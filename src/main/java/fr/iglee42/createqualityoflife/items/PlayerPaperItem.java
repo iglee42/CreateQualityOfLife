@@ -1,7 +1,6 @@
 package fr.iglee42.createqualityoflife.items;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -41,9 +40,9 @@ public class PlayerPaperItem extends Item {
     @Override
     public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (p_41421_.getOrCreateTag().contains("linkedPlayer")){
-            components.add(new TranslatableComponent("tooltip.createqol.player_paper.linked_player",p_41421_.getOrCreateTag().getString("linkedPlayer")));
+            components.add(Component.translatable("tooltip.createqol.player_paper.linked_player",p_41421_.getOrCreateTag().getString("linkedPlayer")));
         } else {
-            components.add(new TranslatableComponent("tooltip.createqol.player_paper.no_linked_player"));
+            components.add(Component.translatable("tooltip.createqol.player_paper.no_linked_player"));
         }
         super.appendHoverText(p_41421_, p_41422_, components, p_41424_);
 

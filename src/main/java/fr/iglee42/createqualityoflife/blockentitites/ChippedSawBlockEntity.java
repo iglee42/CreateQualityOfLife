@@ -1,15 +1,10 @@
 package fr.iglee42.createqualityoflife.blockentitites;
 
-import com.google.common.base.Suppliers;
-import com.google.common.collect.ImmutableList;
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.content.kinetics.saw.CuttingRecipe;
-import com.simibubi.create.content.kinetics.saw.SawFilterSlot;
 import com.simibubi.create.content.processing.recipe.ProcessingInventory;
-import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
@@ -18,29 +13,29 @@ import com.simibubi.create.foundation.recipe.RecipeConditions;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
 import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
-import earth.terrarium.chipped.recipe.ChippedRecipe;
-import earth.terrarium.chipped.registry.ModRecipeTypes;
+import earth.terrarium.chipped.common.recipe.ChippedRecipe;
+import earth.terrarium.chipped.common.registry.ModRecipeTypes;
 import fr.iglee42.createqualityoflife.blocks.ChippedSawBlock;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
 import fr.iglee42.createqualityoflife.utils.ChippedSawFilterSlot;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Container;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.StonecutterRecipe;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -55,9 +50,11 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -273,7 +270,7 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 		else
 			particleData = new ItemParticleOption(ParticleTypes.ITEM, stack);
 
-		Random r = level.random;
+		RandomSource r = level.random;
 		Vec3 v = VecHelper.getCenterOf(this.worldPosition)
 			.add(0, 5 / 16f, 0);
 		for (int i = 0; i < 10; i++) {
@@ -296,7 +293,7 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 			speed = .125f;
 		}
 
-		Random r = level.random;
+		RandomSource r = level.random;
 		Vec3 vec = getItemMovementVec();
 		Vec3 pos = VecHelper.getCenterOf(this.worldPosition);
 		float offset = inventory.recipeDuration != 0 ? (float) (inventory.remainingTime) / inventory.recipeDuration : 0;
@@ -371,7 +368,7 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 		else if (ModBlocks.CARPENTERS_SAW.has(this.getBlockState())) type = ModRecipeTypes.CARPENTERS_TABLE_TYPE.get();
 		else if (ModBlocks.GLASSBLOWER_SAW.has(this.getBlockState())) type = ModRecipeTypes.GLASSBLOWER_TYPE.get();
 		else if (ModBlocks.MASON_SAW.has(this.getBlockState())) type = ModRecipeTypes.MASON_TABLE_TYPE.get();
-		else if (ModBlocks.TINKERING_SAW.has(this.getBlockState())) type = ModRecipeTypes.MECHANIST_WORKBENCH_TYPE.get();
+		else if (ModBlocks.TINKERING_SAW.has(this.getBlockState())) type = ModRecipeTypes.TINKERING_TABLE_TYPE.get();
 		else if (ModBlocks.LOOM_SAW.has(this.getBlockState())) type = ModRecipeTypes.LOOM_TABLE_TYPE.get();
 
 		Predicate<Recipe<?>> types = RecipeConditions.isOfType(type);

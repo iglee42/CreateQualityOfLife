@@ -21,9 +21,8 @@ public class FeatureLoadedCondition implements ICondition {
         return new ResourceLocation(CreateQOL.MODID,"feature_loaded");
     }
 
-
     @Override
-    public boolean test() {
+    public boolean test(IContext iContext) {
         return CreateQOL.isActivate(Features.valueOf(feature.toUpperCase()));
     }
 

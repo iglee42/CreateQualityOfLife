@@ -1,5 +1,6 @@
 package fr.iglee42.createqualityoflife.compat.jei.jei;
 
+import earth.terrarium.chipped.common.compat.jei.ChippedRecipeCategory;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
 import fr.iglee42.createqualityoflife.utils.Features;
@@ -19,17 +20,14 @@ public class JEIPlugin implements IModPlugin {
 
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         if (CreateQOL.isChippedLoaded() && CreateQOL.isActivate(Features.CHIPPED_SAW)) {
-            registration.addRecipeCatalyst(new ItemStack((ItemLike) ModBlocks.BOTANIST_SAW.get()), new ResourceLocation[]{getChippedUidFromId("botanist_workbench")});
-            registration.addRecipeCatalyst(new ItemStack((ItemLike) ModBlocks.GLASSBLOWER_SAW.get()), new ResourceLocation[]{getChippedUidFromId("glassblower")});
-            registration.addRecipeCatalyst(new ItemStack((ItemLike) ModBlocks.CARPENTERS_SAW.get()), new ResourceLocation[]{getChippedUidFromId("carpenters_table")});
-            registration.addRecipeCatalyst(new ItemStack((ItemLike) ModBlocks.LOOM_SAW.get()), new ResourceLocation[]{getChippedUidFromId("loom_table")});
-            registration.addRecipeCatalyst(new ItemStack((ItemLike) ModBlocks.MASON_SAW.get()), new ResourceLocation[]{getChippedUidFromId("mason_table")});
-            registration.addRecipeCatalyst(new ItemStack((ItemLike) ModBlocks.ALCHEMY_SAW.get()), new ResourceLocation[]{getChippedUidFromId("alchemy_bench")});
-            registration.addRecipeCatalyst(new ItemStack((ItemLike) ModBlocks.TINKERING_SAW.get()), new ResourceLocation[]{getChippedUidFromId("mechanist_workbench")});
+            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.BOTANIST_SAW.get()), ChippedRecipeCategory.BOTANIST_WORKBENCH_RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.GLASSBLOWER_SAW.get()), ChippedRecipeCategory.GLASSBLOWER_RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.CARPENTERS_SAW.get()), ChippedRecipeCategory.CARPENTERS_TABLE_RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.LOOM_SAW.get()), ChippedRecipeCategory.LOOM_TABLE_RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.MASON_SAW.get()), ChippedRecipeCategory.MASON_TABLE_RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.ALCHEMY_SAW.get()), ChippedRecipeCategory.ALCHEMY_BENCH_RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.TINKERING_SAW.get()), ChippedRecipeCategory.TINKERING_TABLE_RECIPE);
         }
     }
 
-    private ResourceLocation getChippedUidFromId(String type) {
-        return new ResourceLocation("chipped",type);
-    }
 }
