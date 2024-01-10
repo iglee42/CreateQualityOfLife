@@ -1,0 +1,37 @@
+{
+  "variants": {
+    "facing=north,flipped=false": {
+      "model": "createqol:block/chipped_workbench/loom",
+      "y": 180
+    },
+    "facing=south,flipped=false": {
+      "model": "createqol:block/chipped_workbench/loom"
+    },
+
+    "facing=west,flipped=false": {
+      "model": "createqol:block/chipped_workbench/loom",
+      "y": 90
+    },
+
+    "facing=east,flipped=false": {
+      "model": "createqol:block/chipped_workbench/loom",
+      "y": 270
+    },
+    "facing=north,flipped=true": {
+      "model": "createqol:block/chipped_workbench/loom",
+      "y": 180
+    },
+    "facing=south,flipped=true": {
+      "model": "createqol:block/chipped_workbench/loom"
+    },
+
+    "facing=west,flipped=true": {
+      "model": "createqol:block/chipped_workbench/loom",
+      "y": 90
+    },
+    "facing=east,flipped=true": {
+      "model": "createqol:block/chipped_workbench/loom",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "variants": {
+    "facing=north,flipped=false": {
+      "model": "createqol:block/chipped_workbench/glassblower",
+      "y": 180
+    },
+    "facing=south,flipped=false": {
+      "model": "createqol:block/chipped_workbench/glassblower"
+    },
+
+    "facing=west,flipped=false": {
+      "model": "createqol:block/chipped_workbench/glassblower",
+      "y": 90
+    },
+
+    "facing=east,flipped=false": {
+      "model": "createqol:block/chipped_workbench/glassblower",
+      "y": 270
+    },
+    "facing=north,flipped=true": {
+      "model": "createqol:block/chipped_workbench/glassblower",
+      "y": 180
+    },
+    "facing=south,flipped=true": {
+      "model": "createqol:block/chipped_workbench/glassblower"
+    },
+
+    "facing=west,flipped=true": {
+      "model": "createqol:block/chipped_workbench/glassblower",
+      "y": 90
+    },
+    "facing=east,flipped=true": {
+      "model": "createqol:block/chipped_workbench/glassblower",
+      "y": 270
+    }
+  }
+}

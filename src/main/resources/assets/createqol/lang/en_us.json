@@ -1,0 +1,37 @@
+{
+
+
+  "block.createqol.alchemy_saw": "Philosopher's Saw",
+  "block.createqol.botanist_saw": "Botanist's Saw",
+  "block.createqol.carpenters_saw": "Carpenter's Saw",
+  "block.createqol.glassblower_saw": "Glassblower's Saw",
+  "block.createqol.inventory_linker": "Inventory Linker",
+  "block.createqol.loom_saw": "Shepherd's Saw",
+  "block.createqol.mason_saw": "Mason's Saw",
+  "block.createqol.tinkering_saw": "Tinkerer's Saw",
+
+  "item.createqol.player_paper": "Player Paper",
+  "item.createqol.shadow_radiance": "Shadow Radiance",
+
+  "create.options.createqol.inventory_linker.label": "Inventory Link Mode",
+  "create.options.createqol.inventory_linker.inventory": "Inventory",
+  "create.options.createqol.inventory_linker.armor": "Armor",
+  "create.options.createqol.inventory_linker.off_hand": "Off Hand",
+
+  "tooltip.createqol.player_paper.linked_player": "Linked Player : %s",
+  "tooltip.createqol.player_paper.no_linked_player": "No Player Linked",
+
+  "item.createqol.player_paper.tooltip": "PLAYER PAPER",
+  "item.createqol.player_paper.tooltip.summary": "Link any player to this item",
+  "item.createqol.player_paper.tooltip.condition1": "When R-Clicked when empty",
+  "item.createqol.player_paper.tooltip.behaviour1": "Stock _the player_ who clicked",
+  "item.createqol.player_paper.tooltip.condition2": "When R-Clicked while Sneaking when full",
+  "item.createqol.player_paper.tooltip.behaviour2": "Clear the stocked player",
+
+  "block.createqol.inventory_linker.tooltip": "INVENTORY LINKER",
+  "block.createqol.inventory_linker.tooltip.summary": "Link any player's inventory to this block",
+  "block.createqol.inventory_linker.tooltip.condition1": "When R-Clicked with a full player paper",
+  "block.createqol.inventory_linker.tooltip.behaviour1": "Put the _player paper_ in the block",
+
+  "itemGroup.createqol": "Create : Quality of Life"
+}

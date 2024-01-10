@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "fr.iglee42.createqualityoflife.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "createqol.refmap.json",
+  "mixins": [
+    "ChromaticCompoundItemMixin",
+    "NoGravMagicalDohickyItemMixin",
+    "ScheduleItemMixins"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "inventory_linker"
+        }
+      ],
+      "recipe": {
+        "type": "create:mechanical_crafting",
+        "pattern": [
+          " BBB ",
+          " BEB ",
+          " BRB ",
+          "CCCCC"
+        ],
+        "key": {
+          "C": {
+            "item": "create:brass_casing"
+          },
+          "B": {
+            "tag": "forge:ingots/brass"
+          },
+          "E": {
+            "item": "minecraft:ender_eye"
+          },
+          "R": {
+            "item": "createqol:shadow_radiance"
+          }
+        },
+        "result": {
+          "item": "createqol:inventory_linker",
+          "count": 1
+        },
+        "acceptMirrored": false
+      }
+    }
+  ]
+}

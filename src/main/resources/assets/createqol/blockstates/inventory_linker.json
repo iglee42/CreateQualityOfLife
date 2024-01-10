@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "createqol:block/inventory_linker/block"
+    }
+  }
+}

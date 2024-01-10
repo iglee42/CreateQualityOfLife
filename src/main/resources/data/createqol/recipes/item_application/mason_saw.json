@@ -1,0 +1,29 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "chipped_saw"
+        }
+      ],
+      "recipe": {
+        "type": "create:item_application",
+        "ingredients": [
+          {
+            "item": "create:mechanical_saw"
+          },
+          {
+            "item": "chipped:mason_table"
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:mason_saw"
+          }
+        ]
+      }
+    }
+  ]
+}

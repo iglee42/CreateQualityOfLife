@@ -1,0 +1,45 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "create:mixing",
+        "ingredients": [
+          {
+            "tag": "forge:dusts/glowstone"
+          },
+          {
+            "tag": "forge:dusts/glowstone"
+          },
+          {
+            "tag": "forge:dusts/glowstone"
+          },
+          {
+            "item": "create:powdered_obsidian"
+          },
+          {
+            "item": "create:powdered_obsidian"
+          },
+          {
+            "item": "create:powdered_obsidian"
+          },
+          {
+            "item": "create:polished_rose_quartz"
+          }
+        ],
+        "results": [
+          {
+            "item": "create:chromatic_compound"
+          }
+        ],
+        "heatRequirement": "superheated"
+      }
+    }
+  ]
+}

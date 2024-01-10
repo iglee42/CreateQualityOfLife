@@ -1,0 +1,29 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "inventory_linker"
+        }
+      ],
+      "recipe": {
+        "type": "create:deploying",
+        "ingredients": [
+          {
+            "item": "minecraft:paper"
+          },
+          {
+            "item": "minecraft:ender_eye"
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:player_paper"
+          }
+        ]
+      }
+    }
+  ]
+}
