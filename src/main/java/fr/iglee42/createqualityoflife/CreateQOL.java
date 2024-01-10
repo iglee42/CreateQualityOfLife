@@ -38,10 +38,7 @@ public class CreateQOL {
     public static final String MODID = "createqol";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final CreativeModeTab TAB = new CreativeModeTab(MODID) {
-        @Override
-        public @NotNull ItemStack makeIcon() {return ModItems.SHADOW_RADIANCE.asStack();}
-    };
+
 
     public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID);
 

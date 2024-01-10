@@ -36,7 +36,7 @@ public class ScheduleItemMixins {
                 for (int x = -5; x <= 5; x++) {
                     for (int y = -5; y <= 5; y++) {
                         for (int z = -5; z <= 5; z++) {
-                            if (world.getBlockState(new BlockPos(player.position()).offset(x, y, z)).getBlock() instanceof StationBlock && CreateQOL.isActivate(Features.PROXIMITY_SCHEDULE)) {
+                            if (world.getBlockState(player.getOnPos().above().offset(x, y, z)).getBlock() instanceof StationBlock && CreateQOL.isActivate(Features.PROXIMITY_SCHEDULE)) {
                                 ScheduleEntry entry = new ScheduleEntry();
                                 ScheduledDelay delay = new ScheduledDelay();
                                 ArrayList<ScheduleWaitCondition> initialConditions = new ArrayList<>();
@@ -44,7 +44,7 @@ public class ScheduleItemMixins {
                                 CompoundTag instr = new CompoundTag();
                                 instr.putString("Id", "create:destination");
                                 CompoundTag data = new CompoundTag();
-                                data.putString("Text", ((StationBlockEntity) world.getBlockEntity(new BlockPos(player.position()).offset(x, y, z))).getStation().name);
+                                data.putString("Text", ((StationBlockEntity) world.getBlockEntity(player.getOnPos().above().offset(x, y, z))).getStation().name);
                                 instr.put("Data", data);
                                 entry.instruction = DestinationInstruction.fromTag(instr);
                                 entry.conditions.add(initialConditions);

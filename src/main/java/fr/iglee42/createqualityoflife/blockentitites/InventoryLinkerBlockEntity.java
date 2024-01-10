@@ -18,8 +18,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -115,7 +115,7 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (side != Direction.DOWN ? inventoryOptional.cast() : super.getCapability(cap,side)) : super.getCapability(cap,side);
+        return cap == ForgeCapabilities.ITEM_HANDLER ? (side != Direction.DOWN ? inventoryOptional.cast() : super.getCapability(cap,side)) : super.getCapability(cap,side);
     }
 
     @Override

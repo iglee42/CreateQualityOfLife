@@ -13,6 +13,7 @@ import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.content.kinetics.drill.DrillBlock;
 import com.simibubi.create.content.kinetics.saw.SawBlockEntity;
 import com.simibubi.create.foundation.block.IBE;
+import com.simibubi.create.foundation.damageTypes.CreateDamageSources;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PlacementOffset;
@@ -53,7 +54,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ChippedSawBlock extends HorizontalKineticBlock implements IBE<ChippedSawBlockEntity> {
-	public static DamageSource damageSourceSaw = new DamageSource("create.mechanical_saw").bypassArmor();
 
 	public static final BooleanProperty FLIPPED = BooleanProperty.create("flipped");
 
@@ -144,7 +144,7 @@ public class ChippedSawBlock extends HorizontalKineticBlock implements IBE<Chipp
 		withBlockEntityDo(worldIn, pos, be -> {
 			if (be.getSpeed() == 0)
 				return;
-			entityIn.hurt(damageSourceSaw, (float) DrillBlock.getDamage(be.getSpeed()));
+			entityIn.hurt(CreateDamageSources.saw(worldIn), (float) DrillBlock.getDamage(be.getSpeed()));
 		});
 	}
 
@@ -153,11 +153,11 @@ public class ChippedSawBlock extends HorizontalKineticBlock implements IBE<Chipp
 		super.updateEntityAfterFallOn(worldIn, entityIn);
 		if (!(entityIn instanceof ItemEntity))
 			return;
-		if (entityIn.level.isClientSide)
+		if (entityIn.level().isClientSide)
 			return;
 
 		BlockPos pos = entityIn.blockPosition();
-		withBlockEntityDo(entityIn.level, pos, be -> {
+		withBlockEntityDo(entityIn.level(), pos, be -> {
 			if (be.getSpeed() == 0)
 				return;
 			be.insertItem((ItemEntity) entityIn);
@@ -217,8 +217,7 @@ public class ChippedSawBlock extends HorizontalKineticBlock implements IBE<Chipp
 			List<Direction> directions = IPlacementHelper.orderedByDistanceExceptAxis(pos, ray.getLocation(),
 				Axis.Y,
 				dir -> world.getBlockState(pos.relative(dir))
-					.getMaterial()
-					.isReplaceable());
+					.canBeReplaced());
 
 			if (directions.isEmpty())
 				return PlacementOffset.fail();

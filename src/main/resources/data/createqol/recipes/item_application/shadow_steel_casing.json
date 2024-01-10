@@ -5,22 +5,22 @@
       "conditions": [
         {
           "type": "createqol:feature_loaded",
-          "feature": "chipped_saw"
+          "feature": "shadow_radiance"
         }
       ],
       "recipe": {
         "type": "create:item_application",
         "ingredients": [
           {
-            "item": "create:mechanical_saw"
+            "tag": "create:vanilla_stripped_logs"
           },
           {
-            "item": "chipped:tinkering_table"
+            "item": "create:shadow_steel"
           }
         ],
         "results": [
           {
-            "item": "createqol:tinkering_saw"
+            "item": "create:shadow_steel_casing"
           }
         ]
       }

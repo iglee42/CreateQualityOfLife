@@ -13,13 +13,13 @@ import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
 public class ModItems {
 
     static {
-        REGISTRATE.creativeModeTab(() -> CreateQOL.TAB);
+        REGISTRATE.setCreativeTab(ModCreativeModeTabs.MAIN_TAB);
     }
 
     public static ItemEntry<PlayerPaperItem> PLAYER_PAPER;
 
     public static final ItemEntry<NoGravMagicalDohickyItem> SHADOW_RADIANCE = REGISTRATE.item("shadow_radiance", NoGravMagicalDohickyItem::new)
-                    .properties(p->p.rarity(Rarity.RARE).tab(CreateQOL.TAB))
+                    .properties(p->p.rarity(Rarity.RARE))
                     .register();
 
     public static void register(){

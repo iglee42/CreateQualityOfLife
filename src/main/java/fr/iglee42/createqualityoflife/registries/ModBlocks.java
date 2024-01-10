@@ -14,7 +14,8 @@ import fr.iglee42.createqualityoflife.utils.Features;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.MapColor;
 
 import static com.simibubi.create.AllMovementBehaviours.movementBehaviour;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
@@ -25,7 +26,7 @@ import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
 public class ModBlocks {
 
     static {
-        REGISTRATE.creativeModeTab(() -> CreateQOL.TAB);
+        REGISTRATE.setCreativeTab(ModCreativeModeTabs.MAIN_TAB);
     }
 
     public static BlockEntry<InventoryLinkerBlock> INVENTORY_LINKER;
@@ -37,7 +38,7 @@ public class ModBlocks {
         if (CreateQOL.isActivate(Features.INVENTORY_LINKER)){
             INVENTORY_LINKER = REGISTRATE.block("inventory_linker", InventoryLinkerBlock::new)
                     .initialProperties(SharedProperties::stone)
-                    .properties(p -> p.color(MaterialColor.METAL))
+                    .properties(p -> p.mapColor(MapColor.METAL))
                     .properties(BlockBehaviour.Properties::noOcclusion)
                     .transform(pickaxeOnly())
                     //.onRegisterAfter(Registry.ITEM_REGISTRY,v-> ItemDescription.useKey(v,"block.createqol.inventory_linker"))
@@ -53,7 +54,7 @@ public class ModBlocks {
             ALCHEMY_SAW = REGISTRATE.block("alchemy_saw", ChippedSawBlock::new)
                     .initialProperties(SharedProperties::stone)
                     .addLayer(() -> RenderType::cutoutMipped)
-                    .properties(p -> p.color(MaterialColor.PODZOL))
+                    .properties(p -> p.mapColor(MapColor.PODZOL))
                     .transform(axeOrPickaxe())
                     .blockstate(new SawGenerator()::generate)
                     .transform(BlockStressDefaults.setImpact(4.0))
@@ -65,7 +66,7 @@ public class ModBlocks {
             BOTANIST_SAW = REGISTRATE.block("botanist_saw", ChippedSawBlock::new)
                     .initialProperties(SharedProperties::stone)
                     .addLayer(() -> RenderType::cutoutMipped)
-                    .properties(p -> p.color(MaterialColor.PODZOL))
+                    .properties(p -> p.mapColor(MapColor.PODZOL))
                     .transform(axeOrPickaxe())
                     .blockstate(new SawGenerator()::generate)
                     .transform(BlockStressDefaults.setImpact(4.0))
@@ -77,7 +78,7 @@ public class ModBlocks {
             CARPENTERS_SAW = REGISTRATE.block("carpenters_saw", ChippedSawBlock::new)
                     .initialProperties(SharedProperties::stone)
                     .addLayer(() -> RenderType::cutoutMipped)
-                    .properties(p -> p.color(MaterialColor.PODZOL))
+                    .properties(p -> p.mapColor(MapColor.PODZOL))
                     .transform(axeOrPickaxe())
                     .blockstate(new SawGenerator()::generate)
                     .transform(BlockStressDefaults.setImpact(4.0))
@@ -89,7 +90,7 @@ public class ModBlocks {
             GLASSBLOWER_SAW = REGISTRATE.block("glassblower_saw", ChippedSawBlock::new)
                     .initialProperties(SharedProperties::stone)
                     .addLayer(() -> RenderType::cutoutMipped)
-                    .properties(p -> p.color(MaterialColor.PODZOL))
+                    .properties(p -> p.mapColor(MapColor.PODZOL))
                     .transform(axeOrPickaxe())
                     .blockstate(new SawGenerator()::generate)
                     .transform(BlockStressDefaults.setImpact(4.0))
@@ -101,7 +102,7 @@ public class ModBlocks {
             LOOM_SAW = REGISTRATE.block("loom_saw", ChippedSawBlock::new)
                     .initialProperties(SharedProperties::stone)
                     .addLayer(() -> RenderType::cutoutMipped)
-                    .properties(p -> p.color(MaterialColor.PODZOL))
+                    .properties(p -> p.mapColor(MapColor.PODZOL))
                     .transform(axeOrPickaxe())
                     .blockstate(new SawGenerator()::generate)
                     .transform(BlockStressDefaults.setImpact(4.0))
@@ -113,7 +114,7 @@ public class ModBlocks {
             MASON_SAW = REGISTRATE.block("mason_saw", ChippedSawBlock::new)
                     .initialProperties(SharedProperties::stone)
                     .addLayer(() -> RenderType::cutoutMipped)
-                    .properties(p -> p.color(MaterialColor.PODZOL))
+                    .properties(p -> p.mapColor(MapColor.PODZOL))
                     .transform(axeOrPickaxe())
                     .blockstate(new SawGenerator()::generate)
                     .transform(BlockStressDefaults.setImpact(4.0))
@@ -125,7 +126,7 @@ public class ModBlocks {
             TINKERING_SAW = REGISTRATE.block("tinkering_saw", ChippedSawBlock::new)
                     .initialProperties(SharedProperties::stone)
                     .addLayer(() -> RenderType::cutoutMipped)
-                    .properties(p -> p.color(MaterialColor.PODZOL))
+                    .properties(p -> p.mapColor(MapColor.PODZOL))
                     .transform(axeOrPickaxe())
                     .blockstate(new SawGenerator()::generate)
                     .transform(BlockStressDefaults.setImpact(4.0))

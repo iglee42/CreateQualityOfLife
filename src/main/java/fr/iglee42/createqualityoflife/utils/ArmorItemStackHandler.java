@@ -17,7 +17,7 @@ public class ArmorItemStackHandler extends InventoryLinkerStacksHandler {
     @Override
     public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
         if (stack.getItem() instanceof ArmorItem armor){
-            if (slot != armor.getSlot().getIndex()) return stack;
+            if (slot != armor.getEquipmentSlot().getIndex()) return stack;
         } else return stack;
         return super.insertItem(slot, stack, simulate);
     }

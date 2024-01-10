@@ -5,8 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "createqol.refmap.json",
   "mixins": [
+    "AllCreativeModeTabsMixin",
     "ChromaticCompoundItemMixin",
-    "NoGravMagicalDohickyItemMixin",
     "ScheduleItemMixins"
   ],
   "client": [

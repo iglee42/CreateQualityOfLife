@@ -31,29 +31,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = ChromaticCompoundItem.class)
 public class ChromaticCompoundItemMixin {
 
-
-    @Inject(method = "fillItemCategory(Lnet/minecraft/world/item/CreativeModeTab;Lnet/minecraft/core/NonNullList;)V",at = @At("HEAD"))
-    private void fillItemCategory(CreativeModeTab pCategory, NonNullList<ItemStack> pItems, CallbackInfo ci){
-        Item item = (Item) (Object)this;
-        if (createQualityOfLife$allowdedIn(pCategory,item)) pItems.add(new ItemStack(item));
-    }
-
-    @Unique
-    public boolean createQualityOfLife$allowdedIn(CreativeModeTab p_41390_, Item it) {
-        if (!CreateQOL.isActivate(Features.SHADOW_RADIANCE)) return false;
-        if (it.getCreativeTabs().stream().anyMatch((tab) -> {
-            return tab == p_41390_;
-        })) {
-            return true;
-        } else {
-            CreativeModeTab creativemodetab = it.getItemCategory();
-            return creativemodetab != null && (p_41390_ == CreativeModeTab.TAB_SEARCH || p_41390_ == creativemodetab);
-        }
-    }
-
     @Inject(method = "onEntityItemUpdate", at = @At("HEAD"),cancellable = true,remap = false)
     private void onEntityItemUpdate(ItemStack stack, ItemEntity entity, CallbackInfoReturnable<Boolean> cir){
-        Level world = entity.level;
+        Level world = entity.level();
 
         if (AllConfigs.server().recipes.enableRefinedRadianceRecipe.get()) {
             boolean isOverBeacon = false;
