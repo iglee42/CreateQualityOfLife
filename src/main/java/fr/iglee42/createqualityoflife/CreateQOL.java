@@ -13,6 +13,7 @@ import fr.iglee42.createqualityoflife.conditions.FeatureLoadedCondition;
 import fr.iglee42.createqualityoflife.config.CreateQOLCommonConfig;
 import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
+import fr.iglee42.createqualityoflife.registries.ModCreativeModeTabs;
 import fr.iglee42.createqualityoflife.registries.ModItems;
 import fr.iglee42.createqualityoflife.utils.Features;
 import net.minecraft.world.item.CreativeModeTab;
@@ -59,6 +60,7 @@ public class CreateQOL {
         ModBlocks.register();
         ModBlockEntities.register();
         ModItems.register();
+        ModCreativeModeTabs.register(modEventBus);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> CreateQOLClient.onCtorClient(modEventBus, forgeEventBus));
 
