@@ -14,24 +14,17 @@ import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
 
 public class ModBlockEntities {
 
-    public static  BlockEntityEntry<InventoryLinkerBlockEntity> INVENTORY_LINKER;
+    public static  BlockEntityEntry<InventoryLinkerBlockEntity> INVENTORY_LINKER = REGISTRATE
+            .blockEntity("inventory_linker", InventoryLinkerBlockEntity::new)
+            //.instance(() -> InventoryLinkerInstance::new, false)
+            .validBlocks(ModBlocks.INVENTORY_LINKER)
+            .renderer(() -> InventoryLinkerRenderer::new)
+            .register();
 
-    public static BlockEntityEntry<ChippedSawBlockEntity> CHIPPED_SAW;
-    public static void register() {
-        if (CreateQOL.isActivate(Features.INVENTORY_LINKER)){
-            INVENTORY_LINKER = REGISTRATE
-                    .blockEntity("inventory_linker", InventoryLinkerBlockEntity::new)
-                    //.instance(() -> InventoryLinkerInstance::new, false)
-                    .validBlocks(ModBlocks.INVENTORY_LINKER)
-                    .renderer(() -> InventoryLinkerRenderer::new)
-                    .register();
-        }
-        if (CreateQOL.isChippedLoaded() && CreateQOL.isActivate(Features.CHIPPED_SAW)){
-             CHIPPED_SAW = REGISTRATE.blockEntity("chipped_saw", ChippedSawBlockEntity::new)
-                    .instance(() -> ChippedSawInstance::new)
-                    .validBlocks(ModBlocks.ALCHEMY_SAW,ModBlocks.CARPENTERS_SAW,ModBlocks.BOTANIST_SAW,ModBlocks.GLASSBLOWER_SAW,ModBlocks.LOOM_SAW,ModBlocks.MASON_SAW,ModBlocks.TINKERING_SAW)
-                    .renderer(() -> ChippedSawRenderer::new)
-                    .register();
-        }
-    }
+    public static BlockEntityEntry<ChippedSawBlockEntity> CHIPPED_SAW = REGISTRATE.blockEntity("chipped_saw", ChippedSawBlockEntity::new)
+            .instance(() -> ChippedSawInstance::new)
+            .validBlocks(ModBlocks.ALCHEMY_SAW,ModBlocks.CARPENTERS_SAW,ModBlocks.BOTANIST_SAW,ModBlocks.GLASSBLOWER_SAW,ModBlocks.LOOM_SAW,ModBlocks.MASON_SAW,ModBlocks.TINKERING_SAW)
+            .renderer(() -> ChippedSawRenderer::new)
+            .register();
+    public static void register() {}
 }
