@@ -1,10 +1,14 @@
 package fr.iglee42.createqualityoflife.items;
 
+import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.utils.Features;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -17,6 +21,11 @@ import java.util.List;
 public class PlayerPaperItem extends Item {
     public PlayerPaperItem(Properties p_41383_) {
         super(p_41383_);
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab p_41391_, NonNullList<ItemStack> p_41392_) {
+        if (CreateQOL.isActivate(Features.INVENTORY_LINKER))super.fillItemCategory(p_41391_, p_41392_);
     }
 
     @Override
