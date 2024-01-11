@@ -1,0 +1,29 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "create:item_application",
+        "ingredients": [
+          {
+            "tag": "forge:stripped_logs"
+          },
+          {
+            "item": "create:refined_radiance"
+          }
+        ],
+        "results": [
+          {
+            "item": "create:refined_radiance_casing"
+          }
+        ]
+      }
+    }
+  ]
+}
