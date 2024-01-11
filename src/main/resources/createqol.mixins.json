@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "createqol.refmap.json",
   "mixins": [
+    "CasingBlockMixin",
     "ChromaticCompoundItemMixin",
     "NoGravMagicalDohickyItemMixin",
     "ScheduleItemMixins"
