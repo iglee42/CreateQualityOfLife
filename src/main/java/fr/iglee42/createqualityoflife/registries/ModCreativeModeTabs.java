@@ -4,6 +4,8 @@ import com.simibubi.create.AllCreativeModeTabs;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.blocks.ChippedSawBlock;
+import fr.iglee42.createqualityoflife.utils.Features;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
@@ -51,6 +53,8 @@ public class ModCreativeModeTabs {
 	public static class RegistrateDisplayItemsGenerator implements CreativeModeTab.DisplayItemsGenerator {
 
 		private static boolean testExclusion(Item item) {
+			if (!CreateQOL.isActivate(Features.INVENTORY_LINKER) && (item instanceof BlockItem be ? be.getBlock() == ModBlocks.INVENTORY_LINKER.get() : item == ModItems.PLAYER_PAPER.asItem())) return false;
+			if (!CreateQOL.isActivate(Features.CHIPPED_SAW) && item instanceof BlockItem be && be.getBlock() instanceof ChippedSawBlock) return false;
 			return true;
 		}
 

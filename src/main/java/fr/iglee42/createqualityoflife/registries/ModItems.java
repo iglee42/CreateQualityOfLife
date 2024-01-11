@@ -16,17 +16,13 @@ public class ModItems {
         REGISTRATE.setCreativeTab(ModCreativeModeTabs.MAIN_TAB);
     }
 
-    public static ItemEntry<PlayerPaperItem> PLAYER_PAPER;
+    public static ItemEntry<PlayerPaperItem> PLAYER_PAPER = REGISTRATE.item("player_paper", PlayerPaperItem::new)
+            .properties(properties -> properties.stacksTo(1).rarity(Rarity.RARE))
+            .register();
 
     public static final ItemEntry<NoGravMagicalDohickyItem> SHADOW_RADIANCE = REGISTRATE.item("shadow_radiance", NoGravMagicalDohickyItem::new)
                     .properties(p->p.rarity(Rarity.RARE))
                     .register();
 
-    public static void register(){
-        if (CreateQOL.isActivate(Features.INVENTORY_LINKER)){
-            PLAYER_PAPER = REGISTRATE.item("player_paper", PlayerPaperItem::new)
-                    .properties(properties -> properties.stacksTo(1).rarity(Rarity.RARE))
-                    .register();
-        }
-    }
+    public static void register(){}
 }
