@@ -1,15 +1,10 @@
 package fr.iglee42.createqualityoflife.blockentitites;
 
-import com.google.common.base.Suppliers;
-import com.google.common.collect.ImmutableList;
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.content.kinetics.saw.CuttingRecipe;
-import com.simibubi.create.content.kinetics.saw.SawFilterSlot;
 import com.simibubi.create.content.processing.recipe.ProcessingInventory;
-import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
@@ -24,23 +19,21 @@ import fr.iglee42.createqualityoflife.blocks.ChippedSawBlock;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
 import fr.iglee42.createqualityoflife.utils.ChippedSawFilterSlot;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.StonecutterRecipe;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -55,9 +48,11 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -343,7 +338,11 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 			if (filtering.getFilter().isEmpty()){
 				results.add(tempResults.get(new Random().nextInt(tempResults.size())));
 			} else {
-				if (tempResults.stream().anyMatch(filtering::test)) results.add(filtering.getFilter());
+				if (tempResults.stream().anyMatch(filtering::test)){
+					ItemStack filter = filtering.getFilter();
+					filter.setCount(1);
+					results.add(filter);
+				}
 				//else results.add(item);
 			}
 
@@ -366,17 +365,15 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 			.getResultItem()))
 			return ImmutableList.of(assemblyRecipe.get());*/
 
-		RecipeType<?> type = ModRecipeTypes.ALCHEMY_BENCH_TYPE.get();
-		if (ModBlocks.BOTANIST_SAW.has(this.getBlockState())) type = ModRecipeTypes.BOTANIST_WORKBENCH_TYPE.get();
-		else if (ModBlocks.CARPENTERS_SAW.has(this.getBlockState())) type = ModRecipeTypes.CARPENTERS_TABLE_TYPE.get();
-		else if (ModBlocks.GLASSBLOWER_SAW.has(this.getBlockState())) type = ModRecipeTypes.GLASSBLOWER_TYPE.get();
-		else if (ModBlocks.MASON_SAW.has(this.getBlockState())) type = ModRecipeTypes.MASON_TABLE_TYPE.get();
-		else if (ModBlocks.TINKERING_SAW.has(this.getBlockState())) type = ModRecipeTypes.MECHANIST_WORKBENCH_TYPE.get();
-		else if (ModBlocks.LOOM_SAW.has(this.getBlockState())) type = ModRecipeTypes.LOOM_TABLE_TYPE.get();
+		Predicate<Recipe<?>> types = RecipeConditions.isOfType( ModBlocks.BOTANIST_SAW.has(this.getBlockState()) ? ModRecipeTypes.BOTANIST_WORKBENCH_TYPE.get() :
+				ModBlocks.CARPENTERS_SAW.has(this.getBlockState()) ? ModRecipeTypes.CARPENTERS_TABLE_TYPE.get() :
+						ModBlocks.GLASSBLOWER_SAW.has(this.getBlockState()) ? ModRecipeTypes.GLASSBLOWER_TYPE.get()  :
+								ModBlocks.MASON_SAW.has(this.getBlockState()) ? ModRecipeTypes.MASON_TABLE_TYPE.get() :
+										ModBlocks.TINKERING_SAW.has(this.getBlockState()) ? ModRecipeTypes.MECHANIST_WORKBENCH_TYPE.get() :
+												ModBlocks.LOOM_SAW.has(this.getBlockState()) ? ModRecipeTypes.LOOM_TABLE_TYPE.get() :
+														ModRecipeTypes.ALCHEMY_BENCH_TYPE.get() );
 
-		Predicate<Recipe<?>> types = RecipeConditions.isOfType(type);
-
-		List<Recipe<?>> startedSearch = RecipeFinder.get(cuttingRecipesKey, level, types);
+        List<Recipe<?>> startedSearch = RecipeFinder.get(cuttingRecipesKey, level, types);
 		cuttingRecipesKey = new Object();
 		//type = null;
 		return startedSearch.stream()
