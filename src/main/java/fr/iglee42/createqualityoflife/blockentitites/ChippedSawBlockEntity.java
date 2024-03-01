@@ -340,7 +340,11 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 			if (filtering.getFilter().isEmpty()){
 				results.add(tempResults.get(new Random().nextInt(tempResults.size())));
 			} else {
-				if (tempResults.stream().anyMatch(filtering::test)) results.add(filtering.getFilter());
+				if (tempResults.stream().anyMatch(filtering::test)){
+					ItemStack filter = filtering.getFilter();
+					filter.setCount(1);
+					results.add(filter);
+				}
 				//else results.add(item);
 			}
 
@@ -363,15 +367,13 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 			.getResultItem()))
 			return ImmutableList.of(assemblyRecipe.get());*/
 
-		RecipeType<?> type = ModRecipeTypes.ALCHEMY_BENCH_TYPE.get();
-		if (ModBlocks.BOTANIST_SAW.has(this.getBlockState())) type = ModRecipeTypes.BOTANIST_WORKBENCH_TYPE.get();
-		else if (ModBlocks.CARPENTERS_SAW.has(this.getBlockState())) type = ModRecipeTypes.CARPENTERS_TABLE_TYPE.get();
-		else if (ModBlocks.GLASSBLOWER_SAW.has(this.getBlockState())) type = ModRecipeTypes.GLASSBLOWER_TYPE.get();
-		else if (ModBlocks.MASON_SAW.has(this.getBlockState())) type = ModRecipeTypes.MASON_TABLE_TYPE.get();
-		else if (ModBlocks.TINKERING_SAW.has(this.getBlockState())) type = ModRecipeTypes.TINKERING_TABLE_TYPE.get();
-		else if (ModBlocks.LOOM_SAW.has(this.getBlockState())) type = ModRecipeTypes.LOOM_TABLE_TYPE.get();
-
-		Predicate<Recipe<?>> types = RecipeConditions.isOfType(type);
+		Predicate<Recipe<?>> types = RecipeConditions.isOfType( ModBlocks.BOTANIST_SAW.has(this.getBlockState()) ? ModRecipeTypes.BOTANIST_WORKBENCH_TYPE.get() :
+				ModBlocks.CARPENTERS_SAW.has(this.getBlockState()) ? ModRecipeTypes.CARPENTERS_TABLE_TYPE.get() :
+						ModBlocks.GLASSBLOWER_SAW.has(this.getBlockState()) ? ModRecipeTypes.GLASSBLOWER_TYPE.get()  :
+								ModBlocks.MASON_SAW.has(this.getBlockState()) ? ModRecipeTypes.MASON_TABLE_TYPE.get() :
+										ModBlocks.TINKERING_SAW.has(this.getBlockState()) ? ModRecipeTypes.TINKERING_TABLE_TYPE.get() :
+												ModBlocks.LOOM_SAW.has(this.getBlockState()) ? ModRecipeTypes.LOOM_TABLE_TYPE.get() :
+														ModRecipeTypes.ALCHEMY_BENCH_TYPE.get() );
 
 		List<Recipe<?>> startedSearch = RecipeFinder.get(cuttingRecipesKey, level, types);
 		cuttingRecipesKey = new Object();
