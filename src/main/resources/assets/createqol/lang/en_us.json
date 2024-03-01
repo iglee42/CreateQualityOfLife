@@ -1,14 +1,14 @@
 {
 
 
-  "block.createqol.alchemy_saw": "Philosopher's Saw",
-  "block.createqol.botanist_saw": "Botanist's Saw",
-  "block.createqol.carpenters_saw": "Carpenter's Saw",
-  "block.createqol.glassblower_saw": "Glassblower's Saw",
+  "block.createqol.alchemy_saw": "Alchemy Saw",
+  "block.createqol.botanist_saw": "Botanist Saw",
+  "block.createqol.carpenters_saw": "Carpenters Saw",
+  "block.createqol.glassblower_saw": "Glassblower Saw",
   "block.createqol.inventory_linker": "Inventory Linker",
-  "block.createqol.loom_saw": "Shepherd's Saw",
-  "block.createqol.mason_saw": "Mason's Saw",
-  "block.createqol.tinkering_saw": "Tinkerer's Saw",
+  "block.createqol.loom_saw": "Loom Saw",
+  "block.createqol.mason_saw": "Mason Saw",
+  "block.createqol.tinkering_saw": "Tinkering Saw",
 
   "item.createqol.player_paper": "Player Paper",
   "item.createqol.shadow_radiance": "Shadow Radiance",

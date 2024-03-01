@@ -187,7 +187,7 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4521465")
     //runtimeOnly fg.deobf("curse.maven:cloth-config-348521:4633387")
 
-    implementation fg.deobf("curse.maven:chipped-456956:4634856")
+    implementation fg.deobf("curse.maven:chipped-456956:5077656")
     //implementation fg.deobf("curse.maven:ctm-267602:4393695")
     implementation fg.deobf("curse.maven:resourceful-lib-570073:4973823")
     implementation fg.deobf("curse.maven:athena-841890:4764357")
