@@ -4,17 +4,17 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.content.equipment.armor.DivingHelmetItem;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
+import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.registries.ModArmorMaterials;
 import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.utils.Features;
+import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 
@@ -25,6 +25,10 @@ public class ShadowRadianceHelmet extends DivingHelmetItem {
     }
     static {
         GogglesItem.addIsWearingPredicate(player -> ModItems.SHADOW_RADIANCE_HELMET.isIn(player.getItemBySlot(EquipmentSlot.HEAD)));
+    }
+    @Override
+    public void fillItemCategory(CreativeModeTab p_41391_, NonNullList<ItemStack> p_41392_) {
+        if (CreateQOL.isActivate(Features.SHADOW_RADIANCE))super.fillItemCategory(p_41391_, p_41392_);
     }
 
     @Override

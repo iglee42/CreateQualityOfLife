@@ -6,7 +6,6 @@ import com.simibubi.create.content.trains.schedule.ScheduleItem;
 import com.simibubi.create.content.trains.schedule.condition.ScheduleWaitCondition;
 import com.simibubi.create.content.trains.schedule.condition.ScheduledDelay;
 import com.simibubi.create.content.trains.schedule.destination.DestinationInstruction;
-import com.simibubi.create.content.trains.schedule.destination.ScheduleInstruction;
 import com.simibubi.create.content.trains.station.StationBlock;
 import com.simibubi.create.content.trains.station.StationBlockEntity;
 import fr.iglee42.createqualityoflife.CreateQOL;
@@ -25,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.ArrayList;
 
 @Mixin(value = ScheduleItem.class)
-public class ScheduleItemMixins {
+public class ScheduleItemMixin {
 
     @Inject(method = "use",at = @At("HEAD"))
     private void inject(Level world, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir){

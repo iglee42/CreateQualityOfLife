@@ -12,6 +12,11 @@
 
   "item.createqol.player_paper": "Player Paper",
   "item.createqol.shadow_radiance": "Shadow Radiance",
+  "item.createqol.shadow_radiance_helmet": "Shadow Radiance Helmet",
+  "item.createqol.shadow_radiance_chestplate": "Shadow Radiance Chestplate",
+  "item.createqol.shadow_radiance_chestplate_placeable": "Shadow Radiance Chestplate Placeable",
+  "item.createqol.shadow_radiance_leggings": "Shadow Radiance Leggings",
+  "item.createqol.shadow_radiance_boots": "Shadow Radiance Boots",
 
   "create.options.createqol.inventory_linker.label": "Inventory Link Mode",
   "create.options.createqol.inventory_linker.inventory": "Inventory",

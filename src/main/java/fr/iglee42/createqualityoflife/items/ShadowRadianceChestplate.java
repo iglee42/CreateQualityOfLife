@@ -3,17 +3,17 @@ package fr.iglee42.createqualityoflife.items;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.tterrag.registrate.util.entry.ItemEntry;
+import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.registries.ModArmorMaterials;
+import fr.iglee42.createqualityoflife.utils.Features;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +25,10 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
 
     public ShadowRadianceChestplate(ArmorMaterial material, Properties properties, ResourceLocation textureLoc, Supplier<BacktankBlockItem> placeable) {
         super(material, properties, textureLoc, placeable);
+    }
+    @Override
+    public void fillItemCategory(CreativeModeTab p_41391_, NonNullList<ItemStack> p_41392_) {
+        if (CreateQOL.isActivate(Features.SHADOW_RADIANCE))super.fillItemCategory(p_41391_, p_41392_);
     }
     @Override
     public void onArmorTick(ItemStack stack, Level level, Player player) {

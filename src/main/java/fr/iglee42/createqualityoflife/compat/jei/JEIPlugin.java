@@ -1,4 +1,4 @@
-package fr.iglee42.createqualityoflife.compat.jei.jei;
+package fr.iglee42.createqualityoflife.compat.jei;
 
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
