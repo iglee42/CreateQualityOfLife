@@ -1,4 +1,4 @@
-package fr.iglee42.createqualityoflife.compat.jei.jei;
+package fr.iglee42.createqualityoflife.compat.jei;
 
 import earth.terrarium.chipped.common.compat.jei.ChippedRecipeCategory;
 import fr.iglee42.createqualityoflife.CreateQOL;

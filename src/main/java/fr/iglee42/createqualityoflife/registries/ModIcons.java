@@ -1,4 +1,4 @@
-package fr.iglee42.createqualityoflife.utils;
+package fr.iglee42.createqualityoflife.registries;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;

@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 public enum ModArmorMaterials implements ArmorMaterial {
 
-    SHADOW_RADIANCE(CreateQOL.asResource("shadow_radiance").toString(), 40, new int[] { 4, 9, 7, 4 }, 25, () -> SoundEvents.ARMOR_EQUIP_NETHERITE, 4.0F, 0.2F,
+    SHADOW_RADIANCE(CreateQOL.asResource("shadow_radiance").toString(), 40, new int[] { 4, 7, 9, 4 }, 25, () -> SoundEvents.ARMOR_EQUIP_NETHERITE, 4.0F, 0.2F,
             () -> Ingredient.of(ModItems.SHADOW_RADIANCE.get()))
 
     ;
@@ -71,12 +71,12 @@ public enum ModArmorMaterials implements ArmorMaterial {
 
     @Override
     public int getDurabilityForSlot(EquipmentSlot pType) {
-        return MAX_DAMAGE_ARRAY[pType.ordinal()] * this.maxDamageFactor;
+        return MAX_DAMAGE_ARRAY[pType.getIndex()] * this.maxDamageFactor;
     }
 
     @Override
     public int getDefenseForSlot(EquipmentSlot pType) {
-        return this.damageReductionAmountArray[pType.ordinal()];
+        return this.damageReductionAmountArray[pType.getIndex()];
     }
 
 }

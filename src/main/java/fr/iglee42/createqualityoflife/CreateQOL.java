@@ -14,7 +14,9 @@ import fr.iglee42.createqualityoflife.config.CreateQOLCommonConfig;
 import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
 import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.registries.ModPackets;
 import fr.iglee42.createqualityoflife.utils.Features;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -49,7 +51,7 @@ public class CreateQOL {
         REGISTRATE.setTooltipModifierFactory(item -> new ItemDescription.Modifier(item, TooltipHelper.Palette.STANDARD_CREATE)
                 .andThen(TooltipModifier.mapNull(KineticStats.create(item))));
     }
-    public CreateQOL() throws IOException {
+    public CreateQOL() throws IOException, IllegalAccessException {
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get()
                 .getModEventBus();
@@ -62,6 +64,7 @@ public class CreateQOL {
         ModBlocks.register();
         ModBlockEntities.register();
         ModItems.register();
+        ModPackets.registerPackets();
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> CreateQOLClient.onCtorClient(modEventBus, forgeEventBus));
 
@@ -81,6 +84,10 @@ public class CreateQOL {
 
     public static boolean isActivate(Features feature){
         return feature.getConfig();
+    }
+
+    public static ResourceLocation asResource(String path) {
+        return new ResourceLocation(MODID,path);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
