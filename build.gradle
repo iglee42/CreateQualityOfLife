@@ -1,5 +1,4 @@
 buildscript {
-    ext.kotlin_version = '1.9.22'
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
@@ -7,7 +6,6 @@ buildscript {
     }
     dependencies {
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -16,11 +14,10 @@ plugins {
 }
 
 apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'kotlin'
 
 group = 'fr.iglee42'
 
-version = '1.20.1-1.1'
+version = '1.20.1-1.1-ht1'
 
 java {
     archivesBaseName = 'createqol'
@@ -174,7 +171,6 @@ repositories {
         name = "Jared's maven"
         url = "https://maven.blamejared.com/"
     }
-    mavenCentral()
 }
 
 dependencies {
@@ -211,7 +207,6 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
@@ -233,14 +228,4 @@ jar.finalizedBy('reobfJar')
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
-}
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
 }
