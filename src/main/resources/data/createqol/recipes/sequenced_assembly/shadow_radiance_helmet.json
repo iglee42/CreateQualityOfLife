@@ -1,0 +1,89 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": {
+          "item": "create:netherite_diving_helmet"
+        },
+        "transitionalItem": {
+          "item": "create:netherite_diving_helmet"
+        },
+        "sequence": [
+          {
+            "type": "create:cutting",
+            "ingredients": [
+              {
+                "item": "create:netherite_diving_helmet"
+              }
+            ],
+            "results": [
+              {
+                "item": "create:netherite_diving_helmet"
+              }
+            ],
+            "processingTime": 50
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "create:netherite_diving_helmet"
+              },
+              {
+                "item": "createqol:shadow_radiance"
+              }
+            ],
+            "results": [
+              {
+                "item": "create:netherite_diving_helmet"
+              }
+            ]
+          },
+          {
+            "type": "create:pressing",
+            "ingredients": [
+              {
+                "item": "create:netherite_diving_helmet"
+              }
+            ],
+            "results": [
+              {
+                "item": "create:netherite_diving_helmet"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "create:netherite_diving_helmet"
+              },
+              {
+                "item": "create:goggles"
+              }
+            ],
+            "results": [
+              {
+                "item": "create:netherite_diving_helmet"
+              }
+            ]
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:shadow_radiance_helmet"
+          }
+        ],
+        "loops": 1
+      }
+    }
+  ]
+}

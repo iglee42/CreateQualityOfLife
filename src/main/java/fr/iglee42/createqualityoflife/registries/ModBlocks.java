@@ -1,10 +1,14 @@
 package fr.iglee42.createqualityoflife.registries;
 
+import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags;
+import com.simibubi.create.Create;
+import com.simibubi.create.content.equipment.armor.BacktankBlock;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.kinetics.saw.SawGenerator;
 import com.simibubi.create.content.kinetics.saw.SawMovementBehaviour;
 import com.simibubi.create.foundation.data.AssetLookup;
+import com.simibubi.create.foundation.data.BuilderTransformers;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import fr.iglee42.createqualityoflife.CreateQOL;
@@ -41,6 +45,12 @@ public class ModBlocks {
             .properties(p->p.rarity(Rarity.UNCOMMON))
             .transform(customItemModel())
             .register();
+
+    public static final BlockEntry<BacktankBlock> SHADOW_RADIANCE_CHESTPLATE =
+            REGISTRATE.block("shadow_radiance_chestplate", BacktankBlock::new)
+                    .initialProperties(SharedProperties::netheriteMetal)
+                    .transform(BuilderTransformers.backtank(ModItems.SHADOW_RADIANCE_CHESTPLATE::get))
+                    .register();
 
 
     public static BlockEntry<ChippedSawBlock>
