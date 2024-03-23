@@ -9,6 +9,7 @@ import fr.iglee42.createqualityoflife.utils.Features;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -39,7 +40,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
-        components.add(Component.literal("Air : ").withStyle(ChatFormatting.GOLD).append(Component.literal(String.format("%.1f",BacktankUtil.getAir(stack))).withStyle(ChatFormatting.YELLOW)).append(Component.literal("/"+BacktankUtil.maxAir(stack)+",0").withStyle(ChatFormatting.GOLD)));
+        components.add(new TextComponent("Air : ").withStyle(ChatFormatting.GOLD).append(new TextComponent(String.format("%.1f",BacktankUtil.getAir(stack))).withStyle(ChatFormatting.YELLOW)).append(new TextComponent("/"+BacktankUtil.maxAir(stack)+",0").withStyle(ChatFormatting.GOLD)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 }

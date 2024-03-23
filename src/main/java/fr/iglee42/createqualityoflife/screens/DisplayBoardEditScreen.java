@@ -16,6 +16,8 @@ import fr.iglee42.createqualityoflife.registries.ModPackets;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.DyeColor;
 
 import java.util.Arrays;
@@ -40,7 +42,7 @@ public class DisplayBoardEditScreen extends AbstractSimiScreen {
 
 
     public DisplayBoardEditScreen(FlapDisplayBlockEntity be, int lineIndex) {
-        super(Component.translatable(AllBlocks.DISPLAY_BOARD.get().getDescriptionId()));
+        super(new TranslatableComponent(AllBlocks.DISPLAY_BOARD.get().getDescriptionId()));
         this.be = be;
         this.lineIndex = lineIndex;
     }
@@ -67,7 +69,7 @@ public class DisplayBoardEditScreen extends AbstractSimiScreen {
             glowingButton.setIcon(glowingIndicator.state == Indicator.State.OFF ? AllIcons.I_FX_SURFACE_ON : AllIcons.I_FX_SURFACE_OFF);
             glowingIndicator.state = glowingIndicator.state == Indicator.State.OFF ? Indicator.State.GREEN : Indicator.State.OFF;
         });
-        glowingButton.setToolTip(Component.literal("Glowing"));
+        glowingButton.setToolTip(new TextComponent("Glowing"));
 
         glowingIndicator = new Indicator(guiLeft + 53,guiTop + 64,Components.immutableEmpty());
         glowingIndicator.state = be.glowingLines[lineIndex] ? Indicator.State.GREEN : Indicator.State.OFF;
@@ -80,7 +82,7 @@ public class DisplayBoardEditScreen extends AbstractSimiScreen {
         colorScrollInput.forOptions(Arrays.stream(DyeColor.values()).map(DyeColor::getSerializedName).map(s->{
             String firstLetter = String.valueOf(s.charAt(0)).toUpperCase();
             return firstLetter + s.substring(1).replace("_"," ");
-        }).map(s->Component.literal(s).withStyle(Style.EMPTY.withColor(DyeColor.byName(!s.equals("Black") ?s.replace(" ","_").toLowerCase() : "gray",DyeColor.WHITE).getTextColor()))).toList()).calling(i->{
+        }).map(s->new TextComponent(s).withStyle(Style.EMPTY.withColor(DyeColor.byName(!s.equals("Black") ?s.replace(" ","_").toLowerCase() : "gray",DyeColor.WHITE).getTextColor()))).toList()).calling(i->{
             DyeColor color = DyeColor.byId(i);
             colorScrollInputLabel.colored(color != DyeColor.BLACK ? color.getTextColor() : DyeColor.GRAY.getTextColor());
         }).writingTo(colorScrollInputLabel);
