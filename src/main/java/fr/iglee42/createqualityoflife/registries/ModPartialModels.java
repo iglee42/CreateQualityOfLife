@@ -9,7 +9,9 @@ public class ModPartialModels {
 
     public static final PartialModel
 
-            INVENTORY_LINKER = block("inventory_linker/inner_off"), INVENTORY_LINKER_ON = block("inventory_linker/inner_on")
+            INVENTORY_LINKER = block("inventory_linker/inner_off"), INVENTORY_LINKER_ON = block("inventory_linker/inner_on"),
+
+            SHADOW_RADIANCE_TANK_COGS = block("shadow_radiance_chestplate/cogs")
 
             ;
 

@@ -1,0 +1,89 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": {
+          "item": "create:netherite_backtank"
+        },
+        "transitionalItem": {
+          "item": "create:netherite_backtank"
+        },
+        "sequence": [
+          {
+            "type": "create:cutting",
+            "ingredients": [
+              {
+                "item": "create:netherite_backtank"
+              }
+            ],
+            "results": [
+              {
+                "item": "create:netherite_backtank"
+              }
+            ],
+            "processingTime": 50
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "create:netherite_backtank"
+              },
+              {
+                "item": "createqol:shadow_radiance"
+              }
+            ],
+            "results": [
+              {
+                "item": "create:netherite_backtank"
+              }
+            ]
+          },
+          {
+            "type": "create:pressing",
+            "ingredients": [
+              {
+                "item": "create:netherite_backtank"
+              }
+            ],
+            "results": [
+              {
+                "item": "create:netherite_backtank"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "create:netherite_backtank"
+              },
+              {
+                "item": "create:blaze_burner"
+              }
+            ],
+            "results": [
+              {
+                "item": "create:netherite_backtank"
+              }
+            ]
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:shadow_radiance_chestplate"
+          }
+        ],
+        "loops": 1
+      }
+    }
+  ]
+}

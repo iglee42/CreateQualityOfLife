@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "createqol:item/shadow_radiance_helmet"
+  }
+}
