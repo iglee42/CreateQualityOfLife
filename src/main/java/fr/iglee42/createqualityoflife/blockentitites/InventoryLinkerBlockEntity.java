@@ -9,7 +9,7 @@ import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.utility.Lang;
 import fr.iglee42.createqualityoflife.utils.ArmorItemStackHandler;
 import fr.iglee42.createqualityoflife.utils.InventoryLinkerStacksHandler;
-import fr.iglee42.createqualityoflife.utils.ModIcons;
+import fr.iglee42.createqualityoflife.registries.ModIcons;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

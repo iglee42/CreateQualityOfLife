@@ -12,6 +12,7 @@ public enum Features {
     SHADOW_RADIANCE("shadow_radiance", CreateQOLCommonConfig.shadowRadiance),
     INVENTORY_LINKER("inventory_linker", CreateQOLCommonConfig.inventoryLinker),
     PROXIMITY_SCHEDULE("proximity_schedule", CreateQOLCommonConfig.proximitySchedule),
+    DISPLAY_BOARD_MODIFICATION("display_board_modification", CreateQOLCommonConfig.displayBoardModification),
 
     ;
 

@@ -6,8 +6,12 @@
   "refmap": "createqol.refmap.json",
   "mixins": [
     "AllCreativeModeTabsMixin",
+    "BacktankRendererMixin",
+    "BlockEntityTypeMixin",
     "ChromaticCompoundItemMixin",
-    "ScheduleItemMixins"
+    "FlapDisplayBlockMixin",
+    "NetheriteDivingHandlerMixin",
+    "ScheduleItemMixin"
   ],
   "client": [
   ],
