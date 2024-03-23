@@ -1,0 +1,89 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": {
+          "item": "minecraft:netherite_leggings"
+        },
+        "transitionalItem": {
+          "item": "minecraft:netherite_leggings"
+        },
+        "sequence": [
+          {
+            "type": "create:cutting",
+            "ingredients": [
+              {
+                "item": "minecraft:netherite_leggings"
+              }
+            ],
+            "results": [
+              {
+                "item": "minecraft:netherite_leggings"
+              }
+            ],
+            "processingTime": 50
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "minecraft:netherite_leggings"
+              },
+              {
+                "item": "createqol:shadow_radiance"
+              }
+            ],
+            "results": [
+              {
+                "item": "minecraft:netherite_leggings"
+              }
+            ]
+          },
+          {
+            "type": "create:pressing",
+            "ingredients": [
+              {
+                "item": "minecraft:netherite_leggings"
+              }
+            ],
+            "results": [
+              {
+                "item": "minecraft:netherite_leggings"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "minecraft:netherite_leggings"
+              },
+              {
+                "item": "create:electron_tube"
+              }
+            ],
+            "results": [
+              {
+                "item": "minecraft:netherite_leggings"
+              }
+            ]
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:shadow_radiance_leggings"
+          }
+        ],
+        "loops": 1
+      }
+    }
+  ]
+}

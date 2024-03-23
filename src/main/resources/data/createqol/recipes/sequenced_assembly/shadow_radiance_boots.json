@@ -1,0 +1,89 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": {
+          "item": "create:netherite_diving_boots"
+        },
+        "transitionalItem": {
+          "item": "create:netherite_diving_boots"
+        },
+        "sequence": [
+          {
+            "type": "create:cutting",
+            "ingredients": [
+              {
+                "item": "create:netherite_diving_boots"
+              }
+            ],
+            "results": [
+              {
+                "item": "create:netherite_diving_boots"
+              }
+            ],
+            "processingTime": 50
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "create:netherite_diving_boots"
+              },
+              {
+                "item": "createqol:shadow_radiance"
+              }
+            ],
+            "results": [
+              {
+                "item": "create:netherite_diving_boots"
+              }
+            ]
+          },
+          {
+            "type": "create:pressing",
+            "ingredients": [
+              {
+                "item": "create:netherite_diving_boots"
+              }
+            ],
+            "results": [
+              {
+                "item": "create:netherite_diving_boots"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "create:netherite_diving_boots"
+              },
+              {
+                "item": "create:sturdy_sheet"
+              }
+            ],
+            "results": [
+              {
+                "item": "create:netherite_diving_boots"
+              }
+            ]
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:shadow_radiance_boots"
+          }
+        ],
+        "loops": 1
+      }
+    }
+  ]
+}
