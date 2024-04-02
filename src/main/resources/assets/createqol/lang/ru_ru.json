@@ -1,0 +1,42 @@
+{
+
+
+  "block.createqol.alchemy_saw": "Пила алхимика",
+  "block.createqol.botanist_saw": "Пила ботаника",
+  "block.createqol.carpenters_saw": "Пила плотника",
+  "block.createqol.glassblower_saw": "Пила стеклодува",
+  "block.createqol.inventory_linker": "Привязыватель инвентаря",
+  "block.createqol.loom_saw": "Пила ткача",
+  "block.createqol.mason_saw": "Пила каменщика",
+  "block.createqol.tinkering_saw": "Пила мастера",
+
+  "item.createqol.player_paper": "Бумага с привязкой игрока",
+  "item.createqol.shadow_radiance": "Теневое сияние",
+  "item.createqol.shadow_radiance_helmet": "Шлем из теневого сияния",
+  "item.createqol.shadow_radiance_chestplate": "Нагрудник из теневого сияния",
+  "item.createqol.shadow_radiance_chestplate_placeable": "Размещаемый нагрудник из теневого сияния",
+  "item.createqol.shadow_radiance_leggings": "Поножи из теневого сияния",
+  "item.createqol.shadow_radiance_boots": "Ботинки из теневого сияния",
+
+  "create.options.createqol.inventory_linker.label": "Режим привязки инвентаря",
+  "create.options.createqol.inventory_linker.inventory": "Инвентарь",
+  "create.options.createqol.inventory_linker.armor": "Броня",
+  "create.options.createqol.inventory_linker.off_hand": "Дополнительная рука",
+
+  "tooltip.createqol.player_paper.linked_player": "Привязанный игрок: %s",
+  "tooltip.createqol.player_paper.no_linked_player": "Игрок не привязан",
+
+  "item.createqol.player_paper.tooltip": "БУМАГА С ПРИВЯЗКОЙ ИГРОКА",
+  "item.createqol.player_paper.tooltip.summary": "Привяжите игрока к этому предмету",
+  "item.createqol.player_paper.tooltip.condition1": "ПКМ, если нет привязки",
+  "item.createqol.player_paper.tooltip.behaviour1": "Привязывает кликнувшего _игрока_",
+  "item.createqol.player_paper.tooltip.condition2": "ПКМ в приседе, если есть привязка",
+  "item.createqol.player_paper.tooltip.behaviour2": "Сбрасывает привязку к игроку",
+
+  "block.createqol.inventory_linker.tooltip": "ПРИВЯЗЫВАТЕЛЬ ИНВЕНТАРЯ",
+  "block.createqol.inventory_linker.tooltip.summary": "Привяжите инвентарь игрока к этому блоку",
+  "block.createqol.inventory_linker.tooltip.condition1": "ПКМ бумагой с привязанным игроком",
+  "block.createqol.inventory_linker.tooltip.behaviour1": "Вставляет _бумагу с привязкой игрока_",
+
+  "itemGroup.createqol": "Create: Quality of Life"
+}
