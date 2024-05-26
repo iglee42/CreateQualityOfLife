@@ -13,7 +13,9 @@ import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.blocks.ChippedSawBlock;
+import fr.iglee42.createqualityoflife.blocks.FunneledBeltBlock;
 import fr.iglee42.createqualityoflife.blocks.InventoryLinkerBlock;
+import fr.iglee42.createqualityoflife.registries.generators.FunneledBeltGenerator;
 import fr.iglee42.createqualityoflife.utils.Features;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.Rarity;
@@ -52,6 +54,21 @@ public class ModBlocks {
                     .transform(BuilderTransformers.backtank(ModItems.SHADOW_RADIANCE_CHESTPLATE::get))
                     .register();
 
+    public static BlockEntry<FunneledBeltBlock> FUNNELED_BELT = REGISTRATE.block("funneled_belt", FunneledBeltBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .properties(p -> p.mapColor(MapColor.METAL))
+            .properties(BlockBehaviour.Properties::noOcclusion)
+            .transform(pickaxeOnly())
+            //.onRegisterAfter(Registry.ITEM_REGISTRY,v-> ItemDescription.useKey(v,"block.createqol.inventory_linker"))
+            .blockstate(new FunneledBeltGenerator()::generate)
+            .transform(BlockStressDefaults.setNoImpact())
+            .addLayer(()-> RenderType::cutoutMipped)
+            .item()
+            .properties(p->p.rarity(Rarity.UNCOMMON))
+            .transform(customItemModel())
+            .register();
+
+
 
     public static BlockEntry<ChippedSawBlock>
             ALCHEMY_SAW = createChippedSaw("alchemy"),
@@ -69,7 +86,7 @@ public class ModBlocks {
                 .addLayer(() -> RenderType::cutoutMipped)
                 .properties(p -> p.color(MaterialColor.PODZOL))
                 .transform(axeOrPickaxe())
-                .blockstate(new SawGenerator()::generate)
+                //.blockstate(new SawGenerator()::generate)
                 .transform(BlockStressDefaults.setImpact(4.0))
                 .addLayer(() -> RenderType::cutoutMipped)
                 .item()
