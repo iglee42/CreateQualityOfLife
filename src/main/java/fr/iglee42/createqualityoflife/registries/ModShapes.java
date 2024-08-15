@@ -18,6 +18,7 @@ public class ModShapes {
     public static final VoxelShaper FUNNELED_BELT = shape(makeFlatFull()).add(shape(2, 14, 14, 14, 30, 18).add(0, 11, 8, 16, 32, 14)
             .forHorizontal(NORTH).get(NORTH)).add(shape(2, 14, 14, 14, 30, 18).add(0, 11, 8, 16, 32, 14)
             .forHorizontal(NORTH).get(SOUTH)).forHorizontalAxis();
+    public static final VoxelShaper SINGLE_BELT = shape(1,3,0,15,13,16).forHorizontalAxis();
 
 
     private static AllShapes.Builder shape(VoxelShape shape) {

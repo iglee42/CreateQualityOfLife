@@ -5,42 +5,26 @@ import com.jozufozu.flywheel.core.PartialModel;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.AllSpriteShifts;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.content.kinetics.belt.*;
-import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.foundation.block.render.SpriteShiftEntry;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.ShadowRenderHelper;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
 import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.worldWrappers.WrappedWorld;
 import fr.iglee42.createqualityoflife.blockentitites.FunneledBeltBlockEntity;
-import fr.iglee42.createqualityoflife.blocks.FunneledBeltBlock;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
 import fr.iglee42.createqualityoflife.registries.ModPartialModels;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.AxisDirection;
-import net.minecraft.core.Vec3i;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 public class FunneledBeltRenderer extends SafeBlockEntityRenderer<FunneledBeltBlockEntity> {
@@ -57,7 +41,7 @@ public class FunneledBeltRenderer extends SafeBlockEntityRenderer<FunneledBeltBl
 			BlockState blockState = be.getBlockState();
 			if (!ModBlocks.FUNNELED_BELT.has(blockState)) return;
 
-			Direction facing = blockState.getValue(FunneledBeltBlock.HORIZONTAL_FACING);
+			Direction facing = FunneledBeltBlockEntity.getDirectionFromAxis(blockState);
 			AxisDirection axisDirection = facing.getAxisDirection();
 
 			boolean alongX = facing.getAxis() == Direction.Axis.X;
@@ -106,7 +90,7 @@ public class FunneledBeltRenderer extends SafeBlockEntityRenderer<FunneledBeltBl
 
 			}
 
-				Direction dir = blockState.getValue(FunneledBeltBlock.HORIZONTAL_FACING).getClockWise();
+				Direction dir = FunneledBeltBlockEntity.getDirectionFromAxis(blockState).getClockWise();
 
 				Supplier<PoseStack> matrixStackSupplier = () -> {
 					PoseStack stack = new PoseStack();

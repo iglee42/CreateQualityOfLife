@@ -5,6 +5,9 @@ import com.simibubi.create.Create;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.packets.ConfigureDisplayBoardPacket;
+import fr.iglee42.createqualityoflife.packets.ToggleFansPacket;
+import fr.iglee42.createqualityoflife.packets.ToggleHoverPacket;
+import fr.iglee42.createqualityoflife.packets.UpdateInputsPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +26,10 @@ public enum ModPackets {
 
     //Client to Server
 
-    CONFIGURE_DISPLAY_BOARD(ConfigureDisplayBoardPacket.class,ConfigureDisplayBoardPacket::new,NetworkDirection.PLAY_TO_SERVER)
+    CONFIGURE_DISPLAY_BOARD(ConfigureDisplayBoardPacket.class,ConfigureDisplayBoardPacket::new,NetworkDirection.PLAY_TO_SERVER),
+    TOGGLE_FANS(ToggleFansPacket.class,ToggleFansPacket::new,NetworkDirection.PLAY_TO_SERVER),
+    TOGGLE_HOVER(ToggleHoverPacket .class, ToggleHoverPacket::new, NetworkDirection.PLAY_TO_SERVER),
+    INPUTS_UPDATE(UpdateInputsPacket.class, UpdateInputsPacket::new, NetworkDirection.PLAY_TO_SERVER)
 
     ;
     public static final ResourceLocation CHANNEL_NAME = CreateQOL.asResource("main");

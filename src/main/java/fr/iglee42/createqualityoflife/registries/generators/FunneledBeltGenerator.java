@@ -16,14 +16,12 @@ public class FunneledBeltGenerator extends SpecialBlockStateGen {
 
 	@Override
 	protected int getXRotation(BlockState state) {
-		Direction direction = state.getValue(FunneledBeltBlock.HORIZONTAL_FACING);
-		return direction.getAxisDirection() == AxisDirection.NEGATIVE ? 180 : 0;
+		return 0;
 	}
 
 	@Override
 	protected int getYRotation(BlockState state) {
-		Direction direction = state.getValue(FunneledBeltBlock.HORIZONTAL_FACING);
-		return horizontalAngle(direction);
+		return state.getValue(FunneledBeltBlock.HORIZONTAL_AXIS) == Direction.Axis.X ? 0  : 90;
 	}
 
 	@Override

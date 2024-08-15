@@ -1,0 +1,72 @@
+{
+  "variants": {
+    "casing=false,facing=east,waterlogged=false": {
+      "model": "createqol:block/single_belt/particle",
+      "y": 270
+    },
+    "casing=false,facing=east,waterlogged=true": {
+      "model": "createqol:block/single_belt/particle",
+      "y": 270
+    },
+    "casing=false,facing=north,waterlogged=false": {
+      "model": "createqol:block/single_belt/particle",
+      "x": 180,
+      "y": 180
+    },
+    "casing=false,facing=north,waterlogged=true": {
+      "model": "createqol:block/single_belt/particle",
+      "x": 180,
+      "y": 180
+    },
+    "casing=false,facing=south,waterlogged=false": {
+      "model": "createqol:block/single_belt/particle"
+    },
+    "casing=false,facing=south,waterlogged=true": {
+      "model": "createqol:block/single_belt/particle"
+    },
+    "casing=false,facing=west,waterlogged=false": {
+      "model": "createqol:block/single_belt/particle",
+      "x": 180,
+      "y": 90
+    },
+    "casing=false,facing=west,waterlogged=true": {
+      "model": "createqol:block/single_belt/particle",
+      "x": 180,
+      "y": 90
+    },
+    "casing=true,facing=east,waterlogged=false": {
+      "model": "createqol:block/single_belt/casing",
+      "y": 270
+    },
+    "casing=true,facing=east,waterlogged=true": {
+      "model": "createqol:block/single_belt/casing",
+      "y": 270
+    },
+    "casing=true,facing=north,waterlogged=false": {
+      "model": "createqol:block/single_belt/casing",
+      "x": 180,
+      "y": 180
+    },
+    "casing=true,facing=north,waterlogged=true": {
+      "model": "createqol:block/single_belt/casing",
+      "x": 180,
+      "y": 180
+    },
+    "casing=true,facing=south,waterlogged=false": {
+      "model": "createqol:block/single_belt/casing"
+    },
+    "casing=true,facing=south,waterlogged=true": {
+      "model": "createqol:block/single_belt/casing"
+    },
+    "casing=true,facing=west,waterlogged=false": {
+      "model": "createqol:block/single_belt/casing",
+      "x": 180,
+      "y": 90
+    },
+    "casing=true,facing=west,waterlogged=true": {
+      "model": "createqol:block/single_belt/casing",
+      "x": 180,
+      "y": 90
+    }
+  }
+}

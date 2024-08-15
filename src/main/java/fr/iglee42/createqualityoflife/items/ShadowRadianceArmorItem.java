@@ -27,7 +27,7 @@ public class ShadowRadianceArmorItem extends BaseArmorItem {
     @Override
     public void onArmorTick(ItemStack stack, Level level, Player player) {
         if (stack.getItem() instanceof ShadowRadianceArmorItem it){
-            if (!player.isCreative() && !BacktankUtil.getAllWithAir(player).isEmpty())BacktankUtil.consumeAir(player, BacktankUtil.getAllWithAir(player).get(0), 0.01f);
+            if (!player.isCreative() && !BacktankUtil.getAllWithAir(player).isEmpty())BacktankUtil.consumeAir(player, BacktankUtil.getAllWithAir(player).get(0), 0.001f);
             else if (!player.isCreative()) return;
             switch (it.getSlot()){
                 case LEGS -> player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,20,1,false,false));

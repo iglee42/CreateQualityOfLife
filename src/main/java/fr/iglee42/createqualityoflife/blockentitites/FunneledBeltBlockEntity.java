@@ -1,26 +1,13 @@
 package fr.iglee42.createqualityoflife.blockentitites;
 
-import static net.minecraft.core.Direction.AxisDirection.NEGATIVE;
-import static net.minecraft.core.Direction.AxisDirection.POSITIVE;
-
-import java.util.List;
-
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.content.kinetics.belt.BeltBlockEntity;
-import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
-import com.simibubi.create.content.kinetics.belt.transport.BeltInventory;
-import com.simibubi.create.content.kinetics.belt.transport.BeltTunnelInteractionHandler;
-import com.simibubi.create.content.kinetics.belt.transport.ItemHandlerBeltSegment;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
-import com.simibubi.create.content.logistics.funnel.BeltFunnelBlock;
-import com.simibubi.create.content.logistics.tunnel.BrassTunnelBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.inventory.InvManipulationBehaviour;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.NBTHelper;
-
 import fr.iglee42.createqualityoflife.blocks.FunneledBeltBlock;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
 import fr.iglee42.createqualityoflife.utils.FunneledBeltInventory;
@@ -31,18 +18,21 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import org.apache.commons.lang3.mutable.MutableBoolean;
+
+import java.util.List;
+
+import static net.minecraft.core.Direction.AxisDirection.NEGATIVE;
+import static net.minecraft.core.Direction.AxisDirection.POSITIVE;
 
 public class FunneledBeltBlockEntity extends KineticBlockEntity {
 
@@ -74,9 +64,9 @@ public class FunneledBeltBlockEntity extends KineticBlockEntity {
 
 	@Override
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-		insertBehaviour = new InvManipulationBehaviour(this,(w,p,s)->new BlockFace(p.offset(0,1,0),s.getValue(FunneledBeltBlock.HORIZONTAL_FACING)));
+		insertBehaviour = InvManipulationBehaviour.forInsertion(this,(w,p,s)->new BlockFace(p.offset(0,1,0),getSpeed() > 0 ? getDirectionFromAxis(s).getOpposite() : getDirectionFromAxis(s)));
 		behaviours.add(insertBehaviour);
-		extractBehaviour = new InvManipulationBehaviour(this,(w,p,s)->new BlockFace(p.offset(0,1,0),s.getValue(FunneledBeltBlock.HORIZONTAL_FACING).getOpposite()));
+		extractBehaviour = new InvManipulationBehaviour(this,(w,p,s)->new BlockFace(p.offset(0,1,0),getSpeed() < 0 ? getDirectionFromAxis(s).getOpposite(): getDirectionFromAxis(s)));
 		behaviours.add(extractBehaviour);
 	}
 
@@ -90,6 +80,8 @@ public class FunneledBeltBlockEntity extends KineticBlockEntity {
 		if (inventory == null){
 			initializeItemHandler();
 		}
+
+		if (getSpeed() == 0) return;
 
 
 		invalidateRenderBoundingBox();
@@ -215,11 +207,10 @@ public class FunneledBeltBlockEntity extends KineticBlockEntity {
 	}
 
 	@Override
-	public ModelData getModelData() {
-		return ModelData.builder()
-			.with(CASING_PROPERTY, casing)
-			.with(COVER_PROPERTY, covered)
-			.build();
+	public IModelData getModelData() {
+		return new ModelDataMap.Builder().withInitial(CASING_PROPERTY, casing)
+				.withInitial(COVER_PROPERTY, covered)
+				.build();
 	}
 
 	public void setCovered(boolean blockCoveringBelt) {
@@ -230,7 +221,7 @@ public class FunneledBeltBlockEntity extends KineticBlockEntity {
 	}
 
 	public Direction getBeltFacing(){
-		return getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
+		return getDirectionFromAxis(getBlockState());
 	}
 
 	public float getDirectionAwareBeltMovementSpeed() {
@@ -253,7 +244,7 @@ public class FunneledBeltBlockEntity extends KineticBlockEntity {
 	private void activateExtracting() {
 
 		BlockState blockState = getBlockState();
-		Direction facing = blockState.getValue(BeltFunnelBlock.HORIZONTAL_FACING);
+		Direction facing = getDirectionFromAxis(blockState);
 
 		int amountToExtract = 64;
 		ItemHelper.ExtractionCountMode mode = ItemHelper.ExtractionCountMode.UPTO;
@@ -305,4 +296,10 @@ public class FunneledBeltBlockEntity extends KineticBlockEntity {
 		inventory.addItem(transportedStack);
 		return empty;
 	}
+
+	public static Direction getDirectionFromAxis(BlockState bs) {
+		return bs.getValue(FunneledBeltBlock.HORIZONTAL_AXIS) == Direction.Axis.X ? Direction.NORTH : Direction.EAST;
+	}
+
+
 }

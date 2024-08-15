@@ -6,25 +6,20 @@ import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.core.PartialModel;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.AllBlocks;
+import com.mojang.math.Quaternion;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.AllSpriteShifts;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityInstance;
 import com.simibubi.create.content.kinetics.base.flwdata.BeltData;
 import com.simibubi.create.content.kinetics.base.flwdata.RotatingData;
-import com.simibubi.create.content.kinetics.belt.*;
 import com.simibubi.create.foundation.block.render.SpriteShiftEntry;
 import com.simibubi.create.foundation.render.AllMaterialSpecs;
 import com.simibubi.create.foundation.utility.Iterate;
 import fr.iglee42.createqualityoflife.blockentitites.FunneledBeltBlockEntity;
-import fr.iglee42.createqualityoflife.blocks.FunneledBeltBlock;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
 import fr.iglee42.createqualityoflife.registries.ModPartialModels;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.LightLayer;
-import org.joml.Quaternionf;
 
 import java.util.ArrayList;
 import java.util.function.Supplier;
@@ -46,7 +41,7 @@ public class FunneledBeltInstance extends KineticBlockEntityInstance<FunneledBel
 
         keys = new ArrayList<>(2);
 
-        facing = blockState.getValue(FunneledBeltBlock.HORIZONTAL_FACING);
+        facing = FunneledBeltBlockEntity.getDirectionFromAxis(blockState);
         alongX = facing.getAxis() == Direction.Axis.X;
         alongZ = facing.getAxis() == Direction.Axis.Z;
 
@@ -128,8 +123,7 @@ public class FunneledBeltInstance extends KineticBlockEntityInstance<FunneledBel
     }
 
     private Direction getOrientation() {
-        return blockState.getValue(BeltBlock.HORIZONTAL_FACING)
-                .getClockWise();
+        return FunneledBeltBlockEntity.getDirectionFromAxis(blockState).getClockWise();
     }
 
     private BeltData setup(BeltData key, boolean bottom, SpriteShiftEntry spriteShift) {
@@ -137,7 +131,7 @@ public class FunneledBeltInstance extends KineticBlockEntityInstance<FunneledBel
         float rotY = facing.toYRot();
         float rotZ = 0;
 
-        Quaternionf q = new Quaternionf().rotationXYZ(rotX * Mth.DEG_TO_RAD, rotY * Mth.DEG_TO_RAD, rotZ * Mth.DEG_TO_RAD);
+        Quaternion q = new Quaternion(rotX, rotY, rotZ, true);
 
 		key.setScrollTexture(spriteShift)
 				.setScrollMult(0.5f)
@@ -152,4 +146,8 @@ public class FunneledBeltInstance extends KineticBlockEntityInstance<FunneledBel
         return key;
     }
 
+    @Override
+    protected Direction.Axis getRotationAxis() {
+        return getOrientation().getAxis();
+    }
 }

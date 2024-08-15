@@ -1,0 +1,46 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "custom_belts"
+        }
+      ],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": {
+          "item": "createqol:single_belt"
+        },
+        "transitionalItem": {
+          "item": "createqol:single_belt"
+        },
+        "sequence": [
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:single_belt"
+              },
+              {
+                "item": "create:brass_funnel"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:single_belt"
+              }
+            ]
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:funneled_belt"
+          }
+        ],
+        "loops": 2
+      }
+    }
+  ]
+}
