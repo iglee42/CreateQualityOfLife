@@ -1,5 +1,6 @@
 package fr.iglee42.createqualityoflife.blocks;
 
+import com.simibubi.create.content.kinetics.base.HorizontalAxisKineticBlock;
 import fr.iglee42.createqualityoflife.blockentitites.FunneledBeltBlockEntity;
 import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
 import fr.iglee42.createqualityoflife.registries.ModShapes;
@@ -40,7 +41,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class FunneledBeltBlock extends HorizontalKineticBlock
+public class FunneledBeltBlock extends HorizontalAxisKineticBlock
 	implements IBE<FunneledBeltBlockEntity>, ProperWaterloggedBlock {
 
 	public static final BooleanProperty CASING = BooleanProperty.create("casing");
@@ -55,14 +56,12 @@ public class FunneledBeltBlock extends HorizontalKineticBlock
 
 	@Override
 	public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
-		return face.getAxis() != state.getValue(HORIZONTAL_FACING).getAxis();
+		return face.getAxis() != getRotationAxis(state);
 	}
 
 	@Override
 	public Axis getRotationAxis(BlockState state) {
-		return state.getValue(HORIZONTAL_FACING)
-				.getClockWise()
-			.getAxis();
+		return state.getValue(HORIZONTAL_AXIS) == Axis.X ? Axis.Z : Axis.X;
 	}
 
 
@@ -126,7 +125,7 @@ public class FunneledBeltBlock extends HorizontalKineticBlock
 
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-		return ModShapes.FUNNELED_BELT.get(state.getValue(HORIZONTAL_FACING).getAxis());
+		return ModShapes.FUNNELED_BELT.get(state.getValue(HORIZONTAL_AXIS) == Axis.X ? Axis.Z : Axis.X);
 	}
 
 

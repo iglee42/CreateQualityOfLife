@@ -74,9 +74,9 @@ public class FunneledBeltBlockEntity extends KineticBlockEntity {
 
 	@Override
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-		insertBehaviour = new InvManipulationBehaviour(this,(w,p,s)->new BlockFace(p.offset(0,1,0),s.getValue(FunneledBeltBlock.HORIZONTAL_FACING)));
+		insertBehaviour = InvManipulationBehaviour.forInsertion(this,(w,p,s)->new BlockFace(p.offset(0,1,0),getSpeed() > 0 ? getDirectionFromAxis(s).getOpposite() : getDirectionFromAxis(s)));
 		behaviours.add(insertBehaviour);
-		extractBehaviour = new InvManipulationBehaviour(this,(w,p,s)->new BlockFace(p.offset(0,1,0),s.getValue(FunneledBeltBlock.HORIZONTAL_FACING).getOpposite()));
+		extractBehaviour = new InvManipulationBehaviour(this,(w,p,s)->new BlockFace(p.offset(0,1,0),getSpeed() < 0 ? getDirectionFromAxis(s).getOpposite(): getDirectionFromAxis(s)));
 		behaviours.add(extractBehaviour);
 	}
 
@@ -90,6 +90,8 @@ public class FunneledBeltBlockEntity extends KineticBlockEntity {
 		if (inventory == null){
 			initializeItemHandler();
 		}
+
+		if (getSpeed() == 0) return;
 
 
 		invalidateRenderBoundingBox();
@@ -230,7 +232,7 @@ public class FunneledBeltBlockEntity extends KineticBlockEntity {
 	}
 
 	public Direction getBeltFacing(){
-		return getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
+		return getDirectionFromAxis(getBlockState());
 	}
 
 	public float getDirectionAwareBeltMovementSpeed() {
@@ -253,7 +255,7 @@ public class FunneledBeltBlockEntity extends KineticBlockEntity {
 	private void activateExtracting() {
 
 		BlockState blockState = getBlockState();
-		Direction facing = blockState.getValue(BeltFunnelBlock.HORIZONTAL_FACING);
+		Direction facing = getDirectionFromAxis(blockState);
 
 		int amountToExtract = 64;
 		ItemHelper.ExtractionCountMode mode = ItemHelper.ExtractionCountMode.UPTO;
@@ -305,4 +307,10 @@ public class FunneledBeltBlockEntity extends KineticBlockEntity {
 		inventory.addItem(transportedStack);
 		return empty;
 	}
+
+	public static Direction getDirectionFromAxis(BlockState bs) {
+		return bs.getValue(FunneledBeltBlock.HORIZONTAL_AXIS) == Direction.Axis.X ? Direction.NORTH : Direction.EAST;
+	}
+
+
 }

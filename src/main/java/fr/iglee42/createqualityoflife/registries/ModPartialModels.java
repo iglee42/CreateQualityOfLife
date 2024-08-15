@@ -12,8 +12,9 @@ public class ModPartialModels {
             INVENTORY_LINKER = block("inventory_linker/inner_off"), INVENTORY_LINKER_ON = block("inventory_linker/inner_on"),
 
             SHADOW_RADIANCE_TANK_COGS = block("shadow_radiance_chestplate/cogs"),
-
-            FUNNELED_BELT_TOP = block("funneled_belt/belt"), FUNNELED_BELT_BOTTOM = block("funneled_belt/belt_bottom")
+            SHADOW_RADIANCE_CHESTPLATE_PROPELLERS = block("shadow_radiance_chestplate/propellers"),
+            FUNNELED_BELT_TOP = block("funneled_belt/belt"), FUNNELED_BELT_BOTTOM = block("funneled_belt/belt_bottom"),
+            SINGLE_BELT_TOP = block("single_belt/top"), SINGLE_BELT_BOTTOM = block("single_belt/bottom")
 
             ;
 

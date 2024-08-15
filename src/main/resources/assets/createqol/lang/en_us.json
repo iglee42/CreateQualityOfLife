@@ -9,6 +9,8 @@
   "block.createqol.loom_saw": "Shepherd's Saw",
   "block.createqol.mason_saw": "Mason's Saw",
   "block.createqol.tinkering_saw": "Tinkerer's Saw",
+  "block.createqol.funneled_belt": "Funneled Belt",
+  "block.createqol.single_belt": "Single Belt",
 
   "item.createqol.player_paper": "Player Paper",
   "item.createqol.shadow_radiance": "Shadow Radiance",
@@ -38,5 +40,17 @@
   "block.createqol.inventory_linker.tooltip.condition1": "When R-Clicked with a full player paper",
   "block.createqol.inventory_linker.tooltip.behaviour1": "Put the _player paper_ in the block",
 
-  "itemGroup.createqol": "Create : Quality of Life"
+  "item.createqol.shadow_radiance_chestplate.tooltip.behaviour1": "Provides _Pressurized_ _Air_ to Equipment that requires it.",
+  "item.createqol.shadow_radiance_chestplate.tooltip.behaviour2": "_Collects_ _Pressurized_ _Air_ at a rate depending on the Rotational Speed.",
+  "item.createqol.shadow_radiance_chestplate.tooltip.behaviour3": "_Adds_ _Propeller_ to the Chestplate.",
+  "item.createqol.shadow_radiance_chestplate.tooltip.condition1": "When Worn",
+  "item.createqol.shadow_radiance_chestplate.tooltip.condition2": "When placed, Powered by Kinetics",
+  "item.createqol.shadow_radiance_chestplate.tooltip.condition3": "When placed, Right Click with Propeller",
+  "item.createqol.shadow_radiance_chestplate.tooltip.summary": "A _Wearable_ _Tank_ for carrying Pressurized Air.",
+
+  "itemGroup.createqol": "Create : Quality of Life",
+  "keybind.createqol.category": "Create: Quality of Life",
+
+  "keybind.createqol.shadow_radiance_chestplate_fans": "Toggle Fans",
+  "keybind.createqol.shadow_radiance_chestplate_hover": "Toggle Hover"
 }

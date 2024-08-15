@@ -33,10 +33,8 @@ public class ShadowRadianceHelmet extends DivingHelmetItem {
 
     @Override
     public void onArmorTick(ItemStack stack, Level level, Player player) {
-        if (level.canSeeSky(player.blockPosition())){
-            if (!player.isCreative() && !BacktankUtil.getAllWithAir(player).isEmpty())BacktankUtil.consumeAir(player, BacktankUtil.getAllWithAir(player).get(0), 0.01f);
-            else if (!player.isCreative()) return;
-            player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION,20*11,1,false,false));
-        }
+        if (!player.isCreative() && !BacktankUtil.getAllWithAir(player).isEmpty())BacktankUtil.consumeAir(player, BacktankUtil.getAllWithAir(player).get(0), 0.001f);
+        else if (!player.isCreative()) return;
+        player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION,20*11,1,false,false));
     }
 }

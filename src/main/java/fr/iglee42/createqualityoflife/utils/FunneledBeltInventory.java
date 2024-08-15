@@ -94,8 +94,6 @@ public class FunneledBeltInventory {
 		Level world = belt.getLevel();
 		boolean onClient = world.isClientSide && !belt.isVirtual();
 
-		// resolve ending only when items will reach it this tick
-		Ending ending = Ending.UNRESOLVED;
 
 		// Loop over items
 		while (iterator.hasNext()) {
@@ -135,19 +133,10 @@ public class FunneledBeltInventory {
 					beltMovementPositive ? Math.min(movement, diff - spacing) : Math.max(movement, diff + spacing);
 			}
 
-			// Don't move beyond the edge
-			float diffToEnd = beltMovementPositive ? currentPos : -currentPos;
-			if (Math.abs(diffToEnd) < Math.abs(movement) + 1) {
-				if (ending == Ending.UNRESOLVED)
-					ending = resolveEnding();
-				diffToEnd += beltMovementPositive ? -ending.margin : ending.margin;
-			}
-			float limitedMovement =
-				beltMovementPositive ? Math.min(movement, diffToEnd) : Math.max(movement, diffToEnd);
-			float nextOffset = currentItem.beltPosition + limitedMovement;
 
-			if (checkForFunnels(currentItem,nextOffset))
-				continue;
+			float limitedMovement =
+				beltMovementPositive ? movement : -movement;
+			float nextOffset = currentItem.beltPosition + limitedMovement;
 
 			if (noMovement)
 				continue;
@@ -160,56 +149,24 @@ public class FunneledBeltInventory {
 			currentPos = currentItem.beltPosition;
 
 			// Movement successful
-			if (limitedMovement == movement || onClient)
+			if (onClient)
 				continue;
 
 			// End reached
-			int lastOffset = beltMovementPositive ? 1 : 0;
-			BlockPos nextPosition = getNextPos();
-
-
-
+			checkForFunnels(currentItem,nextOffset);
 		}
 	}
 
 	public boolean canInsert() {
-		return toInsert.isEmpty();
+		return toInsert.isEmpty() && items.size() < 2;
 	}
 
 
-	private enum Ending {
-		UNRESOLVED(0), EJECT(0), INSERT(.25f), FUNNEL(.5f), BLOCKED(.45f);
-
-		private float margin;
-
-		Ending(float f) {
-			this.margin = f;
-		}
-	}
 
 	private BlockPos getNextPos(){
 		return belt.getBlockPos().offset((belt.getBeltFacing().getAxis()== Direction.Axis.X ?beltMovementPositive ? 1 : -1 : 0),0,(belt.getBeltFacing().getAxis()== Direction.Axis.Z ?beltMovementPositive ? 1 : -1 : 0));
 	}
 
-	private Ending resolveEnding() {
-		Level world = belt.getLevel();
-		BlockPos nextPosition = getNextPos();
-
-//		if (AllBlocks.BRASS_BELT_FUNNEL.has(world.getBlockState(lastPosition.up())))
-//			return Ending.FUNNEL;
-
-		DirectBeltInputBehaviour inputBehaviour =
-			BlockEntityBehaviour.get(world, nextPosition, DirectBeltInputBehaviour.TYPE);
-		if (inputBehaviour != null)
-			return Ending.INSERT;
-
-		if (BlockHelper.hasBlockSolidSide(world.getBlockState(nextPosition), world, nextPosition,
-			belt.getMovementFacing()
-				.getOpposite()))
-			return Ending.BLOCKED;
-
-		return Ending.EJECT;
-	}
 
 	//
 
@@ -293,27 +250,21 @@ public class FunneledBeltInventory {
 
 	private boolean checkForFunnels(TransportedItemStack currentItem,
 										  float nextOffset) {
-		int firstUpcomingSegment = (int) Math.floor(currentItem.beltPosition);
-		int step = beltMovementPositive ? 1 : -1;
-		firstUpcomingSegment = Mth.clamp(firstUpcomingSegment, 0, 1);
-
-		for (int segment = firstUpcomingSegment; beltMovementPositive ? segment <= nextOffset
-				: segment + 1 >= nextOffset; segment += step) {
 
 
 			if (belt.getLevel().isClientSide /*|| belt.getBlockState().getOptionalValue(BeltFunnelBlock.POWERED).orElse(false)*/)
-					continue;
+					return false;
 
 			InvManipulationBehaviour inserting = belt.getInsertBehaviour();
 
 			if (inserting == null)
-					continue;
+					return false;
 
-			int amountToExtract = 64;
+			int amountToExtract = 1;
 
 			ItemStack toInsert = currentItem.stack.copy();
 			if (amountToExtract > toInsert.getCount())
-					continue;
+					return false;
 
 /*			if (amountToExtract != -1 && modeToExtract != ItemHelper.ExtractionCountMode.UPTO) {
 				toInsert.setCount(Math.min(amountToExtract, toInsert.getCount()));
@@ -326,9 +277,10 @@ public class FunneledBeltInventory {
 						continue;
 			}*/
 
+			inserting.findNewCapability();
 			ItemStack remainder = inserting.insert(toInsert);
 			if (toInsert.equals(remainder, false))
-					continue;
+					return false;
 
 			int notFilled = currentItem.stack.getCount() - toInsert.getCount();
 			if (!remainder.isEmpty()) {
@@ -338,7 +290,6 @@ public class FunneledBeltInventory {
 
 			currentItem.stack = remainder;
 			belt.sendData();
-		}
 
 		return false;
 	}

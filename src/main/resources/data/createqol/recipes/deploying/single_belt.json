@@ -1,0 +1,29 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "custom_belts"
+        }
+      ],
+      "recipe": {
+        "type": "create:deploying",
+        "ingredients": [
+          {
+            "item": "create:shaft"
+          },
+          {
+            "item": "create:belt_connector"
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:single_belt"
+          }
+        ]
+      }
+    }
+  ]
+}

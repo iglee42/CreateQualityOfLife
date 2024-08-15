@@ -1,5 +1,13 @@
 package fr.iglee42.createqualityoflife.compat.jei;
 
+import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.Create;
+import com.simibubi.create.compat.jei.CreateJEI;
+import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
+import com.simibubi.create.compat.jei.category.ItemApplicationCategory;
+import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe;
+import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import earth.terrarium.chipped.common.compat.jei.ChippedRecipeCategory;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
@@ -7,6 +15,7 @@ import fr.iglee42.createqualityoflife.utils.Features;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;

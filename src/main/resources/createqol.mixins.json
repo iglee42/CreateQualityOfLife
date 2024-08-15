@@ -7,14 +7,22 @@
   "mixins": [
     "CasingBlockMixin",
     "BacktankRendererMixin",
+    "BeltFunnelBlockMixin",
     "BlockEntityTypeMixin",
     "ChromaticCompoundItemMixin",
     "NoGravMagicalDohickyItemMixin",
     "ScheduleItemMixin",
+    "DivingBootsItemMixin",
     "FlapDisplayBlockMixin",
-    "NetheriteDivingHandlerMixin"
+    "NetheriteDivingHandlerMixin",
+    "ModelBuilderMixin",
+    "ModelFileMixin",
+    "MysteriousItemConversionCategoryMixin",
+    "NetheriteDivingHandlerMixin",
+    "ScheduleItemMixin"
   ],
   "client": [
+    "BacktankArmorLayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

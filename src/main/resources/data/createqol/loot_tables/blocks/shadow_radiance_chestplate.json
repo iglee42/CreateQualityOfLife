@@ -37,6 +37,39 @@
                 }
               ],
               "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "ops": [
+                {
+                  "op": "replace",
+                  "source": "propeller",
+                  "target": "Propeller"
+                }
+              ],
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "ops": [
+                {
+                  "op": "replace",
+                  "source": "fans",
+                  "target": "FansEnable"
+                }
+              ],
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "ops": [
+                {
+                  "op": "replace",
+                  "source": "hover",
+                  "target": "HoverEnable"
+                }
+              ],
+              "source": "block_entity"
             }
           ],
           "name": "createqol:shadow_radiance_chestplate"

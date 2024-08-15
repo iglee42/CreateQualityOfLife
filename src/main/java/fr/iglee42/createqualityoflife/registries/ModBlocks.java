@@ -5,24 +5,30 @@ import com.simibubi.create.AllTags;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.equipment.armor.BacktankBlock;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
+import com.simibubi.create.content.kinetics.belt.BeltBlock;
+import com.simibubi.create.content.kinetics.belt.BeltGenerator;
+import com.simibubi.create.content.kinetics.belt.BeltModel;
 import com.simibubi.create.content.kinetics.saw.SawGenerator;
 import com.simibubi.create.content.kinetics.saw.SawMovementBehaviour;
+import com.simibubi.create.content.redstone.displayLink.source.ItemNameDisplaySource;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BuilderTransformers;
+import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import fr.iglee42.createqualityoflife.CreateQOL;
-import fr.iglee42.createqualityoflife.blocks.ChippedSawBlock;
-import fr.iglee42.createqualityoflife.blocks.FunneledBeltBlock;
-import fr.iglee42.createqualityoflife.blocks.InventoryLinkerBlock;
+import fr.iglee42.createqualityoflife.blocks.*;
 import fr.iglee42.createqualityoflife.registries.generators.FunneledBeltGenerator;
+import fr.iglee42.createqualityoflife.registries.generators.SingleBeltGenerator;
 import fr.iglee42.createqualityoflife.utils.Features;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MaterialColor;
 
 import static com.simibubi.create.AllMovementBehaviours.movementBehaviour;
+import static com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours.assignDataBehaviour;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
@@ -48,15 +54,15 @@ public class ModBlocks {
             .transform(customItemModel())
             .register();
 
-    public static final BlockEntry<BacktankBlock> SHADOW_RADIANCE_CHESTPLATE =
-            REGISTRATE.block("shadow_radiance_chestplate", BacktankBlock::new)
+    public static final BlockEntry<ShadowRadianceBacktankBlock> SHADOW_RADIANCE_CHESTPLATE =
+            REGISTRATE.block("shadow_radiance_chestplate", ShadowRadianceBacktankBlock::new)
                     .initialProperties(SharedProperties::netheriteMetal)
                     .transform(BuilderTransformers.backtank(ModItems.SHADOW_RADIANCE_CHESTPLATE::get))
                     .register();
 
     public static BlockEntry<FunneledBeltBlock> FUNNELED_BELT = REGISTRATE.block("funneled_belt", FunneledBeltBlock::new)
             .initialProperties(SharedProperties::stone)
-            .properties(p -> p.mapColor(MapColor.METAL))
+            .properties(p -> p.color(MaterialColor.METAL))
             .properties(BlockBehaviour.Properties::noOcclusion)
             .transform(pickaxeOnly())
             //.onRegisterAfter(Registry.ITEM_REGISTRY,v-> ItemDescription.useKey(v,"block.createqol.inventory_linker"))
@@ -67,6 +73,20 @@ public class ModBlocks {
             .properties(p->p.rarity(Rarity.UNCOMMON))
             .transform(customItemModel())
             .register();
+
+    public static final BlockEntry<SingleBeltBlock> SINGLE_BELT = REGISTRATE.block("single_belt", SingleBeltBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .properties(BlockBehaviour.Properties::noOcclusion)
+            .addLayer(() -> RenderType::cutoutMipped)
+            .transform(axeOrPickaxe())
+            .blockstate(new SingleBeltGenerator()::generate)
+            .transform(BlockStressDefaults.setImpact(0))
+            .onRegister(assignDataBehaviour(new ItemNameDisplaySource(), "combine_item_names"))
+            .onRegister(CreateRegistrate.blockModel(() -> BeltModel::new))
+            .item()
+            .transform(customItemModel())
+            .register();
+
 
 
 

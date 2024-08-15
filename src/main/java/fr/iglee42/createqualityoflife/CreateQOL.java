@@ -1,9 +1,7 @@
 package fr.iglee42.createqualityoflife;
 
 import com.mojang.logging.LogUtils;
-import com.simibubi.create.AllItems;
-import com.simibubi.create.compat.jei.ConversionRecipe;
-import com.simibubi.create.compat.jei.category.MysteriousItemConversionCategory;
+import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;

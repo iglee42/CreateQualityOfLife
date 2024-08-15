@@ -1,62 +1,30 @@
 {
   "variants": {
-    "casing=false,facing=east,waterlogged=false": {
-      "model": "createqol:block/funneled_belt/brass",
-      "y": 270
-    },
-    "casing=false,facing=east,waterlogged=true": {
-      "model": "createqol:block/funneled_belt/brass",
-      "y": 270
-    },
-    "casing=false,facing=north,waterlogged=false": {
-      "model": "createqol:block/funneled_belt/brass",
-      "y": 180
-    },
-    "casing=false,facing=north,waterlogged=true": {
-      "model": "createqol:block/funneled_belt/brass",
-      "y": 180
-    },
-    "casing=false,facing=south,waterlogged=false": {
+    "axis=x,casing=false,waterlogged=false": {
       "model": "createqol:block/funneled_belt/brass"
     },
-    "casing=false,facing=south,waterlogged=true": {
+    "axis=x,casing=false,waterlogged=true": {
       "model": "createqol:block/funneled_belt/brass"
     },
-    "casing=false,facing=west,waterlogged=false": {
+    "axis=x,casing=true,waterlogged=false": {
+      "model": "createqol:block/funneled_belt/brass"
+    },
+    "axis=x,casing=true,waterlogged=true": {
+      "model": "createqol:block/funneled_belt/brass"
+    },
+    "axis=z,casing=false,waterlogged=false": {
       "model": "createqol:block/funneled_belt/brass",
       "y": 90
     },
-    "casing=false,facing=west,waterlogged=true": {
+    "axis=z,casing=false,waterlogged=true": {
       "model": "createqol:block/funneled_belt/brass",
       "y": 90
     },
-    "casing=true,facing=east,waterlogged=false": {
-      "model": "createqol:block/funneled_belt/brass",
-      "y": 270
-    },
-    "casing=true,facing=east,waterlogged=true": {
-      "model": "createqol:block/funneled_belt/brass",
-      "y": 270
-    },
-    "casing=true,facing=north,waterlogged=false": {
-      "model": "createqol:block/funneled_belt/brass",
-      "y": 180
-    },
-    "casing=true,facing=north,waterlogged=true": {
-      "model": "createqol:block/funneled_belt/brass",
-      "y": 180
-    },
-    "casing=true,facing=south,waterlogged=false": {
-      "model": "createqol:block/funneled_belt/brass"
-    },
-    "casing=true,facing=south,waterlogged=true": {
-      "model": "createqol:block/funneled_belt/brass"
-    },
-    "casing=true,facing=west,waterlogged=false": {
+    "axis=z,casing=true,waterlogged=false": {
       "model": "createqol:block/funneled_belt/brass",
       "y": 90
     },
-    "casing=true,facing=west,waterlogged=true": {
+    "axis=z,casing=true,waterlogged=true": {
       "model": "createqol:block/funneled_belt/brass",
       "y": 90
     }
