@@ -44,12 +44,10 @@
     },
     "casing=true,facing=north,waterlogged=false": {
       "model": "createqol:block/single_belt/casing",
-      "x": 180,
       "y": 180
     },
     "casing=true,facing=north,waterlogged=true": {
       "model": "createqol:block/single_belt/casing",
-      "x": 180,
       "y": 180
     },
     "casing=true,facing=south,waterlogged=false": {
@@ -60,12 +58,10 @@
     },
     "casing=true,facing=west,waterlogged=false": {
       "model": "createqol:block/single_belt/casing",
-      "x": 180,
       "y": 90
     },
     "casing=true,facing=west,waterlogged=true": {
       "model": "createqol:block/single_belt/casing",
-      "x": 180,
       "y": 90
     }
   }

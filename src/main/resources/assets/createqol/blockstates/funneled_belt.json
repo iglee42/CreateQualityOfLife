@@ -7,10 +7,10 @@
       "model": "createqol:block/funneled_belt/brass"
     },
     "axis=x,casing=true,waterlogged=false": {
-      "model": "createqol:block/funneled_belt/brass"
+      "model": "createqol:block/funneled_belt/brass_casing"
     },
     "axis=x,casing=true,waterlogged=true": {
-      "model": "createqol:block/funneled_belt/brass"
+      "model": "createqol:block/funneled_belt/brass_casing"
     },
     "axis=z,casing=false,waterlogged=false": {
       "model": "createqol:block/funneled_belt/brass",
@@ -21,11 +21,11 @@
       "y": 90
     },
     "axis=z,casing=true,waterlogged=false": {
-      "model": "createqol:block/funneled_belt/brass",
+      "model": "createqol:block/funneled_belt/brass_casing",
       "y": 90
     },
     "axis=z,casing=true,waterlogged=true": {
-      "model": "createqol:block/funneled_belt/brass",
+      "model": "createqol:block/funneled_belt/brass_casing",
       "y": 90
     }
   }

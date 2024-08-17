@@ -9,6 +9,7 @@ import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import fr.iglee42.createqualityoflife.blocks.FunneledBeltBlock;
+import fr.iglee42.createqualityoflife.client.FunneledBeltModel;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
 import fr.iglee42.createqualityoflife.utils.FunneledBeltInventory;
 import fr.iglee42.createqualityoflife.utils.FunneledBeltItemHandler;
@@ -36,11 +37,7 @@ import static net.minecraft.core.Direction.AxisDirection.POSITIVE;
 
 public class FunneledBeltBlockEntity extends KineticBlockEntity {
 
-	public static final ModelProperty<CasingType> CASING_PROPERTY = new ModelProperty<>();
-	public static final ModelProperty<Boolean> COVER_PROPERTY = new ModelProperty<>();
-
 	public CasingType casing;
-	public boolean covered;
 
 	protected FunneledBeltInventory inventory;
 	protected LazyOptional<IItemHandler> itemHandler;
@@ -138,7 +135,6 @@ public class FunneledBeltBlockEntity extends KineticBlockEntity {
 	public void write(CompoundTag compound, boolean clientPacket) {
 
 		NBTHelper.writeEnum(compound, "Casing", casing);
-		compound.putBoolean("Covered", covered);
 
 		super.write(compound, clientPacket);
 	}
@@ -148,14 +144,12 @@ public class FunneledBeltBlockEntity extends KineticBlockEntity {
 		super.read(compound, clientPacket);
 
 		CasingType casingBefore = casing;
-		boolean coverBefore = covered;
 		casing = NBTHelper.readEnum(compound, "Casing", CasingType.class);
-		covered = compound.getBoolean("Covered");
 
 		if (!clientPacket)
 			return;
 
-		if (casingBefore == casing && coverBefore == covered)
+		if (casingBefore == casing)
 			return;
 		if (!isVirtual())
 			requestModelDataUpdate();
@@ -208,17 +202,10 @@ public class FunneledBeltBlockEntity extends KineticBlockEntity {
 
 	@Override
 	public IModelData getModelData() {
-		return new ModelDataMap.Builder().withInitial(CASING_PROPERTY, casing)
-				.withInitial(COVER_PROPERTY, covered)
+		return new ModelDataMap.Builder().withInitial(FunneledBeltModel.CASING_PROPERTY, casing)
 				.build();
 	}
 
-	public void setCovered(boolean blockCoveringBelt) {
-		if (blockCoveringBelt == covered)
-			return;
-		covered = blockCoveringBelt;
-		notifyUpdate();
-	}
 
 	public Direction getBeltFacing(){
 		return getDirectionFromAxis(getBlockState());

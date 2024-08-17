@@ -16,6 +16,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.VecHelper;
 import fr.iglee42.createqualityoflife.blocks.SingleBeltBlock;
+import fr.iglee42.createqualityoflife.client.SingleBeltModel;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
 import fr.iglee42.createqualityoflife.utils.ItemHandlerSingleBeltSegment;
 import fr.iglee42.createqualityoflife.utils.SingleBeltInteractionHandlers;
@@ -52,6 +53,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Function;
@@ -61,10 +63,6 @@ import static net.minecraft.core.Direction.AxisDirection.POSITIVE;
 import static net.minecraft.world.entity.MoverType.SELF;
 
 public class SingleBeltBlockEntity extends KineticBlockEntity {
-
-	public static final ModelProperty<CasingType> CASING_PROPERTY = new ModelProperty<>();
-	public static final ModelProperty<Boolean> COVER_PROPERTY = new ModelProperty<>();
-
 
 	public Map<Entity, TransportedEntityInfo> passengers;
 	public Optional<DyeColor> color;
@@ -436,11 +434,10 @@ public class SingleBeltBlockEntity extends KineticBlockEntity {
 
 	@Override
 	public IModelData getModelData() {
-		return new ModelDataMap.Builder().withInitial(CASING_PROPERTY, casing)
-				.withInitial(COVER_PROPERTY, covered)
+		return new ModelDataMap.Builder().withInitial(SingleBeltModel.CASING_PROPERTY, casing)
+				.withInitial(SingleBeltModel.COVER_PROPERTY, covered)
 				.build();
 	}
-
 
 
 	public void invalidateItemHandler() {

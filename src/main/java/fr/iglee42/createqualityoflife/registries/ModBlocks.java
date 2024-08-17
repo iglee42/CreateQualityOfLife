@@ -1,15 +1,7 @@
 package fr.iglee42.createqualityoflife.registries;
 
-import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags;
-import com.simibubi.create.Create;
-import com.simibubi.create.content.equipment.armor.BacktankBlock;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
-import com.simibubi.create.content.kinetics.belt.BeltBlock;
-import com.simibubi.create.content.kinetics.belt.BeltGenerator;
-import com.simibubi.create.content.kinetics.belt.BeltModel;
-import com.simibubi.create.content.kinetics.saw.SawGenerator;
-import com.simibubi.create.content.kinetics.saw.SawMovementBehaviour;
 import com.simibubi.create.content.redstone.displayLink.source.ItemNameDisplaySource;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BuilderTransformers;
@@ -18,16 +10,15 @@ import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.blocks.*;
+import fr.iglee42.createqualityoflife.client.FunneledBeltModel;
+import fr.iglee42.createqualityoflife.client.SingleBeltModel;
 import fr.iglee42.createqualityoflife.registries.generators.FunneledBeltGenerator;
 import fr.iglee42.createqualityoflife.registries.generators.SingleBeltGenerator;
-import fr.iglee42.createqualityoflife.utils.Features;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MaterialColor;
 
-import static com.simibubi.create.AllMovementBehaviours.movementBehaviour;
 import static com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours.assignDataBehaviour;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
@@ -65,10 +56,10 @@ public class ModBlocks {
             .properties(p -> p.color(MaterialColor.METAL))
             .properties(BlockBehaviour.Properties::noOcclusion)
             .transform(pickaxeOnly())
-            //.onRegisterAfter(Registry.ITEM_REGISTRY,v-> ItemDescription.useKey(v,"block.createqol.inventory_linker"))
             .blockstate(new FunneledBeltGenerator()::generate)
             .transform(BlockStressDefaults.setNoImpact())
             .addLayer(()-> RenderType::cutoutMipped)
+            .onRegister(CreateRegistrate.blockModel(()-> FunneledBeltModel::new))
             .item()
             .properties(p->p.rarity(Rarity.UNCOMMON))
             .transform(customItemModel())
@@ -80,9 +71,9 @@ public class ModBlocks {
             .addLayer(() -> RenderType::cutoutMipped)
             .transform(axeOrPickaxe())
             .blockstate(new SingleBeltGenerator()::generate)
-            .transform(BlockStressDefaults.setImpact(0))
+            .transform(BlockStressDefaults.setNoImpact())
             .onRegister(assignDataBehaviour(new ItemNameDisplaySource(), "combine_item_names"))
-            .onRegister(CreateRegistrate.blockModel(() -> BeltModel::new))
+            .onRegister(CreateRegistrate.blockModel(() -> SingleBeltModel::new))
             .item()
             .transform(customItemModel())
             .register();
