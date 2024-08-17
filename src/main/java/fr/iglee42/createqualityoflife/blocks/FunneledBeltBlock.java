@@ -82,13 +82,11 @@ public class FunneledBeltBlock extends HorizontalAxisKineticBlock
 
 		if (AllBlocks.BRASS_CASING.isIn(heldItem)) {
 			withBlockEntityDo(world, pos, be -> be.setCasingType(CasingType.BRASS));
-			updateCoverProperty(world, pos, world.getBlockState(pos));
 			return InteractionResult.SUCCESS;
 		}
 
 		if (AllBlocks.ANDESITE_CASING.isIn(heldItem)) {
 			withBlockEntityDo(world, pos, be -> be.setCasingType(CasingType.ANDESITE));
-			updateCoverProperty(world, pos, world.getBlockState(pos));
 			return InteractionResult.SUCCESS;
 		}
 
@@ -140,37 +138,9 @@ public class FunneledBeltBlock extends HorizontalAxisKineticBlock
 	public BlockState updateShape(BlockState state, Direction side, BlockState p_196271_3_, LevelAccessor world,
 		BlockPos pos, BlockPos p_196271_6_) {
 		updateWater(world, state, pos);
-
-		if (side == Direction.UP)
-			updateCoverProperty(world, pos, state);
 		return state;
 	}
 
-	public void updateCoverProperty(LevelAccessor world, BlockPos pos, BlockState state) {
-		if (world.isClientSide())
-			return;
-		if (state.getValue(CASING))
-			withBlockEntityDo(world, pos, bbe -> bbe.setCovered(isBlockCoveringBelt(world, pos.above())));
-	}
-	
-	public static boolean isBlockCoveringBelt(LevelAccessor world, BlockPos pos) {
-		BlockState blockState = world.getBlockState(pos);
-		VoxelShape collisionShape = blockState.getCollisionShape(world, pos);
-		if (collisionShape.isEmpty())
-			return false;
-		AABB bounds = collisionShape.bounds();
-		if (bounds.getXsize() < .5f || bounds.getZsize() < .5f)
-			return false;
-		if (bounds.minY > 0)
-			return false;
-		if (AllBlocks.CRUSHING_WHEEL_CONTROLLER.has(blockState))
-			return false;
-		if (FunnelBlock.isFunnel(blockState) && FunnelBlock.getFunnelFacing(blockState) != Direction.UP)
-			return false;
-		if (blockState.getBlock() instanceof BeltTunnelBlock)
-			return false;
-		return true;
-	}
 
 
 	@Override

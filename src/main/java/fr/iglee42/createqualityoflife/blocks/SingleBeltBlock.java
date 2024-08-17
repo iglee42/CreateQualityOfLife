@@ -253,6 +253,13 @@ public class SingleBeltBlock extends HorizontalKineticBlock
 			return InteractionResult.SUCCESS;
 		}
 
+		if (context.getClickedFace() == Direction.UP) {
+			if (world.isClientSide)
+				return InteractionResult.SUCCESS;
+			world.setBlock(pos,rotate(state,Rotation.CLOCKWISE_90),0);
+			return InteractionResult.SUCCESS;
+		}
+
 
 		return InteractionResult.PASS;
 	}
@@ -295,7 +302,7 @@ public class SingleBeltBlock extends HorizontalKineticBlock
 
 	@Override
 	public RenderShape getRenderShape(BlockState state) {
-		return RenderShape.ENTITYBLOCK_ANIMATED;
+		return state.getValue(CASING) ? RenderShape.MODEL : RenderShape.ENTITYBLOCK_ANIMATED;
 	}
 
 	public static void initBelt(Level world, BlockPos pos) {

@@ -8,6 +8,7 @@
     "createqol:loom_saw",
     "createqol:tinkering_saw",
     "createqol:mason_saw",
-    "createqol:inventory_linker"
+    "createqol:inventory_linker",
+    "createqol:single_belt"
   ]
 }

@@ -45,7 +45,7 @@
   "item.createqol.shadow_radiance_chestplate.tooltip.behaviour3": "_Adds_ _Propeller_ to the Chestplate.",
   "item.createqol.shadow_radiance_chestplate.tooltip.condition1": "When Worn",
   "item.createqol.shadow_radiance_chestplate.tooltip.condition2": "When placed, Powered by Kinetics",
-  "item.createqol.shadow_radiance_chestplate.tooltip.condition3": "When placed, Right Click with Propeller",
+  "item.createqol.shadow_radiance_chestplate.tooltip.condition3": "When placed, R-Clicked with Propeller",
   "item.createqol.shadow_radiance_chestplate.tooltip.summary": "A _Wearable_ _Tank_ for carrying Pressurized Air.",
 
   "itemGroup.createqol": "Create : Quality of Life",
