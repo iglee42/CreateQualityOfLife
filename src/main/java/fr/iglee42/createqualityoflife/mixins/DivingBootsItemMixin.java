@@ -13,10 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(value = DivingBootsItem.class,remap = false)
-public abstract class DivingBootsItemMixin {
+public class DivingBootsItemMixin {
 
 
-    @Inject(method = "getWornItem",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;",shift = At.Shift.BEFORE),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
+    @Inject(remap = true, method = "getWornItem",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;",shift = At.Shift.BEFORE),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
     private static void createqol$getWornItem(Entity entity, CallbackInfoReturnable<ItemStack> cir, LivingEntity livingEntity, ItemStack stack){
         if (ModItems.SHADOW_RADIANCE_BOOTS.is(stack.getItem())) cir.setReturnValue(stack);
     }
