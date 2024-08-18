@@ -1,5 +1,6 @@
 package fr.iglee42.createqualityoflife;
 
+import com.jozufozu.flywheel.core.PartialModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.foundation.particle.AirParticleData;
@@ -63,11 +64,10 @@ public class CreateQOLClient {
 
 
     public static void showPropellers(BlockState renderedState, int light, PoseStack ms, MultiBufferSource buffer, RenderType renderType, LevelAccessor level) {
-        SuperByteBuffer propellers = CachedBufferer.partial( ModPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS,renderedState);
-        float scrollU = (AnimationTickHolder.getRenderTime(level)) % 10 >= 5 ? 1f : 1.00024f;
+        PartialModel partial = (AnimationTickHolder.getRenderTime(level)) % 10 >= 5 ? ModPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS : ModPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS_ALT;
+        SuperByteBuffer propellers = CachedBufferer.partial(partial,renderedState);
         propellers
                 .forEntityRender()
-                .shiftUVScrolling(ModSprites.SHADOW_CHEST,scrollU,0)
                 .light(light)
                 .renderInto(ms, buffer.getBuffer(renderType));
     }
