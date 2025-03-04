@@ -13,16 +13,15 @@ plugins {
     id 'net.minecraftforge.gradle' version '5.1.+'
 }
 
-apply plugin: 'org.spongepowered.mixin'
+group = mod_group_id
+version = minecraft_version + "-" +mod_version
 
-group = 'fr.iglee42'
+base {
+    archivesName = mod_name
+}
 
 version = '1.20.1-1.2-fix1'
 
-java {
-    archivesBaseName = 'createqol'
-    toolchain.languageVersion = JavaLanguageVersion.of(17)
-}
 
 minecraft {
     // The mappings can be changed at any time and must be in the following format.
@@ -147,18 +146,14 @@ mixin {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
 
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
+
+    maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
+    maven { url = "https://mvn.devos.one/snapshots" } // Registrate
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven" }
 
     maven {
-        // Location of the maven for mixed mappings, Registrate, and Flywheel
-        name 'tterrag maven'
-        url 'https://maven.tterrag.com'
+        url "https://maven.teamresourceful.com/repository/maven-public/"
     }
     maven {
         url 'https://www.cursemaven.com'
@@ -171,6 +166,14 @@ repositories {
         name = "Jared's maven"
         url = "https://maven.blamejared.com/"
     }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+    maven { url "https://maven.shedaniel.me/" }
+
+
 }
 
 dependencies {
@@ -179,32 +182,26 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${minecraft_version}-47.1.43"
 
-    implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
-    implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
-    
-    //runtimeOnly fg.deobf("curse.maven:roughly-enough-items-310111:${rei_file}")
-    //runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4521465")
-    //runtimeOnly fg.deobf("curse.maven:cloth-config-348521:4633387")
+    implementation("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }
+    implementation("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
+    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
+    runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
+    implementation("com.tterrag.registrate:Registrate:${registrate_version}")
 
-    implementation fg.deobf("curse.maven:chipped-456956:5813138")
-    //implementation fg.deobf("curse.maven:ctm-267602:4393695")
-    implementation fg.deobf("curse.maven:resourceful-lib-570073:4973823")
-    implementation fg.deobf("curse.maven:athena-841890:4764357")
 
-    // Real mod deobf dependency examples - these get remapped to your current mappings
-    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
-    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
+    //JEI
+    // compile against the JEI API but do not include it at runtime
+    compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
     // at runtime, use the full JEI jar for Forge
-    runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
-    // implementation fg.deobf("com.tterrag.registrate:Registrate:MC${minecraft_version}-${registrate_version}") // Adds registrate as a dependency
+    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
 
-    // Examples using mod jars from ./libs
-    // implementation fg.deobf("blank:coolmod-${minecraft_version}:${coolmod_version}")
+    //REI
+    //runtimeOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}")
+    compileOnly("me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}")
+    compileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}")
 
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    implementation("earth.terrarium.chipped:chipped-neoforge-${minecraft_version}:${chipped_version}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
@@ -228,4 +225,29 @@ jar.finalizedBy('reobfJar')
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            name = 'igleeRepo'
+            url = "https://${System.getenv("MAVEN_IP")}/releases"
+            credentials {
+                username = System.getenv("MAVEN_USER")
+                password = System.getenv("MAVEN_PASS")
+            }
+        }
+    }
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }
