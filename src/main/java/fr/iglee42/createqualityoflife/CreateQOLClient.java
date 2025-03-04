@@ -59,10 +59,16 @@ public class CreateQOLClient {
     public static void registerKeys(RegisterKeyMappingsEvent event){
         event.register(KeyBindManager.FANS_KEY);
         event.register(KeyBindManager.HOVER_KEY);
+        event.register(KeyBindManager.OPEN_ARMOR_CONFIG);
     }
 
     public static void clientInit(final FMLClientSetupEvent event) {
         new ModSprites();
+
+        event.enqueueWork(() -> {
+            ItemProperties.register(ModItems.PLAYER_PAPER.get(),
+                    CreateQOL.asResource("hasplayer"), (stack, level, living, id) -> stack.has(ModDataComponents.LINKED_PLAYER) ? 1.0f : 0.0f);
+        });
         //MinecraftForge.EVENT_BUS.register(new KeyBindManager());
         //ModPonderTags.register();
         //PonderIndex.register();

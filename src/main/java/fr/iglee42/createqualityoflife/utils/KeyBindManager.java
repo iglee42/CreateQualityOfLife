@@ -1,14 +1,17 @@
 package fr.iglee42.createqualityoflife.utils;
 
 import com.simibubi.create.content.equipment.armor.BacktankItem;
+import fr.iglee42.createqualityoflife.client.screen.ArmorConfigScreen;
 import fr.iglee42.createqualityoflife.packets.ToggleFansPacket;
 import fr.iglee42.createqualityoflife.packets.ToggleHoverPacket;
 import fr.iglee42.createqualityoflife.packets.UpdateInputsPacket;
+import fr.iglee42.createqualityoflife.registries.ModArmorMaterials;
 import fr.iglee42.createqualityoflife.registries.ModItems;
-import fr.iglee42.createqualityoflife.registries.ModPackets;
+import net.createmod.catnip.gui.ScreenOpener;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
@@ -30,6 +33,7 @@ public class KeyBindManager {
 
     public static KeyMapping FANS_KEY = new KeyMapping("keybind.createqol.shadow_radiance_chestplate_fans", GLFW.GLFW_KEY_Y, "keybind.createqol.category");
     public static KeyMapping HOVER_KEY = new KeyMapping("keybind.createqol.shadow_radiance_chestplate_hover", GLFW.GLFW_KEY_H, "keybind.createqol.category");
+    public static KeyMapping OPEN_ARMOR_CONFIG = new KeyMapping("keybind.createqol.open_armor_config", GLFW.GLFW_KEY_C, "keybind.createqol.category");
 
 
     private static void tickEnd() {
@@ -60,6 +64,17 @@ public class KeyBindManager {
             Player player = Minecraft.getInstance().player;
             if (player == null) {
                 return;
+            }
+
+            if (OPEN_ARMOR_CONFIG.consumeClick()){
+                AtomicBoolean hasArmor = new AtomicBoolean(false);
+                player.getArmorSlots().forEach(it->{
+                    if (!(it.getItem() instanceof ArmorItem))return;
+                    if (((ArmorItem)it.getItem()).getMaterial().equals(ModArmorMaterials.SHADOW_RADIANCE)) hasArmor.set(true);
+                });
+                if (hasArmor.get()) {
+                    ScreenOpener.open(new ArmorConfigScreen());
+                }
             }
 
             Item backtank = BacktankItem.getWornBy(player);

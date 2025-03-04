@@ -1,0 +1,236 @@
+package fr.iglee42.createqualityoflife.client.screen.widgets;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.systems.RenderSystem;
+
+import fr.iglee42.createqualityoflife.client.screen.ArmorConfigScreen;
+import net.createmod.catnip.gui.TickableGuiEventListener;
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.gui.element.TextStencilElement;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.theme.Color;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+
+public class ArmorConfigScreenList extends ObjectSelectionList<ArmorConfigScreenList.Entry> implements TickableGuiEventListener {
+
+
+	protected final ArmorConfigScreen parent;
+
+	public ArmorConfigScreenList(Minecraft client, int width, int height, int top, int elementHeight,ArmorConfigScreen parent) {
+		super(client, width, height, top, elementHeight);
+		headerHeight = 3;
+		this.parent = parent;
+	}
+
+
+	@Override
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+		Color c = new Color(0x60_000000);
+		UIRenderHelper.angledGradient(graphics, 90, getX() + width / 2, getY(), width, 5, c, Color.TRANSPARENT_BLACK);
+		UIRenderHelper.angledGradient(graphics, -90, getX() + width / 2, getBottom(), width, 5, c, Color.TRANSPARENT_BLACK);
+		UIRenderHelper.angledGradient(graphics, 0, getX(), getY() + height / 2, height, 5, c, Color.TRANSPARENT_BLACK);
+		UIRenderHelper.angledGradient(graphics, 180, getRight(), getY() + height / 2, height, 5, c, Color.TRANSPARENT_BLACK);
+
+		super.render(graphics, mouseX, mouseY, partialTicks);
+
+		if (children().isEmpty()){
+			graphics.drawCenteredString(minecraft.font,"Please Select an item to configure", getX() + width / 2,getY() + getHeight() / 2 - 9,UIRenderHelper.COLOR_TEXT.getFirst().getRGB());
+		}
+	}
+
+	@Override
+	protected void renderListItems(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+		Window window = minecraft.getWindow();
+		double d0 = window.getGuiScale();
+		RenderSystem.enableScissor((int) (getX() * d0), (int) (window.getHeight() - (getBottom() * d0)), (int) (this.width * d0), (int) (this.height * d0));
+		super.renderListItems(graphics, mouseX, mouseY, partialTick);
+		RenderSystem.disableScissor();
+	}
+
+	@Override
+	public boolean mouseClicked(double x, double y, int button) {
+		return super.mouseClicked(x, y, button);
+	}
+
+	@Override
+	public int getRowWidth() {
+		return width - 16;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	@Override
+	protected int getScrollbarPosition() {
+		return getX() + this.width - 6;
+	}
+
+	@Override
+	public void tick() {
+		children().forEach(Entry::tick);
+	}
+
+	public void bumpCog(float force) {
+		ArmorConfigScreen.cogSpin.bump(3, force);
+	}
+
+	public static abstract class Entry extends ObjectSelectionList.Entry<Entry> implements TickableGuiEventListener {
+		protected List<GuiEventListener> listeners;
+		protected Map<String, String> annotations;
+
+		protected Entry() {
+			listeners = new ArrayList<>();
+			annotations = new HashMap<>();
+		}
+
+		@Override
+		public boolean mouseClicked(double x, double y, int button) {
+			return getGuiListeners().stream().anyMatch(l -> l.mouseClicked(x, y, button));
+		}
+
+		@Override
+		public boolean keyPressed(int code, int keyPressed_2_, int keyPressed_3_) {
+			return getGuiListeners().stream().anyMatch(l -> l.keyPressed(code, keyPressed_2_, keyPressed_3_));
+		}
+
+		@Override
+		public boolean charTyped(char ch, int code) {
+			for (GuiEventListener l : getGuiListeners()) {
+				if (l.charTyped(ch, code)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		@Override
+		public void tick() {}
+
+		public List<GuiEventListener> getGuiListeners() {
+			return listeners;
+		}
+
+		protected void setEditable(boolean b) {}
+
+	}
+
+	public static class LabeledEntry extends Entry {
+
+		protected static final float labelWidthMult = 0.4f;
+
+		protected TextStencilElement label;
+		protected List<Component> labelTooltip;
+		@Nullable protected String unit = null;
+		protected LerpedFloat differenceAnimation = LerpedFloat.linear().startWithValue(0);
+		protected LerpedFloat highlightAnimation = LerpedFloat.linear().startWithValue(0);
+
+		public LabeledEntry(String label) {
+			this.label = new TextStencilElement(Minecraft.getInstance().font, label);
+			this.label.withElementRenderer((graphics, width, height, alpha) -> UIRenderHelper.angledGradient(graphics, 0, 0, height / 2, height, width, UIRenderHelper.COLOR_TEXT_STRONG_ACCENT));
+			labelTooltip = new ArrayList<>();
+		}
+
+		public LabeledEntry(String label, String path) {
+			this(label);
+		}
+
+		@Override
+		public void tick() {
+			differenceAnimation.tickChaser();
+			highlightAnimation.tickChaser();
+			super.tick();
+		}
+
+		@Override
+		public void render(GuiGraphics graphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean p_230432_9_, float partialTicks) {
+			if (differenceAnimation.getChaseTarget() != 0)
+				differenceAnimation.chase(0, .6f, LerpedFloat.Chaser.EXP);
+
+			float animation = differenceAnimation.getValue(partialTicks);
+			if (animation > .1f) {
+				int offset = (int) (30 * (1 - animation));
+				UIRenderHelper.breadcrumbArrow(graphics, x - 10 - offset, y + 6, 0, -20, 24, -18, new Color(0x70_ffffff), Color.TRANSPARENT_BLACK);
+			}
+
+			UIRenderHelper.streak(graphics, 0, x - 10, y + height / 2, height - 6, width / 8 * 7, new Color(0xdd_000000));
+			UIRenderHelper.streak(graphics, 180, x + (int) (width * 1.35f) + 10, y + height / 2, height - 6, width / 8 * 7, new Color(0xdd_000000));
+			MutableComponent component = label.getComponent();
+			Font font = Minecraft.getInstance().font;
+			if (font.width(component) > getLabelWidth(width) - 10) {
+				label.withText(font.substrByWidth(component, getLabelWidth(width) - 15).getString() + "...");
+			}
+			if (unit != null) {
+				int unitWidth = font.width(unit);
+				graphics.drawString(font, unit, x + getLabelWidth(width) - unitWidth - 5, y + height / 2 + 2, UIRenderHelper.COLOR_TEXT_DARKER.getFirst().getRGB());
+				label.at(x + 10, y + height / 2 - 10, 0).render(graphics);
+			} else {
+				label.at(x + 10, y + height / 2 - 4, 0).render(graphics);
+			}
+
+			if (annotations.containsKey("highlight")) {
+				highlightAnimation.startWithValue(1).chase(0, 0.1f, LerpedFloat.Chaser.LINEAR);
+				annotations.remove("highlight");
+			}
+
+			animation = highlightAnimation.getValue(partialTicks);
+			if (animation > .01f) {
+				Color highlight = new Color(0xa0_ffffff).scaleAlpha(animation);
+				UIRenderHelper.streak(graphics, 0, x - 10, y + height / 2, height - 6, 5, highlight);
+				UIRenderHelper.streak(graphics, 180, x + width, y + height / 2, height - 6, 5, highlight);
+				UIRenderHelper.streak(graphics, 90, x + width / 2 - 5, y + 3, width + 10, 5, highlight);
+				UIRenderHelper.streak(graphics, -90, x + width / 2 - 5, y + height - 3, width + 10, 5, highlight);
+			}
+
+
+			if (mouseX > x && mouseX < x + getLabelWidth(width) && mouseY > y + 5 && mouseY < y + height - 5) {
+				List<Component> tooltip = getLabelTooltip();
+				if (tooltip.isEmpty())
+					return;
+
+				RenderSystem.disableScissor();
+				graphics.pose().pushPose();
+				graphics.renderComponentTooltip(font, tooltip, mouseX, mouseY);
+				graphics.flush();
+				//RemovedGuiUtils.drawHoveringText(ms, tooltip, mouseX, mouseY, screen.width, screen.height, 300, font);
+				graphics.pose().popPose();
+				GlStateManager._enableScissorTest();
+			}
+		}
+
+
+
+		public List<Component> getLabelTooltip() {
+			return labelTooltip;
+		}
+
+		protected int getLabelWidth(int totalWidth) {
+			return totalWidth;
+		}
+
+		// TODO 1.17
+		@Override
+		public Component getNarration() {
+			return CommonComponents.EMPTY;
+		}
+	}
+}

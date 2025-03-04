@@ -1,7 +1,7 @@
 package fr.iglee42.createqualityoflife.mixins;
 
-import com.jozufozu.flywheel.core.PartialModel;
 import com.simibubi.create.content.equipment.armor.BacktankRenderer;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
 import fr.iglee42.createqualityoflife.registries.ModPartialModels;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,6 +16,10 @@ public class BacktankRendererMixin {
     @Inject(method = "getCogsModel", at=@At("HEAD"),cancellable = true)
     private static void getCogsModel(BlockState state, CallbackInfoReturnable<PartialModel> cir){
         if (ModBlocks.SHADOW_RADIANCE_CHESTPLATE.has(state)) cir.setReturnValue(ModPartialModels.SHADOW_RADIANCE_TANK_COGS);
+    }
+    @Inject(method = "getShaftModel", at=@At("HEAD"),cancellable = true)
+    private static void getShaftModel(BlockState state, CallbackInfoReturnable<PartialModel> cir){
+        if (ModBlocks.SHADOW_RADIANCE_CHESTPLATE.has(state)) cir.setReturnValue(ModPartialModels.SHADOW_RADIANCE_TANK_SHAFT);
     }
 
 }

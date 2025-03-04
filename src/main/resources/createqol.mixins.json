@@ -7,11 +7,11 @@
   "mixins": [
     "AllCreativeModeTabsMixin",
     "BacktankRendererMixin",
-    "BeltFunnelBlockMixin",
     "BlockEntityTypeMixin",
     "ChromaticCompoundItemMixin",
     "DivingBootsItemMixin",
     "FlapDisplayBlockMixin",
+    "LavaSwimmingMixin",
     "ModelBuilderMixin",
     "ModelFileMixin",
     "MysteriousItemConversionCategoryMixin",
@@ -19,7 +19,8 @@
     "ScheduleItemMixin"
   ],
   "client": [
-    "BacktankArmorLayerMixin"
+    "BacktankArmorLayerMixin",
+    "HumanoidArmorLayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -6,14 +6,15 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIconOptions;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.CreateLang;
 import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
+import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import fr.iglee42.createqualityoflife.registries.ModIcons;
 import fr.iglee42.createqualityoflife.utils.ArmorItemStackHandler;
 import fr.iglee42.createqualityoflife.utils.InventoryLinkerStacksHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -28,13 +29,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class InventoryLinkerBlockEntity extends KineticBlockEntity {
 
     private ItemStack playerPaperItemStack = ItemStack.EMPTY;
-    private String linkedPlayerName = "";
     private InventoryLinkerStacksHandler linkedInventoryContent = new InventoryLinkerStacksHandler(0,this);
     private LazyOptional<?> inventoryOptional = LazyOptional.empty();
+    private UUID linkedPlayer;
 
 
     protected ScrollOptionBehaviour<Mode> selectionMode;
@@ -97,22 +99,19 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
         if (!isSpeedRequirementFulfilled()) return;
 
         if (!playerPaperItemStack.isEmpty()){
-            linkedPlayerName = playerPaperItemStack.getOrCreateTag().getString("linkedPlayer");
+            linkedPlayer = playerPaperItemStack.get(ModDataComponents.LINKED_PLAYER);
         } else {
-            linkedPlayerName = "";
+            linkedPlayer = null;
         }
-
-        if (!linkedPlayerName.isEmpty() && level.getServer().getPlayerList().getPlayerByName(linkedPlayerName) != null){
-            linkedInventoryContent = switch (selectionMode.get()) {
-                case INVENTORY -> new InventoryLinkerStacksHandler(level.getServer().getPlayerList().getPlayerByName(linkedPlayerName).getInventory().items,this);
-                case ARMOR -> new ArmorItemStackHandler(level.getServer().getPlayerList().getPlayerByName(linkedPlayerName).getInventory().armor,this);
-                case OFF_HAND -> new InventoryLinkerStacksHandler(level.getServer().getPlayerList().getPlayerByName(linkedPlayerName).getInventory().offhand,this);
+        InventoryLinkerStacksHandler handler = new InventoryLinkerStacksHandler(0,this);
+        if (linkedPlayer != null && level.getServer().getPlayerList().getPlayer(linkedPlayer) != null){
+            handler = switch (selectionMode.get()) {
+                case INVENTORY -> new InventoryLinkerStacksHandler(level.getServer().getPlayerList().getPlayer(linkedPlayer).getInventory().items,this);
+                case ARMOR -> new ArmorItemStackHandler(level.getServer().getPlayerList().getPlayer(linkedPlayer).getInventory().armor,this);
+                case OFF_HAND -> new InventoryLinkerStacksHandler(level.getServer().getPlayerList().getPlayer(linkedPlayer).getInventory().offhand,this);
             };
-            inventoryOptional = LazyOptional.of(()->linkedInventoryContent);
-        } else {
-            linkedInventoryContent = new InventoryLinkerStacksHandler(0,this);
-            inventoryOptional = LazyOptional.of(()->linkedInventoryContent);
         }
+        inventoryOptional = LazyOptional.of(()->handler);
     }
 
     @NotNull

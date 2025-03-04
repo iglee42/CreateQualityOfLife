@@ -5,6 +5,7 @@ import com.mojang.math.Axis;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllPartialModels;
 import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -34,6 +35,7 @@ public class GoggleArmorLayer<T extends LivingEntity, M extends EntityModel<T>> 
             return;
         if (!ModItems.SHADOW_RADIANCE_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)))
             return;
+        if (!entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).shouldRenderAddition()) return;
 
         M entityModel = getParentModel();
         if (!(entityModel instanceof HumanoidModel<?> model))

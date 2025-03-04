@@ -2,6 +2,7 @@ package fr.iglee42.createqualityoflife;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.recipe.DeployingRecipeGen;
 import com.simibubi.create.foundation.item.ItemDescription;
@@ -14,10 +15,17 @@ import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.config.CreateQOLFeaturesConfig;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.utils.Features;
+import net.createmod.catnip.lang.FontHelper;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -28,6 +36,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+
+import static fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate.hasPropeller;
+import static fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate.isFansEnable;
 
 @Mod(CreateQOL.MODID)
 public class CreateQOL {
@@ -59,7 +70,7 @@ public class CreateQOL {
         ModPackets.registerPackets();
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> CreateQOLClient.onCtorClient(modEventBus, forgeEventBus));
-        CreateQOLConfigs.register(ModLoadingContext.get(),container);
+        CreateQOLConfigs.register(ModLoadingContext.get());
 
         modEventBus.addListener(this::commonSetup);
 
@@ -85,6 +96,19 @@ public class CreateQOL {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(()-> CraftingHelper.register(FeatureLoadedCondition.Serializer.INSTANCE));
+    }
+
+    public void removeFallDamage(LivingDamageEvent event){
+        if (!event.getSource().equals(event.getEntity().level().damageSources().fall())) return;
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        if (player.getItemBySlot(EquipmentSlot.CHEST).is(ModItems.SHADOW_RADIANCE_CHESTPLATE.asItem())) {
+            ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
+            if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
+            if (isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack)) {
+                event.setCanceled(true);
+            }
+        }
     }
 
 

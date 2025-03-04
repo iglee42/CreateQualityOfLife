@@ -51,5 +51,6 @@
   "keybind.createqol.category": "Create: Quality of Life",
 
   "keybind.createqol.shadow_radiance_chestplate_fans": "Toggle Fans",
-  "keybind.createqol.shadow_radiance_chestplate_hover": "Toggle Hover"
+  "keybind.createqol.shadow_radiance_chestplate_hover": "Toggle Hover",
+  "keybind.createqol.open_armor_config": "Open Armor Config"
 }
