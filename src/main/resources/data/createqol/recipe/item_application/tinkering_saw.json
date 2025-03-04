@@ -1,8 +1,17 @@
 {
   "neoforge:conditions": [
     {
-      "type": "createqol:feature_loaded",
-      "feature": "chipped_saw"
+      "type": "neoforge:and",
+      "values": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "chipped_saw"
+        },
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "chipped"
+        }
+      ]
     }
   ],
   "type": "create:item_application",
