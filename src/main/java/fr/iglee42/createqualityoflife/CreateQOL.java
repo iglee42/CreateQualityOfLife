@@ -8,7 +8,7 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipModifier;
-import fr.iglee42.createqualityoflife.conditions.FeatureLoadedCondition;
+import com.tterrag.registrate.util.RegistrateDistExecutor;
 import fr.iglee42.createqualityoflife.config.CreateQOLCommonConfig;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.utils.Features;
@@ -44,11 +44,9 @@ public class CreateQOL {
         REGISTRATE.setTooltipModifierFactory(item -> new ItemDescription.Modifier(item, TooltipHelper.Palette.STANDARD_CREATE)
                 .andThen(TooltipModifier.mapNull(KineticStats.create(item))));
     }
-    public CreateQOL() throws IOException, IllegalAccessException {
+    public CreateQOL(IEventBus modEventBus) throws IOException, IllegalAccessException {
 
-        IEventBus modEventBus = FMLJavaModLoadingContext.get()
-                .getModEventBus();
-        IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
+        IEventBus forgeEventBus = NeoForge.EVENT_BUS;
 
         CreateQOLCommonConfig.load();
 

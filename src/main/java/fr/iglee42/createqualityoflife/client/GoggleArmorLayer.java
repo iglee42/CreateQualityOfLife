@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllPartialModels;
+import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import fr.iglee42.createqualityoflife.registries.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;

@@ -10,6 +10,7 @@ import com.simibubi.create.foundation.utility.AnimationTickHolder;
 import fr.iglee42.createqualityoflife.client.GoggleArmorLayer;
 import fr.iglee42.createqualityoflife.client.ShadowRadianceFirstPersonRenderer;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
+import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import fr.iglee42.createqualityoflife.registries.ModPartialModels;
 import fr.iglee42.createqualityoflife.registries.ModSprites;
 import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;

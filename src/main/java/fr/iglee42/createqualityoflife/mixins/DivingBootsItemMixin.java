@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife.mixins;
 
 import com.simibubi.create.content.equipment.armor.DivingBootsItem;
+import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import fr.iglee42.createqualityoflife.registries.ModItems;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

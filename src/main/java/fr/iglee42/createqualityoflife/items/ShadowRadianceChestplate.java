@@ -33,7 +33,6 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
         super(material, properties, textureLoc, placeable);
     }
     @Override
-    public void onArmorTick(ItemStack stack, Level level, Player player) {
         if (!player.isCreative() && !BacktankUtil.getAllWithAir(player).isEmpty())
             BacktankUtil.consumeAir(player, BacktankUtil.getAllWithAir(player).get(0), 0.001f);
         else if (!player.isCreative()) return;
@@ -50,6 +49,10 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
                     } else {
                         if (shiftKeyActive) {
                             pushVertically(player, Math.min(player.getDeltaMovement().get(Direction.Axis.Y) + FANS_ACCELERATION, -0.0D));
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean offHand) {
+        super.inventoryTick(stack, level, entity, slot, offHand);
+        if (!(entity instanceof Player player)) return;
+        if (player.getItemBySlot(EquipmentSlot.CHEST).equals(stack)){
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean offHand) {
         super.inventoryTick(stack, level, entity, slot, offHand);
         if (!(entity instanceof Player player)) return;
@@ -134,6 +137,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
     }
     public static boolean isHoverEnable(ItemStack chestplate){
         return chestplate.getOrCreateTag().contains("HoverEnable") && chestplate.getOrCreateTag().getBoolean("HoverEnable");
+            }
         }
     }
 
