@@ -22,6 +22,7 @@ public class ModDataComponents {
     public static final DataComponentType<Boolean> BACKTANK_PROPELLERS = register("propellers",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> BACKTANK_HOVER = register("hover",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> BACKTANK_FANS = register("fans",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DataComponentType<Boolean> BACKTANK_ARMS = register("arms",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> ARMOR_EFFECT = register("effect",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> HELMET_GOGGLES = register("goggles",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> BOOTS_DIVING = register("diving",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
