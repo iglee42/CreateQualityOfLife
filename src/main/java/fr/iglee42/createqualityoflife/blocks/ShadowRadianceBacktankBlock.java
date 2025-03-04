@@ -1,6 +1,5 @@
 package fr.iglee42.createqualityoflife.blocks;
 
-import com.simibubi.create.AllEnchantments;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.equipment.armor.BacktankBlock;
 import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
@@ -8,27 +7,25 @@ import com.simibubi.create.content.equipment.armor.BacktankItem;
 import fr.iglee42.createqualityoflife.blockentitites.ShadowRadianceBacktankBE;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
+import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.Optional;
 
@@ -65,34 +62,34 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (AllItems.PROPELLER.is(player.getMainHandItem().getItem()) && !world.isClientSide) {
-            if (world.getBlockEntity(pos) instanceof ShadowRadianceBacktankBE be && !   be.hasPropeller()){
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (AllItems.PROPELLER.is(player.getMainHandItem().getItem()) && !level.isClientSide) {
+            if (level.getBlockEntity(pos) instanceof ShadowRadianceBacktankBE be && !   be.hasPropeller()){
                 be.setPropeller(true);
                 player.getMainHandItem().shrink(1);
-                world.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
-                return InteractionResult.CONSUME;
+                level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
+                return ItemInteractionResult.CONSUME;
             }
         }
-        return super.use(state, world, pos, player, hand, hit);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos pos, BlockState state) {
-        ItemStack stack = super.getCloneItemStack(blockGetter, pos, state);
+    public ItemStack getCloneItemStack(LevelReader pLevel, BlockPos pos, BlockState state) {
+        ItemStack stack = super.getCloneItemStack(pLevel, pos, state);
         Item item = asItem();
         if (item instanceof BacktankItem.BacktankBlockItem placeable) {
             item = placeable.getActualItem();
         }
-        Optional<BacktankBlockEntity> blockEntityOptional = getBlockEntityOptional(blockGetter, pos);
+        Optional<BacktankBlockEntity> blockEntityOptional = getBlockEntityOptional(pLevel, pos);
         blockEntityOptional.ifPresent(obe->{
             ShadowRadianceBacktankBE be = (ShadowRadianceBacktankBE) obe;
             boolean propeller = be.hasPropeller();
             boolean fans = be.isFans();
             boolean hover = be.isHover();
-            stack.getOrCreateTag().putBoolean("Propeller",propeller);
-            stack.getOrCreateTag().putBoolean("FansEnable",fans);
-            stack.getOrCreateTag().putBoolean("HoverEnable",hover);
+            stack.set(ModDataComponents.BACKTANK_PROPELLERS,propeller);
+            stack.set(ModDataComponents.BACKTANK_FANS,fans);
+            stack.set(ModDataComponents.BACKTANK_HOVER,hover);
         });
         return stack;
     }

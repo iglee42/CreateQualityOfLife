@@ -1,0 +1,94 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "createqol:feature_loaded",
+      "feature": "shadow_radiance"
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create:netherite_diving_helmet"
+  },
+  "transitional_item": {
+    "item":{
+      "id":"create:netherite_diving_helmet"
+    }
+  },
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "ingredients": [
+        {
+          "item": "create:netherite_diving_helmet"
+        }
+      ],
+      "results": [
+        {
+          "item":{
+            "id":"create:netherite_diving_helmet"
+          }
+        }
+      ],
+      "processing_time": 50
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create:netherite_diving_helmet"
+        },
+        {
+          "item": "createqol:shadow_radiance"
+        }
+      ],
+      "results": [
+        {
+          "item":{
+            "id":"create:netherite_diving_helmet"
+          }
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create:netherite_diving_helmet"
+        }
+      ],
+      "results": [
+        {
+          "item":{
+            "id":"create:netherite_diving_helmet"
+          }
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create:netherite_diving_helmet"
+        },
+        {
+          "item": "create:goggles"
+        }
+      ],
+      "results": [
+        {
+          "item":{
+            "id":"create:netherite_diving_helmet"
+          }
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "item":{
+        "id":"createqol:shadow_radiance_helmet"
+      }
+    }
+  ],
+  "loops": 1
+}

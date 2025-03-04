@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 
 public class ShadowRadianceHelmet extends DivingHelmetItem {
-    public ShadowRadianceHelmet(ArmorMaterial material, Properties properties, ResourceLocation textureLoc) {
+    public ShadowRadianceHelmet(Holder<ArmorMaterial> material, Properties properties, ResourceLocation textureLoc) {
         super(material, properties, textureLoc);
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     }
@@ -28,9 +28,13 @@ public class ShadowRadianceHelmet extends DivingHelmetItem {
     }
 
     @Override
-    public void onArmorTick(ItemStack stack, Level level, Player player) {
         if (!player.isCreative() && !BacktankUtil.getAllWithAir(player).isEmpty())BacktankUtil.consumeAir(player, BacktankUtil.getAllWithAir(player).get(0), 0.001f);
         else if (!player.isCreative()) return;
         player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION,20*11,1,false,false));
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean offHand) {
+        super.inventoryTick(stack, level, entity, slot, offHand);
+        if (!(entity instanceof Player player)) return;
+        if (player.getItemBySlot(EquipmentSlot.HEAD).equals(stack)){
+        }
     }
 }

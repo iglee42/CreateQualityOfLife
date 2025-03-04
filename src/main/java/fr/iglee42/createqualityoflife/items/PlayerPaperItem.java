@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife.items;
 
 import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import fr.iglee42.createqualityoflife.utils.Features;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
@@ -12,7 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -28,14 +29,14 @@ public class PlayerPaperItem extends Item {
         if (p_41432_.isClientSide) return InteractionResultHolder.sidedSuccess(player.getMainHandItem(),p_41432_.isClientSide);
         ItemStack handItem = player.getMainHandItem();
         if (player instanceof FakePlayer) return InteractionResultHolder.pass(handItem);
-        if (handItem.getOrCreateTag().contains("linkedPlayer")){
+        if (handItem.has(ModDataComponents.LINKED_PLAYER)){
             if(player.isCrouching()){
-                handItem.getOrCreateTag().remove("linkedPlayer");
+                handItem.remove(ModDataComponents.LINKED_PLAYER);
                 return InteractionResultHolder.success(handItem);
             }
         } else {
             if (!player.isCrouching()){
-                handItem.getOrCreateTag().putString("linkedPlayer",player.getName().getString());
+                handItem.set(ModDataComponents.LINKED_PLAYER,player.getUUID());
                 return InteractionResultHolder.success(handItem);
             }
         }
@@ -43,13 +44,13 @@ public class PlayerPaperItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
-        if (p_41421_.getOrCreateTag().contains("linkedPlayer")){
-            components.add(Component.translatable("tooltip.createqol.player_paper.linked_player",p_41421_.getOrCreateTag().getString("linkedPlayer")));
+    public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
+        if (stack.has(ModDataComponents.LINKED_PLAYER)){
+            components.add(Component.translatable("tooltip.createqol.player_paper.linked_player",p_41422_.level().getPlayerByUUID(stack.get(ModDataComponents.LINKED_PLAYER)).getName()));
         } else {
             components.add(Component.translatable("tooltip.createqol.player_paper.no_linked_player"));
         }
-        super.appendHoverText(p_41421_, p_41422_, components, p_41424_);
+        super.appendHoverText(stack, p_41422_, components, p_41424_);
 
     }
 }

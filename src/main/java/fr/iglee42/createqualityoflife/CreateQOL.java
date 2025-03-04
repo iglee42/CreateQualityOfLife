@@ -13,15 +13,21 @@ import fr.iglee42.createqualityoflife.config.CreateQOLCommonConfig;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.utils.Features;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -52,11 +58,15 @@ public class CreateQOL {
         ModBlockEntities.register();
         ModItems.register();
         ModCreativeModeTabs.register(modEventBus);
-        ModPackets.registerPackets();
+        ModPackets.register();
+        ModDataComponents.register(modEventBus);
+        ModConditions.CONDITIONS.register(modEventBus);
 
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> CreateQOLClient.onCtorClient(modEventBus, forgeEventBus));
+        RegistrateDistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> CreateQOLClient.onCtorClient(modEventBus, forgeEventBus));
 
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(ChippedSawBlockEntity::registerCapabilities);
+        modEventBus.addListener(InventoryLinkerBlockEntity::registerCapabilities);
 
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -75,11 +85,11 @@ public class CreateQOL {
     }
 
     public static ResourceLocation asResource(String path) {
-        return new ResourceLocation(MODID,path);
+        return ResourceLocation.fromNamespaceAndPath(MODID,path);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(()-> CraftingHelper.register(FeatureLoadedCondition.Serializer.INSTANCE));
+        //event.enqueueWork(()-> CraftingHelper.register(FeatureLoadedCondition.Serializer.INSTANCE));
     }
 
 

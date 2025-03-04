@@ -23,7 +23,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Rarity;
 
-import static com.simibubi.create.AllTags.forgeItemTag;
+import static com.simibubi.create.AllTags.commonItemTag;
 import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
 
 public class ModItems {
@@ -46,7 +46,7 @@ public class ModItems {
             .item("shadow_radiance_helmet",
                     p -> new ShadowRadianceHelmet(ModArmorMaterials.SHADOW_RADIANCE, p, CreateQOL.asResource("shadow_radiance")))
             .properties(p -> p.fireResistant().rarity(Rarity.RARE))
-            .tag(forgeItemTag("armors/helmets"))
+            .tag(commonItemTag("armors/helmets"))
             .register();
 
     public static final ItemEntry<BacktankItem.BacktankBlockItem> SHADOW_RADIANCE_CHESTPLATE_PLACEABLE = REGISTRATE
@@ -61,21 +61,21 @@ public class ModItems {
             .model(AssetLookup.customGenericItemModel("_", "item"))
             .properties(p -> p.fireResistant().rarity(Rarity.RARE))
             .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
-            .tag(forgeItemTag("armors/chestplates"))
+            .tag(commonItemTag("armors/chestplates"))
             .register();
 
     public static final ItemEntry<? extends BaseArmorItem> SHADOW_RADIANCE_LEGGINGS = REGISTRATE
             .item("shadow_radiance_leggings",
                     p -> new ShadowRadianceArmorItem(ModArmorMaterials.SHADOW_RADIANCE, ArmorItem.Type.LEGGINGS, p, CreateQOL.asResource("shadow_radiance")))
             .properties(p -> p.fireResistant().rarity(Rarity.RARE))
-            .tag(forgeItemTag("armors/leggings"))
+            .tag(commonItemTag("armors/leggings"))
             .register();
 
     public static final ItemEntry<? extends BaseArmorItem> SHADOW_RADIANCE_BOOTS = REGISTRATE
             .item("shadow_radiance_boots",
                     p -> new ShadowRadianceArmorItem(ModArmorMaterials.SHADOW_RADIANCE, ArmorItem.Type.BOOTS, p, CreateQOL.asResource("shadow_radiance")))
             .properties(p -> p.fireResistant().rarity(Rarity.RARE))
-            .tag(forgeItemTag("armors/boots"))
+            .tag(commonItemTag("armors/boots"))
             .register();
 
     public static void register(){}

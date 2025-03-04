@@ -15,9 +15,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.DistExecutor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,25 +26,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = FlapDisplayBlock.class/*,remap = false*/)
 public class FlapDisplayBlockMixin {
 
-    @Inject(method = "use",at = @At("HEAD"),cancellable = true)
-    private void inject(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray, CallbackInfoReturnable<InteractionResult> cir){
-        if (player.isCrouching()){
-            if (world.getBlockEntity(pos) instanceof FlapDisplayBlockEntity be && CreateQOL.isActivate(Features.DISPLAY_BOARD_MODIFICATION)){
+    @Inject(method = "useItemOn",remap = false,at = @At("HEAD"),cancellable = true)
+    private void inject(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<ItemInteractionResult> cir){
+        if (player.isCrouching() && stack.isEmpty()){
+            if (level.getBlockEntity(pos) instanceof FlapDisplayBlockEntity be && CreateQOL.isActivate(Features.DISPLAY_BOARD_MODIFICATION)){
                 if (!be.isController){
                     be = be.getController();
                 }
 
                 final FlapDisplayBlockEntity finalBe = be;
-                double yCoord = ray.getLocation()
-                        .add(Vec3.atLowerCornerOf(ray.getDirection()
+                double yCoord = hitResult.getLocation()
+                        .add(Vec3.atLowerCornerOf(hitResult.getDirection()
                                         .getOpposite()
                                         .getNormal())
                                 .scale(.125f)).y;
 
                 int lineIndex = finalBe.getLineIndexAt(yCoord);
 
-                DistExecutor.unsafeRunWhenOn(Dist.CLIENT,()->()->createQualityOfLife$displayScreen(finalBe,player,lineIndex));
-                cir.setReturnValue(InteractionResult.SUCCESS);
+                RegistrateDistExecutor.unsafeRunWhenOn(Dist.CLIENT,()->()->createQualityOfLife$displayScreen(finalBe,player,lineIndex));
+                cir.setReturnValue(ItemInteractionResult.SUCCESS);
             }
         }
     }

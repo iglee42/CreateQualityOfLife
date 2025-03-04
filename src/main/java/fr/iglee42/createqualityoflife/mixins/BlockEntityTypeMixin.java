@@ -12,9 +12,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(BlockEntityType.class)
 public class BlockEntityTypeMixin {
 
-    @Inject(method = "isValid",at = @At("HEAD"),cancellable = true)
+    @Inject(method = "isValid",remap = false,at = @At("HEAD"),cancellable = true)
     private void inject(BlockState state, CallbackInfoReturnable<Boolean> cir){
-        if (this.equals(AllBlockEntityTypes.BACKTANK.get()) && ModBlocks.SHADOW_RADIANCE_CHESTPLATE.has(state)) cir.setReturnValue(true);
+        if (AllBlockEntityTypes.BACKTANK.isBound() && this.equals(AllBlockEntityTypes.BACKTANK.get()) && ModBlocks.SHADOW_RADIANCE_CHESTPLATE.has(state)) cir.setReturnValue(true);
     }
 
 }

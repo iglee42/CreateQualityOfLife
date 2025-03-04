@@ -28,11 +28,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 
 import java.util.Random;
 
@@ -78,10 +78,9 @@ public class CreateQOLClient {
         GoggleArmorLayer.registerOnAll(dispatcher);
     }
 
-    public static void onClientTick(TickEvent.ClientTickEvent event){
+    public static void onClientTick(ClientTickEvent.Post event){
         ShadowRadianceFirstPersonRenderer.clientTick();
         Minecraft minecraft = Minecraft.getInstance();
-        if (event.phase == TickEvent.Phase.END) {
             if (minecraft.player != null && minecraft.level != null) {
                 if (!minecraft.isPaused() && !minecraft.player.isSpectator()) {
                     ItemStack chest = minecraft.player.getItemBySlot(EquipmentSlot.CHEST);
@@ -96,7 +95,6 @@ public class CreateQOLClient {
                         //}
                     }
                 }
-            }
         }
     }
     private static void showJetpackParticles(Minecraft minecraft) {

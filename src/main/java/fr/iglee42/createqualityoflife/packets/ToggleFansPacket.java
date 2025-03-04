@@ -1,32 +1,25 @@
 package fr.iglee42.createqualityoflife.packets;
 
 import com.simibubi.create.content.equipment.armor.BacktankItem;
-import com.simibubi.create.foundation.networking.SimplePacketBase;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.registries.ModPackets;
+import net.createmod.catnip.net.base.ServerboundPacketPayload;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkEvent;
 
-public class ToggleFansPacket extends SimplePacketBase {
+public class ToggleFansPacket implements ServerboundPacketPayload {
 
-
-    public ToggleFansPacket(){}
-
-
-    public ToggleFansPacket(FriendlyByteBuf buffer) {}
+    public static final ToggleFansPacket INSTANCE = new ToggleFansPacket();
+    public static final StreamCodec<FriendlyByteBuf,ToggleFansPacket> STREAM_CODEC = StreamCodec.unit(INSTANCE);
 
 
     @Override
-    public void write(FriendlyByteBuf buffer) {}
-
-    @Override
-    public boolean handle(NetworkEvent.Context context) {
-        context.enqueueWork(()->{
-            ServerPlayer player = context.getSender();
+    public void handle(ServerPlayer player) {
             if (player != null) {
                 ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
                 Item backtank = BacktankItem.getWornBy(player);
@@ -36,7 +29,10 @@ public class ToggleFansPacket extends SimplePacketBase {
                     ShadowRadianceChestplate.toggleFans(chestplate,player);
                 }
             }
-        });
-        return true;
+    }
+
+    @Override
+    public PacketTypeProvider getTypeProvider() {
+        return ModPackets.TOGGLE_FANS;
     }
 }

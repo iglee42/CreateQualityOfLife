@@ -1,5 +1,6 @@
 package fr.iglee42.createqualityoflife.mixins;
 
+import com.simibubi.create.AllDataComponents;
 import com.simibubi.create.content.trains.schedule.Schedule;
 import com.simibubi.create.content.trains.schedule.ScheduleEntry;
 import com.simibubi.create.content.trains.schedule.ScheduleItem;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 @Mixin(value = ScheduleItem.class)
 public class ScheduleItemMixin {
 
-    @Inject(method = "use",at = @At("HEAD"))
+    @Inject(method = "use",remap = false,at = @At("HEAD"))
     private void inject(Level world, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir){
         if (!world.isClientSide) {
             if (player.isCrouching() && hand == InteractionHand.MAIN_HAND) {
@@ -44,18 +45,18 @@ public class ScheduleItemMixin {
                                 CompoundTag data = new CompoundTag();
                                 data.putString("Text", ((StationBlockEntity) world.getBlockEntity(player.getOnPos().above().offset(x, y, z))).getStation().name);
                                 instr.put("Data", data);
-                                entry.instruction = DestinationInstruction.fromTag(instr);
+                                entry.instruction = DestinationInstruction.fromTag(player.registryAccess(),instr);
                                 entry.conditions.add(initialConditions);
                                 ItemStack currentItem = player.getItemInHand(hand);
-                                if (ScheduleItem.getSchedule(currentItem) == null){
+                                if (ScheduleItem.getSchedule(player.registryAccess(),currentItem) == null){
                                     Schedule schedule = new Schedule();
                                     schedule.entries.add(entry);
-                                    currentItem.getOrCreateTag().put("Schedule",schedule.write());
+                                    currentItem.set(AllDataComponents.TRAIN_SCHEDULE,schedule.write(player.registryAccess()));
                                 } else {
-                                    Schedule schedule = ScheduleItem.getSchedule(currentItem);
+                                    Schedule schedule = ScheduleItem.getSchedule(player.registryAccess(),currentItem);
                                     schedule.entries.add(entry);
-                                    currentItem.getOrCreateTag().remove("Schedule");
-                                    currentItem.getOrCreateTag().put("Schedule",schedule.write());
+                                    currentItem.remove(AllDataComponents.TRAIN_SCHEDULE);
+                                    currentItem.set(AllDataComponents.TRAIN_SCHEDULE,schedule.write(player.registryAccess()));
                                 }
                                 ended = true;
                                 player.getCooldowns().addCooldown(currentItem.getItem(),5);

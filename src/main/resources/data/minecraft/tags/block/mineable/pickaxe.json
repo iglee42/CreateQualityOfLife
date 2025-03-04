@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "createqol:alchemy_saw",
+    "createqol:botanist_saw",
+    "createqol:carpenters_saw",
+    "createqol:glassblower_saw",
+    "createqol:loom_saw",
+    "createqol:tinkering_saw",
+    "createqol:mason_saw",
+    "createqol:inventory_linker"
+  ]
+}

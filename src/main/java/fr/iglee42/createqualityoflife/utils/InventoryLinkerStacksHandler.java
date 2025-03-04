@@ -3,7 +3,7 @@ package fr.iglee42.createqualityoflife.utils;
 import fr.iglee42.createqualityoflife.blockentitites.InventoryLinkerBlockEntity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class InventoryLinkerStacksHandler extends ItemStackHandler {

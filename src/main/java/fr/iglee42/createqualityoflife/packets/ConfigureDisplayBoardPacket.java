@@ -1,23 +1,32 @@
 package fr.iglee42.createqualityoflife.packets;
 
 import com.simibubi.create.content.trains.display.FlapDisplayBlockEntity;
-import com.simibubi.create.foundation.gui.widget.Indicator;
 import com.simibubi.create.foundation.networking.BlockEntityConfigurationPacket;
-import com.simibubi.create.foundation.networking.SimplePacketBase;
-import fr.iglee42.createqualityoflife.utils.Utils;
+import fr.iglee42.createqualityoflife.registries.ModPackets;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.DyeColor;
-import net.minecraftforge.network.NetworkEvent;
 
 public class ConfigureDisplayBoardPacket extends BlockEntityConfigurationPacket<FlapDisplayBlockEntity> {
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, ConfigureDisplayBoardPacket> STREAM_CODEC = StreamCodec.composite(
+            BlockPos.STREAM_CODEC,p->p.pos,
+            ByteBufCodecs.INT, p->p.lineIndex,
+            ByteBufCodecs.INT, p->p.dyeColor,
+            ByteBufCodecs.STRING_UTF8,p->p.text,
+            ByteBufCodecs.BOOL,p->p.glowing,
+            ConfigureDisplayBoardPacket::new
+    );
 
     private int lineIndex,dyeColor;
     private String text;
     private boolean glowing;
 
-    public ConfigureDisplayBoardPacket(BlockPos pos,int lineIndex, String text, boolean glowing,int dyeColor) {
+    public ConfigureDisplayBoardPacket(BlockPos pos,int lineIndex,int dyeColor, String text, boolean glowing) {
         super(pos);
         this.lineIndex = lineIndex;
         this.dyeColor = dyeColor;
@@ -25,32 +34,17 @@ public class ConfigureDisplayBoardPacket extends BlockEntityConfigurationPacket<
         this.glowing = glowing;
     }
 
-    public ConfigureDisplayBoardPacket(FriendlyByteBuf buffer) {
-        super(buffer);
-    }
-
-    protected void readSettings(FriendlyByteBuf buffer) {
-        this.lineIndex = buffer.readInt();
-        this.text = Utils.readStringFromBuffer(buffer);
-        this.glowing = buffer.readBoolean();
-        this.dyeColor = buffer.readInt();
-
-    }
-
 
     @Override
-    protected void writeSettings(FriendlyByteBuf buffer) {
-        buffer.writeInt(lineIndex);
-        Utils.saveStringToBuffer(buffer,text);
-        buffer.writeBoolean(glowing);
-        buffer.writeInt(dyeColor);
-    }
-
-    @Override
-    protected void applySettings(FlapDisplayBlockEntity be) {
+    protected void applySettings(ServerPlayer serverPlayer, FlapDisplayBlockEntity be) {
         be.setColour(lineIndex, DyeColor.byId(dyeColor));
         be.glowingLines[lineIndex] = glowing;
-        be.applyTextManually(lineIndex,text);
+        be.applyTextManually(lineIndex,Component.literal(text));
         be.notifyUpdate();
+    }
+
+    @Override
+    public PacketTypeProvider getTypeProvider() {
+        return ModPackets.CONFIGURE_DISPLAY_BOARD;
     }
 }

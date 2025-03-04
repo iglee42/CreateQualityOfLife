@@ -10,13 +10,16 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
-@Mod.EventBusSubscriber(Dist.CLIENT)
+import java.util.concurrent.atomic.AtomicBoolean;
+
+@EventBusSubscriber(Dist.CLIENT)
 public class KeyBindManager {
 
     private static boolean lastFlyState = false;
@@ -48,15 +51,14 @@ public class KeyBindManager {
                 lastBackwardState = backwardState;
                 lastLeftState = leftState;
                 lastRightState = rightState;
-                ModPackets.getChannel().sendToServer(new UpdateInputsPacket(flyState, descendState, forwardState, backwardState, leftState, rightState));
+                PacketDistributor.sendToServer(new UpdateInputsPacket(flyState, descendState, forwardState, backwardState, leftState, rightState));
                 CommonKeysHandler.update(mc.player, flyState, descendState, forwardState, backwardState, leftState, rightState);
             }
         }
     }
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent evt) {
-        if (evt.phase == TickEvent.Phase.END) {
+    public static void onClientTick(ClientTickEvent.Post evt) {
             Player player = Minecraft.getInstance().player;
             if (player == null) {
                 return;
@@ -67,12 +69,11 @@ public class KeyBindManager {
             if (backtank == null) return;
             if (!ModItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank)) return;
             if (FANS_KEY.consumeClick()) {
-                ModPackets.getChannel().sendToServer(new ToggleFansPacket());
+                PacketDistributor.sendToServer(ToggleFansPacket.INSTANCE);
             }
             if (HOVER_KEY.consumeClick()) {
-                ModPackets.getChannel().sendToServer(new ToggleHoverPacket());
+                PacketDistributor.sendToServer(ToggleHoverPacket.INSTANCE);
             }
             tickEnd();
-        }
     }
 }

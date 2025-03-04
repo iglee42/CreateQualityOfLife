@@ -41,12 +41,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -66,7 +64,6 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 
 	public ProcessingInventory inventory;
 	private int recipeIndex;
-	private final LazyOptional<IItemHandler> invProvider;
 	private FilteringBehaviour filtering;
 
 	private ItemStack playEvent;
@@ -76,8 +73,20 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 		inventory = new ProcessingInventory(this::start).withSlotLimit(!AllConfigs.server().recipes.bulkCutting.get());
 		inventory.remainingTime = -1;
 		recipeIndex = 0;
-		invProvider = LazyOptional.of(() -> inventory);
 		playEvent = ItemStack.EMPTY;
+	}
+
+
+	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+		event.registerBlockEntity(
+				Capabilities.ItemHandler.BLOCK,
+				ModBlockEntities.CHIPPED_SAW.get(),
+				(be, context) -> {
+					if (context != Direction.DOWN)
+						return be.inventory;
+					return null;
+				}
+		);
 	}
 
 	@Override
@@ -90,24 +99,24 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 	}
 
 	@Override
-	public void write(CompoundTag compound, boolean clientPacket) {
-		compound.put("Inventory", inventory.serializeNBT());
+	public void write(CompoundTag compound, HolderLookup.Provider provider, boolean clientPacket) {
+		compound.put("Inventory", inventory.serializeNBT(provider));
 		compound.putInt("RecipeIndex", recipeIndex);
-		super.write(compound, clientPacket);
+		super.write(compound,provider, clientPacket);
 
 		if (!clientPacket || playEvent.isEmpty())
 			return;
-		compound.put("PlayEvent", playEvent.serializeNBT());
+		compound.put("PlayEvent", playEvent.saveOptional(provider));
 		playEvent = ItemStack.EMPTY;
 	}
 
 	@Override
-	protected void read(CompoundTag compound, boolean clientPacket) {
-		super.read(compound, clientPacket);
-		inventory.deserializeNBT(compound.getCompound("Inventory"));
+	protected void read(CompoundTag compound, HolderLookup.Provider provider, boolean clientPacket) {
+		super.read(compound,provider, clientPacket);
+		inventory.deserializeNBT(provider,compound.getCompound("Inventory"));
 		recipeIndex = compound.getInt("RecipeIndex");
 		if (compound.contains("PlayEvent"))
-			playEvent = ItemStack.of(compound.getCompound("PlayEvent"));
+			playEvent = ItemStack.parseOptional(provider,compound.getCompound("PlayEvent"));
 	}
 
 	@Override
@@ -242,7 +251,7 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 	@Override
 	public void invalidate() {
 		super.invalidate();
-		invProvider.invalidate();
+		invalidateCapabilities();
 	}
 	
 	@Override
@@ -251,12 +260,6 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 		ItemHelper.dropContents(level, worldPosition, inventory);
 	}
 
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-		if (cap == ForgeCapabilities.ITEM_HANDLER && side != Direction.DOWN)
-			return invProvider.cast();
-		return super.getCapability(cap, side);
-	}
 
 	protected void spawnEventParticles(ItemStack stack) {
 		if (stack == null || stack.isEmpty())
@@ -310,13 +313,13 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 	}
 
 	private void applyRecipe() {
-		List<? extends Recipe<?>> recipes = getRecipes();
+		List<RecipeHolder<? extends Recipe<?>>> recipes = getRecipes();
 		if (recipes.isEmpty())
 			return;
 		if (recipeIndex >= recipes.size())
 			recipeIndex = 0;
 
-		Recipe<?> recipe = recipes.get(recipeIndex);
+		Recipe<?> recipe = recipes.get(recipeIndex).value();
 
 		ItemStack item = inventory.getStackInSlot(0);
 		int rolls = inventory.getStackInSlot(0)
@@ -343,7 +346,7 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 					List<ItemStack> filterResult = tempResults.stream().filter(filtering::test).toList();
                     ItemStack filter;
                     if (filterResult.size() == 1){
-                        filter = filterResult.get(0);
+                        filter = filterResult.getFirst();
                     } else {
                         filter = filterResult.get(new Random().nextInt(filterResult.size()));
                     }
@@ -353,8 +356,7 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 				//else results.add(item);
 			}
 
-			for (int i = 0; i < results.size(); i++) {
-				ItemStack stack = results.get(i);
+			for (ItemStack stack : results) {
 				ItemHelper.addToList(stack, list);
 			}
 		}
@@ -365,33 +367,27 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 		award(AllAdvancements.SAW_PROCESSING);
 	}
 
-	private List<? extends Recipe<?>> getRecipes() {
+	private List<RecipeHolder<? extends Recipe<?>>> getRecipes() {
 /*		Optional<CuttingRecipe> assemblyRecipe = SequencedAssemblyRecipe.getRecipe(level, inventory.getStackInSlot(0),
 			ModRecipeTypes.ALCHEMY_BENCH_TYPE.getType(), CuttingRecipe.class);
 		if (assemblyRecipe.isPresent() && filtering.test(assemblyRecipe.get()
 			.getResultItem()))
 			return ImmutableList.of(assemblyRecipe.get());*/
 
-		Predicate<Recipe<?>> types = RecipeConditions.isOfType( ModBlocks.BOTANIST_SAW.has(this.getBlockState()) ? ModRecipeTypes.BOTANIST_WORKBENCH.get() :
-				ModBlocks.CARPENTERS_SAW.has(this.getBlockState()) ? ModRecipeTypes.CARPENTERS_TABLE.get() :
-						ModBlocks.GLASSBLOWER_SAW.has(this.getBlockState()) ? ModRecipeTypes.GLASSBLOWER.get()  :
-								ModBlocks.MASON_SAW.has(this.getBlockState()) ? ModRecipeTypes.MASON_TABLE.get() :
-										ModBlocks.TINKERING_SAW.has(this.getBlockState()) ? ModRecipeTypes.TINKERING_TABLE.get() :
-												ModBlocks.LOOM_SAW.has(this.getBlockState()) ? ModRecipeTypes.LOOM_TABLE.get() :
-														ModRecipeTypes.ALCHEMY_BENCH.get() );
+		Predicate<RecipeHolder<?>> types = RecipeConditions.isOfType( ModRecipeTypes.WORKBENCH.get());
 
-		List<Recipe<?>> startedSearch = RecipeFinder.get(cuttingRecipesKey, level, types);
+		List<RecipeHolder<?>> startedSearch = RecipeFinder.get(cuttingRecipesKey, level, types);
 		cuttingRecipesKey = new Object();
 		//type = null;
 		return startedSearch.stream()
-				.filter(r->doesMatch((ChippedRecipe) r,inventory.getStackInSlot(0)))
-				.filter(r-> getResults((ChippedRecipe) r,inventory.getStackInSlot(0)).anyMatch(filtering::test))
+				.filter(r->doesMatch((ChippedRecipe) r.value(),inventory.getStackInSlot(0)))
+				.filter(r-> getResults((ChippedRecipe) r.value(),inventory.getStackInSlot(0)).anyMatch(filtering::test))
 				//.filter(r -> !AllRecipeTypes.shouldIgnoreInAutomation(r))
 				.collect(Collectors.toList());
 	}
 
 	private boolean doesMatch(ChippedRecipe recipe, ItemStack input){
-			return !input.isEmpty() && recipe.tags().stream().anyMatch((tag) -> tagIs(input, tag));
+			return !input.isEmpty() && recipe.matches(CraftingInput.of(1,1,List.of(input)),level);
 	}
 
 	public boolean tagIs(ItemStack stack, HolderSet<Item> tag) {
@@ -400,14 +396,7 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 
 	private Stream<ItemStack> getResults(ChippedRecipe recipe, ItemStack current) {
 		if (!current.isEmpty()) {
-			Item item = current.getItem();
-			return recipe.tags().stream().filter((tag) -> {
-				return tagIs(current, tag);
-			}).flatMap((tag) -> {
-				return tag.stream().filter(Holder::isBound).map(Holder::value);
-			}).filter((value) -> {
-				return value != item;
-			}).map(ItemStack::new);
+			return recipe.getResults(current);
 		} else {
 			return Stream.empty();
 		}
@@ -440,7 +429,7 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 		if (level.isClientSide && !isVirtual())
 			return;
 
-		List<? extends Recipe<?>> recipes = getRecipes();
+		List<RecipeHolder<? extends Recipe<?>>> recipes = getRecipes();
 		boolean valid = !recipes.isEmpty();
 		int time = 50;
 

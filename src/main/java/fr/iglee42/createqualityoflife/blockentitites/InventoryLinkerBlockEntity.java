@@ -17,11 +17,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,14 +28,24 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
 
     private ItemStack playerPaperItemStack = ItemStack.EMPTY;
     private String linkedPlayerName = "";
-    private InventoryLinkerStacksHandler linkedInventoryContent = new InventoryLinkerStacksHandler(0,this);
-    private LazyOptional<?> inventoryOptional = LazyOptional.empty();
 
 
     protected ScrollOptionBehaviour<Mode> selectionMode;
 
     public InventoryLinkerBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
+    }
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                ModBlockEntities.INVENTORY_LINKER.get(),
+                (be, context) -> {
+                    if (context != Direction.DOWN)
+                        return be.getPlayerInventory(be.getLevel());
+                    return null;
+                }
+        );
     }
 
     @Override
@@ -112,24 +120,19 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
         }
     }
 
-    @NotNull
-    @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return cap == ForgeCapabilities.ITEM_HANDLER ? (side != Direction.DOWN ? inventoryOptional.cast() : super.getCapability(cap,side)) : super.getCapability(cap,side);
-    }
 
     @Override
-    public void write(CompoundTag tag,boolean clientPacket) {
-        super.write(tag,clientPacket);
+    public void write(CompoundTag tag, HolderLookup.Provider provider, boolean clientPacket) {
+        super.write(tag,provider,clientPacket);
         tag.putInt("mode",selectionMode.getValue());
-        tag.put("paper",playerPaperItemStack.serializeNBT());
+        tag.put("paper",playerPaperItemStack.saveOptional(provider));
     }
 
     @Override
-    protected void read(CompoundTag compound, boolean clientPacket) {
-        super.read(compound, clientPacket);
+    protected void read(CompoundTag compound, HolderLookup.Provider provider, boolean clientPacket) {
+        super.read(compound,provider, clientPacket);
         selectionMode.setValue(compound.getInt("mode"));
-        playerPaperItemStack = ItemStack.of(compound.getCompound("paper"));
+        playerPaperItemStack = ItemStack.parseOptional(provider,compound.getCompound("paper"));
     }
 
     public void setPlayerPaperItemStack(ItemStack playerPaperItemStack) {
@@ -143,7 +146,18 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
     @Override
     public void remove() {
         super.remove();
-        linkedInventoryContent = new InventoryLinkerStacksHandler(0,this);
         Block.popResource(level,worldPosition,playerPaperItemStack);
+    }
+
+    public IItemHandler getPlayerInventory(Level level){
+        InventoryLinkerStacksHandler handler = new InventoryLinkerStacksHandler(0,this);
+        if (linkedPlayer != null && level.getServer().getPlayerList().getPlayer(linkedPlayer) != null){
+            handler = switch (selectionMode.get()) {
+                case INVENTORY -> new InventoryLinkerStacksHandler(level.getServer().getPlayerList().getPlayer(linkedPlayer).getInventory().items,this);
+                case ARMOR -> new ArmorItemStackHandler(level.getServer().getPlayerList().getPlayer(linkedPlayer).getInventory().armor,this);
+                case OFF_HAND -> new InventoryLinkerStacksHandler(level.getServer().getPlayerList().getPlayer(linkedPlayer).getInventory().offhand,this);
+            };
+        }
+        return handler;
     }
 }

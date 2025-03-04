@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "createqol:feature_loaded",
+      "feature": "chipped_saw"
+    }
+  ],
+  "type": "create:item_application",
+  "ingredients": [
+    {
+      "item": "create:mechanical_saw"
+    },
+    {
+      "item": "chipped:alchemy_bench"
+    }
+  ],
+  "results": [
+    {
+      "item": {
+        "id": "createqol:alchemy_saw"
+      }
+    }
+  ]
+}

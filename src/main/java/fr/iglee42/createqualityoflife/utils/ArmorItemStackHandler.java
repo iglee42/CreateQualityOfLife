@@ -4,7 +4,6 @@ import fr.iglee42.createqualityoflife.blockentitites.InventoryLinkerBlockEntity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class ArmorItemStackHandler extends InventoryLinkerStacksHandler {

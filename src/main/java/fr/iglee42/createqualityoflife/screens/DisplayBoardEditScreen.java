@@ -20,6 +20,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.DyeColor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Arrays;
 
@@ -112,7 +113,7 @@ public class DisplayBoardEditScreen extends AbstractSimiScreen {
 
     @Override
     public void onClose() {
-        ModPackets.getChannel().sendToServer(new ConfigureDisplayBoardPacket(be.getBlockPos(),lineIndex,text,glowingIndicator.state != Indicator.State.OFF,colorScrollInput.getState()));
+        PacketDistributor.sendToServer(new ConfigureDisplayBoardPacket(be.getBlockPos(),lineIndex,colorScrollInput.getState(),text,glowingIndicator.state != Indicator.State.OFF));
 
         super.onClose();
 

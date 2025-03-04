@@ -2,9 +2,11 @@ package fr.iglee42.createqualityoflife.items;
 
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
+import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,7 +29,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
     private static final double FANS_SPEED = 0.25D;
     private static final double FANS_HOVER_SPEED = 0.20D;
 
-    public ShadowRadianceChestplate(ArmorMaterial material, Properties properties, ResourceLocation textureLoc, Supplier<BacktankBlockItem> placeable) {
+    public ShadowRadianceChestplate(Holder<ArmorMaterial> material, Properties properties, ResourceLocation textureLoc, Supplier<BacktankBlockItem> placeable) {
         super(material, properties, textureLoc, placeable);
     }
     @Override
@@ -48,6 +50,10 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
                     } else {
                         if (shiftKeyActive) {
                             pushVertically(player, Math.min(player.getDeltaMovement().get(Direction.Axis.Y) + FANS_ACCELERATION, -0.0D));
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean offHand) {
+        super.inventoryTick(stack, level, entity, slot, offHand);
+        if (!(entity instanceof Player player)) return;
+        if (player.getItemBySlot(EquipmentSlot.CHEST).equals(stack)){
                         } else {
                             pushVertically(player, Math.min(player.getDeltaMovement().get(Direction.Axis.Y) + FANS_ACCELERATION, FANS_HOVER_SPEED));
                         }
@@ -128,6 +134,38 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
     }
     public static boolean isHoverEnable(ItemStack chestplate){
         return chestplate.getOrCreateTag().contains("HoverEnable") && chestplate.getOrCreateTag().getBoolean("HoverEnable");
+        }
     }
 
+    public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
+        components.add(Component.literal("Air : ").withStyle(ChatFormatting.GOLD).append(Component.literal(String.valueOf(BacktankUtil.getAir(stack))).withStyle(ChatFormatting.YELLOW)).append(Component.literal("/"+BacktankUtil.maxAir(stack)).withStyle(ChatFormatting.GOLD)));
+        components.add(Component.literal("Propeller : ").withStyle(ChatFormatting.GOLD).append(Component.literal(hasPropeller(stack) ? "Installed" : "Not installed").withStyle(ChatFormatting.YELLOW)));
+        if (hasPropeller(stack)) {
+            components.add(Component.empty());
+            components.add(Component.literal("Fans : ").withStyle(ChatFormatting.GOLD).append(Component.literal(chooseText(isFansEnable(stack))).withStyle(ChatFormatting.YELLOW)));
+            components.add(Component.literal("Hover : ").withStyle(ChatFormatting.GOLD).append(Component.literal(chooseText(isHoverEnable(stack))).withStyle(ChatFormatting.YELLOW)));
+        }
+        super.appendHoverText(stack, p_41422_, components, p_41424_);
+    }
+
+
+    public static void toggleFans(ItemStack chestplate,Player p) {
+        chestplate.set(ModDataComponents.BACKTANK_FANS, chestplate.has(ModDataComponents.BACKTANK_FANS) ? !chestplate.get(ModDataComponents.BACKTANK_FANS) : true);
+        boolean fans = isFansEnable(chestplate);
+        p.displayClientMessage(Component.literal("Fans : ").append(Component.literal(chooseText(fans)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+    }
+    public static void toggleHover(ItemStack chestplate,Player p) {
+        chestplate.set(ModDataComponents.BACKTANK_HOVER, chestplate.has(ModDataComponents.BACKTANK_HOVER) ? !chestplate.get(ModDataComponents.BACKTANK_HOVER) : false);
+        boolean hover = isHoverEnable(chestplate);
+        p.displayClientMessage(Component.literal("Hover : ").append(Component.literal(chooseText(hover)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+    }
+    public static boolean hasPropeller(ItemStack chestplate){
+        return chestplate.has(ModDataComponents.BACKTANK_PROPELLERS) && Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_PROPELLERS));
+    }
+    public static boolean isFansEnable(ItemStack chestplate){
+        return !chestplate.has(ModDataComponents.BACKTANK_FANS) || Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_FANS));
+    }
+    public static boolean isHoverEnable(ItemStack chestplate){
+        return chestplate.has(ModDataComponents.BACKTANK_HOVER) && Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_HOVER));
+    }
 }

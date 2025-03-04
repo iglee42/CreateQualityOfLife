@@ -1,98 +1,48 @@
 package fr.iglee42.createqualityoflife.registries;
 
-import com.simibubi.create.AllPackets;
 import com.simibubi.create.Create;
-import com.simibubi.create.foundation.networking.SimplePacketBase;
 import fr.iglee42.createqualityoflife.CreateQOL;
-import fr.iglee42.createqualityoflife.packets.ConfigureDisplayBoardPacket;
-import fr.iglee42.createqualityoflife.packets.ToggleFansPacket;
-import fr.iglee42.createqualityoflife.packets.ToggleHoverPacket;
-import fr.iglee42.createqualityoflife.packets.UpdateInputsPacket;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
+import fr.iglee42.createqualityoflife.packets.*;
+import net.createmod.catnip.net.base.BasePacketPayload;
+import net.createmod.catnip.net.base.CatnipPacketRegistry;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.Locale;
 
-public enum ModPackets {
+public enum ModPackets implements BasePacketPayload.PacketTypeProvider {
 
     //Client to Server
 
-    CONFIGURE_DISPLAY_BOARD(ConfigureDisplayBoardPacket.class,ConfigureDisplayBoardPacket::new,NetworkDirection.PLAY_TO_SERVER),
-    TOGGLE_FANS(ToggleFansPacket.class,ToggleFansPacket::new,NetworkDirection.PLAY_TO_SERVER),
-    TOGGLE_HOVER(ToggleHoverPacket .class, ToggleHoverPacket::new, NetworkDirection.PLAY_TO_SERVER),
-    INPUTS_UPDATE(UpdateInputsPacket.class, UpdateInputsPacket::new, NetworkDirection.PLAY_TO_SERVER)
+    CONFIGURE_DISPLAY_BOARD(ConfigureDisplayBoardPacket.class,ConfigureDisplayBoardPacket.STREAM_CODEC),
+    TOGGLE_FANS(ToggleFansPacket.class,ToggleFansPacket.STREAM_CODEC),
+    TOGGLE_HOVER(ToggleHoverPacket .class, ToggleHoverPacket.STREAM_CODEC),
+    INPUTS_UPDATE(UpdateInputsPacket.class, UpdateInputsPacket.STREAM_CODEC),
+    CHANGE_ARMOR_COMPONENT(ChangeArmorComponentPacket.class, ChangeArmorComponentPacket.STREAM_CODEC)
 
     ;
-    public static final ResourceLocation CHANNEL_NAME = CreateQOL.asResource("main");
-    public static final int NETWORK_VERSION = 1;
-    public static final String NETWORK_VERSION_STR = String.valueOf(NETWORK_VERSION);
-    private static SimpleChannel channel;
+    private final CatnipPacketRegistry.PacketType<?> type;
 
-    private ModPackets.PacketType<?> packetType;
-
-    <T extends SimplePacketBase> ModPackets(Class<T> type, Function<FriendlyByteBuf, T> factory,
-                                            NetworkDirection direction) {
-        packetType = new ModPackets.PacketType<>(type, factory, direction);
+    <T extends BasePacketPayload> ModPackets(Class<T> clazz, StreamCodec<? super RegistryFriendlyByteBuf, T> codec) {
+        String name = this.name().toLowerCase(Locale.ROOT);
+        this.type = new CatnipPacketRegistry.PacketType<>(
+                new CustomPacketPayload.Type<>(CreateQOL.asResource(name)),
+                clazz, codec
+        );
     }
 
-    public static void registerPackets() {
-        channel = NetworkRegistry.ChannelBuilder.named(CHANNEL_NAME)
-                .serverAcceptedVersions(NETWORK_VERSION_STR::equals)
-                .clientAcceptedVersions(NETWORK_VERSION_STR::equals)
-                .networkProtocolVersion(() -> NETWORK_VERSION_STR)
-                .simpleChannel();
-
-        for (ModPackets packet : values())
-            packet.packetType.register();
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends CustomPacketPayload> CustomPacketPayload.Type<T> getType() {
+        return (CustomPacketPayload.Type<T>) this.type.type();
     }
 
-    public static SimpleChannel getChannel() {
-        return channel;
-    }
-
-    public static void sendToNear(Level world, BlockPos pos, int range, Object message) {
-        getChannel().send(
-                PacketDistributor.NEAR.with(PacketDistributor.TargetPoint.p(pos.getX(), pos.getY(), pos.getZ(), range, world.dimension())),
-                message);
-    }
-
-    private static class PacketType<T extends SimplePacketBase> {
-        private static int index = 0;
-
-        private BiConsumer<T, FriendlyByteBuf> encoder;
-        private Function<FriendlyByteBuf, T> decoder;
-        private BiConsumer<T, Supplier<NetworkEvent.Context>> handler;
-        private Class<T> type;
-        private NetworkDirection direction;
-
-        private PacketType(Class<T> type, Function<FriendlyByteBuf, T> factory, NetworkDirection direction) {
-            encoder = T::write;
-            decoder = factory;
-            handler = (packet, contextSupplier) -> {
-                NetworkEvent.Context context = contextSupplier.get();
-                if (packet.handle(context)) {
-                    context.setPacketHandled(true);
-                }
-            };
-            this.type = type;
-            this.direction = direction;
+    public static void register() {
+        CatnipPacketRegistry packetRegistry = new CatnipPacketRegistry(CreateQOL.MODID, 1);
+        for (ModPackets packet : ModPackets.values()) {
+            packetRegistry.registerPacket(packet.type);
         }
-
-        private void register() {
-            getChannel().messageBuilder(type, index++, direction)
-                    .encoder(encoder)
-                    .decoder(decoder)
-                    .consumerNetworkThread(handler)
-                    .add();
-        }
+        packetRegistry.registerAllPackets();
     }
 }

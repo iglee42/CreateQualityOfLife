@@ -2,7 +2,7 @@ package fr.iglee42.createqualityoflife.config;
 
 import com.google.gson.*;
 import net.minecraft.util.GsonHelper;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.fml.loading.FMLPaths;
 
 import java.io.File;
 import java.io.FileReader;

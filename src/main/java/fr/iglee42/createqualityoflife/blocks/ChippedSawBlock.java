@@ -30,6 +30,7 @@ import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -112,31 +113,29 @@ public class ChippedSawBlock extends HorizontalKineticBlock implements IBE<Chipp
 	}
 
 	@Override
-	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
-		BlockHitResult hit) {
-		ItemStack heldItem = player.getItemInHand(handIn);
+	protected ItemInteractionResult useItemOn(ItemStack heldItem, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
 		IPlacementHelper placementHelper = PlacementHelpers.get(placementHelperId);
 		if (!player.isShiftKeyDown() && player.mayBuild()) {
 			if (placementHelper.matchesItem(heldItem) && placementHelper.getOffset(player, worldIn, state, pos, hit)
-				.placeInWorld(worldIn, (BlockItem) heldItem.getItem(), player, handIn, hit)
-				.consumesAction())
-				return InteractionResult.SUCCESS;
+					.placeInWorld(worldIn, (BlockItem) heldItem.getItem(), player, handIn, hit)
+					.consumesAction())
+				return ItemInteractionResult.SUCCESS;
 		}
 
 		if (player.isSpectator() || !player.getItemInHand(handIn)
-			.isEmpty())
-			return InteractionResult.PASS;
+				.isEmpty())
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 
-		return onBlockEntityUse(worldIn, pos, be -> {
+		return onBlockEntityUseItemOn(worldIn, pos, be -> {
 			for (int i = 0; i < be.inventory.getSlots(); i++) {
 				ItemStack heldItemStack = be.inventory.getStackInSlot(i);
 				if (!worldIn.isClientSide && !heldItemStack.isEmpty())
 					player.getInventory()
-						.placeItemBackInInventory(heldItemStack);
+							.placeItemBackInInventory(heldItemStack);
 			}
 			be.inventory.clear();
 			be.notifyUpdate();
-			return InteractionResult.SUCCESS;
+			return ItemInteractionResult.SUCCESS;
 		});
 	}
 
@@ -200,7 +199,7 @@ public class ChippedSawBlock extends HorizontalKineticBlock implements IBE<Chipp
 	}
 
 	@Override
-	public boolean isPathfindable(BlockState state, BlockGetter reader, BlockPos pos, PathComputationType type) {
+	protected boolean isPathfindable(BlockState p_60475_, PathComputationType p_60478_) {
 		return false;
 	}
 

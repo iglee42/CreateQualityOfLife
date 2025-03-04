@@ -7,6 +7,7 @@ import com.simibubi.create.foundation.block.IBE;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.blockentitites.InventoryLinkerBlockEntity;
 import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
+import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import fr.iglee42.createqualityoflife.registries.ModItems;
 import fr.iglee42.createqualityoflife.utils.Features;
 import net.minecraft.core.BlockPos;
@@ -14,6 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -62,25 +64,25 @@ public class InventoryLinkerBlock extends KineticBlock implements IBE<InventoryL
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand p_60507_, BlockHitResult p_60508_) {
-        if (level.isClientSide) return InteractionResult.sidedSuccess(level.isClientSide);
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand p_316595_, BlockHitResult p_316140_) {
+        if (level.isClientSide) return ItemInteractionResult.sidedSuccess(level.isClientSide);
         if (level.getBlockEntity(pos) instanceof InventoryLinkerBlockEntity be){
             if (player.isCrouching()){
                 if (!be.getPlayerPaperItemStack().isEmpty() && player.getMainHandItem().isEmpty()){
                     player.setItemInHand(InteractionHand.MAIN_HAND,be.getPlayerPaperItemStack().copy());
                     be.setPlayerPaperItemStack(ItemStack.EMPTY);
-                    level.sendBlockUpdated(pos,blockState,blockState,2);
+                    level.sendBlockUpdated(pos,state,state,2);
                 }
             } else {
                 if (be.getPlayerPaperItemStack().isEmpty() && player.getMainHandItem().is(ModItems.PLAYER_PAPER.get())){
-                    if (player.getMainHandItem().getOrCreateTag().contains("linkedPlayer")){
+                    if (player.getMainHandItem().has(ModDataComponents.LINKED_PLAYER)){
                         be.setPlayerPaperItemStack(player.getMainHandItem().copy());
                         player.setItemInHand(InteractionHand.MAIN_HAND,ItemStack.EMPTY);
-                        level.sendBlockUpdated(pos,blockState,blockState,2);
+                        level.sendBlockUpdated(pos,state,state,2);
                     }
                 }
             }
         }
-        return super.use(blockState, level, pos, player, p_60507_, p_60508_);
+        return super.useItemOn(stack, state, level, pos, player, p_316595_, p_316140_);
     }
 }

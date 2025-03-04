@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "createqol:feature_loaded",
+      "feature": "shadow_radiance"
+    }
+  ],
+  "type": "create:item_application",
+  "ingredients": [
+    {
+      "tag": "c:stripped_logs"
+    },
+    {
+      "item": "create:refined_radiance"
+    }
+  ],
+  "results": [
+    {
+      "item": {
+        "id": "create:refined_radiance_casing"
+      }
+    }
+  ]
+}

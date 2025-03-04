@@ -1,14 +1,14 @@
 package fr.iglee42.createqualityoflife.utils;
 
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(bus= EventBusSubscriber.Bus.GAME)
 public class CommonKeysHandler {
 
     private static final Map<Player, Boolean> HOLDING_UP = new HashMap<>();
@@ -70,12 +70,12 @@ public class CommonKeysHandler {
     }
 
     @SubscribeEvent
-    public void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+    public static void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         remove(event.getEntity());
     }
 
     @SubscribeEvent
-    public void onChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+    public static void onChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         remove(event.getEntity());
     }
 }
