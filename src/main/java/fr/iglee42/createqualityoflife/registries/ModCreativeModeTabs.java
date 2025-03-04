@@ -21,10 +21,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+import org.apache.commons.lang3.mutable.MutableObject;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -77,9 +80,9 @@ public class ModCreativeModeTabs {
 		}
 
 		private final boolean addItems;
-		private final DeferredHolder<CreativeModeTab, CreativeModeTab> tabFilter;
+		private final RegistryObject<CreativeModeTab> tabFilter;
 
-		public RegistrateDisplayItemsGenerator(boolean addItems, DeferredHolder<CreativeModeTab, CreativeModeTab> tabFilter) {
+		public RegistrateDisplayItemsGenerator(boolean addItems, RegistryObject<CreativeModeTab> tabFilter) {
 			this.addItems = addItems;
 			this.tabFilter = tabFilter;
 		}
@@ -218,7 +221,7 @@ public class ModCreativeModeTabs {
 
 		private List<Item> collectBlocks(Predicate<Item> exclusionPredicate) {
 			List<Item> items = new ReferenceArrayList<>();
-			for (RegistryEntry<Block, Block> entry : CreateQOL.REGISTRATE.getAll(Registries.BLOCK)) {
+			for (RegistryEntry<Block> entry : CreateQOL.REGISTRATE.getAll(Registries.BLOCK)) {
 				if (!CreateRegistrate.isInCreativeTab(entry, tabFilter))
 					continue;
 				Item item = entry.get()
@@ -234,7 +237,7 @@ public class ModCreativeModeTabs {
 
 		private List<Item> collectItems(Predicate<Item> exclusionPredicate) {
 			List<Item> items = new ReferenceArrayList<>();
-			for (RegistryEntry<Item, Item> entry : CreateQOL.REGISTRATE.getAll(Registries.ITEM)) {
+			for (RegistryEntry<Item> entry : CreateQOL.REGISTRATE.getAll(Registries.ITEM)) {
 				if (!CreateRegistrate.isInCreativeTab(entry, tabFilter))
 					continue;
 				Item item = entry.get();
@@ -258,7 +261,7 @@ public class ModCreativeModeTabs {
 							anchorIndex--;
 						}
 					}
-					if (ordering.type() == RegistrateDisplayItemsGenerator.ItemOrdering.Type.AFTER) {
+					if (ordering.type() == ItemOrdering.Type.AFTER) {
 						items.add(anchorIndex + 1, item);
 					} else {
 						items.add(anchorIndex, item);

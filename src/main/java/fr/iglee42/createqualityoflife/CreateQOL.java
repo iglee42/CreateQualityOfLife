@@ -10,6 +10,8 @@ import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import fr.iglee42.createqualityoflife.conditions.FeatureLoadedCondition;
 import fr.iglee42.createqualityoflife.config.CreateQOLCommonConfig;
+import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
+import fr.iglee42.createqualityoflife.config.CreateQOLFeaturesConfig;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.utils.Features;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +21,7 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -59,8 +62,6 @@ public class CreateQOL {
         CreateQOLConfigs.register(ModLoadingContext.get(),container);
 
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(ChippedSawBlockEntity::registerCapabilities);
-        modEventBus.addListener(InventoryLinkerBlockEntity::registerCapabilities);
 
         forgeEventBus.addListener(this::removeFallDamage);
 
