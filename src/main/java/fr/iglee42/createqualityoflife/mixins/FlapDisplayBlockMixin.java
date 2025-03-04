@@ -3,7 +3,7 @@ package fr.iglee42.createqualityoflife.mixins;
 import com.simibubi.create.content.trains.display.FlapDisplayBlock;
 import com.simibubi.create.content.trains.display.FlapDisplayBlockEntity;
 import fr.iglee42.createqualityoflife.CreateQOL;
-import fr.iglee42.createqualityoflife.screens.DisplayBoardEditScreen;
+import fr.iglee42.createqualityoflife.client.screens.DisplayBoardEditScreen;
 import fr.iglee42.createqualityoflife.utils.Features;
 import net.createmod.catnip.gui.ScreenOpener;
 import net.minecraft.client.player.LocalPlayer;

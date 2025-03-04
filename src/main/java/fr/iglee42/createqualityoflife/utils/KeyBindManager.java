@@ -1,7 +1,7 @@
 package fr.iglee42.createqualityoflife.utils;
 
 import com.simibubi.create.content.equipment.armor.BacktankItem;
-import fr.iglee42.createqualityoflife.client.screen.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
 import fr.iglee42.createqualityoflife.packets.ToggleFansPacket;
 import fr.iglee42.createqualityoflife.packets.ToggleHoverPacket;
 import fr.iglee42.createqualityoflife.packets.UpdateInputsPacket;

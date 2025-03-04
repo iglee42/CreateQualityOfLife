@@ -1,11 +1,9 @@
-package fr.iglee42.createqualityoflife.client.screen.widgets;
+package fr.iglee42.createqualityoflife.client.screens.widgets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.annotation.Nullable;
 
@@ -13,7 +11,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import fr.iglee42.createqualityoflife.client.screen.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
 import net.createmod.catnip.gui.TickableGuiEventListener;
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.gui.element.TextStencilElement;
@@ -22,7 +20,6 @@ import net.createmod.catnip.theme.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.network.chat.CommonComponents;

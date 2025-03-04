@@ -1,12 +1,12 @@
-package fr.iglee42.createqualityoflife.client.screen;
+package fr.iglee42.createqualityoflife.client.screens;
 
 import com.google.common.collect.Lists;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
-import fr.iglee42.createqualityoflife.client.screen.widgets.ArmorConfigScreenList;
-import fr.iglee42.createqualityoflife.client.screen.widgets.ItemButton;
-import fr.iglee42.createqualityoflife.client.screen.widgets.entries.BooleanEntry;
-import fr.iglee42.createqualityoflife.client.screen.widgets.entries.EnumEntry;
+import fr.iglee42.createqualityoflife.client.screens.widgets.ArmorConfigScreenList;
+import fr.iglee42.createqualityoflife.client.screens.widgets.ItemButton;
+import fr.iglee42.createqualityoflife.client.screens.widgets.entries.BooleanEntry;
+import fr.iglee42.createqualityoflife.client.screens.widgets.entries.EnumEntry;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.ModArmorMaterials;
 
@@ -30,13 +30,10 @@ import net.createmod.catnip.animation.Force;
 import net.createmod.catnip.animation.PhysicalFloat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class ArmorConfigScreen extends AbstractSimiScreen {
 

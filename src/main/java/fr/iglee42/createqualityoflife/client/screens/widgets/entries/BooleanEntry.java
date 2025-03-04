@@ -1,4 +1,4 @@
-package fr.iglee42.createqualityoflife.client.screen.widgets.entries;
+package fr.iglee42.createqualityoflife.client.screens.widgets.entries;
 
 import fr.iglee42.createqualityoflife.client.screen.ArmorConfigScreen;
 import fr.iglee42.createqualityoflife.packets.ChangeArmorTagPacket;

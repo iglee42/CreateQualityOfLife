@@ -1,7 +1,7 @@
-package fr.iglee42.createqualityoflife.client.screen.widgets.entries;
+package fr.iglee42.createqualityoflife.client.screens.widgets.entries;
 
-import fr.iglee42.createqualityoflife.client.screen.ArmorConfigScreen;
-import fr.iglee42.createqualityoflife.client.screen.widgets.ArmorConfigScreenList;
+import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.client.screens.widgets.ArmorConfigScreenList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
