@@ -2,20 +2,16 @@ package fr.iglee42.createqualityoflife.screens;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.trains.display.FlapDisplayBlockEntity;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
-import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.Indicator;
 import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.gui.widget.SelectionScrollInput;
-import com.simibubi.create.foundation.utility.Components;
 import fr.iglee42.createqualityoflife.packets.ConfigureDisplayBoardPacket;
 import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
 import fr.iglee42.createqualityoflife.registries.ModPackets;
-import net.minecraft.ChatFormatting;
+import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -56,7 +52,7 @@ public class DisplayBoardEditScreen extends AbstractSimiScreen {
         super.init();
 
         text = be.getLines().get(lineIndex).getSections().get(0).getText() != null ? be.getLines().get(lineIndex).getSections().get(0).getText().getString() : "";
-        textBox = new EditBox(this.font,guiLeft + 58,guiTop + 29,121,8,Components.immutableEmpty());
+        textBox = new EditBox(this.font,guiLeft + 58,guiTop + 29,121,8,Component.empty());
         textBox.setValue(text);
         textBox.setResponder(s->text = s);
         textBox.setBordered(false);
@@ -73,14 +69,14 @@ public class DisplayBoardEditScreen extends AbstractSimiScreen {
         });
         glowingButton.setToolTip(Component.literal("Glowing"));
 
-        glowingIndicator = new Indicator(guiLeft + 53,guiTop + 64,Components.immutableEmpty());
+        glowingIndicator = new Indicator(guiLeft + 53,guiTop + 64,Component.empty());
         glowingIndicator.state = be.glowingLines[lineIndex] ? Indicator.State.GREEN : Indicator.State.OFF;
 
         addRenderableWidget(glowingButton);
         addRenderableWidget(glowingIndicator);
 
         colorScrollInput = new SelectionScrollInput(guiLeft + 144, guiTop + 49, 55, 16);
-        colorScrollInputLabel = new Label(guiLeft + 144, guiTop + 52, Components.immutableEmpty()).withShadow();
+        colorScrollInputLabel = new Label(guiLeft + 144, guiTop + 52, Component.empty()).withShadow();
         colorScrollInput.forOptions(Arrays.stream(DyeColor.values()).map(DyeColor::getSerializedName).map(s->{
             String firstLetter = String.valueOf(s.charAt(0)).toUpperCase();
             return firstLetter + s.substring(1).replace("_"," ");

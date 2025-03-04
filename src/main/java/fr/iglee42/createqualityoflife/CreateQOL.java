@@ -32,10 +32,11 @@ public class CreateQOL {
     public static final String MODID = "createqol";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID);
+    public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID)
+            .defaultCreativeTab((ResourceKey<CreativeModeTab>) null);
 
     static {
-        REGISTRATE.setTooltipModifierFactory(item -> new ItemDescription.Modifier(item, TooltipHelper.Palette.STANDARD_CREATE)
+        REGISTRATE.setTooltipModifierFactory(item -> new ItemDescription.Modifier(item, FontHelper.Palette.STANDARD_CREATE)
                 .andThen(TooltipModifier.mapNull(KineticStats.create(item))));
     }
     public CreateQOL() throws IOException, IllegalAccessException {
@@ -44,7 +45,7 @@ public class CreateQOL {
                 .getModEventBus();
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
-        CreateQOLCommonConfig.load();
+        CreateQOLFeaturesConfig.load();
 
         REGISTRATE.registerEventListeners(modEventBus);
 
@@ -55,10 +56,13 @@ public class CreateQOL {
         ModPackets.registerPackets();
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> CreateQOLClient.onCtorClient(modEventBus, forgeEventBus));
+        CreateQOLConfigs.register(ModLoadingContext.get(),container);
 
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(ChippedSawBlockEntity::registerCapabilities);
+        modEventBus.addListener(InventoryLinkerBlockEntity::registerCapabilities);
 
-        MinecraftForge.EVENT_BUS.register(this);
+        forgeEventBus.addListener(this::removeFallDamage);
 
         //if (isActivate(Features.SHADOW_RADIANCE)){
         //    MysteriousItemConversionCategory.RECIPES.add(ConversionRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.SHADOW_STEEL.asStack()));

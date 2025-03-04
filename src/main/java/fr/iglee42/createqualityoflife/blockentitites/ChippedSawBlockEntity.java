@@ -1,5 +1,6 @@
 package fr.iglee42.createqualityoflife.blockentitites;
 
+import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
@@ -11,18 +12,16 @@ import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringB
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.recipe.RecipeConditions;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
-import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import earth.terrarium.chipped.common.recipes.ChippedRecipe;
 import earth.terrarium.chipped.common.registry.ModRecipeTypes;
 import fr.iglee42.createqualityoflife.blocks.ChippedSawBlock;
+import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
 import fr.iglee42.createqualityoflife.utils.ChippedSawFilterSlot;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
+import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -34,7 +33,9 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -141,102 +142,101 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 
 	public void tick() {
 		super.tick();
-		if (this.canProcess()) {
-			if (this.getSpeed() != 0.0F) {
-				if (this.inventory.remainingTime == -1.0F) {
-					if (!this.inventory.isEmpty() && !this.inventory.appliedRecipe) {
-						this.start(this.inventory.getStackInSlot(0));
-					}
 
-				} else {
-					float processingSpeed = Mth.clamp(Math.abs(this.getSpeed()) / 24.0F, 1.0F, 128.0F);
-					ProcessingInventory var10000 = this.inventory;
-					var10000.remainingTime -= processingSpeed;
-					if (this.inventory.remainingTime > 0.0F) {
-						this.spawnParticles(this.inventory.getStackInSlot(0));
-					}
+		if (!canProcess())
+			return;
+		if (getSpeed() == 0)
+			return;
+		if (inventory.remainingTime == -1) {
+			if (!inventory.isEmpty() && !inventory.appliedRecipe)
+				start(inventory.getStackInSlot(0));
+			return;
+		}
 
-					if (this.inventory.remainingTime < 5.0F && !this.inventory.appliedRecipe) {
-						if (!this.level.isClientSide || this.isVirtual()) {
-							this.playEvent = this.inventory.getStackInSlot(0);
-							this.applyRecipe();
-							this.inventory.appliedRecipe = true;
-							this.inventory.recipeDuration = 20.0F;
-							this.inventory.remainingTime = 20.0F;
-							this.sendData();
-						}
-					} else {
-						Vec3 itemMovement = this.getItemMovementVec();
-						Direction itemMovementFacing = Direction.getNearest(itemMovement.x, itemMovement.y, itemMovement.z);
-						if (!(this.inventory.remainingTime > 0.0F)) {
-							this.inventory.remainingTime = 0.0F;
+		float processingSpeed = Mth.clamp(Math.abs(getSpeed()) / 24, 1, 128);
+		inventory.remainingTime -= processingSpeed;
 
-							for(int slot = 0; slot < this.inventory.getSlots(); ++slot) {
-								ItemStack stack = this.inventory.getStackInSlot(slot);
-								if (!stack.isEmpty()) {
-									ItemStack tryExportingToBeltFunnel = ((DirectBeltInputBehaviour)this.getBehaviour(DirectBeltInputBehaviour.TYPE)).tryExportingToBeltFunnel(stack, itemMovementFacing.getOpposite(), false);
-									if (tryExportingToBeltFunnel != null) {
-										if (tryExportingToBeltFunnel.getCount() != stack.getCount()) {
-											this.inventory.setStackInSlot(slot, tryExportingToBeltFunnel);
-											this.notifyUpdate();
-											return;
-										}
+		if (inventory.remainingTime > 0)
+			spawnParticles(inventory.getStackInSlot(0));
 
-										if (!tryExportingToBeltFunnel.isEmpty()) {
-											return;
-										}
-									}
-								}
-							}
+		if (inventory.remainingTime < 5 && !inventory.appliedRecipe) {
+			if (level.isClientSide && !isVirtual())
+				return;
+			playEvent = inventory.getStackInSlot(0);
+			applyRecipe();
+			inventory.appliedRecipe = true;
+			inventory.recipeDuration = 20;
+			inventory.remainingTime = 20;
+			sendData();
+			return;
+		}
 
-							BlockPos nextPos = this.worldPosition.offset(BlockPos.containing(itemMovement));
-							DirectBeltInputBehaviour behaviour = (DirectBeltInputBehaviour)BlockEntityBehaviour.get(this.level, nextPos, DirectBeltInputBehaviour.TYPE);
-							ItemStack remainder;
-							if (behaviour != null) {
-								boolean changed = false;
-								if (behaviour.canInsertFromSide(itemMovementFacing)) {
-									if (!this.level.isClientSide || this.isVirtual()) {
-										for(int slot = 0; slot < this.inventory.getSlots(); ++slot) {
-											ItemStack stack = this.inventory.getStackInSlot(slot);
-											if (!stack.isEmpty()) {
-												remainder = behaviour.handleInsertion(stack, itemMovementFacing, false);
-												if (!remainder.equals(stack, false)) {
-													this.inventory.setStackInSlot(slot, remainder);
-													changed = true;
-												}
-											}
-										}
+		Vec3 itemMovement = getItemMovementVec();
+		Direction itemMovementFacing = Direction.getNearest(itemMovement.x, itemMovement.y, itemMovement.z);
+		if (inventory.remainingTime > 0)
+			return;
+		inventory.remainingTime = 0;
 
-										if (changed) {
-											this.setChanged();
-											this.sendData();
-										}
-
-									}
-								}
-							} else {
-								Vec3 outPos = VecHelper.getCenterOf(this.worldPosition).add(itemMovement.scale(0.5).add(0.0, 0.5, 0.0));
-								Vec3 outMotion = itemMovement.scale(0.0625).add(0.0, 0.125, 0.0);
-
-								for(int slot = 0; slot < this.inventory.getSlots(); ++slot) {
-									remainder = this.inventory.getStackInSlot(slot);
-									if (!remainder.isEmpty()) {
-										ItemEntity entityIn = new ItemEntity(this.level, outPos.x, outPos.y, outPos.z, remainder);
-										entityIn.setDeltaMovement(outMotion);
-										this.level.addFreshEntity(entityIn);
-									}
-								}
-
-								this.inventory.clear();
-								this.level.updateNeighbourForOutputSignal(this.worldPosition, this.getBlockState().getBlock());
-								this.inventory.remainingTime = -1.0F;
-								this.sendData();
-							}
-						}
-					}
+		for (int slot = 0; slot < inventory.getSlots(); slot++) {
+			ItemStack stack = inventory.getStackInSlot(slot);
+			if (stack.isEmpty())
+				continue;
+			ItemStack tryExportingToBeltFunnel = getBehaviour(DirectBeltInputBehaviour.TYPE)
+					.tryExportingToBeltFunnel(stack, itemMovementFacing.getOpposite(), false);
+			if (tryExportingToBeltFunnel != null) {
+				if (tryExportingToBeltFunnel.getCount() != stack.getCount()) {
+					inventory.setStackInSlot(slot, tryExportingToBeltFunnel);
+					notifyUpdate();
+					return;
 				}
+				if (!tryExportingToBeltFunnel.isEmpty())
+					return;
 			}
 		}
+
+		BlockPos nextPos = worldPosition.offset(BlockPos.containing(itemMovement));
+		DirectBeltInputBehaviour behaviour = BlockEntityBehaviour.get(level, nextPos, DirectBeltInputBehaviour.TYPE);
+		if (behaviour != null) {
+			boolean changed = false;
+			if (!behaviour.canInsertFromSide(itemMovementFacing))
+				return;
+			if (level.isClientSide && !isVirtual())
+				return;
+			for (int slot = 0; slot < inventory.getSlots(); slot++) {
+				ItemStack stack = inventory.getStackInSlot(slot);
+				if (stack.isEmpty())
+					continue;
+				ItemStack remainder = behaviour.handleInsertion(stack, itemMovementFacing, false);
+				if (ItemStack.matches(remainder, stack))
+					continue;
+				inventory.setStackInSlot(slot, remainder);
+				changed = true;
+			}
+			if (changed) {
+				setChanged();
+				sendData();
+			}
+			return;
+		}
+
+		// Eject Items
+		Vec3 outPos = VecHelper.getCenterOf(worldPosition)
+				.add(itemMovement.scale(.5f)
+						.add(0, .5, 0));
+		Vec3 outMotion = itemMovement.scale(.0625)
+				.add(0, .125, 0);
+		for (int slot = 0; slot < inventory.getSlots(); slot++) {
+			ItemStack stack = inventory.getStackInSlot(slot);
+			if (stack.isEmpty())
+				continue;
+			ItemEntity entityIn = new ItemEntity(level, outPos.x, outPos.y, outPos.z, stack);
+			entityIn.setDeltaMovement(outMotion);
+			level.addFreshEntity(entityIn);
+		}
+		inventory.clear();
+		level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
+		inventory.remainingTime = -1;
+		sendData();
 	}
 
 	@Override
@@ -455,11 +455,6 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 			recipeIndex++;
 			if (recipeIndex >= recipes.size())
 				recipeIndex = 0;
-		}
-
-		Recipe<?> recipe = recipes.get(recipeIndex);
-		if (recipe instanceof CuttingRecipe) {
-			time = ((CuttingRecipe) recipe).getProcessingDuration();
 		}
 
 		inventory.remainingTime = time * Math.max(1, (inserted.getCount() / 5));

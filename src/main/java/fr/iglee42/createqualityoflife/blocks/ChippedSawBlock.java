@@ -14,14 +14,14 @@ import com.simibubi.create.content.kinetics.drill.DrillBlock;
 import com.simibubi.create.content.kinetics.saw.SawBlockEntity;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.damageTypes.CreateDamageSources;
-import com.simibubi.create.foundation.placement.IPlacementHelper;
-import com.simibubi.create.foundation.placement.PlacementHelpers;
-import com.simibubi.create.foundation.placement.PlacementOffset;
 
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.blockentitites.ChippedSawBlockEntity;
 import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
 import fr.iglee42.createqualityoflife.utils.Features;
+import net.createmod.catnip.placement.IPlacementHelper;
+import net.createmod.catnip.placement.PlacementHelpers;
+import net.createmod.catnip.placement.PlacementOffset;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
