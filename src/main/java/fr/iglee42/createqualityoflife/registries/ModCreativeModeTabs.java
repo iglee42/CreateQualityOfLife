@@ -102,7 +102,7 @@ public class ModCreativeModeTabs {
 				exclusions.add(ModBlocks.INVENTORY_LINKER.asItem());
 				exclusions.add(ModItems.PLAYER_PAPER.asItem());
 			}
-			if (!CreateQOL.isActivate(Features.CHIPPED_SAW)){
+			if (!CreateQOL.isChippedLoaded() || !CreateQOL.isActivate(Features.CHIPPED_SAW)){
 				exclusions.add(ModBlocks.ALCHEMY_SAW.asItem());
 				exclusions.add(ModBlocks.BOTANIST_SAW.asItem());
 				exclusions.add(ModBlocks.CARPENTERS_SAW.asItem());
