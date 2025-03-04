@@ -175,6 +175,8 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 		switch (((ArmorItem)armor.getItem()).getType()){
 			case HELMET -> list.children().add(new BooleanEntry("Enable Goggles", NBTConstants.getOrDefault(armor,NBTConstants.NBT_GOGGLES,true),NBTConstants.NBT_GOGGLES));
 			case CHESTPLATE -> {
+				list.children().add(new BooleanEntry("Enable Custom Arms", armor.getOrDefault(ModDataComponents.BACKTANK_ARMS,true),ModDataComponents.BACKTANK_ARMS));
+
 				if (ShadowRadianceChestplate.hasPropeller(armor)){
 					list.children().add(new BooleanEntry("Enable Fans", NBTConstants.getOrDefault(armor,NBTConstants.NBT_FANS,true),NBTConstants.NBT_FANS));
 					list.children().add(new BooleanEntry("Enable Hover",NBTConstants.getOrDefault(armor,NBTConstants.NBT_HOVER,false),NBTConstants.NBT_HOVER));
