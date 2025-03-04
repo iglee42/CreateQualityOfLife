@@ -1,7 +1,6 @@
 package fr.iglee42.createqualityoflife.config;
 
 import com.google.gson.*;
-import net.minecraft.util.GsonHelper;
 import net.neoforged.fml.loading.FMLPaths;
 
 import java.io.File;
@@ -10,10 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public class CreateQOLCommonConfig {
+public class CreateQOLFeaturesConfig {
 
     private static File configFile;
 
@@ -27,10 +24,10 @@ public class CreateQOLCommonConfig {
 
 
     public static void load() throws IOException, IllegalAccessException {
-        configFile = new File(FMLPaths.CONFIGDIR.get().toFile(),"createqol-config.json");
+        configFile = new File(FMLPaths.CONFIGDIR.get().toFile(),"createqol-features.json");
         if (configFile.exists()){
             JsonObject config = new Gson().fromJson(new FileReader(configFile),JsonObject.class);
-            for (Field f : Arrays.stream(CreateQOLCommonConfig.class.getDeclaredFields()).filter(f->f.getType().equals(boolean.class)).toList()){
+            for (Field f : Arrays.stream(CreateQOLFeaturesConfig.class.getDeclaredFields()).filter(f->f.getType().equals(boolean.class)).toList()){
                 if (config.has(f.getName())) f.setBoolean(null, config.get(f.getName()).getAsBoolean());
                 else {
                     config.addProperty(f.getName(),f.getBoolean(null));

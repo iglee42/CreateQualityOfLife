@@ -24,7 +24,7 @@ import net.minecraft.world.level.ItemLike;
 public class JEIPlugin implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation("createqol:jei");
+        return CreateQOL.asResource("jei");
     }
 
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {

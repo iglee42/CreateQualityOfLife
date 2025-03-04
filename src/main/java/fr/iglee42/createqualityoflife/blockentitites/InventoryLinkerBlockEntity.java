@@ -7,13 +7,16 @@ import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIc
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
+import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
+import fr.iglee42.createqualityoflife.registries.ModIcons;
 import fr.iglee42.createqualityoflife.utils.ArmorItemStackHandler;
 import fr.iglee42.createqualityoflife.utils.InventoryLinkerStacksHandler;
-import fr.iglee42.createqualityoflife.registries.ModIcons;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -52,7 +55,7 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         super.addBehaviours(behaviours);
         behaviours.add(selectionMode = new ScrollOptionBehaviour<>(Mode.class,
-                Lang.translateDirect("options.createqol.inventory_linker.label"), this, new BrassTunnelModeSlot()));
+                CreateLang.translateDirect("options.createqol.inventory_linker.label"), this, new BrassTunnelModeSlot()));
     }
 
     public enum Mode implements INamedIconOptions {

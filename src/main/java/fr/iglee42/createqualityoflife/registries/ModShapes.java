@@ -2,7 +2,7 @@ package fr.iglee42.createqualityoflife.registries;
 
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.kinetics.belt.BeltShapes;
-import com.simibubi.create.foundation.utility.VoxelShaper;
+import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.shapes.VoxelShape;

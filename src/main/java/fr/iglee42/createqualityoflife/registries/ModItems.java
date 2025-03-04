@@ -1,17 +1,10 @@
 package fr.iglee42.createqualityoflife.registries;
 
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags;
-import com.simibubi.create.Create;
-import com.simibubi.create.content.equipment.armor.AllArmorMaterials;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.content.equipment.armor.BaseArmorItem;
-import com.simibubi.create.content.equipment.armor.DivingHelmetItem;
-import com.simibubi.create.content.equipment.goggles.GogglesModel;
 import com.simibubi.create.content.legacy.NoGravMagicalDohickyItem;
 import com.simibubi.create.foundation.data.AssetLookup;
-import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.items.PlayerPaperItem;
@@ -20,7 +13,6 @@ import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceHelmet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Rarity;
 
 import static com.simibubi.create.AllTags.commonItemTag;

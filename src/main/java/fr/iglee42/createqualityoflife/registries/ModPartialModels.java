@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife.registries;
 
-import com.jozufozu.flywheel.core.PartialModel;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import fr.iglee42.createqualityoflife.CreateQOL;
 import net.minecraft.resources.ResourceLocation;
 
 import static fr.iglee42.createqualityoflife.CreateQOL.MODID;
@@ -19,7 +20,7 @@ public class ModPartialModels {
             ;
 
     private static PartialModel block(String path) {
-        return new PartialModel(new ResourceLocation(MODID,"block/"+path));
+        return PartialModel.of(CreateQOL.asResource("block/"+path));
     }
 
     public static void init(){}

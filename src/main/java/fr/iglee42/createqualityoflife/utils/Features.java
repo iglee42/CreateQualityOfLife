@@ -1,14 +1,14 @@
 package fr.iglee42.createqualityoflife.utils;
 
-import fr.iglee42.createqualityoflife.config.CreateQOLCommonConfig;
+import fr.iglee42.createqualityoflife.config.CreateQOLFeaturesConfig;
 
 public enum Features {
 
-    CHIPPED_SAW("chipped_saw", CreateQOLCommonConfig.chippedSaw),
-    SHADOW_RADIANCE("shadow_radiance", CreateQOLCommonConfig.shadowRadiance),
-    INVENTORY_LINKER("inventory_linker", CreateQOLCommonConfig.inventoryLinker),
-    PROXIMITY_SCHEDULE("proximity_schedule", CreateQOLCommonConfig.proximitySchedule),
-    DISPLAY_BOARD_MODIFICATION("display_board_modification", CreateQOLCommonConfig.displayBoardModification),
+    CHIPPED_SAW("chipped_saw", CreateQOLFeaturesConfig.chippedSaw),
+    SHADOW_RADIANCE("shadow_radiance", CreateQOLFeaturesConfig.shadowRadiance),
+    INVENTORY_LINKER("inventory_linker", CreateQOLFeaturesConfig.inventoryLinker),
+    PROXIMITY_SCHEDULE("proximity_schedule", CreateQOLFeaturesConfig.proximitySchedule),
+    DISPLAY_BOARD_MODIFICATION("display_board_modification", CreateQOLFeaturesConfig.displayBoardModification),
     ;
 
 

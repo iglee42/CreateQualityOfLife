@@ -1,24 +1,26 @@
 package fr.iglee42.createqualityoflife.registries;
 
 import com.simibubi.create.AllTags;
-import com.simibubi.create.content.kinetics.BlockStressDefaults;
-import com.simibubi.create.content.redstone.displayLink.source.ItemNameDisplaySource;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BuilderTransformers;
-import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
+import com.tterrag.registrate.builders.BlockBuilder;
+import com.tterrag.registrate.builders.Builder;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import fr.iglee42.createqualityoflife.blocks.*;
-import fr.iglee42.createqualityoflife.client.FunneledBeltModel;
-import fr.iglee42.createqualityoflife.client.SingleBeltModel;
-import fr.iglee42.createqualityoflife.registries.generators.FunneledBeltGenerator;
-import fr.iglee42.createqualityoflife.registries.generators.SingleBeltGenerator;
+import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
+import fr.iglee42.createqualityoflife.blocks.ChippedSawBlock;
+import fr.iglee42.createqualityoflife.blocks.InventoryLinkerBlock;
+import fr.iglee42.createqualityoflife.blocks.ShadowRadianceBacktankBlock;
+import fr.iglee42.createqualityoflife.config.CQOLStress;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 
-import static com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours.assignDataBehaviour;
+import java.util.function.Supplier;
+
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
@@ -37,7 +39,7 @@ public class ModBlocks {
             .transform(pickaxeOnly())
             //.onRegisterAfter(Registry.ITEM_REGISTRY,v-> ItemDescription.useKey(v,"block.createqol.inventory_linker"))
             .blockstate((c, p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p)))
-            .transform(BlockStressDefaults.setImpact(8.0))
+            .transform(CQOLStress.setImpact(8.0))
             .addLayer(()-> RenderType::cutoutMipped)
             .item()
             .properties(p->p.rarity(Rarity.UNCOMMON))
@@ -47,36 +49,8 @@ public class ModBlocks {
     public static final BlockEntry<ShadowRadianceBacktankBlock> SHADOW_RADIANCE_CHESTPLATE =
             REGISTRATE.block("shadow_radiance_chestplate", ShadowRadianceBacktankBlock::new)
                     .initialProperties(SharedProperties::netheriteMetal)
-                    .transform(BuilderTransformers.backtank(ModItems.SHADOW_RADIANCE_CHESTPLATE::get))
+                    .transform(backtank(ModItems.SHADOW_RADIANCE_CHESTPLATE::get))
                     .register();
-
-    public static BlockEntry<FunneledBeltBlock> FUNNELED_BELT = REGISTRATE.block("funneled_belt", FunneledBeltBlock::new)
-            .initialProperties(SharedProperties::stone)
-            .properties(p -> p.mapColor(MapColor.METAL))
-            .properties(BlockBehaviour.Properties::noOcclusion)
-            .transform(pickaxeOnly())
-            .blockstate(new FunneledBeltGenerator()::generate)
-            .transform(BlockStressDefaults.setNoImpact())
-            .addLayer(()-> RenderType::cutoutMipped)
-            .onRegister(CreateRegistrate.blockModel(()-> FunneledBeltModel::new))
-            .item()
-            .properties(p->p.rarity(Rarity.UNCOMMON))
-            .transform(customItemModel())
-            .register();
-
-    public static final BlockEntry<SingleBeltBlock> SINGLE_BELT = REGISTRATE.block("single_belt", SingleBeltBlock::new)
-            .initialProperties(SharedProperties::stone)
-            .properties(BlockBehaviour.Properties::noOcclusion)
-            .addLayer(() -> RenderType::cutoutMipped)
-            .transform(axeOrPickaxe())
-            .blockstate(new SingleBeltGenerator()::generate)
-            .transform(BlockStressDefaults.setNoImpact())
-            .onRegister(assignDataBehaviour(new ItemNameDisplaySource(), "combine_item_names"))
-            .onRegister(CreateRegistrate.blockModel(() -> SingleBeltModel::new))
-            .item()
-            .transform(customItemModel())
-            .register();
-
 
 
 
@@ -97,7 +71,7 @@ public class ModBlocks {
                 .properties(p -> p.mapColor(MapColor.PODZOL))
                 .transform(axeOrPickaxe())
                 //.blockstate(new SawGenerator()::generate)
-                .transform(BlockStressDefaults.setImpact(4.0))
+                .transform(CQOLStress.setImpact(4.0))
                 .addLayer(() -> RenderType::cutoutMipped)
                 .item()
                 .tag(AllTags.AllItemTags.CONTRAPTION_CONTROLLED.tag)
@@ -106,4 +80,13 @@ public class ModBlocks {
     }
     public static void register(){
     }
+
+    public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> backtank(Supplier<ItemLike> drop) {
+        return b -> b.blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p)))
+                .transform(pickaxeOnly())
+                .addLayer(() -> RenderType::cutoutMipped)
+                .transform(CQOLStress.setImpact(4.0))
+                ;
+    }
+
 }

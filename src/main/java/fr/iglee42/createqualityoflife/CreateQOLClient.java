@@ -1,28 +1,32 @@
 package fr.iglee42.createqualityoflife;
 
-import com.jozufozu.flywheel.core.PartialModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.foundation.particle.AirParticleData;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
+
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import fr.iglee42.createqualityoflife.client.GoggleArmorLayer;
 import fr.iglee42.createqualityoflife.client.ShadowRadianceFirstPersonRenderer;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.ModDataComponents;
+import fr.iglee42.createqualityoflife.registries.ModItems;
 import fr.iglee42.createqualityoflife.registries.ModPartialModels;
 import fr.iglee42.createqualityoflife.registries.ModSprites;
 import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;
 import fr.iglee42.createqualityoflife.utils.KeyBindManager;
 import fr.iglee42.createqualityoflife.utils.Pos3D;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.ParticleStatus;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -36,6 +40,8 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 
 import java.util.Random;
+
+import static fr.iglee42.createqualityoflife.CreateQOL.MODID;
 
 public class CreateQOLClient {
 
@@ -66,9 +72,8 @@ public class CreateQOLClient {
 
     public static void showPropellers(BlockState renderedState, int light, PoseStack ms, MultiBufferSource buffer, RenderType renderType, LevelAccessor level) {
         PartialModel partial = (AnimationTickHolder.getRenderTime(level)) % 10 >= 5 ? ModPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS : ModPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS_ALT;
-        SuperByteBuffer propellers = CachedBufferer.partial(partial,renderedState);
+        SuperByteBuffer propellers = CachedBuffers.partial(partial,renderedState);
         propellers
-                .forEntityRender()
                 .light(light)
                 .renderInto(ms, buffer.getBuffer(renderType));
     }
