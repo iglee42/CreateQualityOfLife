@@ -21,7 +21,7 @@ public enum ModArmorMaterials implements ArmorMaterial {
 
     ;
 
-    private static final int[] MAX_DAMAGE_ARRAY = new int[] { 11, 16, 15, 13 };
+    private static final int[] MAX_DAMAGE_ARRAY = new int[] { 814, 1184, 1110, 962 };
     private final String name;
     private final int maxDamageFactor;
     private final int[] damageReductionAmountArray;
@@ -75,7 +75,7 @@ public enum ModArmorMaterials implements ArmorMaterial {
 
     @Override
     public int getDurabilityForType(Type pType) {
-        return MAX_DAMAGE_ARRAY[pType.ordinal()] * this.maxDamageFactor;
+        return MAX_DAMAGE_ARRAY[pType.ordinal()];
     }
 
     @Override

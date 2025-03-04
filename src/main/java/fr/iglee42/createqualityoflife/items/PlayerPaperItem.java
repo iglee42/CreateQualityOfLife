@@ -2,6 +2,7 @@ package fr.iglee42.createqualityoflife.items;
 
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.utils.Features;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -28,14 +29,14 @@ public class PlayerPaperItem extends Item {
         if (p_41432_.isClientSide) return InteractionResultHolder.sidedSuccess(player.getMainHandItem(),p_41432_.isClientSide);
         ItemStack handItem = player.getMainHandItem();
         if (player instanceof FakePlayer) return InteractionResultHolder.pass(handItem);
-        if (handItem.getOrCreateTag().contains("linkedPlayer")){
+        if (handItem.getOrCreateTag().contains(NBTConstants.NBT_LINKED_PLAYER)){
             if(player.isCrouching()){
-                handItem.getOrCreateTag().remove("linkedPlayer");
+                handItem.getOrCreateTag().remove(NBTConstants.NBT_LINKED_PLAYER);
                 return InteractionResultHolder.success(handItem);
             }
         } else {
             if (!player.isCrouching()){
-                handItem.getOrCreateTag().putString("linkedPlayer",player.getName().getString());
+                handItem.getOrCreateTag().putUUID("linkedPlayer",player.getUUID());
                 return InteractionResultHolder.success(handItem);
             }
         }
@@ -44,8 +45,8 @@ public class PlayerPaperItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
-        if (p_41421_.getOrCreateTag().contains("linkedPlayer")){
-            components.add(Component.translatable("tooltip.createqol.player_paper.linked_player",p_41421_.getOrCreateTag().getString("linkedPlayer")));
+        if (p_41421_.getOrCreateTag().contains(NBTConstants.NBT_LINKED_PLAYER)){
+            components.add(Component.translatable("tooltip.createqol.player_paper.linked_player",p_41422_.getPlayerByUUID(p_41421_.getOrCreateTag().getUUID(NBTConstants.NBT_LINKED_PLAYER)).getName()));
         } else {
             components.add(Component.translatable("tooltip.createqol.player_paper.no_linked_player"));
         }

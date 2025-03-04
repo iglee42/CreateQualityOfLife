@@ -7,6 +7,7 @@ import fr.iglee42.createqualityoflife.packets.ToggleHoverPacket;
 import fr.iglee42.createqualityoflife.packets.UpdateInputsPacket;
 import fr.iglee42.createqualityoflife.registries.ModArmorMaterials;
 import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.registries.ModPackets;
 import net.createmod.catnip.gui.ScreenOpener;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -18,6 +19,8 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mod.EventBusSubscriber(Dist.CLIENT)
 public class KeyBindManager {

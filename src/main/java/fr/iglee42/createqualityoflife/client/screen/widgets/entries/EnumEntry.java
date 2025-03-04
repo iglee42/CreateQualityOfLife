@@ -1,13 +1,8 @@
 package fr.iglee42.createqualityoflife.client.screen.widgets.entries;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-
 import fr.iglee42.createqualityoflife.client.screen.ArmorConfigScreen;
-import fr.iglee42.createqualityoflife.packets.ChangeArmorComponentPacket;
-import fr.iglee42.createqualityoflife.utils.ArmorItemStackHandler;
-import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import fr.iglee42.createqualityoflife.packets.ChangeArmorTagPacket;
+import fr.iglee42.createqualityoflife.registries.ModPackets;
 import net.createmod.catnip.config.ui.ConfigScreen;
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.gui.element.BoxElement;
@@ -17,13 +12,10 @@ import net.createmod.catnip.gui.widget.BoxWidget;
 import net.createmod.ponder.enums.PonderGuiTextures;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.item.ArmorItem;
-import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+import java.util.Locale;
 
 public class EnumEntry extends ValueEntry<Enum<?>> {
 
@@ -33,8 +25,8 @@ public class EnumEntry extends ValueEntry<Enum<?>> {
 	protected BoxWidget cycleLeft;
 	protected BoxWidget cycleRight;
 
-	public EnumEntry(String label, Enum<?> value, DataComponentType<?> component) {
-		super(label, value, component);
+	public EnumEntry(String label, Enum<?> value, String key) {
+		super(label, value, key);
 
 		valueText = new TextStencilElement(Minecraft.getInstance().font, "YEP").centered(true, true);
 		valueText.withElementRenderer((ms, width, height, alpha) -> UIRenderHelper.angledGradient(ms, 0, 0, height / 2,
@@ -115,13 +107,19 @@ public class EnumEntry extends ValueEntry<Enum<?>> {
 	public void onValueChange(Enum<?> newValue) {
 		super.onValueChange(newValue);
 		valueText.withText(ConfigScreen.toHumanReadable(newValue.name().toLowerCase(Locale.ROOT)));
+		List<Integer> armors = ((ArmorConfigScreen)Minecraft.getInstance().screen).getArmors();
+		int selected = ((ArmorConfigScreen)Minecraft.getInstance().screen).getSelectedItem();
+		Minecraft.getInstance().player.getInventory().getArmor(armors.get(selected)).getOrCreateTag().putInt(nbtKey,newValue.ordinal());
 	}
 
 	@Override
 	public void setValue(@NotNull Enum<?> value) {
 		List<Integer> armors = ((ArmorConfigScreen)Minecraft.getInstance().screen).getArmors();
 		int selected = ((ArmorConfigScreen)Minecraft.getInstance().screen).getSelectedItem();
-		PacketDistributor.sendToServer(new ChangeArmorComponentPacket(armors.get(selected),value.ordinal(), BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(component).toString()));
+		ModPackets.getChannel().sendToServer(new ChangeArmorTagPacket(armors.get(selected),value.ordinal(), nbtKey));
 		super.setValue(value);
 	}
+
+
+
 }

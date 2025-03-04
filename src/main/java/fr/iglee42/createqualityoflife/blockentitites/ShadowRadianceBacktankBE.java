@@ -2,6 +2,7 @@ package fr.iglee42.createqualityoflife.blockentitites;
 
 import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
 import fr.iglee42.createqualityoflife.blocks.ShadowRadianceBacktankBlock;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -32,17 +33,17 @@ public class ShadowRadianceBacktankBE extends BacktankBlockEntity {
     @Override
     protected void write(CompoundTag compound, boolean clientPacket) {
         super.write(compound, clientPacket);
-        compound.putBoolean("propeller",propeller);
-        compound.putBoolean("fans",fans);
-        compound.putBoolean("hover",hover);
+        compound.putBoolean(NBTConstants.NBT_PROPELLERS,propeller);
+        compound.putBoolean(NBTConstants.NBT_FANS,fans);
+        compound.putBoolean(NBTConstants.NBT_HOVER,hover);
     }
 
     @Override
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
-        propeller = compound.getBoolean("propeller");
-        fans = compound.getBoolean("fans");
-        hover = compound.getBoolean("hover");
+        propeller = compound.getBoolean(NBTConstants.NBT_PROPELLERS);
+        fans = compound.getBoolean(NBTConstants.NBT_FANS);
+        hover = compound.getBoolean(NBTConstants.NBT_HOVER);
     }
 
     public boolean hasPropeller() {

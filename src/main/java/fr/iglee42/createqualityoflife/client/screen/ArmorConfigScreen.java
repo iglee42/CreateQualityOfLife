@@ -1,5 +1,6 @@
 package fr.iglee42.createqualityoflife.client.screen;
 
+import com.google.common.collect.Lists;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
 import fr.iglee42.createqualityoflife.client.screen.widgets.ArmorConfigScreenList;
@@ -8,12 +9,12 @@ import fr.iglee42.createqualityoflife.client.screen.widgets.entries.BooleanEntry
 import fr.iglee42.createqualityoflife.client.screen.widgets.entries.EnumEntry;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.ModArmorMaterials;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
+
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.createmod.catnip.config.ui.ConfigScreen;
 import net.createmod.catnip.config.ui.ConfigScreenList;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import org.lwjgl.opengl.GL30;
@@ -66,8 +67,8 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 		int listL = this.width / 2 - listWidth / 2;
 		int listR = this.width / 2 + listWidth / 2;
 
-		list = new ArmorConfigScreenList(minecraft, listWidth, height - 80, 35, 40,this);
-		list.setX(listL);
+		list = new ArmorConfigScreenList(minecraft, listWidth, height - 80, 35, height - 45,40,this);
+		list.setLeftPos(listL);
 
 		addRenderableWidget(list);
 
@@ -77,7 +78,7 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 			if (!(it.getItem() instanceof ArmorItem))return;
 			if (((ArmorItem)it.getItem()).getMaterial().equals(ModArmorMaterials.SHADOW_RADIANCE)) armors.add(Minecraft.getInstance().player.getInventory().armor.indexOf(it));
 		});
-		armors = armors.reversed();
+		armors = Lists.reverse(armors);
 		for (int index = 0; index < armors.size(); index++) {
 			int finalIndex = index;
 			addRenderableWidget(new ItemButton(listL - 24,35 + list.getHeight() / 2 +(( index - 2) * 30), btn->{
@@ -99,7 +100,9 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {}
+	public void renderBackground(GuiGraphics p_283688_) {
+		super.renderBackground(p_283688_);
+	}
 
 	@Override
 	protected void renderWindowBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
@@ -133,10 +136,10 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-		cogSpin.bump(3, -scrollY * 5);
+	public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+		cogSpin.bump(3, -delta * 5);
 
-		return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+		return super.mouseScrolled(mouseX, mouseY, delta);
 	}
 
 	@Override
@@ -145,7 +148,7 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 	}
 
 	protected static void renderCog(GuiGraphics graphics) {
-		float partialTicks = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
+		float partialTicks = Minecraft.getInstance().getFrameTime();
 		PoseStack poseStack = graphics.pose();
 		poseStack.pushPose();
 
@@ -173,23 +176,22 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 		ItemStack armor = Minecraft.getInstance().player.getInventory().getArmor(armors.get(selectedItem));
 
 		switch (((ArmorItem)armor.getItem()).getType()){
-			case HELMET -> list.children().add(new BooleanEntry("Enable Goggles", armor.getOrDefault(ModDataComponents.HELMET_GOGGLES,true),ModDataComponents.HELMET_GOGGLES));
+			case HELMET -> list.children().add(new BooleanEntry("Enable Goggles", NBTConstants.getOrDefault(armor,NBTConstants.NBT_GOGGLES,true),NBTConstants.NBT_GOGGLES));
 			case CHESTPLATE -> {
 				if (ShadowRadianceChestplate.hasPropeller(armor)){
-					list.children().add(new BooleanEntry("Enable Fans", armor.getOrDefault(ModDataComponents.BACKTANK_FANS,true),ModDataComponents.BACKTANK_FANS));
-					list.children().add(new BooleanEntry("Enable Hover", armor.getOrDefault(ModDataComponents.BACKTANK_HOVER,false),ModDataComponents.BACKTANK_HOVER));
+					list.children().add(new BooleanEntry("Enable Fans", NBTConstants.getOrDefault(armor,NBTConstants.NBT_FANS,true),NBTConstants.NBT_FANS));
+					list.children().add(new BooleanEntry("Enable Hover",NBTConstants.getOrDefault(armor,NBTConstants.NBT_HOVER,false),NBTConstants.NBT_HOVER));
 				}
 			}
 			case BOOTS -> {
-				list.children().add(new BooleanEntry("Enable Diving", armor.getOrDefault(ModDataComponents.BOOTS_DIVING,false),ModDataComponents.BOOTS_DIVING));
-				list.children().add(new BooleanEntry("Enable Lava Walking", armor.getOrDefault(ModDataComponents.BOOTS_LAVA,true),ModDataComponents.BOOTS_LAVA));
+				list.children().add(new BooleanEntry("Enable Diving", NBTConstants.getOrDefault(armor,NBTConstants.NBT_DIVING,false),NBTConstants.NBT_DIVING));
+				list.children().add(new BooleanEntry("Enable Lava Walking", NBTConstants.getOrDefault(armor,NBTConstants.NBT_LAVA,true),NBTConstants.NBT_LAVA));
 
 			}
 			default -> {}
 		}
-		list.children().add(new BooleanEntry("Apply Potion Effect",armor.getOrDefault(ModDataComponents.ARMOR_EFFECT,true),ModDataComponents.ARMOR_EFFECT));
-		list.children().add(new EnumEntry("Render Type",armor.getOrDefault(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL),
-				ModDataComponents.ARMOR_RENDER_TYPE){
+		list.children().add(new BooleanEntry("Apply Potion Effect",NBTConstants.getOrDefault(armor,NBTConstants.NBT_EFFECTS,true),NBTConstants.NBT_EFFECTS));
+		list.children().add(new EnumEntry("Render Type",NBTConstants.getOrDefault(armor,NBTConstants.NBT_RENDER_TYPE),NBTConstants.NBT_RENDER_TYPE){
 			@Override
 			protected void cycleValue(int direction) {
 				List<Integer> armors = ((ArmorConfigScreen)Minecraft.getInstance().screen).getArmors();

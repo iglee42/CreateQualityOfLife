@@ -135,10 +135,10 @@ public class ModCreativeModeTabs {
 		private static List<ItemOrdering> makeOrderings() {
 			List<ItemOrdering> orderings = new ReferenceArrayList<>();
 
-			Map<ItemProviderEntry<?>, ItemProviderEntry<?, ?>> simpleBeforeOrderings = Map.of(
+			Map<ItemProviderEntry<?>, ItemProviderEntry<?>> simpleBeforeOrderings = Map.of(
 			);
 
-			Map<ItemProviderEntry<?>, ItemProviderEntry<?, ?>> simpleAfterOrderings = Map.of(
+			Map<ItemProviderEntry<?>, ItemProviderEntry<?>> simpleAfterOrderings = Map.of(
 			);
 
 			simpleBeforeOrderings.forEach((entry, otherEntry) -> {
@@ -162,7 +162,7 @@ public class ModCreativeModeTabs {
 			Map<ItemProviderEntry<?>, Function<Item, ItemStack>> simpleFactories = Map.of(
 					ModItems.SHADOW_RADIANCE_CHESTPLATE, item -> {
 						ItemStack stack = new ItemStack(item);
-						stack.set(AllDataComponents.BACKTANK_AIR, BacktankUtil.maxAirWithoutEnchants());
+						stack.getOrCreateTag().putFloat("Air", BacktankUtil.maxAirWithoutEnchants());
 						return stack;
 					}
 			);

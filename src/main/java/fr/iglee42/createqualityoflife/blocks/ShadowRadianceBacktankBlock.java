@@ -8,6 +8,7 @@ import com.simibubi.create.content.equipment.armor.BacktankItem;
 import fr.iglee42.createqualityoflife.blockentitites.ShadowRadianceBacktankBE;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -90,9 +91,9 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
             boolean propeller = be.hasPropeller();
             boolean fans = be.isFans();
             boolean hover = be.isHover();
-            stack.getOrCreateTag().putBoolean("Propeller",propeller);
-            stack.getOrCreateTag().putBoolean("FansEnable",fans);
-            stack.getOrCreateTag().putBoolean("HoverEnable",hover);
+            stack.getOrCreateTag().putBoolean(NBTConstants.NBT_PROPELLERS,propeller);
+            stack.getOrCreateTag().putBoolean(NBTConstants.NBT_FANS,fans);
+            stack.getOrCreateTag().putBoolean(NBTConstants.NBT_HOVER,hover);
         });
         return stack;
     }

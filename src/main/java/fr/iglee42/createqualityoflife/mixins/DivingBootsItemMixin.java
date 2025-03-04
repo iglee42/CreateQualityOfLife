@@ -2,6 +2,7 @@ package fr.iglee42.createqualityoflife.mixins;
 
 import com.simibubi.create.content.equipment.armor.DivingBootsItem;
 import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +25,7 @@ public class DivingBootsItemMixin {
     @Inject(method = "affects",at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/equipment/armor/DivingBootsItem;isWornBy(Lnet/minecraft/world/entity/Entity;)Z",shift = At.Shift.BEFORE),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
     private static void createqol$affects(LivingEntity entity, CallbackInfoReturnable<Boolean> cir){
         if (DivingBootsItem.getWornItem(entity).is(ModItems.SHADOW_RADIANCE_BOOTS.asItem())) {
-            if (!DivingBootsItem.getWornItem(entity).getOrDefault(ModDataComponents.BOOTS_DIVING,false)) {
+            if (!NBTConstants.getOrDefault(DivingBootsItem.getWornItem(entity),NBTConstants.NBT_DIVING,false)) {
                 entity.getPersistentData()
                         .remove("HeavyBoots");
                 cir.setReturnValue(false);

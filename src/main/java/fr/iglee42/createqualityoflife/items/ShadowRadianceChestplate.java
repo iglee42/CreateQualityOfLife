@@ -3,6 +3,7 @@ package fr.iglee42.createqualityoflife.items;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -39,7 +40,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
         if (player.getItemBySlot(EquipmentSlot.CHEST).equals(stack)){
             boolean second = level.getGameTime() % 20 == 0;
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
-            if (stack.getOrDefault(ModDataComponents.ARMOR_EFFECT,true))
+            if (NBTConstants.getOrDefault(stack,NBTConstants.NBT_EFFECTS,true))
                 player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 1, false, false));
             if (player.isCreative()) return;
             if (isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack)) {
@@ -123,22 +124,22 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
     }
 
     public static void toggleFans(ItemStack chestplate,Player p) {
-        chestplate.getOrCreateTag().putBoolean("FansEnable", chestplate.getOrCreateTag().contains("FansEnable") && !chestplate.getOrCreateTag().getBoolean("FansEnable"));
-        boolean fans = chestplate.getOrCreateTag().getBoolean("FansEnable");
-        p.displayClientMessage(Component.literal("Fans : ").append(Component.literal(String.valueOf(fans)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+        chestplate.getOrCreateTag().putBoolean(NBTConstants.NBT_FANS, chestplate.getOrCreateTag().contains(NBTConstants.NBT_FANS) && !chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_FANS));
+        boolean fans = chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_FANS);
+        p.displayClientMessage(Component.literal("Fans : ").append(Component.literal(chooseText(fans)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
     public static void toggleHover(ItemStack chestplate,Player p) {
-        chestplate.getOrCreateTag().putBoolean("HoverEnable", chestplate.getOrCreateTag().contains("HoverEnable") && !chestplate.getOrCreateTag().getBoolean("HoverEnable"));
-        boolean hover = chestplate.getOrCreateTag().getBoolean("HoverEnable");
-        p.displayClientMessage(Component.literal("Hover : ").append(Component.literal(String.valueOf(hover)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+        chestplate.getOrCreateTag().putBoolean(NBTConstants.NBT_HOVER, chestplate.getOrCreateTag().contains(NBTConstants.NBT_HOVER) && !chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_HOVER));
+        boolean hover = chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_HOVER);
+        p.displayClientMessage(Component.literal("Hover : ").append(Component.literal(chooseText(hover)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
     public static boolean hasPropeller(ItemStack chestplate){
-        return chestplate.getOrCreateTag().contains("Propeller") && chestplate.getOrCreateTag().getBoolean("Propeller");
+        return chestplate.getOrCreateTag().contains(NBTConstants.NBT_PROPELLERS) && chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_PROPELLERS);
     }
     public static boolean isFansEnable(ItemStack chestplate){
-        return !chestplate.getOrCreateTag().contains("FansEnable") || chestplate.getOrCreateTag().getBoolean("FansEnable");
+        return !chestplate.getOrCreateTag().contains(NBTConstants.NBT_FANS) || chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_FANS);
     }
     public static boolean isHoverEnable(ItemStack chestplate){
-        return chestplate.getOrCreateTag().contains("HoverEnable") && chestplate.getOrCreateTag().getBoolean("HoverEnable");
+        return chestplate.getOrCreateTag().contains(NBTConstants.NBT_HOVER) && chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_HOVER);
     }
 }

@@ -9,6 +9,7 @@ import fr.iglee42.createqualityoflife.blockentitites.InventoryLinkerBlockEntity;
 import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
 import fr.iglee42.createqualityoflife.registries.ModItems;
 import fr.iglee42.createqualityoflife.utils.Features;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -73,7 +74,7 @@ public class InventoryLinkerBlock extends KineticBlock implements IBE<InventoryL
                 }
             } else {
                 if (be.getPlayerPaperItemStack().isEmpty() && player.getMainHandItem().is(ModItems.PLAYER_PAPER.get())){
-                    if (player.getMainHandItem().getOrCreateTag().contains("linkedPlayer")){
+                    if (player.getMainHandItem().getOrCreateTag().contains(NBTConstants.NBT_LINKED_PLAYER)){
                         be.setPlayerPaperItemStack(player.getMainHandItem().copy());
                         player.setItemInHand(InteractionHand.MAIN_HAND,ItemStack.EMPTY);
                         level.sendBlockUpdated(pos,blockState,blockState,2);

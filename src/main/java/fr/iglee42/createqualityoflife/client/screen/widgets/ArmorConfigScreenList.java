@@ -34,8 +34,11 @@ public class ArmorConfigScreenList extends ObjectSelectionList<ArmorConfigScreen
 
 	protected final ArmorConfigScreen parent;
 
-	public ArmorConfigScreenList(Minecraft client, int width, int height, int top, int elementHeight,ArmorConfigScreen parent) {
-		super(client, width, height, top, elementHeight);
+	public ArmorConfigScreenList(Minecraft client, int width, int height, int top, int bottom, int elementHeight,ArmorConfigScreen parent) {
+		super(client, width, height, top,bottom, elementHeight);
+		setRenderBackground(false);
+		setRenderTopAndBottom(false);
+		setRenderSelection(false);
 		headerHeight = 3;
 		this.parent = parent;
 	}
@@ -44,24 +47,24 @@ public class ArmorConfigScreenList extends ObjectSelectionList<ArmorConfigScreen
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		Color c = new Color(0x60_000000);
-		UIRenderHelper.angledGradient(graphics, 90, getX() + width / 2, getY(), width, 5, c, Color.TRANSPARENT_BLACK);
-		UIRenderHelper.angledGradient(graphics, -90, getX() + width / 2, getBottom(), width, 5, c, Color.TRANSPARENT_BLACK);
-		UIRenderHelper.angledGradient(graphics, 0, getX(), getY() + height / 2, height, 5, c, Color.TRANSPARENT_BLACK);
-		UIRenderHelper.angledGradient(graphics, 180, getRight(), getY() + height / 2, height, 5, c, Color.TRANSPARENT_BLACK);
+		UIRenderHelper.angledGradient(graphics, 90, x0 + width / 2, y0, width, 5, c, Color.TRANSPARENT_BLACK);
+		UIRenderHelper.angledGradient(graphics, -90, x0 + width / 2, y1, width, 5, c, Color.TRANSPARENT_BLACK);
+		UIRenderHelper.angledGradient(graphics, 0, x0, y0 + height / 2, height, 5, c, Color.TRANSPARENT_BLACK);
+		UIRenderHelper.angledGradient(graphics, 180, x1, y0 + height / 2, height, 5, c, Color.TRANSPARENT_BLACK);
 
 		super.render(graphics, mouseX, mouseY, partialTicks);
 
 		if (children().isEmpty()){
-			graphics.drawCenteredString(minecraft.font,"Please Select an item to configure", getX() + width / 2,getY() + getHeight() / 2 - 9,UIRenderHelper.COLOR_TEXT.getFirst().getRGB());
+			graphics.drawCenteredString(minecraft.font,"Please Select an item to configure", getLeft() + width / 2,getTop() + getHeight() / 2 - 9,UIRenderHelper.COLOR_TEXT.getFirst().getRGB());
 		}
 	}
 
 	@Override
-	protected void renderListItems(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+	protected void renderList(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
 		Window window = minecraft.getWindow();
 		double d0 = window.getGuiScale();
-		RenderSystem.enableScissor((int) (getX() * d0), (int) (window.getHeight() - (getBottom() * d0)), (int) (this.width * d0), (int) (this.height * d0));
-		super.renderListItems(graphics, mouseX, mouseY, partialTick);
+		RenderSystem.enableScissor((int) (getLeft() * d0), (int) (window.getHeight() - (getBottom() * d0)), (int) (this.width * d0), (int) (this.height * d0));
+		super.renderList(graphics, mouseX, mouseY, partialTick);
 		RenderSystem.disableScissor();
 	}
 
@@ -81,7 +84,7 @@ public class ArmorConfigScreenList extends ObjectSelectionList<ArmorConfigScreen
 
 	@Override
 	protected int getScrollbarPosition() {
-		return getX() + this.width - 6;
+		return getLeft() + this.width - 6;
 	}
 
 	@Override

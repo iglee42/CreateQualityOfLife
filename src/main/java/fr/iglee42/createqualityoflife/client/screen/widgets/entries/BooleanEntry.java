@@ -1,7 +1,8 @@
 package fr.iglee42.createqualityoflife.client.screen.widgets.entries;
 
 import fr.iglee42.createqualityoflife.client.screen.ArmorConfigScreen;
-import fr.iglee42.createqualityoflife.packets.ChangeArmorComponentPacket;
+import fr.iglee42.createqualityoflife.packets.ChangeArmorTagPacket;
+import fr.iglee42.createqualityoflife.registries.ModPackets;
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.gui.element.RenderElement;
 import net.createmod.catnip.gui.widget.AbstractSimiWidget;
@@ -9,10 +10,6 @@ import net.createmod.catnip.gui.widget.BoxWidget;
 import net.createmod.ponder.enums.PonderGuiTextures;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -23,8 +20,8 @@ public class BooleanEntry extends ValueEntry<Boolean> {
 	RenderElement disabled;
 	BoxWidget button;
 
-	public BooleanEntry(String label, Boolean value, DataComponentType<Boolean> component) {
-		super(label, value, component);
+	public BooleanEntry(String label, Boolean value, String key) {
+		super(label, value, key);
 
 		enabled = PonderGuiTextures.ICON_CONFIRM.asStencil()
 			.withElementRenderer((ms, width, height, alpha) -> UIRenderHelper.angledGradient(ms, 0, 0, height / 2, height, width, AbstractSimiWidget.COLOR_SUCCESS))
@@ -70,13 +67,16 @@ public class BooleanEntry extends ValueEntry<Boolean> {
 		super.onValueChange(newValue);
 		button.showingElement(newValue ? enabled : disabled);
 		bumpCog(newValue ? 15f : -16f);
+		List<Integer> armors = ((ArmorConfigScreen)Minecraft.getInstance().screen).getArmors();
+		int selected = ((ArmorConfigScreen)Minecraft.getInstance().screen).getSelectedItem();
+		Minecraft.getInstance().player.getInventory().getArmor(armors.get(selected)).getOrCreateTag().putBoolean(nbtKey,value);
 	}
 
 	@Override
 	public void setValue(@NotNull Boolean value) {
 		List<Integer> armors = ((ArmorConfigScreen) Minecraft.getInstance().screen).getArmors();
 		int selected = ((ArmorConfigScreen)Minecraft.getInstance().screen).getSelectedItem();
-		PacketDistributor.sendToServer(new ChangeArmorComponentPacket(armors.get(selected), !value ? 0 : 1, BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(component).toString()));
+		ModPackets.getChannel().sendToServer(new ChangeArmorTagPacket(armors.get(selected), !value ? 0 : 1, nbtKey));
 		super.setValue(value);
 	}
 }

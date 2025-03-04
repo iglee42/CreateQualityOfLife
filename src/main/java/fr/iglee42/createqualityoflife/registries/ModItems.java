@@ -37,7 +37,7 @@ public class ModItems {
     public static final ItemEntry<? extends ShadowRadianceHelmet> SHADOW_RADIANCE_HELMET = REGISTRATE
             .item("shadow_radiance_helmet",
                     p -> new ShadowRadianceHelmet(ModArmorMaterials.SHADOW_RADIANCE, p, CreateQOL.asResource("shadow_radiance")))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(814).component(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE))
             .tag(forgeItemTag("armors/helmets"))
             .register();
 
@@ -51,7 +51,7 @@ public class ModItems {
                     p -> new ShadowRadianceChestplate(ModArmorMaterials.SHADOW_RADIANCE, p, CreateQOL.asResource("shadow_radiance"),
                             SHADOW_RADIANCE_CHESTPLATE_PLACEABLE))
             .model(AssetLookup.customGenericItemModel("_", "item"))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1184).component(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE))
             .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
             .tag(forgeItemTag("armors/chestplates"))
             .register();
@@ -59,14 +59,14 @@ public class ModItems {
     public static final ItemEntry<? extends BaseArmorItem> SHADOW_RADIANCE_LEGGINGS = REGISTRATE
             .item("shadow_radiance_leggings",
                     p -> new ShadowRadianceArmorItem(ModArmorMaterials.SHADOW_RADIANCE, ArmorItem.Type.LEGGINGS, p, CreateQOL.asResource("shadow_radiance")))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1110).component(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE))
             .tag(forgeItemTag("armors/leggings"))
             .register();
 
     public static final ItemEntry<? extends BaseArmorItem> SHADOW_RADIANCE_BOOTS = REGISTRATE
             .item("shadow_radiance_boots",
                     p -> new ShadowRadianceArmorItem(ModArmorMaterials.SHADOW_RADIANCE, ArmorItem.Type.BOOTS, p, CreateQOL.asResource("shadow_radiance")))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(962).component(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE))
             .tag(forgeItemTag("armors/boots"))
             .register();
 

@@ -3,24 +3,21 @@ package fr.iglee42.createqualityoflife.client.screen.widgets.entries;
 import fr.iglee42.createqualityoflife.client.screen.ArmorConfigScreen;
 import fr.iglee42.createqualityoflife.client.screen.widgets.ArmorConfigScreenList;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 
 	protected T value;
-	protected DataComponentType<?> component;
+	protected String nbtKey;
 	protected boolean editable = true;
 
-	public ValueEntry(String label, T value, DataComponentType<?> component) {
+	public ValueEntry(String label, T value, String nbtKey) {
 		super(label);
 		this.value = value;
-		this.component = component;
+		this.nbtKey = nbtKey;
 
 		labelTooltip.add(Component.literal(label).withStyle(ChatFormatting.WHITE));
 	}
@@ -60,9 +57,7 @@ public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 		onValueChange(getValue());
 	}
 	public void onValueChange(T newValue) {
-		List<Integer> armors = ((ArmorConfigScreen)Minecraft.getInstance().screen).getArmors();
-		int selected = ((ArmorConfigScreen)Minecraft.getInstance().screen).getSelectedItem();
-		Minecraft.getInstance().player.getInventory().getArmor(armors.get(selected)).set(((DataComponentType<? super T>) component), value);
+
 	}
 
 	protected void bumpCog() {bumpCog(10f);}

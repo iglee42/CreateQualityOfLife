@@ -8,12 +8,12 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import fr.iglee42.createqualityoflife.client.GoggleArmorLayer;
 import fr.iglee42.createqualityoflife.client.ShadowRadianceFirstPersonRenderer;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import fr.iglee42.createqualityoflife.registries.ModItems;
 import fr.iglee42.createqualityoflife.registries.ModPartialModels;
 import fr.iglee42.createqualityoflife.registries.ModSprites;
 import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;
 import fr.iglee42.createqualityoflife.utils.KeyBindManager;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import fr.iglee42.createqualityoflife.utils.Pos3D;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.render.CachedBuffers;
@@ -67,7 +67,7 @@ public class CreateQOLClient {
 
         event.enqueueWork(() -> {
             ItemProperties.register(ModItems.PLAYER_PAPER.get(),
-                    CreateQOL.asResource("hasplayer"), (stack, level, living, id) -> stack.has(ModDataComponents.LINKED_PLAYER) ? 1.0f : 0.0f);
+                    CreateQOL.asResource("hasplayer"), (stack, level, living, id) -> stack.getOrCreateTag().contains(NBTConstants.NBT_LINKED_PLAYER) ? 1.0f : 0.0f);
         });
         //MinecraftForge.EVENT_BUS.register(new KeyBindManager());
         //ModPonderTags.register();

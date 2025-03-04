@@ -2,7 +2,6 @@ package fr.iglee42.createqualityoflife.mixins;
 
 import com.simibubi.create.content.trains.display.FlapDisplayBlock;
 import com.simibubi.create.content.trains.display.FlapDisplayBlockEntity;
-import com.tterrag.registrate.util.RegistrateDistExecutor;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.screens.DisplayBoardEditScreen;
 import fr.iglee42.createqualityoflife.utils.Features;
@@ -12,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;

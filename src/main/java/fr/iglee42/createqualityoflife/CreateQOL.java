@@ -1,16 +1,12 @@
 package fr.iglee42.createqualityoflife;
 
 import com.mojang.logging.LogUtils;
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.simibubi.create.foundation.data.recipe.DeployingRecipeGen;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
-import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import fr.iglee42.createqualityoflife.conditions.FeatureLoadedCondition;
-import fr.iglee42.createqualityoflife.config.CreateQOLCommonConfig;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.config.CreateQOLFeaturesConfig;
 import fr.iglee42.createqualityoflife.registries.*;
