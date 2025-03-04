@@ -6,6 +6,10 @@
         {
           "type": "createqol:feature_loaded",
           "feature": "chipped_saw"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "chipped"
         }
       ],
       "recipe": {
