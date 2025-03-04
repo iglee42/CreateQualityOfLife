@@ -1,10 +1,6 @@
 package fr.iglee42.createqualityoflife.utils;
 
-import com.simibubi.create.Create;
-import com.simibubi.create.foundation.config.ConfigBase;
 import fr.iglee42.createqualityoflife.config.CreateQOLCommonConfig;
-
-import java.lang.reflect.Field;
 
 public enum Features {
 
@@ -13,8 +9,6 @@ public enum Features {
     INVENTORY_LINKER("inventory_linker", CreateQOLCommonConfig.inventoryLinker),
     PROXIMITY_SCHEDULE("proximity_schedule", CreateQOLCommonConfig.proximitySchedule),
     DISPLAY_BOARD_MODIFICATION("display_board_modification", CreateQOLCommonConfig.displayBoardModification),
-    CUSTOM_BELTS("custom_belts", CreateQOLCommonConfig.customBelts),
-
     ;
 
 
