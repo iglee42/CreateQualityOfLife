@@ -1,9 +1,7 @@
-package fr.iglee42.createqualityoflife.client.screen.widgets;
+package fr.iglee42.createqualityoflife.client.screens.widgets;
 
-import java.awt.*;
 import java.util.Locale;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -16,7 +14,6 @@ import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.data.Couple;
 import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.theme.Color;
-import net.createmod.ponder.foundation.PonderTag;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

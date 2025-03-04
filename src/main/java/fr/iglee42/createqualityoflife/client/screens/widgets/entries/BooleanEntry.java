@@ -1,6 +1,6 @@
-package fr.iglee42.createqualityoflife.client.screen.widgets.entries;
+package fr.iglee42.createqualityoflife.client.screens.widgets.entries;
 
-import fr.iglee42.createqualityoflife.client.screen.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
 import fr.iglee42.createqualityoflife.packets.ChangeArmorComponentPacket;
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.gui.element.RenderElement;
@@ -11,7 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,13 +1,10 @@
-package fr.iglee42.createqualityoflife.client.screen.widgets.entries;
+package fr.iglee42.createqualityoflife.client.screens.widgets.entries;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import fr.iglee42.createqualityoflife.client.screen.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
 import fr.iglee42.createqualityoflife.packets.ChangeArmorComponentPacket;
-import fr.iglee42.createqualityoflife.utils.ArmorItemStackHandler;
-import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import net.createmod.catnip.config.ui.ConfigScreen;
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.gui.element.BoxElement;
@@ -19,9 +16,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.item.ArmorItem;
-import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,4 +1,4 @@
-package fr.iglee42.createqualityoflife.screens;
+package fr.iglee42.createqualityoflife.client.screens;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.trains.display.FlapDisplayBlockEntity;
@@ -9,7 +9,6 @@ import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.gui.widget.SelectionScrollInput;
 import fr.iglee42.createqualityoflife.packets.ConfigureDisplayBoardPacket;
 import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
-import fr.iglee42.createqualityoflife.registries.ModPackets;
 import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
