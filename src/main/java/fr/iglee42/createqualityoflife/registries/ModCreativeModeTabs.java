@@ -163,7 +163,7 @@ public class ModCreativeModeTabs {
 			Map<ItemProviderEntry<?, ?>, Function<Item, ItemStack>> simpleFactories = Map.of(
 					ModItems.SHADOW_RADIANCE_CHESTPLATE, item -> {
 						ItemStack stack = new ItemStack(item);
-						stack.getOrCreateTag().putInt("Air", BacktankUtil.maxAir(stack));
+						stack.set(AllDataComponents.BACKTANK_AIR, BacktankUtil.maxAirWithoutEnchants());
 						return stack;
 					}
 			);

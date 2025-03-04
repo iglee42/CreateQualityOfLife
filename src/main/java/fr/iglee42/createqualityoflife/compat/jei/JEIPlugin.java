@@ -8,7 +8,8 @@ import com.simibubi.create.compat.jei.category.ItemApplicationCategory;
 import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe;
 import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import earth.terrarium.chipped.common.compat.jei.ChippedRecipeCategory;
+import earth.terrarium.chipped.common.compat.jei.ChippedJeiPlugin;
+import earth.terrarium.chipped.common.compat.jei.WorkbenchCategory;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
 import fr.iglee42.createqualityoflife.utils.Features;
@@ -29,13 +30,13 @@ public class JEIPlugin implements IModPlugin {
 
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         if (CreateQOL.isChippedLoaded() && CreateQOL.isActivate(Features.CHIPPED_SAW)) {
-            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.BOTANIST_SAW.get()), ChippedRecipeCategory.BOTANIST_WORKBENCH_RECIPE);
-            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.GLASSBLOWER_SAW.get()), ChippedRecipeCategory.GLASSBLOWER_RECIPE);
-            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.CARPENTERS_SAW.get()), ChippedRecipeCategory.CARPENTERS_TABLE_RECIPE);
-            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.LOOM_SAW.get()), ChippedRecipeCategory.LOOM_TABLE_RECIPE);
-            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.MASON_SAW.get()), ChippedRecipeCategory.MASON_TABLE_RECIPE);
-            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.ALCHEMY_SAW.get()), ChippedRecipeCategory.ALCHEMY_BENCH_RECIPE);
-            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.TINKERING_SAW.get()), ChippedRecipeCategory.TINKERING_TABLE_RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.BOTANIST_SAW.get()), WorkbenchCategory.RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.GLASSBLOWER_SAW.get()), WorkbenchCategory.RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.CARPENTERS_SAW.get()), WorkbenchCategory.RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.LOOM_SAW.get()), WorkbenchCategory.RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.MASON_SAW.get()), WorkbenchCategory.RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.ALCHEMY_SAW.get()), WorkbenchCategory.RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.TINKERING_SAW.get()), WorkbenchCategory.RECIPE);
         }
     }
 

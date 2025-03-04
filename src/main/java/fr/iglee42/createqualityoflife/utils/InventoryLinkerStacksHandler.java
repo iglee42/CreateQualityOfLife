@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class InventoryLinkerStacksHandler extends ItemStackHandler {
 
-    private InventoryLinkerBlockEntity be;
+    private final InventoryLinkerBlockEntity be;
 
     public InventoryLinkerStacksHandler(int size,InventoryLinkerBlockEntity be) {
         super(size);
