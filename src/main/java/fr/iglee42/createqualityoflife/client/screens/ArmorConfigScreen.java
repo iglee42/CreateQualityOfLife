@@ -11,6 +11,9 @@ import fr.iglee42.createqualityoflife.registries.ModArmorMaterials;
 import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import org.lwjgl.opengl.GL30;
@@ -167,25 +170,43 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 		ItemStack armor = Minecraft.getInstance().player.getInventory().getArmor(armors.get(selectedItem));
 
 		switch (((ArmorItem)armor.getItem()).getType()){
-			case HELMET -> list.children().add(new BooleanEntry("Enable Goggles", armor.getOrDefault(ModDataComponents.HELMET_GOGGLES,true),ModDataComponents.HELMET_GOGGLES));
+			case HELMET -> list.children().add(new BooleanEntry("Enable Goggles", armor.getOrDefault(ModDataComponents.HELMET_GOGGLES,true),ModDataComponents.HELMET_GOGGLES,
+					"Should engineer's goggle's information be displayed"));
 			case CHESTPLATE -> {
-				list.children().add(new BooleanEntry("Enable Custom Arms", armor.getOrDefault(ModDataComponents.BACKTANK_ARMS,true),ModDataComponents.BACKTANK_ARMS));
+				list.children().add(new BooleanEntry("Enable Custom Arms", armor.getOrDefault(ModDataComponents.BACKTANK_ARMS,true),ModDataComponents.BACKTANK_ARMS,
+						"Should the player's arms be replaced with the armor in first person"));
 
 				if (ShadowRadianceChestplate.hasPropeller(armor)){
-					list.children().add(new BooleanEntry("Enable Fans", armor.getOrDefault(ModDataComponents.BACKTANK_FANS,true),ModDataComponents.BACKTANK_FANS));
-					list.children().add(new BooleanEntry("Enable Hover", armor.getOrDefault(ModDataComponents.BACKTANK_HOVER,false),ModDataComponents.BACKTANK_HOVER));
+					list.children().add(new BooleanEntry("Enable Fans", armor.getOrDefault(ModDataComponents.BACKTANK_FANS,true),ModDataComponents.BACKTANK_FANS,
+							"Activate the propeller on the backtank"));
+					list.children().add(new BooleanEntry("Enable Hover", armor.getOrDefault(ModDataComponents.BACKTANK_HOVER,false),ModDataComponents.BACKTANK_HOVER,
+							"Activate the hover mode"));
 				}
 			}
 			case BOOTS -> {
-				list.children().add(new BooleanEntry("Enable Diving", armor.getOrDefault(ModDataComponents.BOOTS_DIVING,false),ModDataComponents.BOOTS_DIVING));
-				list.children().add(new BooleanEntry("Enable Lava Walking", armor.getOrDefault(ModDataComponents.BOOTS_LAVA,true),ModDataComponents.BOOTS_LAVA));
+				list.children().add(new BooleanEntry("Enable Diving", armor.getOrDefault(ModDataComponents.BOOTS_DIVING,false),ModDataComponents.BOOTS_DIVING,
+						"Enable diving, which makes the player descends quicker in liquids"));
+				list.children().add(new BooleanEntry("Enable Lava Walking", armor.getOrDefault(ModDataComponents.BOOTS_LAVA,true),ModDataComponents.BOOTS_LAVA,
+						"Enable walking under lava, which makes the player walks normally under lava"));
 
 			}
 			default -> {}
 		}
-		list.children().add(new BooleanEntry("Apply Potion Effect",armor.getOrDefault(ModDataComponents.ARMOR_EFFECT,true),ModDataComponents.ARMOR_EFFECT));
+		MobEffect effect = switch (((ArmorItem) armor.getItem()).getType()){
+			case BOOTS -> MobEffects.JUMP.value();
+			case LEGGINGS -> MobEffects.MOVEMENT_SPEED.value();
+			case CHESTPLATE-> MobEffects.DAMAGE_BOOST.value();
+			case HELMET -> MobEffects.NIGHT_VISION.value();
+			default -> MobEffects.DIG_SLOWDOWN.value();
+		};
+		list.children().add(new BooleanEntry("Apply Potion Effect",armor.getOrDefault(ModDataComponents.ARMOR_EFFECT,true),ModDataComponents.ARMOR_EFFECT,
+				"Enable the potion effect granted by the armor piece",
+				"For this piece, the effect is " + Component.translatable(effect.getDescriptionId()).getString()));
 		list.children().add(new EnumEntry("Render Type",armor.getOrDefault(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL),
-				ModDataComponents.ARMOR_RENDER_TYPE){
+				ModDataComponents.ARMOR_RENDER_TYPE,
+				"Define how the armor piece should be rendered.",
+				"\"Armor only\" renders only the armor",
+				"\"Addition only\" renders only the additions (E.g. Backtank, Goggles)"){
 			@Override
 			protected void cycleValue(int direction) {
 				List<Integer> armors = ((ArmorConfigScreen)Minecraft.getInstance().screen).getArmors();

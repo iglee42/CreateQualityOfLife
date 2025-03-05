@@ -2,6 +2,7 @@ package fr.iglee42.createqualityoflife.client.screens.widgets.entries;
 
 import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ArmorConfigScreenList;
+import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -9,6 +10,8 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
@@ -16,14 +19,25 @@ public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 	protected T value;
 	protected DataComponentType<?> component;
 	protected boolean editable = true;
+	protected List<String> commentLines = new ArrayList<>(List.of("."));
 
-	public ValueEntry(String label, T value, DataComponentType<?> component) {
+	public ValueEntry(String label, T value, DataComponentType<?> component,String... comments) {
 		super(label);
 		this.value = value;
 		this.component = component;
 
 		labelTooltip.add(Component.literal(label).withStyle(ChatFormatting.WHITE));
+
+		commentLines.addAll(Arrays.stream(comments).toList());
+
+		labelTooltip.addAll(commentLines.stream()
+				.map(s -> s.equals(".") ? " " : s)
+				.map(Component::literal)
+				.flatMap(stc -> FontHelper.cutTextComponent(stc, FontHelper.Palette.ALL_GRAY).stream())
+				.toList()
+		);
 	}
+
 
 	@Override
 	protected void setEditable(boolean b) {

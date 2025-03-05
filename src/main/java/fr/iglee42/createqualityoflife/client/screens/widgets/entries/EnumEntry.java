@@ -27,8 +27,8 @@ public class EnumEntry extends ValueEntry<Enum<?>> {
 	protected BoxWidget cycleLeft;
 	protected BoxWidget cycleRight;
 
-	public EnumEntry(String label, Enum<?> value, DataComponentType<?> component) {
-		super(label, value, component);
+	public EnumEntry(String label, Enum<?> value, DataComponentType<?> component,String... comments) {
+		super(label, value, component,comments);
 
 		valueText = new TextStencilElement(Minecraft.getInstance().font, "YEP").centered(true, true);
 		valueText.withElementRenderer((ms, width, height, alpha) -> UIRenderHelper.angledGradient(ms, 0, 0, height / 2,

@@ -22,8 +22,8 @@ public class BooleanEntry extends ValueEntry<Boolean> {
 	RenderElement disabled;
 	BoxWidget button;
 
-	public BooleanEntry(String label, Boolean value, DataComponentType<Boolean> component) {
-		super(label, value, component);
+	public BooleanEntry(String label, Boolean value, DataComponentType<Boolean> component,String... comments) {
+		super(label, value, component,comments);
 
 		enabled = PonderGuiTextures.ICON_CONFIRM.asStencil()
 			.withElementRenderer((ms, width, height, alpha) -> UIRenderHelper.angledGradient(ms, 0, 0, height / 2, height, width, AbstractSimiWidget.COLOR_SUCCESS))
