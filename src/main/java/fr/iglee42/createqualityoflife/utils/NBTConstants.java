@@ -12,6 +12,7 @@ public class NBTConstants {
     public static final String NBT_HOVER = "hover";
     public static final String NBT_LAVA = "lava";
     public static final String NBT_DIVING = "diving";
+    public static final String NBT_ARMS = "arms";
     public static final String NBT_RENDER_TYPE = "renderType";
 
 

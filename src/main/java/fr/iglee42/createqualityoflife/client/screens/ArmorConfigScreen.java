@@ -179,7 +179,7 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 			case HELMET -> list.children().add(new BooleanEntry("Enable Goggles", NBTConstants.getOrDefault(armor,NBTConstants.NBT_GOGGLES,true),NBTConstants.NBT_GOGGLES,
                     "Should engineer's goggle's information be displayed"));
 			case CHESTPLATE -> {
-				list.children().add(new BooleanEntry("Enable Custom Arms", armor.getOrDefault(ModDataComponents.BACKTANK_ARMS,true),ModDataComponents.BACKTANK_ARMS,
+				list.children().add(new BooleanEntry("Enable Custom Arms", NBTConstants.getOrDefault(armor,NBTConstants.NBT_ARMS,true),NBTConstants.NBT_ARMS,
 						"Should the player's arms be replaced with the armor in first person"));
 
 				if (ShadowRadianceChestplate.hasPropeller(armor)){

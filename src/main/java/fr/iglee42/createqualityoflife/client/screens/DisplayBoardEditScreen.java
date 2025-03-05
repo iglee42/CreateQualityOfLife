@@ -9,6 +9,7 @@ import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.gui.widget.SelectionScrollInput;
 import fr.iglee42.createqualityoflife.packets.ConfigureDisplayBoardPacket;
 import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
+import fr.iglee42.createqualityoflife.registries.ModPackets;
 import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;

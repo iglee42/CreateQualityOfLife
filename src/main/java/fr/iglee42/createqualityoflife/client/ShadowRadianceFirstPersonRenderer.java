@@ -33,7 +33,7 @@ public class ShadowRadianceFirstPersonRenderer {
 	public static void clientTick() {
 		Minecraft mc = Minecraft.getInstance();
 		rendererActive =
-			mc.player != null && ModItems.SHADOW_RADIANCE_CHESTPLATE.isIn(mc.player.getItemBySlot(EquipmentSlot.CHEST)) && NBTConstants.getOrDefault(mc.player.getItemBySlot(EquipmentSlot.CHEST),NBTConstants.NBT_RENDER_TYPE).shouldRenderArmor() && NBTConstants.getOrDefault(mc.player.getItemBySlot(EquipmentSlot.HEAD),NBTConstants.NBT_ARMS,true);
+			mc.player != null && ModItems.SHADOW_RADIANCE_CHESTPLATE.isIn(mc.player.getItemBySlot(EquipmentSlot.CHEST)) && NBTConstants.getOrDefault(mc.player.getItemBySlot(EquipmentSlot.CHEST),NBTConstants.NBT_RENDER_TYPE).shouldRenderArmor() && NBTConstants.getOrDefault(mc.player.getItemBySlot(EquipmentSlot.CHEST),NBTConstants.NBT_ARMS,true);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
