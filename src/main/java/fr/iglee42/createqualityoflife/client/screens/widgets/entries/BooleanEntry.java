@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife.client.screens.widgets.entries;
 
-import fr.iglee42.createqualityoflife.client.screen.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.client.screens.widgets.entries.ValueEntry;
 import fr.iglee42.createqualityoflife.packets.ChangeArmorTagPacket;
 import fr.iglee42.createqualityoflife.registries.ModPackets;
 import net.createmod.catnip.gui.UIRenderHelper;
@@ -20,8 +21,8 @@ public class BooleanEntry extends ValueEntry<Boolean> {
 	RenderElement disabled;
 	BoxWidget button;
 
-	public BooleanEntry(String label, Boolean value, String key) {
-		super(label, value, key);
+	public BooleanEntry(String label, Boolean value, String key,String... comments) {
+		super(label, value, key,comments);
 
 		enabled = PonderGuiTextures.ICON_CONFIRM.asStencil()
 			.withElementRenderer((ms, width, height, alpha) -> UIRenderHelper.angledGradient(ms, 0, 0, height / 2, height, width, AbstractSimiWidget.COLOR_SUCCESS))

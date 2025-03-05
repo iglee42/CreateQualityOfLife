@@ -15,6 +15,9 @@ import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.createmod.catnip.config.ui.ConfigScreen;
 import net.createmod.catnip.config.ui.ConfigScreenList;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import org.lwjgl.opengl.GL30;
@@ -173,24 +176,42 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 		ItemStack armor = Minecraft.getInstance().player.getInventory().getArmor(armors.get(selectedItem));
 
 		switch (((ArmorItem)armor.getItem()).getType()){
-			case HELMET -> list.children().add(new BooleanEntry("Enable Goggles", NBTConstants.getOrDefault(armor,NBTConstants.NBT_GOGGLES,true),NBTConstants.NBT_GOGGLES));
+			case HELMET -> list.children().add(new BooleanEntry("Enable Goggles", NBTConstants.getOrDefault(armor,NBTConstants.NBT_GOGGLES,true),NBTConstants.NBT_GOGGLES,
+                    "Should engineer's goggle's information be displayed"));
 			case CHESTPLATE -> {
-				list.children().add(new BooleanEntry("Enable Custom Arms", armor.getOrDefault(ModDataComponents.BACKTANK_ARMS,true),ModDataComponents.BACKTANK_ARMS));
+				list.children().add(new BooleanEntry("Enable Custom Arms", armor.getOrDefault(ModDataComponents.BACKTANK_ARMS,true),ModDataComponents.BACKTANK_ARMS,
+						"Should the player's arms be replaced with the armor in first person"));
 
 				if (ShadowRadianceChestplate.hasPropeller(armor)){
-					list.children().add(new BooleanEntry("Enable Fans", NBTConstants.getOrDefault(armor,NBTConstants.NBT_FANS,true),NBTConstants.NBT_FANS));
-					list.children().add(new BooleanEntry("Enable Hover",NBTConstants.getOrDefault(armor,NBTConstants.NBT_HOVER,false),NBTConstants.NBT_HOVER));
+					list.children().add(new BooleanEntry("Enable Fans", NBTConstants.getOrDefault(armor,NBTConstants.NBT_FANS,true),NBTConstants.NBT_FANS,
+                            "Activate the propeller on the backtank"));
+					list.children().add(new BooleanEntry("Enable Hover",NBTConstants.getOrDefault(armor,NBTConstants.NBT_HOVER,false),NBTConstants.NBT_HOVER,
+                            "Activate the hover mode"));
 				}
 			}
 			case BOOTS -> {
-				list.children().add(new BooleanEntry("Enable Diving", NBTConstants.getOrDefault(armor,NBTConstants.NBT_DIVING,false),NBTConstants.NBT_DIVING));
-				list.children().add(new BooleanEntry("Enable Lava Walking", NBTConstants.getOrDefault(armor,NBTConstants.NBT_LAVA,true),NBTConstants.NBT_LAVA));
+				list.children().add(new BooleanEntry("Enable Diving", NBTConstants.getOrDefault(armor,NBTConstants.NBT_DIVING,false),NBTConstants.NBT_DIVING,
+                        "Enable diving, which makes the player descends quicker in liquids"));
+                list.children().add(new BooleanEntry("Enable Lava Walking", NBTConstants.getOrDefault(armor,NBTConstants.NBT_LAVA,true),NBTConstants.NBT_LAVA,
+                        "Enable walking under lava, which makes the player walks normally under lava"));
 
 			}
 			default -> {}
 		}
-		list.children().add(new BooleanEntry("Apply Potion Effect",NBTConstants.getOrDefault(armor,NBTConstants.NBT_EFFECTS,true),NBTConstants.NBT_EFFECTS));
-		list.children().add(new EnumEntry("Render Type",NBTConstants.getOrDefault(armor,NBTConstants.NBT_RENDER_TYPE),NBTConstants.NBT_RENDER_TYPE){
+        MobEffect effect = switch (((ArmorItem) armor.getItem()).getType()){
+            case BOOTS -> MobEffects.JUMP;
+            case LEGGINGS -> MobEffects.MOVEMENT_SPEED;
+            case CHESTPLATE-> MobEffects.DAMAGE_BOOST;
+            case HELMET -> MobEffects.NIGHT_VISION;
+            default -> MobEffects.DIG_SLOWDOWN;
+        };
+		list.children().add(new BooleanEntry("Apply Potion Effect",NBTConstants.getOrDefault(armor,NBTConstants.NBT_EFFECTS,true),NBTConstants.NBT_EFFECTS,
+                "Enable the potion effect granted by the armor piece",
+                "For this piece, the effect is " + Component.translatable(effect.getDescriptionId()).getString()));
+		list.children().add(new EnumEntry("Render Type",NBTConstants.getOrDefault(armor,NBTConstants.NBT_RENDER_TYPE),NBTConstants.NBT_RENDER_TYPE,
+                "Define how the armor piece should be rendered.",
+                "\"Armor only\" renders only the armor",
+                "\"Addition only\" renders only the additions (E.g. Backtank, Goggles)"){
 			@Override
 			protected void cycleValue(int direction) {
 				List<Integer> armors = ((ArmorConfigScreen)Minecraft.getInstance().screen).getArmors();

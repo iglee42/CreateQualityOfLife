@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife.client.screens.widgets.entries;
 
-import fr.iglee42.createqualityoflife.client.screen.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.client.screens.widgets.entries.ValueEntry;
 import fr.iglee42.createqualityoflife.packets.ChangeArmorTagPacket;
 import fr.iglee42.createqualityoflife.registries.ModPackets;
 import net.createmod.catnip.config.ui.ConfigScreen;
@@ -25,8 +26,8 @@ public class EnumEntry extends ValueEntry<Enum<?>> {
 	protected BoxWidget cycleLeft;
 	protected BoxWidget cycleRight;
 
-	public EnumEntry(String label, Enum<?> value, String key) {
-		super(label, value, key);
+	public EnumEntry(String label, Enum<?> value, String key,String... comments) {
+		super(label, value, key,comments);
 
 		valueText = new TextStencilElement(Minecraft.getInstance().font, "YEP").centered(true, true);
 		valueText.withElementRenderer((ms, width, height, alpha) -> UIRenderHelper.angledGradient(ms, 0, 0, height / 2,
@@ -119,7 +120,4 @@ public class EnumEntry extends ValueEntry<Enum<?>> {
 		ModPackets.getChannel().sendToServer(new ChangeArmorTagPacket(armors.get(selected),value.ordinal(), nbtKey));
 		super.setValue(value);
 	}
-
-
-
 }
