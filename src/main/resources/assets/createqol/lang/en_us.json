@@ -39,13 +39,18 @@
   "block.createqol.inventory_linker.tooltip.condition1": "When R-Clicked with a full player paper",
   "block.createqol.inventory_linker.tooltip.behaviour1": "Put the _player paper_ in the block",
 
-  "item.createqol.shadow_radiance_chestplate.tooltip.behaviour1": "Provides _Pressurized_ _Air_ to Equipment that requires it.",
+  "item.createqol.shadow_radiance_chestplate.tooltip.behaviour1": "Provides _Pressurized_ _Air_ to Equipment that requires it. Can be _configured_ with a _Keybind_",
   "item.createqol.shadow_radiance_chestplate.tooltip.behaviour2": "_Collects_ _Pressurized_ _Air_ at a rate depending on the Rotational Speed.",
   "item.createqol.shadow_radiance_chestplate.tooltip.behaviour3": "_Adds_ _Propeller_ to the Chestplate.",
   "item.createqol.shadow_radiance_chestplate.tooltip.condition1": "When Worn",
   "item.createqol.shadow_radiance_chestplate.tooltip.condition2": "When placed, Powered by Kinetics",
   "item.createqol.shadow_radiance_chestplate.tooltip.condition3": "When placed, R-Clicked with Propeller",
   "item.createqol.shadow_radiance_chestplate.tooltip.summary": "A _Wearable_ _Tank_ for carrying Pressurized Air.",
+
+  "item.createqol.shadow_armor.tooltip.summary": "A _powerful armor_ which provides _useful stuff_.",
+  "item.createqol.shadow_armor.tooltip.condition1": "When Worn",
+  "item.createqol.shadow_armor.tooltip.behaviour1": "Can be _configured_ with a _Keybind_",
+
 
   "itemGroup.createqol": "Create : Quality of Life",
   "keybind.createqol.category": "Create: Quality of Life",
