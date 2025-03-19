@@ -2,6 +2,7 @@ package fr.iglee42.createqualityoflife.items;
 
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
+import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.ChatFormatting;
@@ -40,11 +41,11 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
         if (player.getItemBySlot(EquipmentSlot.CHEST).equals(stack)){
             boolean second = level.getGameTime() % 20 == 0;
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
-            if (NBTConstants.getOrDefault(stack,NBTConstants.NBT_EFFECTS,true))
+            if (NBTConstants.getOrDefault(stack,NBTConstants.NBT_EFFECTS,true) && CreateQOLConfigs.common().armorEffects.get())
                 player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 1, false, false));
             if (player.isCreative() || player.isSpectator()) return;
-            if (isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack)) {
-                boolean hover = isHoverEnable(stack);
+            if (isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack) && CreateQOLConfigs.common().propellersAllowed.get()) {
+                boolean hover = isHoverEnable(stack) && CreateQOLConfigs.common().hoverAllowed.get();
                 boolean jumpKeyActive = CommonKeysHandler.isHoldingUp(player);
                 boolean shiftKeyActive = CommonKeysHandler.isHoldingDown(player);
                 player.resetFallDistance();
@@ -58,17 +59,19 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
                                 pushVertically(player, Math.min(player.getDeltaMovement().get(Direction.Axis.Y) + FANS_ACCELERATION, -0.0D));
                             else
                                 pushVertically(player, Math.min(player.getDeltaMovement().get(Direction.Axis.Y) + FANS_ACCELERATION, FANS_SPEED));
-                        } else {
+                        } else if (CreateQOLConfigs.common().hoverAllowed.get()){
                             pushVertically(player, Math.min(player.getDeltaMovement().get(Direction.Axis.Y) + FANS_ACCELERATION, FANS_HOVER_SPEED));
                         }
                         if (second)BacktankUtil.consumeAir(player,stack,1);
                     } else {
                         if (hover) {
-                            if (shiftKeyActive)
-                                pushVertically(player, Math.min(player.getDeltaMovement().get(Direction.Axis.Y) + FANS_ACCELERATION, -(FANS_HOVER_SPEED * 2)));
-                            else {
-                                pushVertically(player, Math.min(player.getDeltaMovement().get(Direction.Axis.Y) + FANS_ACCELERATION, -0.00D));
-                                if (second)BacktankUtil.consumeAir(player,stack,1);
+                            if (CreateQOLConfigs.common().hoverAllowed.get()) {
+                                if (shiftKeyActive)
+                                    pushVertically(player, Math.min(player.getDeltaMovement().get(Direction.Axis.Y) + FANS_ACCELERATION, -(FANS_HOVER_SPEED * 2)));
+                                else {
+                                    pushVertically(player, Math.min(player.getDeltaMovement().get(Direction.Axis.Y) + FANS_ACCELERATION, -0.00D));
+                                    if (second) BacktankUtil.consumeAir(player, stack, 1);
+                                }
                             }
                         } else {
                             if (shiftKeyActive) {
@@ -110,11 +113,14 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
         components.add(Component.literal("Air : ").withStyle(ChatFormatting.GOLD).append(Component.literal(String.valueOf(BacktankUtil.getAir(stack))).withStyle(ChatFormatting.YELLOW)).append(Component.literal("/"+BacktankUtil.maxAir(stack)).withStyle(ChatFormatting.GOLD)));
-        components.add(Component.literal("Propeller : ").withStyle(ChatFormatting.GOLD).append(Component.literal(hasPropeller(stack) ? "Installed" : "Not installed").withStyle(ChatFormatting.YELLOW)));
-        if (hasPropeller(stack)) {
+        components.add(Component.literal("Propeller : ").withStyle(ChatFormatting.GOLD).append(Component.literal(
+                !CreateQOLConfigs.common().propellersAllowed.get() ? "Disabled" :
+                        (hasPropeller(stack) ? "Installed"  : "Not installed"))
+                .withStyle(!CreateQOLConfigs.common().propellersAllowed.get()? ChatFormatting.RED : ChatFormatting.YELLOW)));
+        if (hasPropeller(stack) && CreateQOLConfigs.common().propellersAllowed.get()) {
             components.add(Component.empty());
             components.add(Component.literal("Fans : ").withStyle(ChatFormatting.GOLD).append(Component.literal(chooseText(isFansEnable(stack))).withStyle(ChatFormatting.YELLOW)));
-            components.add(Component.literal("Hover : ").withStyle(ChatFormatting.GOLD).append(Component.literal(chooseText(isHoverEnable(stack))).withStyle(ChatFormatting.YELLOW)));
+            components.add(Component.literal("Hover : ").withStyle(ChatFormatting.GOLD).append(Component.literal(!CreateQOLConfigs.common().hoverAllowed.get() ? "Disabled" :chooseText(isHoverEnable(stack))).withStyle(!CreateQOLConfigs.common().hoverAllowed.get()? ChatFormatting.RED :ChatFormatting.YELLOW)));
         }
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
@@ -124,11 +130,23 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
     }
 
     public static void toggleFans(ItemStack chestplate,Player p) {
+        if (!CreateQOLConfigs.common().propellersAllowed.get()){
+            p.displayClientMessage(Component.literal("Propellers are disabled by the config").withStyle(ChatFormatting.RED),true);
+            return;
+        }
         chestplate.getOrCreateTag().putBoolean(NBTConstants.NBT_FANS, chestplate.getOrCreateTag().contains(NBTConstants.NBT_FANS) && !chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_FANS));
         boolean fans = chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_FANS);
         p.displayClientMessage(Component.literal("Fans : ").append(Component.literal(chooseText(fans)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
     public static void toggleHover(ItemStack chestplate,Player p) {
+        if (!CreateQOLConfigs.common().propellersAllowed.get()){
+            p.displayClientMessage(Component.literal("Propellers are disabled by the config").withStyle(ChatFormatting.RED),true);
+            return;
+        }
+        if (!CreateQOLConfigs.common().hoverAllowed.get()){
+            p.displayClientMessage(Component.literal("Hover is disabled by the config").withStyle(ChatFormatting.RED),true);
+            return;
+        }
         chestplate.getOrCreateTag().putBoolean(NBTConstants.NBT_HOVER, chestplate.getOrCreateTag().contains(NBTConstants.NBT_HOVER) && !chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_HOVER));
         boolean hover = chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_HOVER);
         p.displayClientMessage(Component.literal("Hover : ").append(Component.literal(chooseText(hover)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED)),true);

@@ -138,7 +138,7 @@ public class ArmorConfigScreenList extends ObjectSelectionList<ArmorConfigScreen
 
 		protected static final float labelWidthMult = 0.4f;
 
-		protected TextStencilElement label;
+		public TextStencilElement label;
 		protected List<Component> labelTooltip;
 		@Nullable protected String unit = null;
 		protected LerpedFloat differenceAnimation = LerpedFloat.linear().startWithValue(0);

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllPartialModels;
+import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.ModItems;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
@@ -37,6 +38,7 @@ public class GoggleArmorLayer<T extends LivingEntity, M extends EntityModel<T>> 
         if (!ModItems.SHADOW_RADIANCE_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)))
             return;
         if (!NBTConstants.getOrDefault(entity.getItemBySlot(EquipmentSlot.HEAD),NBTConstants.NBT_RENDER_TYPE).shouldRenderAddition()) return;
+        if (!CreateQOLConfigs.common().helmetHaveGoggles.get()) return;
 
         M entityModel = getParentModel();
         if (!(entityModel instanceof HumanoidModel<?> model))
