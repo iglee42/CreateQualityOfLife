@@ -2,6 +2,7 @@ package fr.iglee42.createqualityoflife.items;
 
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.content.equipment.armor.BaseArmorItem;
+import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.ModArmorMaterials;
 import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import net.minecraft.core.Holder;
@@ -25,6 +26,7 @@ public class ShadowRadianceArmorItem extends BaseArmorItem {
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean offHand) {
         super.inventoryTick(stack, level, entity, slot, offHand);
         if (!(entity instanceof Player player)) return;
+        if (!CreateQOLConfigs.common().armorEffects.get()) return;
         if (player.getItemBySlot(EquipmentSlot.LEGS).equals(stack) && ((ShadowRadianceArmorItem)stack.getItem()).getType().equals(Type.LEGGINGS)) {
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
             if (stack.getOrDefault(ModDataComponents.ARMOR_EFFECT,true))player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,20,1,false,false));

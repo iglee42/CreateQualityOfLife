@@ -40,8 +40,17 @@ public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 
 
 	@Override
-	protected void setEditable(boolean b) {
+	public void setEditable(boolean b) {
 		editable = b;
+		labelTooltip.clear();
+		labelTooltip.add(label.getComponent().copy().withStyle(ChatFormatting.WHITE));
+		labelTooltip.addAll(commentLines.stream()
+				.map(s -> s.equals(".") ? " " : s)
+				.map(Component::literal)
+				.flatMap(stc -> FontHelper.cutTextComponent(stc, FontHelper.Palette.ALL_GRAY).stream())
+				.toList()
+		);
+		if (!b)labelTooltip.add(Component.literal("Disabled by the config").withStyle(ChatFormatting.RED));
 	}
 
 
@@ -82,5 +91,13 @@ public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 	protected void bumpCog() {bumpCog(10f);}
 	protected void bumpCog(float force) {
 		ArmorConfigScreen.cogSpin.bump(3, force);
+	}
+
+	public DataComponentType<?> getComponent() {
+		return component;
+	}
+
+	public boolean isEditable() {
+		return editable;
 	}
 }

@@ -2,10 +2,13 @@ package fr.iglee42.createqualityoflife.client.screens;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
+import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ArmorConfigScreenList;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ItemButton;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.BooleanEntry;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.EnumEntry;
+import fr.iglee42.createqualityoflife.client.screens.widgets.entries.ValueEntry;
+import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.ModArmorMaterials;
 import fr.iglee42.createqualityoflife.registries.ModDataComponents;
@@ -92,6 +95,50 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 
 		children().stream().filter(w->w instanceof ItemButton).forEach(btn->{
 			((ItemButton) btn).setActive(((ItemButton) btn).getIndex() != selectedItem);
+		});
+
+		list.children().stream()
+				.filter(e->e instanceof ValueEntry<?>)
+				.map(e->(ValueEntry<?>)e)
+				.forEach(entry->{
+			if (entry.getComponent().equals(ModDataComponents.HELMET_GOGGLES)){
+				if (!CreateQOLConfigs.common().helmetHaveGoggles.get() && entry.isEditable()){
+					((BooleanEntry)entry).setValue(false);
+				}
+				entry.setEditable(CreateQOLConfigs.common().helmetHaveGoggles.get());
+			}
+			if (entry.getComponent().equals(ModDataComponents.BACKTANK_FANS)){
+				if (!CreateQOLConfigs.common().propellersAllowed.get() && entry.isEditable()){
+					((BooleanEntry)entry).setValue(false);
+				}
+				entry.setEditable(CreateQOLConfigs.common().propellersAllowed.get());
+			}
+			if (entry.getComponent().equals(ModDataComponents.BACKTANK_HOVER)){
+				if ((!CreateQOLConfigs.common().hoverAllowed.get() || !CreateQOLConfigs.common().propellersAllowed.get() )&& entry.isEditable()){
+					((BooleanEntry)entry).setValue(false);
+				}
+				entry.setEditable(CreateQOLConfigs.common().propellersAllowed.get() && CreateQOLConfigs.common().hoverAllowed.get());
+			}
+
+			if (entry.getComponent().equals(ModDataComponents.ARMOR_EFFECT)){
+				if (!CreateQOLConfigs.common().armorEffects.get()&& entry.isEditable()){
+					((BooleanEntry)entry).setValue(false);
+				}
+				entry.setEditable(CreateQOLConfigs.common().armorEffects.get());
+			}
+
+			if (entry.getComponent().equals(ModDataComponents.BOOTS_DIVING)){
+				if (!CreateQOLConfigs.common().bootsDiving.get()&& entry.isEditable()){
+					((BooleanEntry)entry).setValue(false);
+				}
+				entry.setEditable(CreateQOLConfigs.common().bootsDiving.get());
+			}
+			if (entry.getComponent().equals(ModDataComponents.BOOTS_LAVA)){
+				if (!CreateQOLConfigs.common().bootsLavaWalking.get()&& entry.isEditable()){
+					((BooleanEntry)entry).setValue(false);
+				}
+				entry.setEditable(CreateQOLConfigs.common().bootsLavaWalking.get());
+			}
 		});
 	}
 

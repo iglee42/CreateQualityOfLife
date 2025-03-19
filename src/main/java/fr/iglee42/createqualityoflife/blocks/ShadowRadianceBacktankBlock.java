@@ -1,14 +1,18 @@
 package fr.iglee42.createqualityoflife.blocks;
 
 import com.simibubi.create.AllItems;
+import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.equipment.armor.BacktankBlock;
 import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import fr.iglee42.createqualityoflife.blockentitites.ShadowRadianceBacktankBE;
+import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
 import fr.iglee42.createqualityoflife.registries.ModDataComponents;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -64,7 +68,12 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (AllItems.PROPELLER.is(player.getMainHandItem().getItem()) && !level.isClientSide) {
-            if (level.getBlockEntity(pos) instanceof ShadowRadianceBacktankBE be && !   be.hasPropeller()){
+            if (level.getBlockEntity(pos) instanceof ShadowRadianceBacktankBE be && !be.hasPropeller()){
+                if (!CreateQOLConfigs.common().propellersAllowed.get()){
+                    player.displayClientMessage(Component.literal("Propellers are disabled by the config").withStyle(ChatFormatting.RED),true);
+                    level.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
+                    return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                }
                 be.setPropeller(true);
                 player.getMainHandItem().shrink(1);
                 level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
