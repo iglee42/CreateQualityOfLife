@@ -42,7 +42,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
             if (NBTConstants.getOrDefault(stack,NBTConstants.NBT_EFFECTS,true))
                 player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 1, false, false));
-            if (player.isCreative()) return;
+            if (player.isCreative() || player.isSpectator()) return;
             if (isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack)) {
                 boolean hover = isHoverEnable(stack);
                 boolean jumpKeyActive = CommonKeysHandler.isHoldingUp(player);
