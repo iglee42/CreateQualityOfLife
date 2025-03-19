@@ -7,6 +7,7 @@ import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.content.equipment.armor.BacktankRenderer;
 import fr.iglee42.createqualityoflife.CreateQOLClient;
 import fr.iglee42.createqualityoflife.blocks.ShadowRadianceBacktankBlock;
+import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import fr.iglee42.createqualityoflife.registries.ModItems;
@@ -42,7 +43,7 @@ public class BacktankArmorLayerMixin {
                 ci.cancel();
                 return;
             }
-            renderedState = renderedState.setValue(ShadowRadianceBacktankBlock.PROPELLER,ShadowRadianceChestplate.hasPropeller(stack));
+            renderedState = renderedState.setValue(ShadowRadianceBacktankBlock.PROPELLER,ShadowRadianceChestplate.hasPropeller(stack) && CreateQOLConfigs.common().propellersAllowed.get());
             backtank = CachedBuffers.block(renderedState);
 
             ms.pushPose();
