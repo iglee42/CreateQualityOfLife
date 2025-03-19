@@ -60,8 +60,6 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
             return;
         withBlockEntityDo(worldIn, pos, be -> {
             ((ShadowRadianceBacktankBE)be).setPropeller(ShadowRadianceChestplate.hasPropeller(stack));
-            ((ShadowRadianceBacktankBE)be).setFans(ShadowRadianceChestplate.isFansEnable(stack));
-            ((ShadowRadianceBacktankBE)be).setHover(ShadowRadianceChestplate.isHoverEnable(stack));
         });
     }
 
@@ -89,11 +87,7 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
         blockEntityOptional.ifPresent(obe->{
             ShadowRadianceBacktankBE be = (ShadowRadianceBacktankBE) obe;
             boolean propeller = be.hasPropeller();
-            boolean fans = be.isFans();
-            boolean hover = be.isHover();
             stack.getOrCreateTag().putBoolean(NBTConstants.NBT_PROPELLERS,propeller);
-            stack.getOrCreateTag().putBoolean(NBTConstants.NBT_FANS,fans);
-            stack.getOrCreateTag().putBoolean(NBTConstants.NBT_HOVER,hover);
         });
         return stack;
     }

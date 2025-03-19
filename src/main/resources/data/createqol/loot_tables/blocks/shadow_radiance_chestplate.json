@@ -20,6 +20,17 @@
               "function": "minecraft:copy_nbt",
               "ops": [
                 {
+                  "op": "merge",
+                  "source": "VanillaTag",
+                  "target": "{}"
+                }
+              ],
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "ops": [
+                {
                   "op": "replace",
                   "source": "Air",
                   "target": "Air"
@@ -32,41 +43,8 @@
               "ops": [
                 {
                   "op": "replace",
-                  "source": "Enchantments",
-                  "target": "Enchantments"
-                }
-              ],
-              "source": "block_entity"
-            },
-            {
-              "function": "minecraft:copy_nbt",
-              "ops": [
-                {
-                  "op": "replace",
-                  "source": "propeller",
+                  "source": "propellers",
                   "target": "propellers"
-                }
-              ],
-              "source": "block_entity"
-            },
-            {
-              "function": "minecraft:copy_nbt",
-              "ops": [
-                {
-                  "op": "replace",
-                  "source": "fans",
-                  "target": "fans"
-                }
-              ],
-              "source": "block_entity"
-            },
-            {
-              "function": "minecraft:copy_nbt",
-              "ops": [
-                {
-                  "op": "replace",
-                  "source": "hover",
-                  "target": "hover"
                 }
               ],
               "source": "block_entity"
