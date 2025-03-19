@@ -89,8 +89,8 @@ public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 		ArmorConfigScreen.cogSpin.bump(3, force);
 	}
 
-	public DataComponentType<?> getComponent() {
-		return component;
+	public String getNbtKey() {
+		return nbtKey;
 	}
 
 	public boolean isEditable() {

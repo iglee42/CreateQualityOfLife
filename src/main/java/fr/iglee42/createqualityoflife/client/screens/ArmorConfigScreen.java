@@ -105,39 +105,39 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 				.filter(e->e instanceof ValueEntry<?>)
 				.map(e->(ValueEntry<?>)e)
 				.forEach(entry->{
-			if (entry.getComponent().equals(ModDataComponents.HELMET_GOGGLES)){
+			if (entry.getNbtKey().equals(NBTConstants.NBT_GOGGLES)){
 				if (!CreateQOLConfigs.common().helmetHaveGoggles.get() && entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
 				entry.setEditable(CreateQOLConfigs.common().helmetHaveGoggles.get());
 			}
-			if (entry.getComponent().equals(ModDataComponents.BACKTANK_FANS)){
+			if (entry.getNbtKey().equals(NBTConstants.NBT_FANS)){
 				if (!CreateQOLConfigs.common().propellersAllowed.get() && entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
 				entry.setEditable(CreateQOLConfigs.common().propellersAllowed.get());
 			}
-			if (entry.getComponent().equals(ModDataComponents.BACKTANK_HOVER)){
+			if (entry.getNbtKey().equals(NBTConstants.NBT_HOVER)){
 				if ((!CreateQOLConfigs.common().hoverAllowed.get() || !CreateQOLConfigs.common().propellersAllowed.get() )&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
 				entry.setEditable(CreateQOLConfigs.common().propellersAllowed.get() && CreateQOLConfigs.common().hoverAllowed.get());
 			}
 
-			if (entry.getComponent().equals(ModDataComponents.ARMOR_EFFECT)){
+			if (entry.getNbtKey().equals(NBTConstants.NBT_EFFECTS)){
 				if (!CreateQOLConfigs.common().armorEffects.get()&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
 				entry.setEditable(CreateQOLConfigs.common().armorEffects.get());
 			}
 
-			if (entry.getComponent().equals(ModDataComponents.BOOTS_DIVING)){
+			if (entry.getNbtKey().equals(NBTConstants.NBT_DIVING)){
 				if (!CreateQOLConfigs.common().bootsDiving.get()&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
 				entry.setEditable(CreateQOLConfigs.common().bootsDiving.get());
 			}
-			if (entry.getComponent().equals(ModDataComponents.BOOTS_LAVA)){
+			if (entry.getNbtKey().equals(NBTConstants.NBT_LAVA)){
 				if (!CreateQOLConfigs.common().bootsLavaWalking.get()&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
