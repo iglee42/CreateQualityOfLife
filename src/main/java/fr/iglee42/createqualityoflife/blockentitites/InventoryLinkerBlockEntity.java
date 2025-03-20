@@ -10,8 +10,6 @@ import com.simibubi.create.foundation.utility.CreateLang;
 import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
 import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import fr.iglee42.createqualityoflife.registries.ModIcons;
-import fr.iglee42.createqualityoflife.utils.ArmorItemStackHandler;
-import fr.iglee42.createqualityoflife.utils.InventoryLinkerStacksHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -24,6 +22,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.PlayerArmorInvWrapper;
+import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
+import net.neoforged.neoforge.items.wrapper.PlayerOffhandInvWrapper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -58,6 +60,10 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
         super.addBehaviours(behaviours);
         behaviours.add(selectionMode = new ScrollOptionBehaviour<>(Mode.class,
                 CreateLang.translateDirect("options.createqol.inventory_linker.label"), this, new BrassTunnelModeSlot()));
+    }
+
+    public UUID getLinkedPlayer() {
+        return linkedPlayer;
     }
 
     public enum Mode implements INamedIconOptions {
@@ -143,14 +149,13 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
     }
 
     public IItemHandler getPlayerInventory(Level level){
-        InventoryLinkerStacksHandler handler = new InventoryLinkerStacksHandler(0,this);
-        if (linkedPlayer != null && level.getServer().getPlayerList().getPlayer(linkedPlayer) != null){
-            handler = switch (selectionMode.get()) {
-                case INVENTORY -> new InventoryLinkerStacksHandler(level.getServer().getPlayerList().getPlayer(linkedPlayer).getInventory().items,this);
-                case ARMOR -> new ArmorItemStackHandler(level.getServer().getPlayerList().getPlayer(linkedPlayer).getInventory().armor,this);
-                case OFF_HAND -> new InventoryLinkerStacksHandler(level.getServer().getPlayerList().getPlayer(linkedPlayer).getInventory().offhand,this);
+        if (linkedPlayer != null && level.getPlayerByUUID(linkedPlayer) != null){
+             return switch (selectionMode.get()) {
+                case INVENTORY -> new PlayerMainInvWrapper(level.getPlayerByUUID(linkedPlayer).getInventory());
+                case ARMOR ->  new PlayerArmorInvWrapper(level.getPlayerByUUID(linkedPlayer).getInventory());
+                case OFF_HAND ->  new PlayerOffhandInvWrapper(level.getPlayerByUUID(linkedPlayer).getInventory());
             };
         }
-        return handler;
+        return new ItemStackHandler(0);
     }
 }
