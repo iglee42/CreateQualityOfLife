@@ -8,8 +8,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOp
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.utility.CreateLang;
 import fr.iglee42.createqualityoflife.registries.ModIcons;
-import fr.iglee42.createqualityoflife.utils.ArmorItemStackHandler;
-import fr.iglee42.createqualityoflife.utils.InventoryLinkerStacksHandler;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,8 +19,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import net.minecraftforge.items.wrapper.PlayerArmorInvWrapper;
+import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
+import net.minecraftforge.items.wrapper.PlayerOffhandInvWrapper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +34,7 @@ import java.util.UUID;
 public class InventoryLinkerBlockEntity extends KineticBlockEntity {
 
     private ItemStack playerPaperItemStack = ItemStack.EMPTY;
-    private InventoryLinkerStacksHandler linkedInventoryContent = new InventoryLinkerStacksHandler(0,this);
+    private IItemHandler linkedInventoryContent = new ItemStackHandler(0);
     private LazyOptional<?> inventoryOptional = LazyOptional.empty();
     private UUID linkedPlayer;
 
@@ -47,6 +50,10 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
         super.addBehaviours(behaviours);
         behaviours.add(selectionMode = new ScrollOptionBehaviour<>(Mode.class,
                 CreateLang.translateDirect("options.createqol.inventory_linker.label"), this, new BrassTunnelModeSlot()));
+    }
+
+    public UUID getLinkedPlayer() {
+        return linkedPlayer;
     }
 
     public enum Mode implements INamedIconOptions {
@@ -102,9 +109,9 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
         }
         if (linkedPlayer != null && level.getServer().getPlayerList().getPlayer(linkedPlayer) != null){
             linkedInventoryContent = switch (selectionMode.get()) {
-                case INVENTORY -> new InventoryLinkerStacksHandler(level.getServer().getPlayerList().getPlayer(linkedPlayer).getInventory().items,this);
-                case ARMOR -> new ArmorItemStackHandler(level.getServer().getPlayerList().getPlayer(linkedPlayer).getInventory().armor,this);
-                case OFF_HAND -> new InventoryLinkerStacksHandler(level.getServer().getPlayerList().getPlayer(linkedPlayer).getInventory().offhand,this);
+                case INVENTORY -> new PlayerMainInvWrapper(level.getPlayerByUUID(linkedPlayer).getInventory());
+                case ARMOR ->  new PlayerArmorInvWrapper(level.getPlayerByUUID(linkedPlayer).getInventory());
+                case OFF_HAND ->  new PlayerOffhandInvWrapper(level.getPlayerByUUID(linkedPlayer).getInventory());
             };
         }
         inventoryOptional = LazyOptional.of(()->linkedInventoryContent);
@@ -141,7 +148,7 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
     @Override
     public void remove() {
         super.remove();
-        linkedInventoryContent = new InventoryLinkerStacksHandler(0,this);
+        linkedInventoryContent = new ItemStackHandler(0);
         Block.popResource(level,worldPosition,playerPaperItemStack);
     }
 }
