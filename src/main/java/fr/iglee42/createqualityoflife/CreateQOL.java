@@ -11,6 +11,8 @@ import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.config.CreateQOLFeaturesConfig;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.utils.Features;
+import fr.iglee42.createqualityoflife.utils.IHaveTankMixin;
+import fr.iglee42.createqualityoflife.utils.liquidblazeburners.LiquidBlazeBurnerReloadListener;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -21,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -40,7 +43,7 @@ import static fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate.isFa
 public class CreateQOL {
 
     public static final String MODID = "createqol";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID)
             .defaultCreativeTab((ResourceKey<CreativeModeTab>) null);
@@ -64,6 +67,9 @@ public class CreateQOL {
         ModItems.register();
         ModCreativeModeTabs.register(modEventBus);
         ModPackets.registerPackets();
+        ModDataComponents.register(modEventBus);
+        ModConditions.CONDITIONS.register(modEventBus);
+        ModRecipeTypes.register(modEventBus);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> CreateQOLClient.onCtorClient(modEventBus, forgeEventBus));
         CreateQOLConfigs.register(ModLoadingContext.get());
@@ -71,12 +77,18 @@ public class CreateQOL {
         modEventBus.addListener(this::commonSetup);
 
         forgeEventBus.addListener(this::removeFallDamage);
+        forgeEventBus.addListener(this::registerReloadListener);
 
         //if (isActivate(Features.SHADOW_RADIANCE)){
-        //    MysteriousItemConversionCategory.RECIPES.add(ConversionRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.SHADOW_STEEL.asStack()));
-        //    MysteriousItemConversionCategory.RECIPES.add(ConversionRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.REFINED_RADIANCE.asStack()));
+        //    MysteriousItemConversionCategory.RECIPES.add(BlazeBurnerLiquidRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.SHADOW_STEEL.asStack()));
+        //    MysteriousItemConversionCategory.RECIPES.add(BlazeBurnerLiquidRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.REFINED_RADIANCE.asStack()));
         //}
     }
+    private void registerReloadListener(AddReloadListenerEvent event){
+        if (!isActivate(Features.LIQUID_BLAZE_BURNER)) return;
+        event.addListener(LiquidBlazeBurnerReloadListener.INSTANCE);
+    }
+
 
     public static boolean isChippedLoaded() {
         return ModList.get().isLoaded("chipped");

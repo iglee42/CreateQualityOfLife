@@ -20,6 +20,7 @@ public class CreateQOLFeaturesConfig {
     public static boolean shadowRadiance = true;
     public static boolean proximitySchedule = true;
     public static boolean displayBoardModification = true;
+    public static boolean blazeBurnerUseLiquids = true;
 
 
 
@@ -44,6 +45,7 @@ public class CreateQOLFeaturesConfig {
             config.addProperty("shadowRadiance",shadowRadiance);
             config.addProperty("proximitySchedule",proximitySchedule);
             config.addProperty("displayBoardModification",displayBoardModification);
+            config.addProperty("blazeBurnerUseLiquids",blazeBurnerUseLiquids);
             FileWriter writer = new FileWriter(configFile);
             writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(config));
             writer.close();
