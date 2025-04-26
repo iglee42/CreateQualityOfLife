@@ -16,7 +16,9 @@
     "ModelFileMixin",
     "MysteriousItemConversionCategoryMixin",
     "NetheriteDivingHandlerMixin",
-    "ScheduleItemMixin"
+    "ScheduleItemMixin",
+    "liquidblazeburners.BlazeBurnerBlockEntityMixin",
+    "liquidblazeburners.SmartBlockEntityMixin"
   ],
   "client": [
     "BacktankArmorLayerMixin",

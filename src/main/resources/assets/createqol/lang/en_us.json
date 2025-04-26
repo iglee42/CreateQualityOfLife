@@ -57,5 +57,7 @@
 
   "keybind.createqol.shadow_radiance_chestplate_fans": "Toggle Fans",
   "keybind.createqol.shadow_radiance_chestplate_hover": "Toggle Hover",
-  "keybind.createqol.open_armor_config": "Open Armor Config"
+  "keybind.createqol.open_armor_config": "Open Armor Config",
+
+  "createqol.recipe.blaze_burner_liquids": "Blaze Burner Liquid Fuels"
 }

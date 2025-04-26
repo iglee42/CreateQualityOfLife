@@ -11,7 +11,7 @@ public class CQOLCommon extends ConfigBase {
     public ConfigBool hoverAllowed = b(true,"hoverAllowed",Comments.hover);
     public ConfigBool armorEffects = b(true,"armorEffectsEnable",Comments.effects);
     public ConfigBool bootsDiving = b(true,"bootsDiving",Comments.diving,Comments.explainDiving);
-    public ConfigBool bootsLavaWalking = b(true,"bootsLavaWalking",Comments.lavaWalking,Comments.explainDiving);
+    public ConfigBool bootsLavaWalking = b(true,"bootsLavaWalking",Comments.lavaWalking);
 
     @Override
     public String getName() {

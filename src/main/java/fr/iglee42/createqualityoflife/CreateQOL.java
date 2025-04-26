@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife;
 
 import com.mojang.logging.LogUtils;
+import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
@@ -13,6 +14,8 @@ import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.config.CreateQOLFeaturesConfig;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.utils.Features;
+import fr.iglee42.createqualityoflife.utils.IHaveTankMixin;
+import fr.iglee42.createqualityoflife.utils.liquidblazeburners.LiquidBlazeBurnerReloadListener;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +30,10 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.slf4j.Logger;
 
@@ -40,7 +46,7 @@ import static fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate.isFa
 public class CreateQOL {
 
     public static final String MODID = "createqol";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID)
             .defaultCreativeTab((ResourceKey<CreativeModeTab>) null);
@@ -64,6 +70,7 @@ public class CreateQOL {
         ModPackets.register();
         ModDataComponents.register(modEventBus);
         ModConditions.CONDITIONS.register(modEventBus);
+        ModRecipeTypes.register(modEventBus);
 
         CreateQOLConfigs.register(ModLoadingContext.get(),container);
 
@@ -72,13 +79,32 @@ public class CreateQOL {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(ChippedSawBlockEntity::registerCapabilities);
         modEventBus.addListener(InventoryLinkerBlockEntity::registerCapabilities);
+        modEventBus.addListener(this::registerCapabilities);
 
         forgeEventBus.addListener(this::removeFallDamage);
+        forgeEventBus.addListener(this::registerReloadListener);
 
         //if (isActivate(Features.SHADOW_RADIANCE)){
-        //    MysteriousItemConversionCategory.RECIPES.add(ConversionRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.SHADOW_STEEL.asStack()));
-        //    MysteriousItemConversionCategory.RECIPES.add(ConversionRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.REFINED_RADIANCE.asStack()));
+        //    MysteriousItemConversionCategory.RECIPES.add(BlazeBurnerLiquidRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.SHADOW_STEEL.asStack()));
+        //    MysteriousItemConversionCategory.RECIPES.add(BlazeBurnerLiquidRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.REFINED_RADIANCE.asStack()));
         //}
+    }
+
+    private void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                AllBlockEntityTypes.HEATER.get(),
+                (be, context) -> {
+                    if (!isActivate(Features.LIQUID_BLAZE_BURNER)) return null;
+                    if (!(be instanceof IHaveTankMixin tank)) return null;
+                    return tank.createQOL$tank();
+                }
+        );
+    }
+
+    private void registerReloadListener(AddReloadListenerEvent event){
+        if (!isActivate(Features.LIQUID_BLAZE_BURNER)) return;
+        event.addListener(LiquidBlazeBurnerReloadListener.INSTANCE);
     }
 
     public static boolean isChippedLoaded() {
