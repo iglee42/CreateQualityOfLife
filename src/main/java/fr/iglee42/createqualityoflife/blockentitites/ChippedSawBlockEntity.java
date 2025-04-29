@@ -335,17 +335,16 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 			List<ItemStack> tempResults = getResults(r,item).toList();
 
 			if (filtering.getFilter().isEmpty()){
-				results.add(tempResults.get(new Random().nextInt(tempResults.size())));
+				results.add(tempResults.get(new Random().nextInt(tempResults.size())).copyWithCount(1));
 			} else {
 				if (tempResults.stream().anyMatch(filtering::test)){
 					List<ItemStack> filterResult = tempResults.stream().filter(filtering::test).toList();
                     ItemStack filter;
                     if (filterResult.size() == 1){
-                        filter = filterResult.get(0);
+                        filter = filterResult.get(0).copyWithCount(1);
                     } else {
-                        filter = filterResult.get(new Random().nextInt(filterResult.size()));
+                        filter = filterResult.get(new Random().nextInt(filterResult.size())).copyWithCount(1);
                     }
-                    filter.setCount(1);
                     results.add(filter);
                 }
 				//else results.add(item);
