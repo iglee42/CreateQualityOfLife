@@ -38,7 +38,7 @@ public class GoggleArmorLayer<T extends LivingEntity, M extends EntityModel<T>> 
         if (!ModItems.SHADOW_RADIANCE_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)))
             return;
         if (!NBTConstants.getOrDefault(entity.getItemBySlot(EquipmentSlot.HEAD),NBTConstants.NBT_RENDER_TYPE).shouldRenderAddition()) return;
-        if (!CreateQOLConfigs.common().helmetHaveGoggles.get()) return;
+        if (!CreateQOLConfigs.server().helmetHaveGoggles.get()) return;
 
         M entityModel = getParentModel();
         if (!(entityModel instanceof HumanoidModel<?> model))
@@ -51,6 +51,14 @@ public class GoggleArmorLayer<T extends LivingEntity, M extends EntityModel<T>> 
         ms.translate(model.head.x / 16.0, model.head.y / 16.0, model.head.z / 16.0);
         ms.mulPose(Axis.YP.rotation(model.head.yRot));
         ms.mulPose(Axis.XP.rotation(model.head.xRot));
+
+        if (model.young) {
+            if (model.scaleHead) {
+                float f = 1.5F / model.babyHeadScale;
+                ms.scale(f, f, f);
+            }
+            ms.translate(0.0D, model.babyYHeadOffset / 16.0F, model.babyZHeadOffset / 16.0F);
+        }
 
         // Translate and scale to our head
         ms.translate(0, -0.30, -0.045);
