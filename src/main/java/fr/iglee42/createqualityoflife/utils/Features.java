@@ -10,7 +10,6 @@ public enum Features {
     PROXIMITY_SCHEDULE("proximity_schedule", CreateQOLFeaturesConfig.proximitySchedule),
     DISPLAY_BOARD_MODIFICATION("display_board_modification", CreateQOLFeaturesConfig.displayBoardModification),
     LIQUID_BLAZE_BURNER("liquid_blaze_burner", CreateQOLFeaturesConfig.blazeBurnerUseLiquids),
-    STATUE("statue", CreateQOLFeaturesConfig.statue),
     ;
 
 

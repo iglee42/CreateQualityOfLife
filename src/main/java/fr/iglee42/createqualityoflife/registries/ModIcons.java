@@ -33,18 +33,6 @@ public class ModIcons extends AllIcons {
 		I_ARMOR = next(),
 		I_OFF_HAND = next();
 
-	public static final ModIcons
-			I_UNLOCKED_STATUE = newRow(),
-			I_LOCKED_STATUE = next(),
-			I_HAT = next(),
-			I_JACKET = next(),
-			I_LEFT_SLEEVE = next(),
-			I_RIGHT_SLEEVE = next(),
-			I_LEFT_PANTS = next(),
-			I_RIGHT_PANTS = next(),
-			I_CAPE_OFF = next(),
-			I_CAPE_ON = next();
-
 	public ModIcons(int x, int y) {
 		super(x,y);
 		iconX = x * 16;

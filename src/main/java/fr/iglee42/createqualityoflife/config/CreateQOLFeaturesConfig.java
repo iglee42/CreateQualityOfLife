@@ -21,7 +21,6 @@ public class CreateQOLFeaturesConfig {
     public static boolean proximitySchedule = true;
     public static boolean displayBoardModification = true;
     public static boolean blazeBurnerUseLiquids = true;
-    public static boolean statue = false;
 
 
 
@@ -47,7 +46,6 @@ public class CreateQOLFeaturesConfig {
             config.addProperty("proximitySchedule",proximitySchedule);
             config.addProperty("displayBoardModification",displayBoardModification);
             config.addProperty("blazeBurnerUseLiquids",blazeBurnerUseLiquids);
-            config.addProperty("statue",statue);
             FileWriter writer = new FileWriter(configFile);
             writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(config));
             writer.close();

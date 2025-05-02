@@ -1,84 +1,156 @@
 package fr.iglee42.createqualityoflife.client.screens.widgets;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.simibubi.create.AllKeys;
-import com.simibubi.create.foundation.gui.AllGuiTextures;
+import java.util.Locale;
+import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+
+import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.gui.element.GuiGameElement;
-import net.createmod.catnip.gui.element.ScreenElement;
-import net.createmod.catnip.gui.widget.AbstractSimiWidget;
+import net.createmod.catnip.gui.widget.BoxWidget;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.theme.Color;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 
-public class ItemButton extends AbstractSimiWidget {
+public class ItemButton extends BoxWidget {
 
-	protected ItemStack icon;
+	public static final Couple<Color> COLOR_IDLE = Couple.create(
+		new Color(0x60_c0c0ff, true),
+		new Color(0x30_c0c0ff, true)
+	).map(Color::setImmutable);
+	public static final Couple<Color> COLOR_HOVER = Couple.create(
+		new Color(0xf0_c0c0ff, true),
+		new Color(0xa0_c0c0ff, true)
+	).map(Color::setImmutable);
+	public static final Couple<Color> COLOR_CLICK = Couple.create(
+		new Color(0xff_ffffff, true),
+		new Color(0xdd_ffffff, true)
+	).map(Color::setImmutable);
+	public static final Couple<Color> COLOR_DISABLED = Couple.create(
+		new Color(0x80_909090, true),
+		new Color(0x20_909090, true)
+	).map(Color::setImmutable);
 
-	public boolean green;
+	@Nullable protected ItemStack item;
+	@Nullable protected int index;
+	@Nullable protected KeyMapping shortcut;
+	protected LerpedFloat flash = LerpedFloat.linear().startWithValue(0).chase(0, 0.1f, LerpedFloat.Chaser.EXP);
 
-	private final OnClick clicked;
+	private final Consumer<ItemButton> onClick;
 
-
-	public ItemButton(int x, int y, ItemStack icon,OnClick onClick) {
-		this(x, y, 18, 18, icon,onClick);
+	public ItemButton(int x, int y, Consumer<ItemButton> onClick,int index) {
+		this(x, y, 20, 20,onClick,index);
 	}
 
-	public ItemButton(int x, int y, int w, int h, ItemStack icon,OnClick onClick) {
-		super(x, y, w, h);
-		this.icon = icon;
-		this.clicked = onClick;
+	public ItemButton(int x, int y, int width, int height, Consumer<ItemButton> onClick,int index) {
+		super(x, y, width, height);
+		this.onClick = onClick;
+		this.index = index;
+		z = 420;
+		paddingX = 2;
+		paddingY = 2;
+		colorIdle = COLOR_IDLE;
+		colorHover = COLOR_HOVER;
+		colorClick = COLOR_CLICK;
+		colorDisabled = COLOR_DISABLED;
+		updateGradientFromState();
+	}
+
+
+	public <T extends ItemButton> T showing(ItemStack item) {
+		this.item = item;
+		return super.showingElement(GuiGameElement.of(item)
+				.scale(1.5f)
+				.at(-4, -4));
+	}
+
+	public void flash() {
+		flash.updateChaseTarget(1);
+	}
+
+	public void dim() {
+		flash.updateChaseTarget(0);
+	}
+
+	@Override
+	public void tick() {
+		super.tick();
+		flash.tickChaser();
+	}
+
+	@Override
+	protected void beforeRender(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+		super.beforeRender(graphics, mouseX, mouseY, partialTicks);
+
+		float flashValue = flash.getValue(partialTicks);
+		if (flashValue > .1f) {
+			float sin = 0.5f + 0.5f * Mth.sin((AnimationTickHolder.getTicks(true) + partialTicks) / 10f);
+			sin *= flashValue;
+			Color nc1 = new Color(255, 255, 255, Mth.clamp(gradientColor.getFirst().getAlpha() + 150, 0, 255));
+			Color nc2 = new Color(155, 155, 155, Mth.clamp(gradientColor.getSecond().getAlpha() + 150, 0, 255));
+			Couple<Color> newColors = Couple.create(nc1, nc2);
+			float finalSin = sin;
+			gradientColor = gradientColor.mapWithParams((color, other) -> color.mixWith(other, finalSin), newColors);
+		}
 	}
 
 	@Override
 	public void doRender(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-		if (visible) {
-			isHovered = mouseX >= getX() && mouseY >= getY() && mouseX < getX() + width && mouseY < getY() + height;
+		super.doRender(graphics, mouseX, mouseY, partialTicks);
+		float fadeValue = fade.getValue();
 
-			AllGuiTextures button = !active ? AllGuiTextures.BUTTON_DISABLED
-				: isHovered && AllKeys.isMouseButtonDown(0) ? AllGuiTextures.BUTTON_DOWN
-					: isHovered ? AllGuiTextures.BUTTON_HOVER
-						: green ? AllGuiTextures.BUTTON_GREEN : AllGuiTextures.BUTTON;
+		if (fadeValue < .1f)
+			return;
 
-			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			drawBg(graphics, button);
-			GuiGameElement.of(icon).render(graphics,getX() + 1,getY() + 1);
-			//icon.render(graphics, getX() + 1, getY() + 1);
+		if (shortcut != null) {
+			PoseStack poseStack = graphics.pose();
+			poseStack.pushPose();
+			poseStack.translate(0, 0, z + 10);
+			graphics.drawCenteredString(Minecraft.getInstance().font, shortcut.getTranslatedKeyMessage().getString().toLowerCase(
+					Locale.ROOT), getX() + width / 2 + 8, getY() + height - 6, UIRenderHelper.COLOR_TEXT_DARKER.getFirst().scaleAlpha(fadeValue).getRGB());
+			poseStack.popPose();
 		}
 	}
 
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if (visible && active &&  mouseX >= getX() && mouseY >= getY() && mouseX < getX() + width && mouseY < getY() + height){
-			if (button == 0) {
-				clicked.onClick(this);
-				this.playDownSound(Minecraft.getInstance().getSoundManager());
-				return true;
-			}
-		}
+	public boolean isFocused() {
 		return false;
 	}
 
-	protected void drawBg(GuiGraphics graphics, AllGuiTextures button) {
-		graphics.blit(button.location, getX(), getY(), button.getStartX(), button.getStartY(), button.getWidth(),
-			button.getHeight());
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (shortcut != null && shortcut.matches(keyCode, scanCode)) {
+
+			gradientColor = getColorClick();
+			startGradientAnimation(getColorForState(), 0.15);
+
+			runCallback(width / 2f, height / 2f);
+			return true;
+		}
+
+		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
 
-	public void setToolTip(Component text) {
-		toolTip.clear();
-		toolTip.add(text);
+	@Override
+	public void onClick(double x, double y) {
+		super.onClick(x, y);
+		onClick.accept(this);
 	}
 
-	public void setIcon(ItemStack icon) {
-		this.icon = icon;
+	@Nullable
+	public ItemStack getItem() {
+		return item;
 	}
 
-	public ItemStack getIcon() {
-		return icon;
-	}
-
-	public interface OnClick{
-		void onClick(ItemButton button);
+	public int getIndex() {
+		return index;
 	}
 }

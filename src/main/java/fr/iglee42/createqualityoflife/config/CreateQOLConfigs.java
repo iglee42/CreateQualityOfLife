@@ -21,20 +21,20 @@ public class CreateQOLConfigs {
 	private static final Map<ModConfig.Type, ConfigBase> CONFIGS = new EnumMap<>(ModConfig.Type.class);
 
 	//private static CCClient client;
-	//private static CQOLCommon common;
-	private static CQOLServer server;
+	private static CQOLCommon common;
+	//private static CCServer server;
 
 	/*public static CCClient client() {
 		return client;
 	}*/
 
-	/*public static CQOLCommon server() {
+	public static CQOLCommon common() {
 		return common;
-	}*/
-
-	public static CQOLServer server() {
-		return server;
 	}
+
+	/*public static CCServer server() {
+		return server;
+	}*/
 
 	public static ConfigBase byType(ModConfig.Type type) {
 		return CONFIGS.get(type);
@@ -55,15 +55,15 @@ public class CreateQOLConfigs {
 
 	public static void register(ModLoadingContext context) {
 		//client = register(CCClient::new, ModConfig.Type.CLIENT);
-		//common = register(CQOLCommon::new, ModConfig.Type.COMMON);
-		server = register(CQOLServer::new, ModConfig.Type.SERVER);
+		common = register(CQOLCommon::new, ModConfig.Type.COMMON);
+		//server = register(CCServer::new, ModConfig.Type.SERVER);
 
 		for (Entry<ModConfig.Type, ConfigBase> pair : CONFIGS.entrySet())
 			context.registerConfig(pair.getKey(), pair.getValue().specification);
 
 
-		BlockStressValues.IMPACTS.registerProvider(server().kinetics.stressValues::getImpact);
-		BlockStressValues.CAPACITIES.registerProvider(server().kinetics.stressValues::getCapacity);
+		BlockStressValues.IMPACTS.registerProvider(common().kinetics.stressValues::getImpact);
+		BlockStressValues.CAPACITIES.registerProvider(common().kinetics.stressValues::getCapacity);
 
 
 	}

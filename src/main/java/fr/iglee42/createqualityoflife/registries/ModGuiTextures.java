@@ -11,20 +11,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public enum ModGuiTextures implements ScreenElement {
-    DISPLAY_BOARD("display_board", 256, 89),
-    STATUE("statue_gui", 226, 220),
-    TEXT_BOX("statue_gui",0,220,131, 18),
-    COORDINATES("statue_gui",131,220,118, 18),
-    SLIDER("statue_gui",0,238,119, 18),
-    SLOT("slot",18,18),
-
-    POSE_BUTTON("statue_pose_button",0,0,45,60),
-    POSE_BUTTON_HOVER("statue_pose_button",45,0,45,60),
-    POSE_BUTTON_CLICKED("statue_pose_button",90,0,45,60),
-    POSE_BUTTON_DISABLED("statue_pose_button",135,0,45,60),
-
-    INFO_ICON("info_icon",0,0,16,16),
-    INFO_ICON_HOVER("info_icon",16,0,16,16)
+    DISPLAY_BOARD("display_board", 256, 89)
 
     ;
 
@@ -69,6 +56,5 @@ public enum ModGuiTextures implements ScreenElement {
         bind();
         UIRenderHelper.drawColoredTexture(graphics, c, x, y, startX, startY, width, height);
     }
-
 
 }

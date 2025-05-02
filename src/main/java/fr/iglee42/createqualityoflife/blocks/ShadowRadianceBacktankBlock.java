@@ -73,7 +73,7 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (AllItems.PROPELLER.is(player.getMainHandItem().getItem()) && !world.isClientSide) {
             if (world.getBlockEntity(pos) instanceof ShadowRadianceBacktankBE be && !   be.hasPropeller()){
-                if (!CreateQOLConfigs.server().propellersAllowed.get()){
+                if (!CreateQOLConfigs.common().propellersAllowed.get()){
                     player.displayClientMessage(Component.literal("Propellers are disabled by the config").withStyle(ChatFormatting.RED),true);
                     world.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
                     return InteractionResult.PASS;

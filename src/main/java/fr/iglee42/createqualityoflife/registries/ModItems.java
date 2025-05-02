@@ -12,7 +12,6 @@ import fr.iglee42.createqualityoflife.items.PlayerPaperItem;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceArmorItem;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceHelmet;
-import fr.iglee42.createqualityoflife.statue.StatueItem;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ArmorItem;
@@ -75,11 +74,6 @@ public class ModItems {
             .tag(forgeItemTag("armors/boots"))
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
-
-    public static final ItemEntry<StatueItem> STATUE = REGISTRATE.item("statue", StatueItem::new)
-            .properties(p->p.stacksTo(16))
-            .register();
-
 
     public static void register(){}
 }
