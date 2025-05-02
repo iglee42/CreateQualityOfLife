@@ -46,7 +46,6 @@ public class QOLGhostIngredientHandler<T extends GhostItemMenu<?>>
 
 	@Override
 	public boolean shouldHighlightTargets() {
-		// TODO change to false and highlight the slots ourself in some better way
 		return true;
 	}
 
