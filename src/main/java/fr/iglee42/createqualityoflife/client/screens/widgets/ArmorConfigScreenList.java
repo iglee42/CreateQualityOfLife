@@ -226,8 +226,6 @@ public class ArmorConfigScreenList extends ObjectSelectionList<ArmorConfigScreen
 		protected int getLabelWidth(int totalWidth) {
 			return totalWidth;
 		}
-
-		// TODO 1.17
 		@Override
 		public Component getNarration() {
 			return CommonComponents.EMPTY;
