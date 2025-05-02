@@ -22,7 +22,7 @@ public class CQOLServer extends ConfigBase {
     }
 
     private static class Comments {
-        static String kinetics = "Modify Create Qol blocks comportements";
+        static String kinetics = "Modify Create Qol blocks comportment";
         static String goggles = "Define if the shadow radiance helmet has goggles";
         static String propellers = "Define if players can add propellers to their shadow radiance chestplate";
         static String hover = "Define if players can activate the hover mode with their shadow radiance chestplate";
