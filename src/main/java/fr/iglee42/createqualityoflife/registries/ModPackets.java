@@ -19,7 +19,9 @@ public enum ModPackets implements BasePacketPayload.PacketTypeProvider {
     TOGGLE_FANS(ToggleFansPacket.class,ToggleFansPacket.STREAM_CODEC),
     TOGGLE_HOVER(ToggleHoverPacket .class, ToggleHoverPacket.STREAM_CODEC),
     INPUTS_UPDATE(UpdateInputsPacket.class, UpdateInputsPacket.STREAM_CODEC),
-    CHANGE_ARMOR_COMPONENT(ChangeArmorComponentPacket.class, ChangeArmorComponentPacket.STREAM_CODEC)
+    CHANGE_ARMOR_COMPONENT(ChangeArmorComponentPacket.class, ChangeArmorComponentPacket.STREAM_CODEC),
+    SAVE_STATUE_CONFIG(SaveStatueConfigPacket.class, SaveStatueConfigPacket.STREAM_CODEC),
+    //Server To Client
 
     ;
     private final CatnipPacketRegistry.PacketType<?> type;

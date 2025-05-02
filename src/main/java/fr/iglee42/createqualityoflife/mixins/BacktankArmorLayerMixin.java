@@ -43,7 +43,7 @@ public class BacktankArmorLayerMixin {
                 ci.cancel();
                 return;
             }
-            renderedState = renderedState.setValue(ShadowRadianceBacktankBlock.PROPELLER,ShadowRadianceChestplate.hasPropeller(stack) && CreateQOLConfigs.common().propellersAllowed.get());
+            renderedState = renderedState.setValue(ShadowRadianceBacktankBlock.PROPELLER,ShadowRadianceChestplate.hasPropeller(stack) && CreateQOLConfigs.server().propellersAllowed.get());
             backtank = CachedBuffers.block(renderedState);
 
             ms.pushPose();

@@ -17,8 +17,12 @@ import fr.iglee42.createqualityoflife.utils.Features;
 import fr.iglee42.createqualityoflife.utils.IHaveTankMixin;
 import fr.iglee42.createqualityoflife.utils.liquidblazeburners.LiquidBlazeBurnerReloadListener;
 import net.createmod.catnip.lang.FontHelper;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.OutgoingChatMessage;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -34,6 +38,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.slf4j.Logger;
 
@@ -71,6 +76,9 @@ public class CreateQOL {
         ModDataComponents.register(modEventBus);
         ModConditions.CONDITIONS.register(modEventBus);
         ModRecipeTypes.register(modEventBus);
+        ModEntityDataSerializers.ENTITY_SERIALIZERS.register(modEventBus);
+        ModEntityTypes.ENTITIES.register(modEventBus);
+        ModMenuTypes.register();
 
         CreateQOLConfigs.register(ModLoadingContext.get(),container);
 
@@ -80,9 +88,11 @@ public class CreateQOL {
         modEventBus.addListener(ChippedSawBlockEntity::registerCapabilities);
         modEventBus.addListener(InventoryLinkerBlockEntity::registerCapabilities);
         modEventBus.addListener(this::registerCapabilities);
+        modEventBus.addListener(ModEntityTypes::registerEntityAttributes);
 
         forgeEventBus.addListener(this::removeFallDamage);
         forgeEventBus.addListener(this::registerReloadListener);
+        forgeEventBus.addListener(this::playerJoin);
 
         //if (isActivate(Features.SHADOW_RADIANCE)){
         //    MysteriousItemConversionCategory.RECIPES.add(BlazeBurnerLiquidRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.SHADOW_STEEL.asStack()));
@@ -134,6 +144,16 @@ public class CreateQOL {
                 event.setCanceled(true);
             }
         }
+    }
+
+    private void playerJoin(EntityJoinLevelEvent event){
+        if (!(event.getEntity() instanceof Player p))return;
+        if (event.getLevel().isClientSide) return;
+        ServerPlayer player = (ServerPlayer) p;
+        if ( event.getLevel().getServer() == null) return;
+        if (event.getLevel().getServer().getProfilePermissions(p.getGameProfile()) < 1) return;
+        if (isActivate(Features.STATUE) && CreateQOLConfigs.server().experimentalWarning.get())
+            player.displayClientMessage(Component.literal("Warning: Statue are still a beta feature, some bugs and crash might appear.\nPlease report them on https://issues-qol.iglee.fr").withStyle(ChatFormatting.YELLOW),false);
     }
 
 

@@ -2,9 +2,8 @@ package fr.iglee42.createqualityoflife.client.screens;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
-import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ArmorConfigScreenList;
-import fr.iglee42.createqualityoflife.client.screens.widgets.ItemButton;
+import fr.iglee42.createqualityoflife.client.screens.widgets.ItemConfigButton;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.BooleanEntry;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.EnumEntry;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.ValueEntry;
@@ -80,7 +79,7 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 		armors = armors.reversed();
 		for (int index = 0; index < armors.size(); index++) {
 			int finalIndex = index;
-			addRenderableWidget(new ItemButton(listL - 24,35 + list.getHeight() / 2 +(( index - 2) * 30), btn->{
+			addRenderableWidget(new ItemConfigButton(listL - 24,35 + list.getHeight() / 2 +(( index - 2) * 30), btn->{
 				onSelectedChange(finalIndex);
 			},finalIndex).showing(
 					Minecraft.getInstance().player.getInventory().getArmor(armors.get(index))));
@@ -93,8 +92,8 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 		super.tick();
 		cogSpin.tick();
 
-		children().stream().filter(w->w instanceof ItemButton).forEach(btn->{
-			((ItemButton) btn).setActive(((ItemButton) btn).getIndex() != selectedItem);
+		children().stream().filter(w->w instanceof ItemConfigButton).forEach(btn->{
+			((ItemConfigButton) btn).setActive(((ItemConfigButton) btn).getIndex() != selectedItem);
 		});
 
 		list.children().stream()
@@ -102,42 +101,42 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 				.map(e->(ValueEntry<?>)e)
 				.forEach(entry->{
 			if (entry.getComponent().equals(ModDataComponents.HELMET_GOGGLES)){
-				if (!CreateQOLConfigs.common().helmetHaveGoggles.get() && entry.isEditable()){
+				if (!CreateQOLConfigs.server().helmetHaveGoggles.get() && entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
-				entry.setEditable(CreateQOLConfigs.common().helmetHaveGoggles.get());
+				entry.setEditable(CreateQOLConfigs.server().helmetHaveGoggles.get());
 			}
 			if (entry.getComponent().equals(ModDataComponents.BACKTANK_FANS)){
-				if (!CreateQOLConfigs.common().propellersAllowed.get() && entry.isEditable()){
+				if (!CreateQOLConfigs.server().propellersAllowed.get() && entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
-				entry.setEditable(CreateQOLConfigs.common().propellersAllowed.get());
+				entry.setEditable(CreateQOLConfigs.server().propellersAllowed.get());
 			}
 			if (entry.getComponent().equals(ModDataComponents.BACKTANK_HOVER)){
-				if ((!CreateQOLConfigs.common().hoverAllowed.get() || !CreateQOLConfigs.common().propellersAllowed.get() )&& entry.isEditable()){
+				if ((!CreateQOLConfigs.server().hoverAllowed.get() || !CreateQOLConfigs.server().propellersAllowed.get() )&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
-				entry.setEditable(CreateQOLConfigs.common().propellersAllowed.get() && CreateQOLConfigs.common().hoverAllowed.get());
+				entry.setEditable(CreateQOLConfigs.server().propellersAllowed.get() && CreateQOLConfigs.server().hoverAllowed.get());
 			}
 
 			if (entry.getComponent().equals(ModDataComponents.ARMOR_EFFECT)){
-				if (!CreateQOLConfigs.common().armorEffects.get()&& entry.isEditable()){
+				if (!CreateQOLConfigs.server().armorEffects.get()&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
-				entry.setEditable(CreateQOLConfigs.common().armorEffects.get());
+				entry.setEditable(CreateQOLConfigs.server().armorEffects.get());
 			}
 
 			if (entry.getComponent().equals(ModDataComponents.BOOTS_DIVING)){
-				if (!CreateQOLConfigs.common().bootsDiving.get()&& entry.isEditable()){
+				if (!CreateQOLConfigs.server().bootsDiving.get()&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
-				entry.setEditable(CreateQOLConfigs.common().bootsDiving.get());
+				entry.setEditable(CreateQOLConfigs.server().bootsDiving.get());
 			}
 			if (entry.getComponent().equals(ModDataComponents.BOOTS_LAVA)){
-				if (!CreateQOLConfigs.common().bootsLavaWalking.get()&& entry.isEditable()){
+				if (!CreateQOLConfigs.server().bootsLavaWalking.get()&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
-				entry.setEditable(CreateQOLConfigs.common().bootsLavaWalking.get());
+				entry.setEditable(CreateQOLConfigs.server().bootsLavaWalking.get());
 			}
 		});
 	}

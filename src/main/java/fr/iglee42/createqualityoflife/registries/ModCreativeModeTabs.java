@@ -119,6 +119,10 @@ public class ModCreativeModeTabs {
 				exclusions.add(ModItems.SHADOW_RADIANCE_BOOTS.asItem());
 			}
 
+			if (!CreateQOL.isActivate(Features.STATUE)){
+				exclusions.add(ModItems.STATUE.asItem());
+			}
+
 			for (ItemProviderEntry<?, ?> entry : simpleExclusions) {
 				exclusions.add(entry.asItem());
 			}

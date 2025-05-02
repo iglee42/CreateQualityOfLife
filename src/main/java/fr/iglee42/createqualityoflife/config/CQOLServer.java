@@ -3,7 +3,7 @@ package fr.iglee42.createqualityoflife.config;
 
 import net.createmod.catnip.config.ConfigBase;
 
-public class CQOLCommon extends ConfigBase {
+public class CQOLServer extends ConfigBase {
 
     public final CQOLKinetics kinetics = nested(0, CQOLKinetics::new,Comments.kinetics);
     public ConfigBool helmetHaveGoggles = b(true,"helmetHaveGoggles",Comments.goggles);
@@ -13,9 +13,12 @@ public class CQOLCommon extends ConfigBase {
     public ConfigBool bootsDiving = b(true,"bootsDiving",Comments.diving,Comments.explainDiving);
     public ConfigBool bootsLavaWalking = b(true,"bootsLavaWalking",Comments.lavaWalking);
 
+    public ConfigInt statueDistance = i(16,"statueMaxDistance",Comments.statueDistance);
+    public ConfigBool experimentalWarning = b(true,"experimentalWarning",Comments.experimentalWarning);
+
     @Override
     public String getName() {
-        return "common";
+        return "server";
     }
 
     private static class Comments {
@@ -26,7 +29,8 @@ public class CQOLCommon extends ConfigBase {
         static String effects = "Define if the shadow radiance armor pieces give potion effects";
         static String diving = "Define if the diving effect is applied on the shadow radiance boots";
         static String explainDiving = "Diving makes players descend quicker in liquids ";
-        static String lavaWalking = "Define if players can walk normally under lava with shadow radiance boots ";
-
+        static String lavaWalking = "Define if players can walk normally under lava with shadow radiance boots";
+        static String statueDistance = "Define the max distance can be set to the statue";
+        static String experimentalWarning = "Should the op players be warning about experimental features";
     }
 }

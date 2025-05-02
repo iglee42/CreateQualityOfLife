@@ -8,10 +8,10 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import fr.iglee42.createqualityoflife.client.GoggleArmorLayer;
 import fr.iglee42.createqualityoflife.client.ShadowRadianceFirstPersonRenderer;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
-import fr.iglee42.createqualityoflife.registries.ModItems;
-import fr.iglee42.createqualityoflife.registries.ModPartialModels;
-import fr.iglee42.createqualityoflife.registries.ModSprites;
+import fr.iglee42.createqualityoflife.registries.*;
+import fr.iglee42.createqualityoflife.statue.StatueArmorModel;
+import fr.iglee42.createqualityoflife.statue.StatueModel;
+import fr.iglee42.createqualityoflife.statue.StatueRenderer;
 import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;
 import fr.iglee42.createqualityoflife.utils.KeyBindManager;
 import fr.iglee42.createqualityoflife.utils.Pos3D;
@@ -20,9 +20,13 @@ import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.ParticleStatus;
+import net.minecraft.client.model.ArmorStandArmorModel;
+import net.minecraft.client.model.geom.LayerDefinitions;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -38,12 +42,19 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
 import static fr.iglee42.createqualityoflife.CreateQOL.MODID;
 
 public class CreateQOLClient {
+
+    public static final ModelLayerLocation STATUE = new ModelLayerLocation(CreateQOL.asResource("statue"),"main");
+    public static final ModelLayerLocation STATUE_INNER_ARMOR =  new ModelLayerLocation(CreateQOL.asResource("statue"),"inner_armor");
+    public static final ModelLayerLocation STATUE_OUTER_ARMOR =  new ModelLayerLocation(CreateQOL.asResource("statue"),"outer_armor");
+    private static final Logger log = LoggerFactory.getLogger(CreateQOLClient.class);
 
     public static void onCtorClient(IEventBus modEventBus, IEventBus forgeEventBus) {
         ModPartialModels.init();
@@ -52,6 +63,7 @@ public class CreateQOLClient {
         modEventBus.addListener(CreateQOLClient::clientInit);
         modEventBus.addListener(CreateQOLClient::addEntityRendererLayers);
         modEventBus.addListener(CreateQOLClient::registerKeys);
+        modEventBus.addListener(CreateQOLClient::registerEntityRendererLayers);
 
         forgeEventBus.addListener(CreateQOLClient::onClientTick);
 
@@ -69,6 +81,8 @@ public class CreateQOLClient {
             ItemProperties.register(ModItems.PLAYER_PAPER.get(),
                     CreateQOL.asResource("hasplayer"), (stack, level, living, id) -> stack.has(ModDataComponents.LINKED_PLAYER) ? 1.0f : 0.0f);
         });
+
+        EntityRenderers.register(ModEntityTypes.STATUE.get(), StatueRenderer::new);
         //MinecraftForge.EVENT_BUS.register(new KeyBindManager());
         //ModPonderTags.register();
         //PonderIndex.register();
@@ -88,6 +102,13 @@ public class CreateQOLClient {
         EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
 
         GoggleArmorLayer.registerOnAll(dispatcher);
+    }
+
+    public static void registerEntityRendererLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
+        event.registerLayerDefinition(STATUE,StatueModel::createBodyLayer);
+        event.registerLayerDefinition(STATUE_INNER_ARMOR, ()-> ArmorStandArmorModel.createBodyLayer(LayerDefinitions.INNER_ARMOR_DEFORMATION));
+        event.registerLayerDefinition(STATUE_OUTER_ARMOR, ()-> ArmorStandArmorModel.createBodyLayer(LayerDefinitions.OUTER_ARMOR_DEFORMATION));
+
     }
 
     public static void onClientTick(ClientTickEvent.Post event){
