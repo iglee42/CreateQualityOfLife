@@ -1,6 +1,4 @@
 {
-
-
   "block.createqol.alchemy_saw": "Пила алхимика",
   "block.createqol.botanist_saw": "Пила ботаника",
   "block.createqol.carpenters_saw": "Пила плотника",
@@ -21,7 +19,7 @@
   "create.options.createqol.inventory_linker.label": "Режим привязки инвентаря",
   "create.options.createqol.inventory_linker.inventory": "Инвентарь",
   "create.options.createqol.inventory_linker.armor": "Броня",
-  "create.options.createqol.inventory_linker.off_hand": "Дополнительная рука",
+  "create.options.createqol.inventory_linker.off_hand": "Вторая рука",
 
   "tooltip.createqol.player_paper.linked_player": "Привязанный игрок: %s",
   "tooltip.createqol.player_paper.no_linked_player": "Игрок не привязан",
@@ -29,7 +27,7 @@
   "item.createqol.player_paper.tooltip": "БУМАГА С ПРИВЯЗКОЙ ИГРОКА",
   "item.createqol.player_paper.tooltip.summary": "Привяжите игрока к этому предмету",
   "item.createqol.player_paper.tooltip.condition1": "ПКМ, если нет привязки",
-  "item.createqol.player_paper.tooltip.behaviour1": "Привязывает кликнувшего _игрока_",
+  "item.createqol.player_paper.tooltip.behaviour1": "Привязывает нажавшего _игрока_",
   "item.createqol.player_paper.tooltip.condition2": "ПКМ в приседе, если есть привязка",
   "item.createqol.player_paper.tooltip.behaviour2": "Сбрасывает привязку к игроку",
 
@@ -38,5 +36,22 @@
   "block.createqol.inventory_linker.tooltip.condition1": "ПКМ бумагой с привязанным игроком",
   "block.createqol.inventory_linker.tooltip.behaviour1": "Вставляет _бумагу с привязкой игрока_",
 
-  "itemGroup.createqol": "Create: Quality of Life"
+  "item.createqol.shadow_radiance_chestplate.tooltip.behaviour1": "Обеспечивает подачу _сжатого_ _воздуха_ к оборудованию, которое в нем нуждается. Может быть _сконфигурировано_ _привязкой клавиш_",
+  "item.createqol.shadow_radiance_chestplate.tooltip.behaviour2": "_Собирает_ _сжатый_ _воздух_ со скоростью, зависящей от частоты вращения.",
+  "item.createqol.shadow_radiance_chestplate.tooltip.behaviour3": "_Добавляет_ _пропеллер_ к нагруднику.",
+  "item.createqol.shadow_radiance_chestplate.tooltip.condition1": "Когда надето",
+  "item.createqol.shadow_radiance_chestplate.tooltip.condition2": "При размещении питается от кинетики",
+  "item.createqol.shadow_radiance_chestplate.tooltip.condition3": "ПКМ с пропеллером при размещении",
+  "item.createqol.shadow_radiance_chestplate.tooltip.summary": "_Переносной_ _резервуар_ для подачи сжатого воздуха.",
+
+  "item.createqol.shadow_armor.tooltip.summary": "_Мощная броня_, которая даёт _полезные вещи_.",
+  "item.createqol.shadow_armor.tooltip.condition1": "Когда надето",
+  "item.createqol.shadow_armor.tooltip.behaviour1": "Может быть _сконфигурировано_ _привязкой клавиш_",
+
+  "itemGroup.createqol": "Create: Качество Жизни",
+  "keybind.createqol.category": "Create: Качество Жизни",
+
+  "keybind.createqol.shadow_radiance_chestplate_fans": "Переключить вентиляторы",
+  "keybind.createqol.shadow_radiance_chestplate_hover": "Переключить парение",
+  "keybind.createqol.open_armor_config": "Открыть конфигурацию брони"
 }
