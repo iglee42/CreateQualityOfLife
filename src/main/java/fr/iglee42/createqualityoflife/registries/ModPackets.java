@@ -27,7 +27,8 @@ public enum ModPackets {
     TOGGLE_FANS(ToggleFansPacket.class,ToggleFansPacket::new,NetworkDirection.PLAY_TO_SERVER),
     TOGGLE_HOVER(ToggleHoverPacket .class, ToggleHoverPacket::new, NetworkDirection.PLAY_TO_SERVER),
     INPUTS_UPDATE(UpdateInputsPacket.class, UpdateInputsPacket::new, NetworkDirection.PLAY_TO_SERVER),
-    CHANGE_ARMOR_TAG(ChangeArmorTagPacket .class, ChangeArmorTagPacket::new, NetworkDirection.PLAY_TO_SERVER)
+    CHANGE_ARMOR_TAG(ChangeArmorTagPacket .class, ChangeArmorTagPacket::new, NetworkDirection.PLAY_TO_SERVER),
+    SAVE_STATUE_CONFIG(SaveStatueConfigPacket.class, SaveStatueConfigPacket::new, NetworkDirection.PLAY_TO_SERVER),
 
     ;
     public static final ResourceLocation CHANNEL_NAME = CreateQOL.asResource("main");

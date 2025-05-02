@@ -13,7 +13,7 @@ public class CQOLServer extends ConfigBase {
     public ConfigBool bootsDiving = b(true,"bootsDiving",Comments.diving,Comments.explainDiving);
     public ConfigBool bootsLavaWalking = b(true,"bootsLavaWalking",Comments.lavaWalking);
 
-    public ConfigInt statueDistance = i(16,1,"statueMaxDistance",Comments.statueDistance);
+    public ConfigInt statueDistance = i(16,"statueMaxDistance",Comments.statueDistance);
     public ConfigBool experimentalWarning = b(true,"experimentalWarning",Comments.experimentalWarning);
 
     @Override
@@ -22,7 +22,7 @@ public class CQOLServer extends ConfigBase {
     }
 
     private static class Comments {
-        static String kinetics = "Modify Create Qol blocks comportment";
+        static String kinetics = "Modify Create Qol blocks comportements";
         static String goggles = "Define if the shadow radiance helmet has goggles";
         static String propellers = "Define if players can add propellers to their shadow radiance chestplate";
         static String hover = "Define if players can activate the hover mode with their shadow radiance chestplate";
@@ -31,6 +31,6 @@ public class CQOLServer extends ConfigBase {
         static String explainDiving = "Diving makes players descend quicker in liquids ";
         static String lavaWalking = "Define if players can walk normally under lava with shadow radiance boots";
         static String statueDistance = "Define the max distance can be set to the statue";
-        static String experimentalWarning = "Should the op players be warned about experimental features";
+        static String experimentalWarning = "Should the op players be warning about experimental features";
     }
 }
