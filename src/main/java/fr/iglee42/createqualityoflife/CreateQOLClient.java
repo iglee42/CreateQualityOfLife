@@ -112,7 +112,7 @@ public class CreateQOLClient {
 
     }
 
-    public static void onClientTick(ClientTickEvent.Post event){
+    public static void onClientTick(TickEvent.ClientTickEvent event){
         ShadowRadianceFirstPersonRenderer.clientTick();
         Minecraft minecraft = Minecraft.getInstance();
         if (event.phase == TickEvent.Phase.END) {

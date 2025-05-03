@@ -1,7 +1,6 @@
 package fr.iglee42.createqualityoflife.statue;
 
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.Dynamic;
+import com.mojang.authlib.GameProfile;
 import com.simibubi.create.AllSoundEvents;
 import fr.iglee42.createqualityoflife.registries.ModEntityDataSerializers;
 import fr.iglee42.createqualityoflife.registries.ModEntityTypes;
@@ -9,15 +8,18 @@ import fr.iglee42.createqualityoflife.registries.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Rotations;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
@@ -27,17 +29,14 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.PlayerModelPart;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.ResolvableProfile;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
@@ -47,6 +46,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -63,7 +63,7 @@ public class Statue extends LivingEntity {
     private static final Rotations DEFAULT_LEFT_LEG_POSE = new Rotations(-1.0F, 0.0F, -1.0F);
     private static final Rotations DEFAULT_RIGHT_LEG_POSE = new Rotations(1.0F, 0.0F, 1.0F);
     private static final EntityDimensions MARKER_DIMENSIONS = EntityDimensions.fixed(0.0F, 0.0F);
-    private static final EntityDimensions BABY_DIMENSIONS = EntityType.ARMOR_STAND.getDimensions().scale(0.5F).withEyeHeight(0.9875F);
+    private static final EntityDimensions BABY_DIMENSIONS = EntityType.ARMOR_STAND.getDimensions().scale(0.5F);
     public static final EntityDataAccessor<Boolean> DATA_INVULNERABLE = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Byte> DATA_CLIENT_FLAGS = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.BYTE);
     public static final EntityDataAccessor<Rotations> DATA_HEAD_POSE = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.ROTATIONS);
@@ -75,7 +75,7 @@ public class Statue extends LivingEntity {
     public static final EntityDataAccessor<Rotations> DATA_GLOBAL_ROTATIONS = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.ROTATIONS);
     public static final EntityDataAccessor<Byte> DATA_PLAYER_SKIN_CUSTOMISATION = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.BYTE);
     public static final EntityDataAccessor<Optional<UUID>> DATA_OWNER = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.OPTIONAL_UUID);
-    public static final EntityDataAccessor<Optional<ResolvableProfile>> DATA_PROFILE = SynchedEntityData.defineId(Statue.class, ModEntityDataSerializers.RESOLVABLE_PROFILE_ENTITY_DATA_SERIALIZER.value());
+    public static final EntityDataAccessor<Optional<GameProfile>> DATA_PROFILE = SynchedEntityData.defineId(Statue.class, ModEntityDataSerializers.PROFILE_ENTITY_DATA_SERIALIZER);
     public static final EntityDataAccessor<Float> DATA_SCALE = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.FLOAT);
     private static final Predicate<Entity> RIDABLE_MINECARTS = p_31582_ -> p_31582_ instanceof AbstractMinecart
             && ((AbstractMinecart)p_31582_).canBeRidden();
@@ -99,10 +99,6 @@ public class Statue extends LivingEntity {
     public Statue(Level p_31556_, double p_31557_, double p_31558_, double p_31559_) {
         this(ModEntityTypes.STATUE.get(), p_31556_);
         this.setPos(p_31557_, p_31558_, p_31559_);
-    }
-
-    public static AttributeSupplier.Builder createAttributes() {
-        return createLivingAttributes().add(Attributes.STEP_HEIGHT, 0.0);
     }
 
     @Override
@@ -129,22 +125,24 @@ public class Statue extends LivingEntity {
     public boolean isEffectiveAi() {
         return super.isEffectiveAi() && this.hasPhysics();
     }
+
+
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder p_326283_) {
-        super.defineSynchedData(p_326283_);
-        p_326283_.define(DATA_INVULNERABLE, false);
-        p_326283_.define(DATA_CLIENT_FLAGS, (byte)0);
-        p_326283_.define(DATA_HEAD_POSE, DEFAULT_HEAD_POSE);
-        p_326283_.define(DATA_BODY_POSE, DEFAULT_BODY_POSE);
-        p_326283_.define(DATA_LEFT_ARM_POSE, DEFAULT_LEFT_ARM_POSE);
-        p_326283_.define(DATA_RIGHT_ARM_POSE, DEFAULT_RIGHT_ARM_POSE);
-        p_326283_.define(DATA_LEFT_LEG_POSE, DEFAULT_LEFT_LEG_POSE);
-        p_326283_.define(DATA_RIGHT_LEG_POSE, DEFAULT_RIGHT_LEG_POSE);
-        p_326283_.define(DATA_GLOBAL_ROTATIONS, DEFAULT_ENTITY_ROTATIONS);
-        p_326283_.define(DATA_PLAYER_SKIN_CUSTOMISATION, getAllModelParts());
-        p_326283_.define(DATA_PROFILE, Optional.empty());
-        p_326283_.define(DATA_OWNER, Optional.empty());
-        p_326283_.define(DATA_SCALE, DEFAULT_SCALE);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_INVULNERABLE, false);
+        this.entityData.define(DATA_CLIENT_FLAGS, (byte)0);
+        this.entityData.define(DATA_HEAD_POSE, DEFAULT_HEAD_POSE);
+        this.entityData.define(DATA_BODY_POSE, DEFAULT_BODY_POSE);
+        this.entityData.define(DATA_LEFT_ARM_POSE, DEFAULT_LEFT_ARM_POSE);
+        this.entityData.define(DATA_RIGHT_ARM_POSE, DEFAULT_RIGHT_ARM_POSE);
+        this.entityData.define(DATA_LEFT_LEG_POSE, DEFAULT_LEFT_LEG_POSE);
+        this.entityData.define(DATA_RIGHT_LEG_POSE, DEFAULT_RIGHT_LEG_POSE);
+        this.entityData.define(DATA_GLOBAL_ROTATIONS, DEFAULT_ENTITY_ROTATIONS);
+        this.entityData.define(DATA_PLAYER_SKIN_CUSTOMISATION, getAllModelParts());
+        this.entityData.define(DATA_PROFILE, Optional.empty());
+        this.entityData.define(DATA_OWNER, Optional.empty());
+        this.entityData.define(DATA_SCALE, DEFAULT_SCALE);
     }
 
     private static byte getAllModelParts() {
@@ -170,16 +168,11 @@ public class Statue extends LivingEntity {
         switch (slot.getType()) {
             case HAND:
                 return this.handItems.get(slot.getIndex());
-            case HUMANOID_ARMOR:
+            case ARMOR:
                 return this.armorItems.get(slot.getIndex());
             default:
                 return ItemStack.EMPTY;
         }
-    }
-
-    @Override
-    public boolean canUseSlot(EquipmentSlot p_326077_) {
-        return p_326077_ != EquipmentSlot.BODY;
     }
 
     @Override
@@ -189,7 +182,7 @@ public class Statue extends LivingEntity {
             case HAND:
                 this.onEquipItem(p_31584_, this.handItems.set(p_31584_.getIndex(), p_31585_), p_31585_);
                 break;
-            case HUMANOID_ARMOR:
+            case ARMOR:
                 this.onEquipItem(p_31584_, this.armorItems.set(p_31584_.getIndex(), p_31585_), p_31585_);
         }
     }
@@ -206,14 +199,14 @@ public class Statue extends LivingEntity {
         ListTag listtag = new ListTag();
 
         for (ItemStack itemstack : this.armorItems) {
-            listtag.add(itemstack.saveOptional(this.registryAccess()));
+            listtag.add(itemstack.save(new CompoundTag()));
         }
 
         nbt.put("ArmorItems", listtag);
         ListTag listtag1 = new ListTag();
 
         for (ItemStack itemstack1 : this.handItems) {
-            listtag1.add(itemstack1.saveOptional(this.registryAccess()));
+            listtag1.add(itemstack1.save(new CompoundTag()));
         }
 
         nbt.put("HandItems", listtag1);
@@ -229,8 +222,8 @@ public class Statue extends LivingEntity {
         getOwner().ifPresent(owner -> nbt.putUUID("Owner",owner));
         nbt.put("Pose", this.writePose());
         nbt.putByte("SkinParts", this.entityData.get(DATA_PLAYER_SKIN_CUSTOMISATION));
-        this.entityData.get(DATA_PROFILE).ifPresent((ResolvableProfile resolvableProfile) -> {
-            nbt.put("Profile", ResolvableProfile.CODEC.encodeStart(NbtOps.INSTANCE, resolvableProfile).getOrThrow());
+        this.entityData.get(DATA_PROFILE).ifPresent(profile -> {
+            nbt.put("Profile", NbtUtils.writeGameProfile(new CompoundTag(),profile));
         });
 
         nbt.put("Rotations", getEntityRotations().save());
@@ -245,7 +238,7 @@ public class Statue extends LivingEntity {
 
             for (int i = 0; i < this.armorItems.size(); i++) {
                 CompoundTag compoundtag = listtag.getCompound(i);
-                this.armorItems.set(i, ItemStack.parseOptional(this.registryAccess(), compoundtag));
+                this.armorItems.set(i, ItemStack.of(compoundtag));
             }
         }
 
@@ -254,7 +247,7 @@ public class Statue extends LivingEntity {
 
             for (int j = 0; j < this.handItems.size(); j++) {
                 CompoundTag compoundtag2 = listtag1.getCompound(j);
-                this.handItems.set(j, ItemStack.parseOptional(this.registryAccess(), compoundtag2));
+                this.handItems.set(j, ItemStack.of(compoundtag2));
             }
         }
 
@@ -272,14 +265,11 @@ public class Statue extends LivingEntity {
         this.readPose(compoundtag1);
         this.entityData.set(DATA_PLAYER_SKIN_CUSTOMISATION,nbt.getByte("SkinParts"));
 
-        Optional<Dynamic<?>> optional = Optional.empty();
+        Optional<GameProfile> optional = Optional.empty();
         if (nbt.contains("Profile", Tag.TAG_COMPOUND)) {
-            optional = Optional.of(new Dynamic<>(NbtOps.INSTANCE, nbt.get("Profile")));
+            optional = Optional.ofNullable(NbtUtils.readGameProfile(nbt.getCompound("Profile")));
         }
-        if (optional.isEmpty()) setProfile(null);
-        else optional.map(ResolvableProfile.CODEC::parse)
-                .flatMap((DataResult<ResolvableProfile> dataResult) -> dataResult.resultOrPartial((string) -> {}))
-                .ifPresent(this::setProfile);
+        setProfile(optional.orElse(null));
 
         if (nbt.contains("Rotations", Tag.TAG_LIST)) {
             Rotations entityRotations = new Rotations(nbt.getList("Rotations", Tag.TAG_FLOAT));
@@ -372,7 +362,7 @@ public class Statue extends LivingEntity {
             return InteractionResult.FAIL;
         } else {
             if (player.isCrouching()){
-                player.openMenu(new MenuProvider() {
+                NetworkHooks.openScreen((ServerPlayer) player,new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
                         return Statue.this.getDisplayName();
@@ -383,7 +373,7 @@ public class Statue extends LivingEntity {
                         return new StatueMenu(i,player.getInventory(),Statue.this);
                     }
                 },buf->buf.writeInt(getId()));
-                return InteractionResult.SUCCESS_NO_ITEM_USED;
+                return InteractionResult.SUCCESS;
             } else {
                 EquipmentSlot equipmentslot = this.getEquipmentSlotForItem(itemstack);
                 if (itemstack.isEmpty()) {
@@ -427,7 +417,7 @@ public class Statue extends LivingEntity {
     private EquipmentSlot getClickedSlot(Vec3 p_31660_) {
         EquipmentSlot equipmentslot = EquipmentSlot.MAINHAND;
         boolean flag = this.isSmall();
-        double d0 = p_31660_.y / (double)(this.getScale() * this.getAgeScale());
+        double d0 = p_31660_.y / (double)(this.getScale() * (isSmall() ? 0.5 : 1));
         EquipmentSlot equipmentslot1 = EquipmentSlot.FEET;
         if (d0 >= 0.1 && d0 < 0.1 + (flag ? 0.8 : 0.45) && this.hasItemInSlot(equipmentslot1)) {
             equipmentslot = EquipmentSlot.FEET;
@@ -446,61 +436,65 @@ public class Statue extends LivingEntity {
 
 
 
-    @Override
     public boolean hurt(DamageSource p_31579_, float p_31580_) {
-        if (this.isRemoved()) {
-            return false;
-        } else if (this.level() instanceof ServerLevel serverlevel) {
+        if (!this.level().isClientSide && !this.isRemoved()) {
             if (p_31579_.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
                 this.kill();
                 return false;
-            } else if (this.isInvulnerableTo(p_31579_) || this.invisible || this.isMarker()) {
-                return false;
-            } else if (p_31579_.is(DamageTypeTags.IS_EXPLOSION)) {
-                this.brokenByAnything(serverlevel, p_31579_);
-                this.kill();
-                return false;
-            } else if (p_31579_.is(DamageTypeTags.IGNITES_ARMOR_STANDS)) {
-                if (this.isOnFire()) {
-                    this.causeDamage(serverlevel, p_31579_, 0.15F);
-                } else {
-                    this.igniteForSeconds(5.0F);
-                }
+            } else if (!this.isInvulnerableTo(p_31579_) && !this.invisible && !this.isMarker()) {
+                if (p_31579_.is(DamageTypeTags.IS_EXPLOSION)) {
+                    this.brokenByAnything(p_31579_);
+                    this.kill();
+                    return false;
+                } else if (p_31579_.is(DamageTypeTags.IGNITES_ARMOR_STANDS)) {
+                    if (this.isOnFire()) {
+                        this.causeDamage(p_31579_, 0.15F);
+                    } else {
+                        this.setSecondsOnFire(5);
+                    }
 
-                return false;
-            } else if (p_31579_.is(DamageTypeTags.BURNS_ARMOR_STANDS) && this.getHealth() > 0.5F) {
-                this.causeDamage(serverlevel, p_31579_, 4.0F);
-                return false;
-            } else {
-                boolean flag1 = p_31579_.is(DamageTypeTags.CAN_BREAK_ARMOR_STAND);
-                boolean flag = p_31579_.is(DamageTypeTags.ALWAYS_KILLS_ARMOR_STANDS);
-                if (!flag1 && !flag) {
+                    return false;
+                } else if (p_31579_.is(DamageTypeTags.BURNS_ARMOR_STANDS) && this.getHealth() > 0.5F) {
+                    this.causeDamage(p_31579_, 4.0F);
                     return false;
                 } else {
-                    if (p_31579_.getEntity() instanceof Player player && !player.getAbilities().mayBuild) {
+                    boolean flag = p_31579_.getDirectEntity() instanceof AbstractArrow;
+                    boolean flag1 = flag && ((AbstractArrow)p_31579_.getDirectEntity()).getPierceLevel() > 0;
+                    boolean flag2 = "player".equals(p_31579_.getMsgId());
+                    if (!flag2 && !flag) {
                         return false;
-                    }
-
-                    if (p_31579_.isCreativePlayer()) {
-                        this.playBrokenSound();
-                        this.showBreakingParticles();
-                        this.kill();
-                        return true;
                     } else {
-                        long i = serverlevel.getGameTime();
-                        if (i - this.lastHit > 5L && !flag) {
-                            serverlevel.broadcastEntityEvent(this, (byte)32);
-                            this.gameEvent(GameEvent.ENTITY_DAMAGE, p_31579_.getEntity());
-                            this.lastHit = i;
-                        } else {
-                            this.brokenByPlayer(serverlevel, p_31579_);
-                            this.showBreakingParticles();
-                            this.kill();
+                        Entity entity = p_31579_.getEntity();
+                        if (entity instanceof Player) {
+                            Player player = (Player)entity;
+                            if (!player.getAbilities().mayBuild) {
+                                return false;
+                            }
                         }
 
-                        return true;
+                        if (p_31579_.isCreativePlayer()) {
+                            this.playBrokenSound();
+                            this.showBreakingParticles();
+                            this.kill();
+                            return flag1;
+                        } else {
+                            long i = this.level().getGameTime();
+                            if (i - this.lastHit > 5L && !flag) {
+                                this.level().broadcastEntityEvent(this, (byte)32);
+                                this.gameEvent(GameEvent.ENTITY_DAMAGE, p_31579_.getEntity());
+                                this.lastHit = i;
+                            } else {
+                                this.brokenByPlayer(p_31579_);
+                                this.showBreakingParticles();
+                                this.kill();
+                            }
+
+                            return true;
+                        }
                     }
                 }
+            } else {
+                return false;
             }
         } else {
             return false;
@@ -547,11 +541,11 @@ public class Statue extends LivingEntity {
         }
     }
 
-    private void causeDamage(ServerLevel p_348633_, DamageSource p_31649_, float p_31650_) {
+    private void causeDamage(DamageSource p_31649_, float p_31650_) {
         float f = this.getHealth();
         f -= p_31650_;
         if (f <= 0.5F) {
-            this.brokenByAnything(p_348633_, p_31649_);
+            this.brokenByAnything(p_31649_);
             this.kill();
         } else {
             this.setHealth(f);
@@ -559,16 +553,18 @@ public class Statue extends LivingEntity {
         }
     }
 
-    private void brokenByPlayer(ServerLevel p_348677_, DamageSource p_31647_) {
+    private void brokenByPlayer(DamageSource p_31647_) {
         ItemStack itemstack = new ItemStack(ModItems.STATUE.get());
-        itemstack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
+        if (this.hasCustomName()) {
+            itemstack.setHoverName(this.getCustomName());
+        }
         Block.popResource(this.level(), this.blockPosition(), itemstack);
-        this.brokenByAnything(p_348677_, p_31647_);
+        this.brokenByAnything(p_31647_);
     }
 
-    private void brokenByAnything(ServerLevel p_348553_, DamageSource p_31654_) {
+    private void brokenByAnything(DamageSource p_31654_) {
         this.playBrokenSound();
-        this.dropAllDeathLoot(p_348553_, p_31654_);
+        this.dropAllDeathLoot(p_31654_);
     }
 
     private void playBrokenSound() {
@@ -657,9 +653,10 @@ public class Statue extends LivingEntity {
         this.gameEvent(GameEvent.ENTITY_DIE);
     }
 
+
     @Override
-    public boolean ignoreExplosion(Explosion p_312813_) {
-        return this.isInvisible();
+    public boolean ignoreExplosion() {
+        return this.isInvisible() || this.isInvulnerable();
     }
 
     @Override
@@ -837,10 +834,6 @@ public class Statue extends LivingEntity {
         return false;
     }
 
-    @Override
-    public EntityDimensions getDefaultDimensions(Pose p_31587_) {
-        return this.getDimensionsMarker(this.isMarker());
-    }
 
     private EntityDimensions getDimensionsMarker(boolean p_31684_) {
         if (p_31684_) {
@@ -885,17 +878,31 @@ public class Statue extends LivingEntity {
         }
     }
 
-    public Optional<ResolvableProfile> getProfile() {
+    public Optional<GameProfile> getProfile() {
         return this.entityData.get(DATA_PROFILE);
     }
 
-    public void setProfile(@Nullable ResolvableProfile resolvableProfile) {
-        this.entityData.set(DATA_PROFILE, Optional.ofNullable(resolvableProfile));
-        if (resolvableProfile != null && !resolvableProfile.isResolved()) {
-            resolvableProfile.resolve().thenAcceptAsync((ResolvableProfile newResolvableProfile) -> {
-                this.entityData.set(DATA_PROFILE, Optional.of(newResolvableProfile));
-            }, SkullBlockEntity.CHECKED_MAIN_THREAD_EXECUTOR);
+    public void verifyAndSetProfile(@Nullable GameProfile gameProfile) {
+        // check for max name length here as client will crash when value is exceeded
+        if (gameProfile != null && (!gameProfile.isComplete() || gameProfile.getName().length() > 16)) {
+            if (gameProfile.getName().length() > 16) {
+                if (gameProfile.getId() != null) {
+                    // will throw exception if both uuid and name are empty
+                    gameProfile = new GameProfile(gameProfile.getId(), "");
+                } else {
+                    this.setOwner(null);
+                    return;
+                }
+            }
+            SkullBlockEntity.updateGameprofile(gameProfile, this::setProfile);
+        } else {
+            this.setProfile(gameProfile);
         }
+    }
+
+
+    public void setProfile(@Nullable GameProfile resolvableProfile) {
+        this.entityData.set(DATA_PROFILE, Optional.ofNullable(resolvableProfile));
     }
 
 

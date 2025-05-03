@@ -73,7 +73,6 @@ public class CreateQOL {
         ModCreativeModeTabs.register(modEventBus);
         ModPackets.registerPackets();
         ModRecipeTypes.register(modEventBus);
-        ModEntityDataSerializers.ENTITY_SERIALIZERS.register(modEventBus);
         ModEntityTypes.ENTITIES.register(modEventBus);
         ModMenuTypes.register();
 

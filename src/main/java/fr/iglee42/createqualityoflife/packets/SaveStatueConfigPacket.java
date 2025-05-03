@@ -1,35 +1,40 @@
 package fr.iglee42.createqualityoflife.packets;
 
-import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
-import fr.iglee42.createqualityoflife.registries.ModPackets;
-import io.netty.buffer.ByteBuf;
-import net.createmod.catnip.net.base.ClientboundPacketPayload;
-import net.createmod.catnip.net.base.ServerboundPacketPayload;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
+import com.simibubi.create.foundation.networking.SimplePacketBase;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkEvent;
 
-public record SaveStatueConfigPacket(int id, CompoundTag nbts) implements ServerboundPacketPayload {
-    public static final StreamCodec<ByteBuf, SaveStatueConfigPacket> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.INT, SaveStatueConfigPacket::id,
-            ByteBufCodecs.COMPOUND_TAG, SaveStatueConfigPacket::nbts,
-            SaveStatueConfigPacket::new
-    );
+public class SaveStatueConfigPacket extends SimplePacketBase {
+
+    private final int id;
+    private final CompoundTag nbts;
+
+    public SaveStatueConfigPacket(int id, CompoundTag nbts) {
+        this.id = id;
+        this.nbts = nbts;
+    }
+
+    public SaveStatueConfigPacket(FriendlyByteBuf buf){
+        this.id = buf.readInt();
+        this.nbts = buf.readNbt();
+    }
 
     @Override
-    public void handle(ServerPlayer player) {
+    public void write(FriendlyByteBuf buffer) {
+        buffer.writeInt(id);
+        buffer.writeNbt(nbts);
+    }
+
+    @Override
+    public boolean handle(NetworkEvent.Context context) {
+        ServerPlayer player = context.getSender();
         if (player != null) {
             if (player.level().getEntity(id) != null){
                 player.level().getEntity(id).load(nbts);
             }
         }
-    }
-
-    @Override
-    public PacketTypeProvider getTypeProvider() {
-        return ModPackets.SAVE_STATUE_CONFIG;
+        return true;
     }
 }

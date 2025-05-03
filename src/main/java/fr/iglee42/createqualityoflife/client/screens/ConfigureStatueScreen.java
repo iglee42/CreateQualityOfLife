@@ -10,13 +10,13 @@ import fr.iglee42.createqualityoflife.packets.SaveStatueConfigPacket;
 import fr.iglee42.createqualityoflife.registries.ModEntityTypes;
 import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
 import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.registries.ModPackets;
 import fr.iglee42.createqualityoflife.statue.Statue;
 import fr.iglee42.createqualityoflife.statue.StatueMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -24,8 +24,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.ResolvableProfile;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.minecraft.world.item.PlayerHeadItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +88,8 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
             ItemButton btn = addRenderableWidget(new ItemButton(leftPos + imageWidth +2,topPos + 15+ t.getIndex() * 20, t.getItem().getDefaultInstance(),b->currentTab = t.getIndex()));
             if (btn.getIcon().is(Items.PLAYER_HEAD)){
                 ItemStack stack = Items.PLAYER_HEAD.getDefaultInstance();
-                stack.set(DataComponents.PROFILE,new ResolvableProfile(Minecraft.getInstance().getGameProfile()));
+                CompoundTag nbt = new CompoundTag();
+                nbt.putString("SkullOwner",Minecraft.getInstance().player.getGameProfile().getName());
                 btn.setIcon(stack);
             }
             btn.getToolTip().add(t.getTooltips());
@@ -107,9 +107,10 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
         getMenu().setShowSlots(false);
     }
 
+
     @Override
-    public void renderBackground(GuiGraphics p_295206_, int p_295457_, int p_294596_, float p_296351_) {
-        if (!hideBackground)super.renderBackground(p_295206_, p_295457_, p_294596_, p_296351_);
+    public void renderBackground(GuiGraphics p_283688_) {
+        if (!hideBackground)super.renderBackground(p_283688_);
     }
 
     @Override
@@ -120,7 +121,7 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
 
     @Override
     protected void renderBg(GuiGraphics graphics, float v, int i, int i1) {
-        ModGuiTextures.STATUE.render(graphics, leftPos, topPos);
+        if (!hideBackground)ModGuiTextures.STATUE.render(graphics, leftPos, topPos);
     }
 
     @Override
@@ -141,7 +142,7 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
             tabs.stream().filter(t->t.getIndex() == currentTab).findFirst().ifPresent(t->t.forEachWidgets(this::addRenderableWidget));
             oCurrentTab = currentTab;
         }
-        if (exampleStatue != null && !hideBackground)InventoryScreen.renderEntityInInventoryFollowsMouse(graphics,leftPos + offsetX,topPos + offsetY,leftPos + offsetX + 67,topPos + offsetY + size,50,0,mouseX,mouseY,exampleStatue);
+        if (exampleStatue != null && !hideBackground)InventoryScreen.renderEntityInInventoryFollowsMouse(graphics,getGuiLeft() + 40,getGuiTop() + 150,50, (getGuiLeft() + 40) -mouseX ,(getGuiLeft() + offsetY) -mouseY,exampleStatue);
         tabs.stream().filter(t->t.getIndex() == currentTab).findAny().ifPresent(t->{
             t.render(graphics,mouseX,mouseY,partialTicks,leftPos + 2*offsetX + 67 + (hideBackground?110:0), topPos + offsetY);
 
@@ -192,7 +193,7 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
             if (getExampleStatue().hasOwner() && !Minecraft.getInstance().player.getUUID().equals(getExampleStatue().getOwner().get())){
                 nbt.putBoolean("Invulnerable",menu.contentHolder.isInvulnerable());
             }
-            PacketDistributor.sendToServer(new SaveStatueConfigPacket(menu.contentHolder.getId(),nbt));
+            ModPackets.getChannel().sendToServer(new SaveStatueConfigPacket(menu.contentHolder.getId(),nbt));
         }
     }
 

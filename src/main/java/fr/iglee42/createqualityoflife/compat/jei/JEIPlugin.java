@@ -1,21 +1,24 @@
 package fr.iglee42.createqualityoflife.compat.jei;
 
-import earth.terrarium.chipped.common.compat.jei.ChippedRecipeCategory;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllRecipeTypes;
-import com.simibubi.create.compat.jei.*;
+import com.simibubi.create.Create;
+import com.simibubi.create.compat.jei.CreateJEI;
+import com.simibubi.create.compat.jei.DoubleItemIcon;
+import com.simibubi.create.compat.jei.EmptyBackground;
+import com.simibubi.create.compat.jei.ItemIcon;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CRecipes;
-import earth.terrarium.chipped.common.compat.jei.WorkbenchCategory;
+import earth.terrarium.chipped.common.compat.jei.ChippedRecipeCategory;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
 import fr.iglee42.createqualityoflife.recipes.BlazeBurnerLiquidRecipe;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
-import fr.iglee42.createqualityoflife.statue.StatueMenu;
 import fr.iglee42.createqualityoflife.utils.Features;
 import fr.iglee42.createqualityoflife.utils.liquidblazeburners.LiquidBlazeBurnerManager;
 import mezz.jei.api.IModPlugin;
@@ -30,20 +33,14 @@ import mezz.jei.api.runtime.IIngredientManager;
 import net.createmod.catnip.config.ConfigBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -88,7 +85,7 @@ public class JEIPlugin implements IModPlugin {
                 blazeBurnerLiquids = builder(BlazeBurnerLiquidRecipe.class)
                 .enableIf((c)->CreateQOL.isActivate(Features.LIQUID_BLAZE_BURNER))
                 .addRecipes(()->{
-                    List<RecipeHolder<BlazeBurnerLiquidRecipe>> recipes = new ArrayList<>();
+                    List<BlazeBurnerLiquidRecipe> recipes = new ArrayList<>();
                     LiquidBlazeBurnerManager.BLAZE_BURNER_LIQUIDS.forEach((fluid,entry)->{
                         recipes.add(BlazeBurnerLiquidRecipe.create(fluid,entry.superHeated() ? BlazeBurnerBlock.HeatLevel.SEETHING : BlazeBurnerBlock.HeatLevel.FADING));
                     });
@@ -120,14 +117,14 @@ public class JEIPlugin implements IModPlugin {
 
 
 
-    private class CategoryBuilder<T extends Recipe<? extends RecipeInput>> {
+    private class CategoryBuilder<T extends Recipe<?>> {
         private final Class<? extends T> recipeClass;
         private Predicate<CRecipes> predicate = cRecipes -> true;
 
         private IDrawable background;
         private IDrawable icon;
 
-        private final List<Consumer<List<RecipeHolder<T>>>> recipeListConsumers = new ArrayList<>();
+        private final List<Consumer<List<T>>> recipeListConsumers = new ArrayList<>();
         private final List<Supplier<? extends ItemStack>> catalysts = new ArrayList<>();
 
         public CategoryBuilder(Class<? extends T> recipeClass) {
@@ -144,24 +141,24 @@ public class JEIPlugin implements IModPlugin {
             return this;
         }
 
-        public CategoryBuilder<T> addRecipeListConsumer(Consumer<List<RecipeHolder<T>>> consumer) {
+        public CategoryBuilder<T> addRecipeListConsumer(Consumer<List<T>> consumer) {
             recipeListConsumers.add(consumer);
             return this;
         }
 
-        public CategoryBuilder<T> addRecipes(Supplier<Collection<? extends RecipeHolder<T>>> collection) {
+        public CategoryBuilder<T> addRecipes(Supplier<Collection<? extends T>> collection) {
             return addRecipeListConsumer(recipes -> recipes.addAll(collection.get()));
         }
 
         @SuppressWarnings("unchecked")
-        public CategoryBuilder<T> addAllRecipesIf(Predicate<RecipeHolder<T>> pred) {
-            return addRecipeListConsumer(recipes -> consumeAllRecipesOfType(recipe -> {
+        public CategoryBuilder<T> addAllRecipesIf(Predicate<Recipe<?>> pred) {
+            return addRecipeListConsumer(recipes -> consumeAllRecipes(recipe -> {
                 if (pred.test(recipe))
-                    recipes.add(recipe);
+                    recipes.add((T) recipe);
             }));
         }
 
-        public CategoryBuilder<T> addAllRecipesIf(Predicate<RecipeHolder<?>> pred, Function<RecipeHolder<?>, RecipeHolder<T>> converter) {
+        public CategoryBuilder<T> addAllRecipesIf(Predicate<Recipe<?>> pred, Function<Recipe<?>, T> converter) {
             return addRecipeListConsumer(recipes -> consumeAllRecipes(recipe -> {
                 if (pred.test(recipe)) {
                     recipes.add(converter.apply(recipe));
@@ -172,20 +169,17 @@ public class JEIPlugin implements IModPlugin {
         public CategoryBuilder<T> addTypedRecipes(IRecipeTypeInfo recipeTypeEntry) {
             return addTypedRecipes(recipeTypeEntry::getType);
         }
-        public <I extends RecipeInput, R extends Recipe<I>> CategoryBuilder<T> addTypedRecipes(Supplier<RecipeType<R>> recipeType) {
-            return addRecipeListConsumer(recipes -> JEIPlugin.<T>consumeTypedRecipes(recipe -> {
-                if (recipeClass.isInstance(recipe.value()))
-                    //noinspection unchecked - checked by if statement above
-                    recipes.add((RecipeHolder<T>) recipe);
-            }, recipeType.get()));
+
+        public CategoryBuilder<T> addTypedRecipes(Supplier<RecipeType<? extends T>> recipeType) {
+            return addRecipeListConsumer(recipes -> CreateJEI.<T>consumeTypedRecipes(recipes::add, recipeType.get()));
         }
 
-        public CategoryBuilder<T> addTypedRecipes(Supplier<RecipeType<T>> recipeType, Function<RecipeHolder<?>, RecipeHolder<T>> converter) {
-            return addRecipeListConsumer(recipes -> JEIPlugin.<T>consumeTypedRecipes(recipe -> recipes.add(converter.apply(recipe)), recipeType.get()));
+        public CategoryBuilder<T> addTypedRecipes(Supplier<RecipeType<? extends T>> recipeType, Function<Recipe<?>, T> converter) {
+            return addRecipeListConsumer(recipes -> CreateJEI.<T>consumeTypedRecipes(recipe -> recipes.add(converter.apply(recipe)), recipeType.get()));
         }
 
-        public CategoryBuilder<T> addTypedRecipesIf(Supplier<RecipeType<? extends T>> recipeType, Predicate<RecipeHolder<?>> pred) {
-            return addRecipeListConsumer(recipes -> consumeTypedRecipesTyped(recipe -> {
+        public CategoryBuilder<T> addTypedRecipesIf(Supplier<RecipeType<? extends T>> recipeType, Predicate<Recipe<?>> pred) {
+            return addRecipeListConsumer(recipes -> CreateJEI.<T>consumeTypedRecipes(recipe -> {
                 if (pred.test(recipe)) {
                     recipes.add(recipe);
                 }
@@ -193,12 +187,12 @@ public class JEIPlugin implements IModPlugin {
         }
 
         public CategoryBuilder<T> addTypedRecipesExcluding(Supplier<RecipeType<? extends T>> recipeType,
-                                                           Supplier<RecipeType<? extends T>> excluded) {
+                                                                     Supplier<RecipeType<? extends T>> excluded) {
             return addRecipeListConsumer(recipes -> {
-                List<RecipeHolder<?>> excludedRecipes = getTypedRecipes(excluded.get());
-                consumeTypedRecipesTyped(recipe -> {
-                    for (RecipeHolder<?> excludedRecipe : excludedRecipes) {
-                        if (doInputsMatch(recipe.value(), excludedRecipe.value())) {
+                List<Recipe<?>> excludedRecipes = getTypedRecipes(excluded.get());
+                CreateJEI.<T>consumeTypedRecipes(recipe -> {
+                    for (Recipe<?> excludedRecipe : excludedRecipes) {
+                        if (doInputsMatch(recipe, excludedRecipe)) {
                             return;
                         }
                     }
@@ -209,10 +203,10 @@ public class JEIPlugin implements IModPlugin {
 
         public CategoryBuilder<T> removeRecipes(Supplier<RecipeType<? extends T>> recipeType) {
             return addRecipeListConsumer(recipes -> {
-                List<RecipeHolder<?>> excludedRecipes = getTypedRecipes(recipeType.get());
+                List<Recipe<?>> excludedRecipes = getTypedRecipes(recipeType.get());
                 recipes.removeIf(recipe -> {
-                    for (RecipeHolder<?> excludedRecipe : excludedRecipes)
-                        if (doInputsMatch(recipe.value(), excludedRecipe.value()) && doOutputsMatch(recipe.value(), excludedRecipe.value()))
+                    for (Recipe<?> excludedRecipe : excludedRecipes)
+                        if (doInputsMatch(recipe, excludedRecipe) && doOutputsMatch(recipe, excludedRecipe))
                             return true;
                     return false;
                 });
@@ -259,47 +253,28 @@ public class JEIPlugin implements IModPlugin {
         }
 
         public CreateRecipeCategory<T> build(String name, CreateRecipeCategory.Factory<T> factory) {
-            Supplier<List<RecipeHolder<T>>> recipesSupplier;
+            Supplier<List<T>> recipesSupplier;
             if (predicate.test(AllConfigs.server().recipes)) {
                 recipesSupplier = () -> {
-                    List<RecipeHolder<T>> recipes = new ArrayList<>();
-                    for (Consumer<List<RecipeHolder<T>>> consumer : recipeListConsumers)
+                    List<T> recipes = new ArrayList<>();
+                    for (Consumer<List<T>> consumer : recipeListConsumers)
                         consumer.accept(recipes);
                     return recipes;
                 };
             } else {
-                recipesSupplier = Collections::emptyList;
+                recipesSupplier = () -> Collections.emptyList();
             }
 
             CreateRecipeCategory.Info<T> info = new CreateRecipeCategory.Info<>(
-                    new mezz.jei.api.recipe.RecipeType<>(CreateQOL.asResource(name), recipeClass),
-                    Component.translatable(CreateQOL.MODID + ".recipe." + name), background, icon, recipesSupplier, catalysts);
+                    new mezz.jei.api.recipe.RecipeType<>(Create.asResource(name), recipeClass),
+                    CreateLang.translateDirect("recipe." + name), background, icon, recipesSupplier, catalysts);
             CreateRecipeCategory<T> category = factory.create(info);
             allCategories.add(category);
             return category;
         }
-
-        private void consumeAllRecipesOfType(Consumer<RecipeHolder<T>> consumer) {
-            consumeAllRecipes(recipeHolder -> {
-                if (recipeClass.isInstance(recipeHolder.value())) {
-                    //noinspection unchecked - this is checked by the if statement
-                    consumer.accept((RecipeHolder<T>) recipeHolder);
-                }
-            });
-        }
-
-        private void consumeTypedRecipesTyped(Consumer<RecipeHolder<T>> consumer, RecipeType<?> type) {
-            consumeTypedRecipes(recipeHolder -> {
-                if (recipeClass.isInstance(recipeHolder.value())) {
-                    //noinspection unchecked - this is checked by the if statement
-                    consumer.accept((RecipeHolder<T>) recipeHolder);
-                }
-            }, type);
-        }
     }
 
-
-    public static void consumeAllRecipes(Consumer<? super RecipeHolder<?>> consumer) {
+    public static void consumeAllRecipes(Consumer<Recipe<?>> consumer) {
         Minecraft.getInstance()
                 .getConnection()
                 .getRecipeManager()
@@ -307,23 +282,23 @@ public class JEIPlugin implements IModPlugin {
                 .forEach(consumer);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <T extends Recipe<?>> void consumeTypedRecipes(Consumer<RecipeHolder<?>> consumer, RecipeType<?> type) {
-        List<? extends RecipeHolder<?>> map = Minecraft.getInstance()
+    @SuppressWarnings("unchecked")
+    public static <T extends Recipe<?>> void consumeTypedRecipes(Consumer<T> consumer, RecipeType<?> type) {
+        Map<ResourceLocation, Recipe<?>> map = Minecraft.getInstance()
                 .getConnection()
-                .getRecipeManager().getAllRecipesFor((RecipeType) type);
-        if (!map.isEmpty())
-            map.forEach(consumer);
+                .getRecipeManager().recipes.get(type);
+        if (map != null)
+            map.values().forEach(recipe -> consumer.accept((T) recipe));
     }
 
-    public static List<RecipeHolder<?>> getTypedRecipes(RecipeType<?> type) {
-        List<RecipeHolder<?>> recipes = new ArrayList<>();
+    public static List<Recipe<?>> getTypedRecipes(RecipeType<?> type) {
+        List<Recipe<?>> recipes = new ArrayList<>();
         consumeTypedRecipes(recipes::add, type);
         return recipes;
     }
 
-    public static List<RecipeHolder<?>> getTypedRecipesExcluding(RecipeType<?> type, Predicate<RecipeHolder<?>> exclusionPred) {
-        List<RecipeHolder<?>> recipes = getTypedRecipes(type);
+    public static List<Recipe<?>> getTypedRecipesExcluding(RecipeType<?> type, Predicate<Recipe<?>> exclusionPred) {
+        List<Recipe<?>> recipes = getTypedRecipes(type);
         recipes.removeIf(exclusionPred);
         return recipes;
     }
@@ -336,13 +311,13 @@ public class JEIPlugin implements IModPlugin {
             return false;
         }
         ItemStack[] matchingStacks = recipe1.getIngredients()
-                .getFirst()
+                .get(0)
                 .getItems();
         if (matchingStacks.length == 0) {
             return false;
         }
         return recipe2.getIngredients()
-                .getFirst()
+                .get(0)
                 .test(matchingStacks[0]);
     }
 

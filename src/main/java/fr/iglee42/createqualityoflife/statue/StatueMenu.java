@@ -5,31 +5,30 @@ import com.simibubi.create.foundation.gui.menu.GhostItemMenu;
 import com.simibubi.create.foundation.gui.menu.MenuBase;
 import fr.iglee42.createqualityoflife.registries.ModMenuTypes;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.ItemHandlerCopySlot;
-import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class StatueMenu extends GhostItemMenu<Statue> {
 
-    public static final ResourceLocation EMPTY_ARMOR_SLOT_HELMET = ResourceLocation.withDefaultNamespace("item/empty_armor_slot_helmet");
-    public static final ResourceLocation EMPTY_ARMOR_SLOT_CHESTPLATE = ResourceLocation.withDefaultNamespace("item/empty_armor_slot_chestplate");
-    public static final ResourceLocation EMPTY_ARMOR_SLOT_LEGGINGS = ResourceLocation.withDefaultNamespace("item/empty_armor_slot_leggings");
-    public static final ResourceLocation EMPTY_ARMOR_SLOT_BOOTS = ResourceLocation.withDefaultNamespace("item/empty_armor_slot_boots");
-    public static final ResourceLocation EMPTY_ARMOR_SLOT_SHIELD = ResourceLocation.withDefaultNamespace("item/empty_armor_slot_shield");
-    public static final ResourceLocation EMPTY_ARMOR_SLOT_SWORD = ResourceLocation.withDefaultNamespace("item/empty_slot_sword");
+    public static final ResourceLocation EMPTY_ARMOR_SLOT_HELMET = new ResourceLocation("item/empty_armor_slot_helmet");
+    public static final ResourceLocation EMPTY_ARMOR_SLOT_CHESTPLATE = new ResourceLocation("item/empty_armor_slot_chestplate");
+    public static final ResourceLocation EMPTY_ARMOR_SLOT_LEGGINGS = new ResourceLocation("item/empty_armor_slot_leggings");
+    public static final ResourceLocation EMPTY_ARMOR_SLOT_BOOTS = new ResourceLocation("item/empty_armor_slot_boots");
+    public static final ResourceLocation EMPTY_ARMOR_SLOT_SHIELD = new ResourceLocation("item/empty_armor_slot_shield");
+    public static final ResourceLocation EMPTY_ARMOR_SLOT_SWORD = new ResourceLocation("item/empty_slot_sword");
 
     boolean showSlots = true;
 
-    public StatueMenu(MenuType<?> type, int id, Inventory inv, RegistryFriendlyByteBuf extraData) {
+    public StatueMenu(MenuType<?> type, int id, Inventory inv, FriendlyByteBuf extraData) {
         super(type, id, inv, extraData);
     }
 
@@ -38,7 +37,7 @@ public class StatueMenu extends GhostItemMenu<Statue> {
     }
 
     @Override
-    protected Statue createOnClient(RegistryFriendlyByteBuf extraData) {
+    protected Statue createOnClient(FriendlyByteBuf extraData) {
         if (Minecraft.getInstance().level == null) return null;
         return (Statue) Minecraft.getInstance().level.getEntity(extraData.readInt());
     }
@@ -145,7 +144,7 @@ public class StatueMenu extends GhostItemMenu<Statue> {
             if (player.isCreative() && held.isEmpty()) {
                 ItemStack stackInSlot = ghostInventory.getStackInSlot(slot)
                         .copy();
-                stackInSlot.setCount(stackInSlot.getOrDefault(DataComponents.MAX_STACK_SIZE, 64));
+                stackInSlot.setCount(stackInSlot.getMaxStackSize());
                 setCarried(stackInSlot);
                 return;
             }

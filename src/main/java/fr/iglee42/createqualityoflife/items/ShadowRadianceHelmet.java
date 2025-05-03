@@ -25,13 +25,13 @@ public class ShadowRadianceHelmet extends DivingHelmetItem {
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     }
     static {
-        GogglesItem.addIsWearingPredicate(player -> ModItems.SHADOW_RADIANCE_HELMET.isIn(player.getItemBySlot(EquipmentSlot.HEAD)) && NBTConstants.getOrDefault( player.getItemBySlot(EquipmentSlot.HEAD),NBTConstants.NBT_GOGGLES,true) && CreateQOLConfigs.common().helmetHaveGoggles.get());
+        GogglesItem.addIsWearingPredicate(player -> ModItems.SHADOW_RADIANCE_HELMET.isIn(player.getItemBySlot(EquipmentSlot.HEAD)) && NBTConstants.getOrDefault( player.getItemBySlot(EquipmentSlot.HEAD),NBTConstants.NBT_GOGGLES,true) && CreateQOLConfigs.server().helmetHaveGoggles.get());
     }
 
     @Override
     public void onArmorTick(ItemStack stack, Level level, Player player) {
         if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
-        if (!CreateQOLConfigs.common().armorEffects.get()) return;
+        if (!CreateQOLConfigs.server().armorEffects.get()) return;
         if (NBTConstants.getOrDefault(stack,NBTConstants.NBT_EFFECTS,true))player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION,20*11,1,false,false));
     }
 }

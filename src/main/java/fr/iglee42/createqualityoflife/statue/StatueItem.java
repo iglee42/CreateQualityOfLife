@@ -21,7 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.util.FakePlayer;
+import net.minecraftforge.common.util.FakePlayer;
 
 public class StatueItem extends Item {
     public StatueItem(Item.Properties p_40503_) {
@@ -43,7 +43,7 @@ public class StatueItem extends Item {
             if (level.noCollision(null, aabb) && level.getEntities(null, aabb).isEmpty()) {
                 if (level instanceof ServerLevel serverlevel) {
                     Consumer<Statue> consumer = EntityType.createDefaultStackConfig(serverlevel, itemstack, ctx.getPlayer());
-                    Statue statue = ModEntityTypes.STATUE.get().create(serverlevel, consumer, blockpos, MobSpawnType.SPAWN_EGG, true, true);
+                    Statue statue = ModEntityTypes.STATUE.get().create(serverlevel, itemstack.getTag(), consumer, blockpos, MobSpawnType.SPAWN_EGG, true, true);
                     if (statue == null) {
                         return InteractionResult.FAIL;
                     }

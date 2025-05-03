@@ -68,9 +68,9 @@ public class StatuePoseWidget extends AbstractSimiWidget {
         example.load(tag);
         example.setCustomNameVisible(false);
         pose.applyToStatue(example);
-        int posX = getX() + 10;
-        int posY = getY() + 7;
-        InventoryScreen.renderEntityInInventory(graphics, posX,posY, 24, new Vector3f(example.getBbWidth(),example.getBbHeight() ,0), new Quaternionf().rotationXYZ((float) Math.toRadians(180), (float) Math.toRadians(renderTime / 96 * 360), 0),null,example);
+        int posX = getX() + 22;
+        int posY = getY() + 51;
+        InventoryScreen.renderEntityInInventory(graphics, posX,posY, 24, new Quaternionf().rotationXYZ((float) Math.toRadians(180), (float) Math.toRadians(renderTime / 96 * 360), 0),null,example);
 
     }
 
@@ -89,7 +89,7 @@ public class StatuePoseWidget extends AbstractSimiWidget {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0 && mouseX >= getX() && mouseX <= getX() + getWidth() && mouseY > getY() + getHeight() && mouseY <= getY() + getHeight() + 11){
             if (pose.getSource().getString().equals("Vanilla Tweaks")){
-                ConfirmLinkScreen.confirmLinkNow(parent,"https://vanillatweaks.net/");
+                ConfirmLinkScreen.confirmLinkNow("https://vanillatweaks.net/",parent,true);
                 return true;
             }
         }

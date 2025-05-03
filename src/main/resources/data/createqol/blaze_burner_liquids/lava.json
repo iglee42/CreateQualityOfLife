@@ -1,6 +1,6 @@
 {
   "fluid": "minecraft:lava",
-  "burn_time": 20,
-  "super_heat": false,
+  "burnTime": 20,
+  "superHeat": false,
   "consumptionPerTick": 1
 }

@@ -1,18 +1,28 @@
 package fr.iglee42.createqualityoflife.registries;
 
+import com.mojang.authlib.GameProfile;
 import fr.iglee42.createqualityoflife.CreateQOL;
-import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializer;
-import net.minecraft.world.item.component.ResolvableProfile;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+
 
 import java.util.Optional;
+import java.util.UUID;
 
 public class ModEntityDataSerializers {
 
-    public static final DeferredRegister<EntityDataSerializer<?>> ENTITY_SERIALIZERS = DeferredRegister.create(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, CreateQOL.MODID);
 
-    public static final DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<Optional<ResolvableProfile>>> RESOLVABLE_PROFILE_ENTITY_DATA_SERIALIZER = ENTITY_SERIALIZERS.register("profile",()->EntityDataSerializer.forValueType(ResolvableProfile.STREAM_CODEC.apply(ByteBufCodecs::optional)));
+    public static final EntityDataSerializer<Optional<GameProfile>> PROFILE_ENTITY_DATA_SERIALIZER = EntityDataSerializer.optional((friendlyByteBuf, gameProfile) -> {
+        if (!gameProfile.isComplete()) {
+            UUID uuid = UUIDUtil.createOfflinePlayerUUID(gameProfile.getName());
+            gameProfile = new GameProfile(uuid, gameProfile.getName());
+        }
+        friendlyByteBuf.writeGameProfile(gameProfile);
+    },FriendlyByteBuf::readGameProfile);
 }

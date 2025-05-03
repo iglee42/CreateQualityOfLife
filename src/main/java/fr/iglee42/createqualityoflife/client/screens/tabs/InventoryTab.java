@@ -1,16 +1,11 @@
 package fr.iglee42.createqualityoflife.client.screens.tabs;
 
 import com.simibubi.create.AllItems;
-import fr.iglee42.createqualityoflife.CreateQOLClient;
-import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
 import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
 import fr.iglee42.createqualityoflife.statue.StatueMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.items.SlotItemHandler;
 
 import java.util.function.Consumer;
 

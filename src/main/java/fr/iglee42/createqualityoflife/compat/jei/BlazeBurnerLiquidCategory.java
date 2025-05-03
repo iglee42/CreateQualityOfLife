@@ -55,7 +55,7 @@ public class BlazeBurnerLiquidCategory extends CreateRecipeCategory<BlazeBurnerL
 	public void setRecipe(IRecipeLayoutBuilder builder, BlazeBurnerLiquidRecipe recipe, IFocusGroup focuses) {
 		builder.addSlot(RecipeIngredientRole.INPUT, 51, 5)
 				.setBackground(getRenderedSlot(), -1, -1)
-				.addFluidStack(recipe.getFluidIngredients().get(0).getMatchingFluidStacks().getFirst().getFluid(),recipe.getFluidIngredients().get(0).getRequiredAmount());
+				.addFluidStack(recipe.getFluidIngredients().get(0).getMatchingFluidStacks().get(0).getFluid(),recipe.getFluidIngredients().get(0).getRequiredAmount());
 		recipe.getFluidIngredients().get(0).getMatchingFluidStacks().forEach(fs->{
             fs.getFluid().getBucket();
             if (!fs.getFluid().getBucket().equals(Items.AIR)) builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemLike(fs.getFluid().getBucket());

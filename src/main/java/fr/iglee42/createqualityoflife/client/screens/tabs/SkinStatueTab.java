@@ -1,5 +1,7 @@
 package fr.iglee42.createqualityoflife.client.screens.tabs;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.properties.PropertyMap;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.foundation.gui.AllIcons;
@@ -19,13 +21,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.ResolvableProfile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +51,9 @@ public class SkinStatueTab extends AbstractStatueTab{
     @Override
     public void initWidgets(int x, int y) {
         playerSkinTextBox = new EditBox(Minecraft.getInstance().font,x + TEXT_BOX_X_OFFSET, y + SKIN_Y + TEXT_Y_OFFSET,TEXT_BOX_WIDTH,20,Component.empty());
-        Optional<ResolvableProfile> profile = getExampleStatue().getProfile();
+        Optional<GameProfile> profile = getExampleStatue().getProfile();
         profile.ifPresent(rp->{
-            playerSkinTextBox.setValue(rp.gameProfile().getName());
+            playerSkinTextBox.setValue(rp.getName());
         });
         playerSkinTextBox.setResponder(s->{
             lastInputSkinBox = 100;
@@ -105,7 +105,7 @@ public class SkinStatueTab extends AbstractStatueTab{
         btn.getToolTip().addAll(isPartActive.test(getExampleStatue()) ? tipEnabled : tip);
         Label label = new Label(x + LABEL_X_OFFSET,y + LABEL_Y_OFFSET,part.getName());
         label.text = part.getName();
-        Optional<ResourceLocation> texture = StatueRenderer.getPlayerProfileTexture(getExampleStatue()).map(PlayerSkin::capeTexture);
+        Optional<ResourceLocation> texture = StatueRenderer.getPlayerProfileTexture(getExampleStatue(), MinecraftProfileTexture.Type.CAPE);
         if (part == PlayerModelPart.CAPE && texture.isEmpty()){
             btn.active = false;
             btn.getToolTip().clear();
@@ -121,18 +121,16 @@ public class SkinStatueTab extends AbstractStatueTab{
         if (lastInputSkinBox > 0) lastInputSkinBox--;
         if( lastInputSkinBox == 0 ){
             String value = playerSkinTextBox.getValue();
-            ResolvableProfile resolvableProfile;
+            GameProfile profile;
             if (value.isEmpty()) {
-                resolvableProfile = null;
+                profile = null;
             } else {
-                resolvableProfile = new ResolvableProfile(Optional.of(value),
-                        Optional.empty(),
-                        new PropertyMap());
+                profile = new GameProfile(null,playerSkinTextBox.getValue());
             }
-            getExampleStatue().setProfile(resolvableProfile);
+            getExampleStatue().verifyAndSetProfile(profile);
             lastInputSkinBox = -1;
 
-            Optional<ResourceLocation> texture = StatueRenderer.getPlayerProfileTexture(getExampleStatue()).map(PlayerSkin::capeTexture);
+            Optional<ResourceLocation> texture = StatueRenderer.getPlayerProfileTexture(getExampleStatue(), MinecraftProfileTexture.Type.CAPE);
             if (capeButton != null){
                 capeButton.active = texture.isPresent();
             }
@@ -154,14 +152,12 @@ public class SkinStatueTab extends AbstractStatueTab{
     public void onQuit() {
         //This makes that the skin is saved even if the timer is not ended
         String value = playerSkinTextBox.getValue();
-        ResolvableProfile resolvableProfile;
+        GameProfile profile;
         if (value.isEmpty()) {
-            resolvableProfile = null;
+            profile = null;
         } else {
-            resolvableProfile = new ResolvableProfile(Optional.of(value),
-                    Optional.empty(),
-                    new PropertyMap());
+            profile = new GameProfile(null,playerSkinTextBox.getValue());
         }
-        getExampleStatue().setProfile(resolvableProfile);
+        getExampleStatue().verifyAndSetProfile(profile);
     }
 }

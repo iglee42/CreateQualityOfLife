@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.simibubi.create.AllPackets;
 import com.simibubi.create.content.logistics.filter.AttributeFilterScreen;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.gui.menu.GhostItemMenu;
@@ -76,7 +77,7 @@ public class QOLGhostIngredientHandler<T extends GhostItemMenu<?>>
 
 
 			// sync new filter contents with server
-			CatnipServices.NETWORK.sendToServer(new GhostItemSubmitPacket(stack, slotIndex));
+			AllPackets.getChannel().sendToServer(new GhostItemSubmitPacket(stack, slotIndex));
 		}
 	}
 }

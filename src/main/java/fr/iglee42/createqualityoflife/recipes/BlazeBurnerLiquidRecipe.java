@@ -1,23 +1,18 @@
 package fr.iglee42.createqualityoflife.recipes;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
-
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.registries.ModRecipeTypes;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Helper recipe type for displaying an item relationship in JEI
@@ -28,12 +23,11 @@ public class BlazeBurnerLiquidRecipe extends ProcessingRecipe<RecipeWrapper> {
 	static int counter = 0;
 	private final BlazeBurnerBlock.HeatLevel burnerLevel;
 
-	public static RecipeHolder<BlazeBurnerLiquidRecipe> create(Fluid from, BlazeBurnerBlock.HeatLevel to) {
+	public static BlazeBurnerLiquidRecipe create(Fluid from, BlazeBurnerBlock.HeatLevel to) {
 		ResourceLocation recipeId = CreateQOL.asResource("blaze_burner_liquid_" + counter++);
-		BlazeBurnerLiquidRecipe recipe = new ProcessingRecipeBuilder<>(p->new BlazeBurnerLiquidRecipe(p,to), recipeId)
-			.withFluidIngredients(FluidIngredient.fromFluid(from,1000))
-			.build();
-		return new RecipeHolder<>(recipeId, recipe);
+        return new ProcessingRecipeBuilder<>(p->new BlazeBurnerLiquidRecipe(p,to), recipeId)
+            .withFluidIngredients(FluidIngredient.fromFluid(from,1000))
+            .build();
 	}
 
 	public BlazeBurnerLiquidRecipe(ProcessingRecipeParams params) {

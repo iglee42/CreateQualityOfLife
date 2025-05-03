@@ -2,6 +2,7 @@ package fr.iglee42.createqualityoflife.mixins.liquidblazeburners;
 
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import fr.iglee42.createqualityoflife.CreateQOL;
@@ -10,16 +11,25 @@ import fr.iglee42.createqualityoflife.utils.IHaveTankMixin;
 import fr.iglee42.createqualityoflife.utils.liquidblazeburners.LiquidBlazeBurnerManager;
 import fr.iglee42.createqualityoflife.utils.liquidblazeburners.LiquidBlazeBurnerManager.LiquidEntry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityProvider;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -31,7 +41,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(value = BlazeBurnerBlockEntity.class,remap = false)
-public abstract class BlazeBurnerBlockEntityMixin implements IHaveTankMixin {
+public abstract class BlazeBurnerBlockEntityMixin extends SmartBlockEntity implements IHaveTankMixin {
+
+    public BlazeBurnerBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+    }
 
     @Shadow protected abstract void setBlockHeat(BlazeBurnerBlock.HeatLevel heat);
 
@@ -48,6 +62,7 @@ public abstract class BlazeBurnerBlockEntityMixin implements IHaveTankMixin {
     @Shadow public abstract void spawnParticleBurst(boolean soulFlame);
 
     @Shadow protected BlazeBurnerBlockEntity.FuelType activeFuel;
+
     @Unique
     protected SmartFluidTank createQOL$tank;
 
@@ -69,21 +84,21 @@ public abstract class BlazeBurnerBlockEntityMixin implements IHaveTankMixin {
 
 
     @Inject(method = "read", at = @At("TAIL"))
-    public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
+    public void createQOL$read(CompoundTag nbt,boolean clientPacket, CallbackInfo ci) {
         if (createQOL$tank != null && nbt.contains("tank")) {
-            createQOL$tank.readFromNBT(registries,nbt.getCompound("tank"));
+            createQOL$tank.readFromNBT(nbt.getCompound("tank"));
         }
     }
 
     @Inject(method = "write", at = @At("TAIL"))
-    public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
+    public void createQOL$write(CompoundTag nbt,boolean clientPacket, CallbackInfo ci) {
         if (createQOL$tank != null) {
-            nbt.put("tank", createQOL$tank.writeToNBT(registries,new CompoundTag()));
+            nbt.put("tank", createQOL$tank.writeToNBT(new CompoundTag()));
         }
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    public void tick(CallbackInfo info) {
+    public void createQOL$tick(CallbackInfo info) {
 
         if (!CreateQOL.isActivate(Features.LIQUID_BLAZE_BURNER)) return;
 
@@ -120,16 +135,16 @@ public abstract class BlazeBurnerBlockEntityMixin implements IHaveTankMixin {
     }
 
     @Inject(method = "tryUpdateFuel", at = @At("HEAD"), cancellable = true)
-    public void tryUpdateFuel(ItemStack itemStack, boolean forceOverflow, boolean simulate, CallbackInfoReturnable<Boolean> cir) {
+    private void createQOL$tryUpdateFuel(ItemStack itemStack, boolean forceOverflow, boolean simulate, CallbackInfoReturnable<Boolean> cir) {
 
         if (!CreateQOL.isActivate(Features.LIQUID_BLAZE_BURNER)) return;
 
         if (createQOL$tank == null)
             return;
 
-        if (itemStack.getCapability(Capabilities.FluidHandler.ITEM) == null) return;
+        if (itemStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM) == null || !itemStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) return;
 
-        IFluidHandler handler = itemStack.getCapability(Capabilities.FluidHandler.ITEM);
+        IFluidHandlerItem handler = itemStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve().orElse(null);
 
         if (handler == null) return;
 
@@ -172,5 +187,11 @@ public abstract class BlazeBurnerBlockEntityMixin implements IHaveTankMixin {
             level.playSound(null, worldPosition, SoundEvents.BLAZE_AMBIENT, SoundSource.BLOCKS,
                     .125f + level.random.nextFloat() * .125f, 1.15f - level.random.nextFloat() * .25f);
         cir.setReturnValue(true);
+    }
+
+    @Override
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if (isFluidHandlerCap(cap)) return LazyOptional.of(()->createQOL$tank).cast();
+        return super.getCapability(cap, side);
     }
 }

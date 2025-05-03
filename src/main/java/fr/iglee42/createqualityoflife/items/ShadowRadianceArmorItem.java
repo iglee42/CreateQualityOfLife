@@ -27,7 +27,7 @@ public class ShadowRadianceArmorItem extends BaseArmorItem {
     public void onArmorTick(ItemStack stack, Level level, Player player) {
         if (stack.getItem() instanceof ShadowRadianceArmorItem it){
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
-            if (!CreateQOLConfigs.common().armorEffects.get()) return;
+            if (!CreateQOLConfigs.server().armorEffects.get()) return;
             if (!NBTConstants.getOrDefault(stack,NBTConstants.NBT_EFFECTS,true)) return;
             switch (it.getType()){
                 case LEGGINGS -> player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,20,1,false,false));

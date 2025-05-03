@@ -123,8 +123,9 @@ public class FloatScrollInput extends AbstractSimiWidget {
 		return this;
 	}
 
+
 	@Override
-	public boolean mouseScrolled(double pMouseX, double pMouseY, double pScrollX, double pScrollY) {
+	public boolean mouseScrolled(double pMouseX, double pMouseY, double pScrollY) {
 		if (inverted)
 			pScrollY *= -1;
 
@@ -144,9 +145,9 @@ public class FloatScrollInput extends AbstractSimiWidget {
 		if (priorState != state) {
 			if (!soundPlayed)
 				Minecraft.getInstance()
-					.getSoundManager()
-					.play(SimpleSoundInstance.forUI(AllSoundEvents.SCROLL_VALUE.getMainEvent(),
-                            (float) (1.5f + 0.1f * (state - min) / (max - min))));
+						.getSoundManager()
+						.play(SimpleSoundInstance.forUI(AllSoundEvents.SCROLL_VALUE.getMainEvent(),
+								(float) (1.5f + 0.1f * (state - min) / (max - min))));
 			soundPlayed = true;
 			onChanged();
 		}
