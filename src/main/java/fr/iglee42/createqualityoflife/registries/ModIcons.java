@@ -43,7 +43,9 @@ public class ModIcons extends AllIcons {
 			I_LEFT_PANTS = next(),
 			I_RIGHT_PANTS = next(),
 			I_CAPE_OFF = next(),
-			I_CAPE_ON = next();
+			I_CAPE_ON = next(),
+			I_STATUE = next(),
+			I_DISCARD_HOVER = next();
 
 	public ModIcons(int x, int y) {
 		super(x,y);

@@ -14,14 +14,13 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class MainStatueTab extends AbstractStatueTab{
+public class MainStatueTab extends StatueTab {
     public static final int NAME_Y = 0;
     public static final int SHOW_NAME_Y = 22;
     public static final int SMALL_Y = 44;
@@ -76,7 +75,7 @@ public class MainStatueTab extends AbstractStatueTab{
         tipEnabled.set(1, CreateLang.translateDirect("gui.schematicannon.optionEnabled")
                .withStyle(ChatFormatting.DARK_GREEN));
 
-        showNameButton = new IconButton(x + BASE_X_OFFSET, y + SHOW_NAME_Y, AllIcons.I_PASSIVE);
+        showNameButton = new IconButton(x + BASE_OFFSET, y + SHOW_NAME_Y, AllIcons.I_PASSIVE);
         List<Component> finalTipEnabled1 = tipEnabled;
         showNameButton.withCallback(() -> {
             getExampleStatue().setCustomNameVisible(!getExampleStatue().isCustomNameVisible());
@@ -99,7 +98,7 @@ public class MainStatueTab extends AbstractStatueTab{
         tipEnabled.set(1, CreateLang.translateDirect("gui.schematicannon.optionEnabled")
                 .withStyle(ChatFormatting.DARK_GREEN));
 
-        smallButton = new IconButton(x + BASE_X_OFFSET, y + SMALL_Y, AllIcons.I_PRIORITY_LOW);
+        smallButton = new IconButton(x + BASE_OFFSET, y + SMALL_Y, AllIcons.I_PRIORITY_LOW);
         List<Component> finalTipEnabled = tipEnabled;
         smallButton.withCallback(() -> {
             getExampleStatue().setSmall(!getExampleStatue().isSmall());
@@ -121,7 +120,7 @@ public class MainStatueTab extends AbstractStatueTab{
         tipEnabled = new ArrayList<>(tip);
         tipEnabled.set(1, CreateLang.translateDirect("gui.schematicannon.optionEnabled")
                 .withStyle(ChatFormatting.DARK_GREEN));
-        slimArmsButton = new IconButton(x + BASE_X_OFFSET, y + SLIM_ARMS_Y, AllIcons.I_TOOL_MOVE_XZ);
+        slimArmsButton = new IconButton(x + BASE_OFFSET, y + SLIM_ARMS_Y, AllIcons.I_TOOL_MOVE_XZ);
         List<Component> finalTipEnabled2 = tipEnabled;
         slimArmsButton.withCallback(() -> {
             getExampleStatue().setSlimArms(!getExampleStatue().isSlimArms());
@@ -143,7 +142,7 @@ public class MainStatueTab extends AbstractStatueTab{
         tipEnabled = new ArrayList<>(tip);
         tipEnabled.set(1, CreateLang.translateDirect("gui.schematicannon.optionEnabled")
                 .withStyle(ChatFormatting.DARK_GREEN));
-        ngButton = new IconButton(x + BASE_X_OFFSET, y + NO_GRAVITY_Y, !getExampleStatue().isNoGravity() ? AllIcons.I_WHITELIST_OR : AllIcons.I_WHITELIST_NOT);
+        ngButton = new IconButton(x + BASE_OFFSET, y + NO_GRAVITY_Y, !getExampleStatue().isNoGravity() ? AllIcons.I_WHITELIST_OR : AllIcons.I_WHITELIST_NOT);
         List<Component> finalTipEnabled3 = tipEnabled;
         ngButton.withCallback(() -> {
             getExampleStatue().setNoGravity(!getExampleStatue().isNoGravity());
@@ -169,7 +168,7 @@ public class MainStatueTab extends AbstractStatueTab{
         tipEnabled = new ArrayList<>(tip);
         tipEnabled.set(1, CreateLang.translateDirect("gui.schematicannon.optionEnabled")
                 .withStyle(ChatFormatting.DARK_GREEN));
-        invulnerableButton = new IconButton(x + BASE_X_OFFSET, y + INVUlNERABLE_Y, getExampleStatue().isInvulnerable() ? ModIcons.I_LOCKED_STATUE : ModIcons.I_UNLOCKED_STATUE);
+        invulnerableButton = new IconButton(x + BASE_OFFSET, y + INVUlNERABLE_Y, getExampleStatue().isInvulnerable() ? ModIcons.I_LOCKED_STATUE : ModIcons.I_UNLOCKED_STATUE);
         List<Component> finalTipEnabled4 = tipEnabled;
         invulnerableButton.withCallback(() -> {
             getExampleStatue().setInvulnerable(!getExampleStatue().isInvulnerable());
@@ -200,7 +199,7 @@ public class MainStatueTab extends AbstractStatueTab{
         tipEnabled = new ArrayList<>(tip);
         tipEnabled.set(1, CreateLang.translateDirect("gui.schematicannon.optionEnabled")
                 .withStyle(ChatFormatting.DARK_GREEN));
-        invisibleButton = new IconButton(x + BASE_X_OFFSET, y + INVISIBLE_Y, !getExampleStatue().isInvisible() ? AllIcons.I_FX_SURFACE_ON : AllIcons.I_FX_SURFACE_OFF);
+        invisibleButton = new IconButton(x + BASE_OFFSET, y + INVISIBLE_Y, !getExampleStatue().isInvisible() ? AllIcons.I_FX_SURFACE_ON : AllIcons.I_FX_SURFACE_OFF);
         List<Component> finalTipEnabled5 = tipEnabled;
         invisibleButton.withCallback(() -> {
             getExampleStatue().setInvisible(!getExampleStatue().isInvisible());
@@ -219,7 +218,7 @@ public class MainStatueTab extends AbstractStatueTab{
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partial, int x, int y) {
-        ModGuiTextures.TEXT_BOX.render(graphics,x + BASE_X_OFFSET, y + NAME_Y);
+        ModGuiTextures.TEXT_BOX.render(graphics,x + BASE_OFFSET, y + NAME_Y);
     }
 
 

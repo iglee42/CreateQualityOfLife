@@ -29,6 +29,9 @@ public enum ModPackets {
     INPUTS_UPDATE(UpdateInputsPacket.class, UpdateInputsPacket::new, NetworkDirection.PLAY_TO_SERVER),
     CHANGE_ARMOR_TAG(ChangeArmorTagPacket .class, ChangeArmorTagPacket::new, NetworkDirection.PLAY_TO_SERVER),
     SAVE_STATUE_CONFIG(SaveStatueConfigPacket.class, SaveStatueConfigPacket::new, NetworkDirection.PLAY_TO_SERVER),
+    PUBLISH_ANIMATION(PublishAnimationPacket.class, PublishAnimationPacket.STREAM_CODEC),
+    DELETE_ANIMATION(DeleteAnimationPacket.class, DeleteAnimationPacket.STREAM_CODEC),
+    SYNC_ANIMATIONS(SyncAnimationsConfigPacket.class, SyncAnimationsConfigPacket.STREAM_CODEC),
 
     ;
     public static final ResourceLocation CHANNEL_NAME = CreateQOL.asResource("main");

@@ -1,10 +1,16 @@
 package fr.iglee42.createqualityoflife.statue;
 
 import com.mojang.authlib.GameProfile;
+import com.simibubi.create.AllItems;
 import com.simibubi.create.AllSoundEvents;
+import com.simibubi.create.content.equipment.wrench.WrenchItem;
+import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueHandler;
 import fr.iglee42.createqualityoflife.registries.ModEntityDataSerializers;
 import fr.iglee42.createqualityoflife.registries.ModEntityTypes;
 import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.statue.animation.StatueAnimation;
+import fr.iglee42.createqualityoflife.statue.animation.StatueAnimationFrame;
+import fr.iglee42.createqualityoflife.statue.animation.StatuePartTable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Rotations;
@@ -47,6 +53,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -77,6 +84,10 @@ public class Statue extends LivingEntity {
     public static final EntityDataAccessor<Optional<UUID>> DATA_OWNER = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.OPTIONAL_UUID);
     public static final EntityDataAccessor<Optional<GameProfile>> DATA_PROFILE = SynchedEntityData.defineId(Statue.class, ModEntityDataSerializers.PROFILE_ENTITY_DATA_SERIALIZER);
     public static final EntityDataAccessor<Float> DATA_SCALE = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.FLOAT);
+    public static final EntityDataAccessor<Optional<StatueAnimation>> DATA_ANIMATION = SynchedEntityData.defineId(Statue.class, ModEntityDataSerializers.ANIMATION_ENTITY_DATA_SERIALIZER.get());
+    public static final EntityDataAccessor<Integer> DATA_ANIMATION_PROGRESS = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_ANIMATION_REVERSING = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> DATA_ANIMATION_PLAYING = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.BOOLEAN);
     private static final Predicate<Entity> RIDABLE_MINECARTS = p_31582_ -> p_31582_ instanceof AbstractMinecart
             && ((AbstractMinecart)p_31582_).canBeRidden();
     private final NonNullList<ItemStack> handItems = NonNullList.withSize(2, ItemStack.EMPTY);
@@ -143,6 +154,10 @@ public class Statue extends LivingEntity {
         this.entityData.define(DATA_PROFILE, Optional.empty());
         this.entityData.define(DATA_OWNER, Optional.empty());
         this.entityData.define(DATA_SCALE, DEFAULT_SCALE);
+        this.entityData.define(DATA_ANIMATION, Optional.empty());
+        this.entityData.define(DATA_ANIMATION_PROGRESS, 0);
+        this.entityData.define(DATA_ANIMATION_REVERSING, false);
+        this.entityData.define(DATA_ANIMATION_PLAYING, false);
     }
 
     private static byte getAllModelParts() {
@@ -228,6 +243,12 @@ public class Statue extends LivingEntity {
 
         nbt.put("Rotations", getEntityRotations().save());
         nbt.putBoolean("Invulnerable",isInvulnerable());
+        this.entityData.get(DATA_ANIMATION).ifPresent(animation -> {
+            nbt.put("Animation", StatueAnimation.CODEC.encodeStart(NbtOps.INSTANCE, animation).getOrThrow());
+        });
+        nbt.putInt("AnimationProgress",getAnimationProgress());
+        nbt.putBoolean("AnimationReversing",isAnimationReversing());
+        nbt.putBoolean("AnimationPlaying",isAnimationPlaying());
     }
 
     @Override
@@ -277,7 +298,49 @@ public class Statue extends LivingEntity {
             this.entityRotationsO = this.getEntityRotations();
         }
         if (nbt.contains("Invulnerable"))setInvulnerable(nbt.getBoolean("Invulnerable"));
+        Optional<Dynamic<?>> animationOptional = Optional.empty();
+        if (nbt.contains("Animation", Tag.TAG_COMPOUND)) {
+            animationOptional = Optional.of(new Dynamic<>(NbtOps.INSTANCE, nbt.get("Animation")));
+        }
+        if (animationOptional.isEmpty()) setAnimation(null);
+        else animationOptional.map(StatueAnimation.CODEC::parse).flatMap(dataResult->dataResult.resultOrPartial((s)->{
+            System.out.println(s);
+        })).ifPresent(this::setAnimation);
+        setAnimationProgress(nbt.getInt("AnimationProgress"));
+        setAnimationReversing(nbt.getBoolean("AnimationReversing"));
+        setAnimationPlaying(nbt.getBoolean("AnimationPlaying"));
+    }
 
+    public void setAnimation(StatueAnimation statueAnimation) {
+        this.entityData.set(DATA_ANIMATION,Optional.ofNullable(statueAnimation));
+    }
+
+    public Optional<StatueAnimation> getAnimation(){
+        return this.entityData.get(DATA_ANIMATION);
+    }
+
+    public int getAnimationProgress(){
+        return this.entityData.get(DATA_ANIMATION_PROGRESS);
+    }
+
+    public void setAnimationProgress(int progress){
+        this.entityData.set(DATA_ANIMATION_PROGRESS,progress);
+    }
+
+    public boolean isAnimationReversing(){
+        return this.entityData.get(DATA_ANIMATION_REVERSING);
+    }
+
+    public void setAnimationReversing(boolean reversing){
+        this.entityData.set(DATA_ANIMATION_REVERSING,reversing);
+    }
+
+    public boolean isAnimationPlaying(){
+        return this.entityData.get(DATA_ANIMATION_PLAYING);
+    }
+
+    public void setAnimationPlaying(boolean playing){
+        this.entityData.set(DATA_ANIMATION_PLAYING,playing);
     }
 
     private void readPose(CompoundTag p_31658_) {
@@ -361,12 +424,21 @@ public class Statue extends LivingEntity {
         } else  if (isInvulnerable() && hasOwner() && !player.getUUID().equals(getOwner().get())) {
             return InteractionResult.FAIL;
         } else {
-            if (player.isCrouching()){
-                NetworkHooks.openScreen((ServerPlayer) player,new MenuProvider() {
-                    @Override
-                    public Component getDisplayName() {
-                        return Statue.this.getDisplayName();
-                    }
+            if (player.getItemInHand(hand).is(AllItems.WRENCH) && getAnimation().isPresent()){
+                if (player.isCrouching()){
+                    setAnimationProgress(0);
+                    setAnimationPlaying(true);
+                } else {
+                    setAnimationPlaying(!isAnimationPlaying());
+                }
+                ScrollValueHandler.wrenchCog.bump(30);
+            } else {
+                if (player.isCrouching()) {
+                    NetworkHooks.openScreen((ServerPlayer) player,new MenuProvider() {
+                        @Override
+                        public @NotNull Component getDisplayName() {
+                            return Statue.this.getDisplayName();
+                        }
 
                     @Override
                     public @org.jetbrains.annotations.Nullable AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
@@ -469,6 +541,17 @@ public class Statue extends LivingEntity {
                             Player player = (Player)entity;
                             if (!player.getAbilities().mayBuild) {
                                 return false;
+                            }
+                        }
+                        if (p_31579_.getEntity() instanceof Player player){
+                            if (player.getMainHandItem().is(AllItems.WRENCH)){
+                                this.playBrokenSound();
+                                if (!p_31579_.isCreativePlayer()){
+                                    this.brokenByPlayer(serverlevel, p_31579_);
+                                }
+                                this.showBreakingParticles();
+                                this.kill();
+                                return true;
                             }
                         }
 
@@ -629,6 +712,89 @@ public class Statue extends LivingEntity {
         if (!this.rightLegPose.equals(rotations5)) {
             this.setRightLegPose(rotations5);
         }
+
+        if (level().isClientSide) return;
+
+        tickAnimation();
+    }
+
+    public void tickAnimation(){
+        getAnimation().ifPresent(animation -> {
+            if (isAnimationPlaying()) {
+                if (getAnimationProgress() < animation.getDuration() && !isAnimationReversing()) {
+                    setAnimationProgress(getAnimationProgress() + 1);
+                } else if (getAnimationProgress() > 0 && isAnimationReversing()) {
+                    setAnimationProgress(getAnimationProgress() - 1);
+                } else if (getAnimationProgress() >= animation.getDuration()) {
+                    if (animation.canBeRevert())
+                        setAnimationReversing(true);
+                    else {
+                        setAnimationProgress(animation.isLooping() ? 0 : getAnimationProgress());
+                        setAnimationPlaying(animation.isLooping());
+                    }
+                } else if (getAnimationProgress() <= 0) {
+                    setAnimationReversing(false);
+                    setAnimationPlaying(animation.isLooping());
+                }
+                if (animation.getFrameForProgress(getAnimationProgress()) != null) {
+                    StatueAnimationFrame frame = animation.getFrameForProgress(getAnimationProgress());
+                    if (animation.getNextFrame(frame) == null) {
+                        setEntityRotations(frame.getGlobal().getXRot(), frame.getGlobal().getYRot(), frame.getGlobal().getZRot());
+                        setHeadPose(frame.getHead().toRotation());
+                        setLeftArmPose(frame.getLeftArm().toRotation());
+                        setRightArmPose(frame.getRightArm().toRotation());
+                        setLeftLegPose(frame.getLeftLeg().toRotation());
+                        setRightLegPose(frame.getRightLeg().toRotation());
+                    } else {
+                        StatueAnimationFrame nextFrame = animation.getNextFrame(frame);
+                        float t = (getAnimationProgress() - frame.getTick()) / (float) (animation.getNextFrame(frame).getTick() - frame.getTick());
+                        Rotations globalPart = frame.getGlobal().toRotation();
+                        Rotations nextGlobalPart = nextFrame.getGlobal().toRotation();
+                        setEntityRotations(Mth.lerp(t, globalPart.getX(), nextGlobalPart.getX()), Mth.lerp(t, globalPart.getY(), nextGlobalPart.getY()), Mth.lerp(t, globalPart.getZ(), nextGlobalPart.getZ()));
+
+                        Rotations headPart = frame.getHead().toRotation();
+                        Rotations nextHeadPart = nextFrame.getHead().toRotation();
+                        setHeadPose(new Rotations(
+                                Mth.lerp(t, headPart.getX(), nextHeadPart.getX()),
+                                Mth.lerp(t, headPart.getY(), nextHeadPart.getY()),
+                                Mth.lerp(t, headPart.getZ(), nextHeadPart.getZ())
+                        ));
+
+                        Rotations leftArmPart = frame.getLeftArm().toRotation();
+                        Rotations nextLeftArmPart = nextFrame.getLeftArm().toRotation();
+                        setLeftArmPose(new Rotations(
+                                Mth.lerp(t, leftArmPart.getX(), nextLeftArmPart.getX()),
+                                Mth.lerp(t, leftArmPart.getY(), nextLeftArmPart.getY()),
+                                Mth.lerp(t, leftArmPart.getZ(), nextLeftArmPart.getZ())
+                        ));
+
+                        Rotations rightArmPart = frame.getRightArm().toRotation();
+                        Rotations nextRightArmPart = nextFrame.getRightArm().toRotation();
+                        setRightArmPose(new Rotations(
+                                Mth.lerp(t, rightArmPart.getX(), nextRightArmPart.getX()),
+                                Mth.lerp(t, rightArmPart.getY(), nextRightArmPart.getY()),
+                                Mth.lerp(t, rightArmPart.getZ(), nextRightArmPart.getZ())
+                        ));
+
+                        Rotations leftLegPart = frame.getLeftLeg().toRotation();
+                        Rotations nextLeftLegPart = nextFrame.getLeftLeg().toRotation();
+                        setLeftLegPose(new Rotations(
+                                Mth.lerp(t, leftLegPart.getX(), nextLeftLegPart.getX()),
+                                Mth.lerp(t, leftLegPart.getY(), nextLeftLegPart.getY()),
+                                Mth.lerp(t, leftLegPart.getZ(), nextLeftLegPart.getZ())
+                        ));
+
+                        Rotations rightLegPart = frame.getRightLeg().toRotation();
+                        Rotations nextRightLegPart = nextFrame.getRightLeg().toRotation();
+                        setRightLegPose(new Rotations(
+                                Mth.lerp(t, rightLegPart.getX(), nextRightLegPart.getX()),
+                                Mth.lerp(t, rightLegPart.getY(), nextRightLegPart.getY()),
+                                Mth.lerp(t, rightLegPart.getZ(), nextRightLegPart.getZ())
+                        ));
+                    }
+                }
+            }
+        });
     }
 
     @Override

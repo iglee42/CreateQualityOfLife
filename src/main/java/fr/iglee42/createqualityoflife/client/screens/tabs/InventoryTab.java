@@ -9,7 +9,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 
 import java.util.function.Consumer;
 
-public class InventoryTab extends AbstractStatueTab{
+public class InventoryTab extends StatueTab {
     public InventoryTab(int index, ConfigureStatueScreen parent) {
         super(index, AllItems.CARDBOARD_SWORD.asItem(), parent,"statue.inventoryTab");
     }

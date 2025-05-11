@@ -10,12 +10,12 @@ import net.minecraft.world.item.Item;
 
 import java.util.function.Consumer;
 
-public abstract class AbstractStatueTab {
+public abstract class StatueTab {
 
-    public static final int BASE_X_OFFSET = 2;
-    public static final int TEXT_BOX_X_OFFSET = BASE_X_OFFSET + 2;
-    public static final int TEXT_BOX_WIDTH = 121 - BASE_X_OFFSET;
-    public static final int LABEL_X_OFFSET = BASE_X_OFFSET * 2 + 20;
+    public static final int BASE_OFFSET = 2;
+    public static final int TEXT_BOX_X_OFFSET = BASE_OFFSET + 2;
+    public static final int TEXT_BOX_WIDTH = 121 - BASE_OFFSET;
+    public static final int LABEL_X_OFFSET = BASE_OFFSET * 2 + 20;
     public static final int TEXT_Y_OFFSET = 5;
     public static final int INDICATOR_Y_OFFSET = 18;
     public static final int LABEL_Y_OFFSET = TEXT_Y_OFFSET;
@@ -26,7 +26,7 @@ public abstract class AbstractStatueTab {
     private final ConfigureStatueScreen parent;
     private final String key;
 
-    public AbstractStatueTab(int index, Item item, ConfigureStatueScreen parent, String key) {
+    public StatueTab(int index, Item item, ConfigureStatueScreen parent, String key) {
         this.index = index;
         this.item = item;
         this.parent = parent;

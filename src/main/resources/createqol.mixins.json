@@ -18,7 +18,9 @@
     "MysteriousItemConversionCategoryMixin",
     "NetheriteDivingHandlerMixin",
     "ScheduleItemMixin",
-    "liquidblazeburners.BlazeBurnerBlockEntityMixin"
+    "StockTickerInteractionHandlerMixin",
+    "liquidblazeburners.BlazeBurnerBlockEntityMixin",
+    "liquidblazeburners.SmartBlockEntityMixin"
   ],
   "client": [
     "BacktankArmorLayerMixin",

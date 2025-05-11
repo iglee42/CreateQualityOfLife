@@ -4,7 +4,6 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.properties.PropertyMap;
 import com.simibubi.create.AllItems;
-import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.utility.CreateLang;
@@ -23,6 +22,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -33,7 +33,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class SkinStatueTab extends AbstractStatueTab{
+public class SkinStatueTab extends StatueTab {
     public static final int SKIN_Y = -12;
 
     private EditBox playerSkinTextBox;
@@ -58,11 +58,12 @@ public class SkinStatueTab extends AbstractStatueTab{
         playerSkinTextBox.setResponder(s->{
             lastInputSkinBox = 100;
         });
+        playerSkinTextBox.setMaxLength(16);
         playerSkinTextBox.setBordered(false);
         playerSkinTextBox.setTextColor(0xffffff);
         playerSkinTextBox.setFocused(false);
         playerSkinTextBox.setHint(Component.literal("Player Name"));
-        playerSkinTextBox.setFilter(s->!s.contains(" "));
+        playerSkinTextBox.setFilter(StringUtil::isValidPlayerName);
 
         partsButtons = new ArrayList<>();
         partsLabels = new ArrayList<>();
@@ -87,7 +88,7 @@ public class SkinStatueTab extends AbstractStatueTab{
         tipEnabled.set(1, CreateLang.translateDirect("gui.schematicannon.optionEnabled")
                 .withStyle(ChatFormatting.DARK_GREEN));
 
-        IconButton btn = new IconButton(x + BASE_X_OFFSET, y, icon);
+        IconButton btn = new IconButton(x + BASE_OFFSET, y, icon);
         if (part == PlayerModelPart.CAPE) {
             btn.setIcon(isPartActive.test(getExampleStatue()) ? ModIcons.I_CAPE_ON : ModIcons.I_CAPE_OFF);
             capeButton = btn;
@@ -137,7 +138,7 @@ public class SkinStatueTab extends AbstractStatueTab{
             getParent().sendUpdatePacket();
         }
 
-        ModGuiTextures.TEXT_BOX.render(graphics,x + BASE_X_OFFSET, y + SKIN_Y);
+        ModGuiTextures.TEXT_BOX.render(graphics,x + BASE_OFFSET, y + SKIN_Y);
     }
 
 

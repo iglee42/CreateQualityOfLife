@@ -13,7 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.core.Rotations;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
@@ -22,7 +21,7 @@ import java.util.function.Consumer;
 
 import static net.minecraft.client.gui.screens.Screen.isPaste;
 
-public class StatueTransformTab extends AbstractStatueTab{
+public class StatueTransformTab extends StatueTab {
 
     private Label positionLabel;
     private EditBox posX;
@@ -63,7 +62,7 @@ public class StatueTransformTab extends AbstractStatueTab{
         AllGuiTextures.TRAIN_PROMPT_L.render(graphics, (int) (inputX + progress * scale.getWidth() - 3),scale.getY());
         AllGuiTextures.TRAIN_PROMPT_R.render(graphics, (int) (inputX + progress * scale.getWidth()),scale.getY());
 
-        ModGuiTextures.COORDINATES.render(graphics,x + BASE_X_OFFSET, y);
+        ModGuiTextures.COORDINATES.render(graphics,x + BASE_OFFSET, y);
 
     }
 
@@ -150,7 +149,7 @@ public class StatueTransformTab extends AbstractStatueTab{
         posX = new EditBox(Minecraft.getInstance().font,x + TEXT_BOX_X_OFFSET, y+TEXT_Y_OFFSET, 34, 18, CommonComponents.EMPTY);
         posY = new EditBox(Minecraft.getInstance().font,x + TEXT_BOX_X_OFFSET + 40, y+TEXT_Y_OFFSET, 34, 18,CommonComponents.EMPTY);
         posZ = new EditBox(Minecraft.getInstance().font,x + TEXT_BOX_X_OFFSET + 80, y+TEXT_Y_OFFSET, 34, 18,CommonComponents.EMPTY);
-        positionLabel = new Label(x + 2*BASE_X_OFFSET, y-2*LABEL_Y_OFFSET,CreateQOLLang.translateDirect("statue.position"));
+        positionLabel = new Label(x + 2* BASE_OFFSET, y-2*LABEL_Y_OFFSET,CreateQOLLang.translateDirect("statue.position"));
         positionLabel.text = CreateQOLLang.translateDirect("statue.position");
 
 
@@ -177,10 +176,10 @@ public class StatueTransformTab extends AbstractStatueTab{
         posY.setValue(""+getParent().getMenu().contentHolder.position().y);
         posZ.setValue(""+getParent().getMenu().contentHolder.position().z);
 
-        scaleLabel = new Label(x + 2*BASE_X_OFFSET, y+44 - 3*LABEL_Y_OFFSET,CreateQOLLang.translateDirect("statue.scale"));
+        scaleLabel = new Label(x + 2* BASE_OFFSET, y+44 - 3*LABEL_Y_OFFSET,CreateQOLLang.translateDirect("statue.scale"));
         scaleLabel.text = CreateQOLLang.translateDirect("statue.scale");
 
-        scale = new FloatScrollInput(x + 2*BASE_X_OFFSET, y + 44,TEXT_BOX_WIDTH,18);
+        scale = new FloatScrollInput(x + 2* BASE_OFFSET, y + 44,TEXT_BOX_WIDTH,18);
         scale.withRange(0.1f,10);
         scale.withStepFunction(ctx->ctx.control ? 1 : ctx.shift ? 0.5f : 0.1f);
         scale.calling(i->{
@@ -191,9 +190,9 @@ public class StatueTransformTab extends AbstractStatueTab{
         scale.setState(getExampleStatue().getEntityScale());
         scale.titled(Component.literal("Scale: " + String.format("%.2f",scale.getState())));
 
-        rotationLabel = new Label(x + 2*BASE_X_OFFSET, y+88 - LABEL_Y_OFFSET*3,CreateQOLLang.translateDirect("statue.rotation.cape"));
+        rotationLabel = new Label(x + 2* BASE_OFFSET, y+88 - LABEL_Y_OFFSET*3,CreateQOLLang.translateDirect("statue.rotation.cape"));
         rotationLabel.text = CreateQOLLang.translateDirect("statue.rotation.cape");
-        rotationX = new ScrollInput(x + 2*BASE_X_OFFSET, y + 88,TEXT_BOX_WIDTH,18);
+        rotationX = new ScrollInput(x + 2* BASE_OFFSET, y + 88,TEXT_BOX_WIDTH,18);
         rotationX.withRange(-180,180);
         rotationX.withStepFunction(ctx->ctx.control ? 90 : ctx.shift ? 45 : 1);
         rotationX.calling(i->{
@@ -204,7 +203,7 @@ public class StatueTransformTab extends AbstractStatueTab{
         rotationX.setState((int) getExampleStatue().getEntityRotations().getX());
         rotationX.titled(Component.literal("X: " + rotationX.getState() + "°"));
 
-        rotationY = new ScrollInput(x + 2*BASE_X_OFFSET, y + 110,TEXT_BOX_WIDTH,18);
+        rotationY = new ScrollInput(x + 2* BASE_OFFSET, y + 110,TEXT_BOX_WIDTH,18);
         rotationY.withRange(-180,180);
         rotationY.withStepFunction(ctx->ctx.control ? 90 : ctx.shift ? 45 : 1);
         rotationY.calling(i->{
@@ -215,7 +214,7 @@ public class StatueTransformTab extends AbstractStatueTab{
         rotationY.setState((int) getExampleStatue().getEntityRotations().getY());
         rotationY.titled(Component.literal("Y: " + rotationY.getState() + "°"));
 
-        rotationZ = new ScrollInput(x + 2*BASE_X_OFFSET, y + 132,TEXT_BOX_WIDTH,18);
+        rotationZ = new ScrollInput(x + 2* BASE_OFFSET, y + 132,TEXT_BOX_WIDTH,18);
         rotationZ.withRange(-180,180);
         rotationZ.withStepFunction(ctx->ctx.control ? 90 : ctx.shift ? 45 : 1);
         rotationZ.calling(i->{
