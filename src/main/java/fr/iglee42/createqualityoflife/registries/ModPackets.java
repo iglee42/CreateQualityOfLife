@@ -18,6 +18,7 @@ public enum ModPackets implements BasePacketPayload.PacketTypeProvider {
     CONFIGURE_DISPLAY_BOARD(ConfigureDisplayBoardPacket.class,ConfigureDisplayBoardPacket.STREAM_CODEC),
     TOGGLE_FANS(ToggleFansPacket.class,ToggleFansPacket.STREAM_CODEC),
     TOGGLE_HOVER(ToggleHoverPacket .class, ToggleHoverPacket.STREAM_CODEC),
+    TOGGLE_ELYTRA(ToggleElytraPacket .class, ToggleElytraPacket.STREAM_CODEC),
     INPUTS_UPDATE(UpdateInputsPacket.class, UpdateInputsPacket.STREAM_CODEC),
     CHANGE_ARMOR_COMPONENT(ChangeArmorComponentPacket.class, ChangeArmorComponentPacket.STREAM_CODEC),
     SAVE_STATUE_CONFIG(SaveStatueConfigPacket.class, SaveStatueConfigPacket.STREAM_CODEC),

@@ -15,6 +15,7 @@ public class ShadowRadianceBacktankBE extends BacktankBlockEntity {
     private boolean propeller;
     private boolean fans;
     private boolean hover;
+    private boolean elytra;
 
     public ShadowRadianceBacktankBE(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -32,12 +33,17 @@ public class ShadowRadianceBacktankBE extends BacktankBlockEntity {
         this.hover = hover;
     }
 
+    public void setElytra(boolean elytra) {
+        this.elytra = elytra;
+    }
+
     @Override
     protected void write(CompoundTag compound, HolderLookup.Provider provider, boolean clientPacket) {
         super.write(compound,provider, clientPacket);
         compound.putBoolean("propeller",propeller);
         compound.putBoolean("fans",fans);
         compound.putBoolean("hover",hover);
+        compound.putBoolean("elytra",elytra);
     }
 
     @Override
@@ -46,6 +52,7 @@ public class ShadowRadianceBacktankBE extends BacktankBlockEntity {
         propeller = compound.getBoolean("propeller");
         fans = compound.getBoolean("fans");
         hover = compound.getBoolean("hover");
+        elytra = compound.getBoolean("elytra");
     }
 
     public boolean hasPropeller() {
@@ -58,6 +65,10 @@ public class ShadowRadianceBacktankBE extends BacktankBlockEntity {
 
     public boolean isHover() {
         return hover;
+    }
+
+    public boolean hasElytra(){
+        return elytra;
     }
 
     @Override
@@ -74,6 +85,7 @@ public class ShadowRadianceBacktankBE extends BacktankBlockEntity {
         propeller = componentInput.getOrDefault(ModDataComponents.BACKTANK_PROPELLERS,false);
         fans = componentInput.getOrDefault(ModDataComponents.BACKTANK_FANS,true);
         hover = componentInput.getOrDefault(ModDataComponents.BACKTANK_HOVER,false);
+        elytra = componentInput.getOrDefault(ModDataComponents.BACKTANK_ELYTRA,false);
     }
 
     @Override
@@ -82,5 +94,6 @@ public class ShadowRadianceBacktankBE extends BacktankBlockEntity {
         components.set(ModDataComponents.BACKTANK_PROPELLERS,propeller);
         components.set(ModDataComponents.BACKTANK_FANS,fans);
         components.set(ModDataComponents.BACKTANK_HOVER,hover);
+        components.set(ModDataComponents.BACKTANK_ELYTRA,elytra);
     }
 }

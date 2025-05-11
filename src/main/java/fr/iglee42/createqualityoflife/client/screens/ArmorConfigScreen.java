@@ -119,6 +119,13 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 				entry.setEditable(CreateQOLConfigs.server().propellersAllowed.get() && CreateQOLConfigs.server().hoverAllowed.get());
 			}
 
+			if (entry.getComponent().equals(ModDataComponents.BACKTANK_ELYTRA_STATE)){
+				if (!CreateQOLConfigs.server().elytraAllowed.get()&& entry.isEditable()){
+					((BooleanEntry)entry).setValue(false);
+				}
+				entry.setEditable(CreateQOLConfigs.server().elytraAllowed.get());
+			}
+
 			if (entry.getComponent().equals(ModDataComponents.ARMOR_EFFECT)){
 				if (!CreateQOLConfigs.server().armorEffects.get()&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
@@ -227,6 +234,11 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 							"Activate the propeller on the backtank"));
 					list.children().add(new BooleanEntry("Enable Hover", armor.getOrDefault(ModDataComponents.BACKTANK_HOVER,false),ModDataComponents.BACKTANK_HOVER,
 							"Activate the hover mode"));
+				}
+
+				if (ShadowRadianceChestplate.hasElytra(armor)){
+					list.children().add(new BooleanEntry("Enable Elytra", armor.getOrDefault(ModDataComponents.BACKTANK_ELYTRA_STATE,false),ModDataComponents.BACKTANK_ELYTRA_STATE,
+							"Activate the elytra on the backtank"));
 				}
 			}
 			case BOOTS -> {

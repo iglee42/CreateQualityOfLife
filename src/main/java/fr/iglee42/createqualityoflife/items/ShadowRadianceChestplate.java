@@ -15,11 +15,13 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,6 +37,20 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
     public ShadowRadianceChestplate(Holder<ArmorMaterial> material, Properties properties, ResourceLocation textureLoc, Supplier<BacktankBlockItem> placeable) {
         super(material, properties, textureLoc, placeable);
     }
+
+
+    public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
+        return hasElytra(stack)
+                && isElytraEnable(stack)
+                && (!hasPropeller(stack) || !isFansEnable(stack))
+                && !BacktankUtil.getAllWithAir(entity).isEmpty()
+                && CreateQOLConfigs.server().elytraAllowed.get();
+    }
+
+    public boolean elytraFlightTick(ItemStack stack, LivingEntity entity, int flightTicks) {
+        return true;
+    }
+
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean offHand) {
         super.inventoryTick(stack, level, entity, slot, offHand);
@@ -44,6 +60,14 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
             if (stack.getOrDefault(ModDataComponents.ARMOR_EFFECT,true) && CreateQOLConfigs.server().armorEffects.get())
                 player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 1, false, false));
+            if (player.isFallFlying() && isElytraEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && CreateQOLConfigs.server().elytraAllowed.get() && CreateQOLConfigs.server().elytraBoostAllowed.get() && level.getGameTime() % 10==0 && CommonKeysHandler.isHoldingUp(player)){
+                Vec3 vec31 =  player.getLookAngle();
+                double d0 = 1.5F;
+                double d1 = 0.1;
+                Vec3 vec32 = player.getDeltaMovement();
+                player.setDeltaMovement(vec32.add(vec31.x * d1 + (vec31.x * (double)d0 - vec32.x) * (double)0.5F, vec31.y * d1 + (vec31.y * (double)d0 - vec32.y) * (double)0.5F, vec31.z * d1 + (vec31.z * (double)d0 - vec32.z) * (double)0.5F));
+                BacktankUtil.consumeAir(player,stack,1);
+            }
             if (player.isCreative() || player.isSpectator()) return;
             if (isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack) && CreateQOLConfigs.server().propellersAllowed.get()) {
                 boolean hover = isHoverEnable(stack) && CreateQOLConfigs.server().hoverAllowed.get();
@@ -113,22 +137,40 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
-        components.add(Component.literal("Air : ").withStyle(ChatFormatting.GOLD).append(Component.literal(String.valueOf(BacktankUtil.getAir(stack))).withStyle(ChatFormatting.YELLOW)).append(Component.literal("/"+BacktankUtil.maxAir(stack)).withStyle(ChatFormatting.GOLD)));
-        components.add(Component.literal("Propeller : ").withStyle(ChatFormatting.GOLD).append(Component.literal(
-                !CreateQOLConfigs.server().propellersAllowed.get() ? "Disabled" :
-                        (hasPropeller(stack) ? "Installed"  : "Not installed"))
+        components.add(Component.literal("Air : ")
+                .withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(String.valueOf(BacktankUtil.getAir(stack)))
+                        .withStyle(ChatFormatting.YELLOW))
+                .append(Component.literal("/"+BacktankUtil.maxAir(stack))
+                        .withStyle(ChatFormatting.GOLD)));
+        components.add(Component.literal("Propeller : ")
+                .withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(
+                chooseState(CreateQOLConfigs.server().propellersAllowed.get() ,hasPropeller(stack) ,true,false,false))
                 .withStyle(!CreateQOLConfigs.server().propellersAllowed.get()? ChatFormatting.RED : ChatFormatting.YELLOW)));
         if (hasPropeller(stack) && CreateQOLConfigs.server().propellersAllowed.get()) {
             components.add(Component.empty());
-            components.add(Component.literal("Fans : ").withStyle(ChatFormatting.GOLD).append(Component.literal(chooseText(isFansEnable(stack))).withStyle(ChatFormatting.YELLOW)));
-            components.add(Component.literal("Hover : ").withStyle(ChatFormatting.GOLD).append(Component.literal(!CreateQOLConfigs.server().hoverAllowed.get() ? "Disabled" :chooseText(isHoverEnable(stack))).withStyle(!CreateQOLConfigs.server().hoverAllowed.get()? ChatFormatting.RED :ChatFormatting.YELLOW)));
+            components.add(Component.literal("Fans : ")
+                    .withStyle(ChatFormatting.GOLD)
+                    .append(Component.literal(chooseState(true,true,isFansEnable(stack),false,true))
+                            .withStyle(ChatFormatting.YELLOW)));
+            components.add(Component.literal("Hover : ")
+                    .withStyle(ChatFormatting.GOLD)
+                    .append(Component.literal(chooseState(CreateQOLConfigs.server().hoverAllowed.get() ,true,isHoverEnable(stack),false,true))
+                            .withStyle(!CreateQOLConfigs.server().hoverAllowed.get()? ChatFormatting.RED :ChatFormatting.YELLOW)));
         }
+        components.add(Component.literal("Elytra : ")
+                .withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(chooseState(CreateQOLConfigs.server().elytraAllowed.get() ,hasElytra(stack) ,isElytraEnable(stack), true,false))
+                .withStyle(!CreateQOLConfigs.server().elytraAllowed.get()? ChatFormatting.RED : ChatFormatting.YELLOW)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 
-    private static String chooseText(boolean enabled){
-        return enabled ? "Enable" : "Disable";
+    private static String chooseState(boolean config,boolean installed, boolean active, boolean activeReplaceInstall, boolean activeOnly){
+        if (activeOnly) return  !config ? "Disabled By Config" : (active ? "Enable" : "Disable");
+        return !config ? "Disabled By Config" : (installed ? (activeReplaceInstall ? (active ? "Enable" : "Disable") : "Installed") : "Not Installed");
     }
+
 
     public static void toggleFans(ItemStack chestplate,Player p) {
         if (!CreateQOLConfigs.server().propellersAllowed.get()){
@@ -137,7 +179,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
         }
         chestplate.set(ModDataComponents.BACKTANK_FANS, chestplate.has(ModDataComponents.BACKTANK_FANS) ? !chestplate.get(ModDataComponents.BACKTANK_FANS) : true);
         boolean fans = isFansEnable(chestplate);
-        p.displayClientMessage(Component.literal("Fans : ").append(Component.literal(chooseText(fans)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+        p.displayClientMessage(Component.literal("Fans : ").append(Component.literal(chooseState(true,true,fans,false,true)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
     public static void toggleHover(ItemStack chestplate,Player p) {
         if (!CreateQOLConfigs.server().propellersAllowed.get()){
@@ -150,10 +192,27 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
         }
         chestplate.set(ModDataComponents.BACKTANK_HOVER, chestplate.has(ModDataComponents.BACKTANK_HOVER) ? !chestplate.get(ModDataComponents.BACKTANK_HOVER) : false);
         boolean hover = isHoverEnable(chestplate);
-        p.displayClientMessage(Component.literal("Hover : ").append(Component.literal(chooseText(hover)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+        p.displayClientMessage(Component.literal("Hover : ").append(Component.literal(chooseState(true,true,hover,false,true)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+    }
+
+    public static void toggleElytra(ItemStack chestplate,Player p) {
+        if (!CreateQOLConfigs.server().elytraAllowed.get()){
+            p.displayClientMessage(Component.literal("Elytra are disabled by the config").withStyle(ChatFormatting.RED),true);
+            return;
+        }
+        chestplate.set(ModDataComponents.BACKTANK_ELYTRA_STATE, chestplate.has(ModDataComponents.BACKTANK_ELYTRA_STATE) ? !chestplate.get(ModDataComponents.BACKTANK_ELYTRA_STATE) : false);
+        boolean elytra = isElytraEnable(chestplate);
+        p.displayClientMessage(Component.literal("Elytra : ").append(Component.literal(chooseState(true,true,elytra,false,true)).withStyle(elytra ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
     public static boolean hasPropeller(ItemStack chestplate){
         return chestplate.has(ModDataComponents.BACKTANK_PROPELLERS) && Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_PROPELLERS));
+    }
+
+    public static boolean hasElytra(ItemStack chestplate){
+        return chestplate.has(ModDataComponents.BACKTANK_ELYTRA) && Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_ELYTRA));
+    }
+    public static boolean isElytraEnable(ItemStack chestplate){
+        return !chestplate.has(ModDataComponents.BACKTANK_ELYTRA_STATE) ? !isFansEnable(chestplate) : Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_ELYTRA_STATE));
     }
     public static boolean isFansEnable(ItemStack chestplate){
         return !chestplate.has(ModDataComponents.BACKTANK_FANS) || Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_FANS));

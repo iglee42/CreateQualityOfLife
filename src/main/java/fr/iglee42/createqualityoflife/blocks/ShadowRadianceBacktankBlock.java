@@ -21,6 +21,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -62,22 +63,36 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
             ((ShadowRadianceBacktankBE)be).setPropeller(ShadowRadianceChestplate.hasPropeller(stack));
             ((ShadowRadianceBacktankBE)be).setFans(ShadowRadianceChestplate.isFansEnable(stack));
             ((ShadowRadianceBacktankBE)be).setHover(ShadowRadianceChestplate.isHoverEnable(stack));
+            ((ShadowRadianceBacktankBE)be).setElytra(ShadowRadianceChestplate.hasElytra(stack));
         });
     }
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (AllItems.PROPELLER.is(player.getMainHandItem().getItem()) && !level.isClientSide) {
-            if (level.getBlockEntity(pos) instanceof ShadowRadianceBacktankBE be && !be.hasPropeller()){
-                if (!CreateQOLConfigs.server().propellersAllowed.get()){
-                    player.displayClientMessage(Component.literal("Propellers are disabled by the config").withStyle(ChatFormatting.RED),true);
-                    level.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
-                    return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        if (!level.isClientSide) {
+            if (level.getBlockEntity(pos) instanceof ShadowRadianceBacktankBE be){
+                if (!be.hasPropeller() && AllItems.PROPELLER.is(player.getMainHandItem().getItem())) {
+                    if (!CreateQOLConfigs.server().propellersAllowed.get()) {
+                        player.displayClientMessage(Component.literal("Propellers are disabled by the config").withStyle(ChatFormatting.RED), true);
+                        level.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
+                        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                    }
+                    be.setPropeller(true);
+                    player.getMainHandItem().shrink(1);
+                    level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
+                    return ItemInteractionResult.CONSUME;
                 }
-                be.setPropeller(true);
-                player.getMainHandItem().shrink(1);
-                level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
-                return ItemInteractionResult.CONSUME;
+                if (!be.hasElytra() && player.getMainHandItem().is(Items.ELYTRA)) {
+                    if (!CreateQOLConfigs.server().elytraAllowed.get()) {
+                        player.displayClientMessage(Component.literal("Elytra are disabled by the config").withStyle(ChatFormatting.RED), true);
+                        level.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
+                        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                    }
+                    be.setElytra(true);
+                    player.getMainHandItem().shrink(1);
+                    level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
+                    return ItemInteractionResult.CONSUME;
+                }
             }
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
@@ -96,9 +111,11 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
             boolean propeller = be.hasPropeller();
             boolean fans = be.isFans();
             boolean hover = be.isHover();
+            boolean elytra = be.hasElytra();
             stack.set(ModDataComponents.BACKTANK_PROPELLERS,propeller);
             stack.set(ModDataComponents.BACKTANK_FANS,fans);
             stack.set(ModDataComponents.BACKTANK_HOVER,hover);
+            stack.set(ModDataComponents.BACKTANK_ELYTRA,elytra);
         });
         return stack;
     }

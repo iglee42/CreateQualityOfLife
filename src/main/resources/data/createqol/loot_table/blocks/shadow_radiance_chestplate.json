@@ -19,7 +19,8 @@
                 "create:banktank_air",
                 "createqol:propellers",
                 "createqol:fans",
-                "createqol:hover"
+                "createqol:hover",
+                "createqol:elytra"
               ]
             }
           ],
