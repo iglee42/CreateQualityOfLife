@@ -17,6 +17,7 @@
     "MysteriousItemConversionCategoryMixin",
     "NetheriteDivingHandlerMixin",
     "ScheduleItemMixin",
+    "StockTickerInteractionHandlerMixin",
     "liquidblazeburners.BlazeBurnerBlockEntityMixin",
     "liquidblazeburners.SmartBlockEntityMixin"
   ],

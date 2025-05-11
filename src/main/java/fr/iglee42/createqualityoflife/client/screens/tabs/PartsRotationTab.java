@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class PartsRotationTab extends AbstractStatueTab{
+public class PartsRotationTab extends StatueTab {
 
     private final PlayerModelPart part1;
     private final @Nullable PlayerModelPart part2;
@@ -113,23 +113,23 @@ public class PartsRotationTab extends AbstractStatueTab{
         if (part1 != null && part2 == null) y =  y + (158-y) / 2;
         inputs = new HashMap<>();
         if (part1 != null){
-            part1Label = new Label(x + 2*BASE_X_OFFSET, y-LABEL_Y_OFFSET*2,CreateQOLLang.translateDirect("statue.rotation." + part1.name().toLowerCase()));
+            part1Label = new Label(x + 2* BASE_OFFSET, y-LABEL_Y_OFFSET*2,CreateQOLLang.translateDirect("statue.rotation." + part1.name().toLowerCase()));
             part1Label.text = CreateQOLLang.translateDirect("statue.rotation." + part1.name().toLowerCase());
-            part1X = new ScrollInput(x + 2*BASE_X_OFFSET, y,TEXT_BOX_WIDTH,18);
+            part1X = new ScrollInput(x + 2* BASE_OFFSET, y,TEXT_BOX_WIDTH,18);
             part1X.calling(i->{
                 setRotation(part1,'x',i);
                 inputs.put(part1X,i);
                 part1X.titled(Component.literal("X: " + i + "°"));
                 getParent().sendUpdatePacket();
             });
-            part1Y = new ScrollInput(x + 2*BASE_X_OFFSET, y + 22,TEXT_BOX_WIDTH,18);
+            part1Y = new ScrollInput(x + 2* BASE_OFFSET, y + 22,TEXT_BOX_WIDTH,18);
             part1Y.calling(i->{
                 setRotation(part1,'y',i);
                 inputs.put(part1Y,i);
                 part1Y.titled(Component.literal("Y: " + i + "°"));
                 getParent().sendUpdatePacket();
             });
-            part1Z = new ScrollInput(x + 2*BASE_X_OFFSET, y + 44,TEXT_BOX_WIDTH,18);
+            part1Z = new ScrollInput(x + 2* BASE_OFFSET, y + 44,TEXT_BOX_WIDTH,18);
             part1Z.calling(i->{
                 setRotation(part1,'z',i);
                 inputs.put(part1Z,i);
@@ -139,16 +139,16 @@ public class PartsRotationTab extends AbstractStatueTab{
             setupConfigForInputs(getRotationsForPart(part1),part1X,part1Y,part1Z);
         }
         if (part2 != null){
-            part2Label = new Label(x + 2*BASE_X_OFFSET, y+88 - LABEL_Y_OFFSET*2,CreateQOLLang.translateDirect("statue.rotation." + part2.name().toLowerCase()));
+            part2Label = new Label(x + 2* BASE_OFFSET, y+88 - LABEL_Y_OFFSET*2,CreateQOLLang.translateDirect("statue.rotation." + part2.name().toLowerCase()));
             part2Label.text = CreateQOLLang.translateDirect("statue.rotation." + part2.name().toLowerCase());
-            part2X = new ScrollInput(x + 2*BASE_X_OFFSET, y + 88,TEXT_BOX_WIDTH,18);
+            part2X = new ScrollInput(x + 2* BASE_OFFSET, y + 88,TEXT_BOX_WIDTH,18);
             part2X.calling(i->{
                 setRotation(part2,'x',i);
                 inputs.put(part2X,i);
                 part2X.titled(Component.literal("X: " + i + "°"));
                 getParent().sendUpdatePacket();
             });
-            part2Y = new ScrollInput(x + 2*BASE_X_OFFSET, y + 110,TEXT_BOX_WIDTH,18);
+            part2Y = new ScrollInput(x + 2* BASE_OFFSET, y + 110,TEXT_BOX_WIDTH,18);
             part2Y.calling(i->{
                 setRotation(part2,'y',i);
                 inputs.put(part2Y,i);
@@ -156,7 +156,7 @@ public class PartsRotationTab extends AbstractStatueTab{
                 getParent().sendUpdatePacket();
 
             });
-            part2Z = new ScrollInput(x + 2*BASE_X_OFFSET, y + 132,TEXT_BOX_WIDTH,18);
+            part2Z = new ScrollInput(x + 2* BASE_OFFSET, y + 132,TEXT_BOX_WIDTH,18);
             part2Z.calling(i->{
                 setRotation(part2,'z',i);
                 inputs.put(part2Z,i);

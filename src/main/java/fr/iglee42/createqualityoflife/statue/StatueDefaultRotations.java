@@ -8,6 +8,8 @@ import net.minecraft.network.chat.MutableComponent;
 
 public enum StatueDefaultRotations {
     DEFAULT(new int[]{0,0,0}, new int[]{0,0,0}, new int[]{-10,0,-10},new int[]{-15,0,10}, new int[]{-1,0,-1},new int[]{1,0,1},"Minecraft"),
+    T_POSE(new int[]{0,0,0}, new int[]{0,0,0}, new int[]{0,0,-90},new int[]{0,0,90}, new int[]{0,0,0},new int[]{0,0,0},"Minecraft"),
+    A_POSE(new int[]{0,0,0}, new int[]{0,0,0}, new int[]{0,0,-35},new int[]{0,0,35}, new int[]{0,0,0},new int[]{0,0,0},"Minecraft"),
     ATTENTION(new int[]{0, 0, 0}, new int[]{0, 0, 0}, new int[]{0, 0, 0}, new int[]{0, 0, 0}, new int[]{0, 0, 0}, new int[]{0, 0, 0}),
     WALKING(new int[]{0, 0, 0}, new int[]{0, 0, 0}, new int[]{-20, 0, -10}, new int[]{20, 0, 10}, new int[]{20, 0, 0}, new int[]{-20, 0, 0}),
     RUNNING(new int[]{0, 0, 0}, new int[]{0, 0, 0}, new int[]{40, 0, -10}, new int[]{-40, 0, 10}, new int[]{-40, 0, 0}, new int[]{40, 0, 0}),

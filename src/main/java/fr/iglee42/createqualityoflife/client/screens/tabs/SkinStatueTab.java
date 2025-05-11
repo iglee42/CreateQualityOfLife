@@ -2,7 +2,6 @@ package fr.iglee42.createqualityoflife.client.screens.tabs;
 
 import com.mojang.authlib.properties.PropertyMap;
 import com.simibubi.create.AllItems;
-import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.utility.CreateLang;
@@ -10,7 +9,6 @@ import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
 import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
 import fr.iglee42.createqualityoflife.registries.ModIcons;
-import fr.iglee42.createqualityoflife.registries.ModItems;
 import fr.iglee42.createqualityoflife.statue.Statue;
 import fr.iglee42.createqualityoflife.statue.StatueRenderer;
 import net.createmod.catnip.gui.element.ScreenElement;
@@ -22,9 +20,8 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.player.PlayerModelPart;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ResolvableProfile;
 
 import java.util.ArrayList;
@@ -33,7 +30,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class SkinStatueTab extends AbstractStatueTab{
+public class SkinStatueTab extends StatueTab {
     public static final int SKIN_Y = -12;
 
     private EditBox playerSkinTextBox;
@@ -58,11 +55,12 @@ public class SkinStatueTab extends AbstractStatueTab{
         playerSkinTextBox.setResponder(s->{
             lastInputSkinBox = 100;
         });
+        playerSkinTextBox.setMaxLength(16);
         playerSkinTextBox.setBordered(false);
         playerSkinTextBox.setTextColor(0xffffff);
         playerSkinTextBox.setFocused(false);
         playerSkinTextBox.setHint(Component.literal("Player Name"));
-        playerSkinTextBox.setFilter(s->!s.contains(" "));
+        playerSkinTextBox.setFilter(StringUtil::isValidPlayerName);
 
         partsButtons = new ArrayList<>();
         partsLabels = new ArrayList<>();
@@ -87,7 +85,7 @@ public class SkinStatueTab extends AbstractStatueTab{
         tipEnabled.set(1, CreateLang.translateDirect("gui.schematicannon.optionEnabled")
                 .withStyle(ChatFormatting.DARK_GREEN));
 
-        IconButton btn = new IconButton(x + BASE_X_OFFSET, y, icon);
+        IconButton btn = new IconButton(x + BASE_OFFSET, y, icon);
         if (part == PlayerModelPart.CAPE) {
             btn.setIcon(isPartActive.test(getExampleStatue()) ? ModIcons.I_CAPE_ON : ModIcons.I_CAPE_OFF);
             capeButton = btn;
@@ -139,7 +137,7 @@ public class SkinStatueTab extends AbstractStatueTab{
             getParent().sendUpdatePacket();
         }
 
-        ModGuiTextures.TEXT_BOX.render(graphics,x + BASE_X_OFFSET, y + SKIN_Y);
+        ModGuiTextures.TEXT_BOX.render(graphics,x + BASE_OFFSET, y + SKIN_Y);
     }
 
 

@@ -33,12 +33,14 @@ import java.util.List;
 public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMenu> {
 
     private Statue exampleStatue;
-    private List<AbstractStatueTab> tabs;
+    private List<StatueTab> tabs;
     private int currentTab;
     private int oCurrentTab = -1;
     private IconButton possesButton;
     private IconButton confirmButton;
+    private IconButton hideButton;
     private boolean hideBackground = false;
+    private boolean wasAnimationPlaying;
 
     public ConfigureStatueScreen(StatueMenu container, Inventory inv, Component title) {
         super(container, inv, title);
@@ -52,13 +54,16 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
         setWindowOffset(0,0);
         super.init();
 
+        wasAnimationPlaying = menu.contentHolder.isAnimationPlaying();
+        menu.contentHolder.setAnimationPlaying(false);
+
         confirmButton = new IconButton(leftPos + bg.width - 25, topPos + bg.height - 24, AllIcons.I_CONFIRM);
         confirmButton.withCallback(() -> {
             onClose();
             minecraft.player.closeContainer();
         });
 
-        IconButton hideButton = new IconButton(leftPos + bg.width - 55, topPos + bg.height - 24, AllIcons.I_MTD_SCAN);
+        hideButton = new IconButton(leftPos + bg.width - 55, topPos + bg.height - 24, AllIcons.I_MTD_SCAN);
         hideButton.withCallback(() -> {
             setHideBackground(!isHideBackground());
             int currentTab = this.currentTab;
@@ -85,8 +90,10 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
         tabs.add(new PartsRotationTab(tabs.size(), ModItems.SHADOW_RADIANCE_LEGGINGS.asItem(), this, PlayerModelPart.LEFT_PANTS_LEG,PlayerModelPart.RIGHT_PANTS_LEG));
         tabs.add(new InventoryTab(tabs.size(), this));
         tabs.add(new RotationPresetsTab(tabs.size(), this));
+        tabs.add(new AnimationTab(tabs.size(),this));
+        tabs.add(new PublishedAnimationsTab(tabs.size(),this));
         tabs.forEach(t->{
-            ItemButton btn = addRenderableWidget(new ItemButton(leftPos + imageWidth +2,topPos + 15+ t.getIndex() * 20, t.getItem().getDefaultInstance(),b->currentTab = t.getIndex()));
+            ItemButton btn = addRenderableWidget(new ItemButton(leftPos + imageWidth +2,topPos + 10+ t.getIndex() * 20, t.getItem().getDefaultInstance(),b->currentTab = t.getIndex()));
             if (btn.getIcon().is(Items.PLAYER_HEAD)){
                 ItemStack stack = Items.PLAYER_HEAD.getDefaultInstance();
                 stack.set(DataComponents.PROFILE,new ResolvableProfile(Minecraft.getInstance().getGameProfile()));
@@ -129,12 +136,16 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
         for (int slot = 0; slot < getMenu().ghostInventory.getSlots(); slot++) {
             getExampleStatue().setItemSlot(EquipmentSlot.values()[slot],getMenu().ghostInventory.getStackInSlot(slot));
         }
+        if (!hideBackground){
+            graphics.drawString(Minecraft.getInstance().font,"Customize your Statue",getGuiLeft() + 5, getGuiTop() + 3,0xffffff);
+        }
 
         int offsetX = 10;
         int offsetY = 30;
         int size = 160;
         if (oCurrentTab != currentTab){
-            tabs.stream().filter(t->t.getIndex() == oCurrentTab).findFirst().ifPresent(t->{
+            tabs.stream().filter(t->t.getIndex() == oCurrentTab).forEach(t->{
+                t.forEachWidgets(this::removeWidget);
                 t.forEachWidgets(this::removeWidget);
                 t.onQuit();
             });
@@ -155,9 +166,9 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
                 .forEach(btn->btn.visible = !hideBackground);
         confirmButton.visible = !hideBackground;
         String toDraw = exampleStatue.hasOwner() ? "Owner: " + Minecraft.getInstance().level.getPlayerByUUID(exampleStatue.getOwner().get()).getName().getString() : "No Owner";
-        if (!hideBackground)graphics.drawString(font,toDraw, leftPos + 5, topPos + ModGuiTextures.STATUE.height - 22, 0xffffff);
+        if (!hideBackground)graphics.drawString(font,toDraw, leftPos + 5, topPos + ModGuiTextures.STATUE.height - 21, 0xffffff);
 
-        if (!CreateQOLLang.translateDirect(tabs.get(currentTab).getKey()+".desc").getString().isEmpty()) {
+        if (!CreateQOLLang.translateDirect(tabs.get(currentTab).getKey()+".desc").getString().isEmpty() && !hideBackground) {
             boolean infoHovered = mouseX >= getGuiLeft() + imageWidth - 18 && mouseX <= getGuiLeft() + imageWidth - 2 && mouseY >= getGuiTop() && mouseY <= getGuiTop() + 16;
             if (infoHovered)
                 ModGuiTextures.INFO_ICON_HOVER.render(graphics, getGuiLeft() + imageWidth - 18, getGuiTop());
@@ -172,7 +183,8 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
 
 
     }
-    
+
+
 
     public Statue getExampleStatue() {
         return exampleStatue;
@@ -180,7 +192,8 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
 
     @Override
     public void onClose() {
-        tabs.stream().filter(t->t.getIndex() == currentTab).findFirst().ifPresent(AbstractStatueTab::onQuit);
+        tabs.stream().filter(t->t.getIndex() == currentTab).forEach(StatueTab::onQuit);
+        getExampleStatue().setAnimationPlaying(wasAnimationPlaying);
         sendUpdatePacket();
         super.onClose();
     }
@@ -214,6 +227,7 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
 
     @Override
     public void resize(Minecraft p_96575_, int p_96576_, int p_96577_) {
+        tabs.stream().filter(t->t.getIndex() == currentTab).findFirst().ifPresent(t->t.forEachWidgets(this::removeWidget));
         super.resize(p_96575_, p_96576_, p_96577_);
         tabs.stream().filter(t->t.getIndex() == currentTab).findFirst().ifPresent(t->t.forEachWidgets(this::addRenderableWidget));
     }
