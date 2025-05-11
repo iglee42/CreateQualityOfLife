@@ -9,6 +9,8 @@ public class CQOLServer extends ConfigBase {
     public ConfigBool helmetHaveGoggles = b(true,"helmetHaveGoggles",Comments.goggles);
     public ConfigBool propellersAllowed = b(true,"propellersAllowed",Comments.propellers);
     public ConfigBool hoverAllowed = b(true,"hoverAllowed",Comments.hover);
+    public ConfigBool elytraAllowed = b(true,"elytraAllowed",Comments.elytra);
+    public ConfigBool elytraBoostAllowed = b(true,"elytraBoostAllowed",Comments.elytraBoost);
     public ConfigBool armorEffects = b(true,"armorEffectsEnable",Comments.effects);
     public ConfigBool bootsDiving = b(true,"bootsDiving",Comments.diving,Comments.explainDiving);
     public ConfigBool bootsLavaWalking = b(true,"bootsLavaWalking",Comments.lavaWalking);
@@ -26,6 +28,8 @@ public class CQOLServer extends ConfigBase {
         static String goggles = "Define if the shadow radiance helmet has goggles";
         static String propellers = "Define if players can add propellers to their shadow radiance chestplate";
         static String hover = "Define if players can activate the hover mode with their shadow radiance chestplate";
+        static String elytra = "Define if players can add elytra to their shadow radiance chestplate";
+        static String elytraBoost = "Define if players can use air in the chestplate to boost the elytra";
         static String effects = "Define if the shadow radiance armor pieces give potion effects";
         static String diving = "Define if the diving effect is applied on the shadow radiance boots";
         static String explainDiving = "Diving makes players descend quicker in liquids ";

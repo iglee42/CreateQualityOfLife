@@ -72,6 +72,7 @@ public class CreateQOLClient {
     public static void registerKeys(RegisterKeyMappingsEvent event){
         event.register(KeyBindManager.FANS_KEY);
         event.register(KeyBindManager.HOVER_KEY);
+        event.register(KeyBindManager.ELYTRA_KEY);
         event.register(KeyBindManager.OPEN_ARMOR_CONFIG);
     }
 

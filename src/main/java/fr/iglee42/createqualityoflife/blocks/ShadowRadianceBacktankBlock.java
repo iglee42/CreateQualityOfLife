@@ -26,6 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -66,22 +67,36 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
             return;
         withBlockEntityDo(worldIn, pos, be -> {
             ((ShadowRadianceBacktankBE)be).setPropeller(ShadowRadianceChestplate.hasPropeller(stack));
+            ((ShadowRadianceBacktankBE)be).setElytra(ShadowRadianceChestplate.hasElytra(stack));
         });
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (AllItems.PROPELLER.is(player.getMainHandItem().getItem()) && !world.isClientSide) {
-            if (world.getBlockEntity(pos) instanceof ShadowRadianceBacktankBE be && !   be.hasPropeller()){
-                if (!CreateQOLConfigs.server().propellersAllowed.get()){
-                    player.displayClientMessage(Component.literal("Propellers are disabled by the config").withStyle(ChatFormatting.RED),true);
-                    world.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
-                    return InteractionResult.PASS;
+    protected InteractionResult use(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (!level.isClientSide) {
+            if (level.getBlockEntity(pos) instanceof ShadowRadianceBacktankBE be){
+                if (!be.hasPropeller() && AllItems.PROPELLER.is(player.getMainHandItem().getItem())) {
+                    if (!CreateQOLConfigs.server().propellersAllowed.get()) {
+                        player.displayClientMessage(Component.literal("Propellers are disabled by the config").withStyle(ChatFormatting.RED), true);
+                        level.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
+                        return InteractionResult.PASS;
+                    }
+                    be.setPropeller(true);
+                    player.getMainHandItem().shrink(1);
+                    level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
+                    return InteractionResult.CONSUME;
                 }
-                be.setPropeller(true);
-                player.getMainHandItem().shrink(1);
-                world.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
-                return InteractionResult.CONSUME;
+                if (!be.hasElytra() && player.getMainHandItem().is(Items.ELYTRA)) {
+                    if (!CreateQOLConfigs.server().elytraAllowed.get()) {
+                        player.displayClientMessage(Component.literal("Elytra are disabled by the config").withStyle(ChatFormatting.RED), true);
+                        level.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
+                        return InteractionResult.PASS;
+                    }
+                    be.setElytra(true);
+                    player.getMainHandItem().shrink(1);
+                    level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
+                    return InteractionResult.CONSUME;
+                }
             }
         }
         return super.use(state, world, pos, player, hand, hit);
@@ -99,6 +114,7 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
             ShadowRadianceBacktankBE be = (ShadowRadianceBacktankBE) obe;
             boolean propeller = be.hasPropeller();
             stack.getOrCreateTag().putBoolean(NBTConstants.NBT_PROPELLERS,propeller);
+            stack.getOrCreateTag().putBoolean(NBTConstants.NBT_ELYTRA,be.hasElytra());
         });
         return stack;
     }

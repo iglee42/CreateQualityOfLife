@@ -26,6 +26,7 @@ public enum ModPackets {
     CONFIGURE_DISPLAY_BOARD(ConfigureDisplayBoardPacket.class,ConfigureDisplayBoardPacket::new,NetworkDirection.PLAY_TO_SERVER),
     TOGGLE_FANS(ToggleFansPacket.class,ToggleFansPacket::new,NetworkDirection.PLAY_TO_SERVER),
     TOGGLE_HOVER(ToggleHoverPacket .class, ToggleHoverPacket::new, NetworkDirection.PLAY_TO_SERVER),
+    TOGGLE_ELYTRA(ToggleElytraPacket .class, ToggleElytraPacket.STREAM_CODEC),
     INPUTS_UPDATE(UpdateInputsPacket.class, UpdateInputsPacket::new, NetworkDirection.PLAY_TO_SERVER),
     CHANGE_ARMOR_TAG(ChangeArmorTagPacket .class, ChangeArmorTagPacket::new, NetworkDirection.PLAY_TO_SERVER),
     SAVE_STATUE_CONFIG(SaveStatueConfigPacket.class, SaveStatueConfigPacket::new, NetworkDirection.PLAY_TO_SERVER),

@@ -2,6 +2,7 @@ package fr.iglee42.createqualityoflife.utils;
 
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.packets.ToggleElytraPacket;
 import fr.iglee42.createqualityoflife.packets.ToggleFansPacket;
 import fr.iglee42.createqualityoflife.packets.ToggleHoverPacket;
 import fr.iglee42.createqualityoflife.packets.UpdateInputsPacket;
@@ -36,6 +37,7 @@ public class KeyBindManager {
 
     public static KeyMapping FANS_KEY = new KeyMapping("keybind.createqol.shadow_radiance_chestplate_fans", GLFW.GLFW_KEY_Y, "keybind.createqol.category");
     public static KeyMapping HOVER_KEY = new KeyMapping("keybind.createqol.shadow_radiance_chestplate_hover", GLFW.GLFW_KEY_H, "keybind.createqol.category");
+    public static KeyMapping ELYTRA_KEY = new KeyMapping("keybind.createqol.shadow_radiance_chestplate_elytra", GLFW.GLFW_KEY_I, "keybind.createqol.category");
     public static KeyMapping OPEN_ARMOR_CONFIG = new KeyMapping("keybind.createqol.open_armor_config", GLFW.GLFW_KEY_C, "keybind.createqol.category");
 
 
@@ -89,6 +91,9 @@ public class KeyBindManager {
             }
             if (HOVER_KEY.consumeClick()) {
                 ModPackets.getChannel().sendToServer(new ToggleHoverPacket());
+            }
+            if (ELYTRA_KEY.consumeClick()) {
+                PacketDistributor.sendToServer(ToggleElytraPacket.INSTANCE);
             }
             tickEnd();
         }
