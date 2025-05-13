@@ -69,7 +69,7 @@ public class CQOLStress extends ConfigBase {
 	public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> setImpact(double value) {
 		return builder -> {
 			assertFromCreateQOL(builder);
-			ResourceLocation id = Create.asResource(builder.getName());
+			ResourceLocation id = CreateQOL.asResource(builder.getName());
 			DEFAULT_IMPACTS.put(id, value);
 			return builder;
 		};
@@ -86,7 +86,7 @@ public class CQOLStress extends ConfigBase {
 
 	private static void assertFromCreateQOL(BlockBuilder<?, ?> builder) {
 		if (!builder.getOwner().getModid().equals(CreateQOL.MODID)) {
-			throw new IllegalStateException("Non-Create QOL blocks cannot be added to Create Casing's config.");
+			throw new IllegalStateException("Non-Create QOL blocks cannot be added to Create QOL's config.");
 		}
 	}
 
