@@ -127,6 +127,8 @@ public class ModCreativeModeTabs {
 				exclusions.add(entry.asItem());
 			}
 
+			exclusions.addAll(PackageStyles.RARE_BOXES);
+
 			for (ItemEntry<TagDependentIngredientItem> entry : tagDependentExclusions) {
 				TagDependentIngredientItem item = entry.get();
 				if (item.shouldHide()) {

@@ -1,5 +1,9 @@
 package fr.iglee42.createqualityoflife.registries;
 
+import com.simibubi.create.AllItems;
+import com.simibubi.create.AllPartialModels;
+import com.simibubi.create.Create;
+import com.simibubi.create.content.logistics.box.PackageStyles;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +24,19 @@ public class ModPartialModels {
         return PartialModel.of(CreateQOL.asResource("block/"+path));
     }
 
-    public static void init(){}
+    public static void init(){
+        registerPackageStyle(ModItems.FURTI);
+        registerPackageStyle(ModItems.DELTA);
+        registerPackageStyle(ModItems.IGLEE);
+    }
+
+    private static void registerPackageStyle(PackageStyles.PackageStyle style){
+        ResourceLocation key = CreateQOL.asResource(style.getItemId().getPath());
+        PartialModel model = PartialModel.of(CreateQOL.asResource("item/" + key.getPath()));
+        AllPartialModels.PACKAGES.put(key, model);
+        if (!style.rare())
+            AllPartialModels.PACKAGES_TO_HIDE_AS.add(model);
+        AllPartialModels.PACKAGE_RIGGING.put(key, PartialModel.of(style.getRiggingModel()));
+    }
 
 }
