@@ -1,9 +1,12 @@
 package fr.iglee42.createqualityoflife.registries;
 
+import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.content.equipment.armor.BaseArmorItem;
 import com.simibubi.create.content.legacy.NoGravMagicalDohickyItem;
+import com.simibubi.create.content.logistics.box.PackageItem;
+import com.simibubi.create.content.logistics.box.PackageStyles;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -15,7 +18,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Rarity;
 
-import static com.simibubi.create.AllTags.forgeItemTag;
+import static com.simibubi.create.AllTags.commonItemTag;
 import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
 
 public class ModItems {
@@ -78,5 +81,19 @@ public class ModItems {
             .register();
 
 
-    public static void register(){}
+    public static final PackageStyles.PackageStyle FURTI = new PackageStyles.PackageStyle("rare_furti", 12, 10, 21f, true);
+    public static final ItemEntry<PackageItem> FURTI_PACKAGE = createRarePackage(FURTI);
+    public static final PackageStyles.PackageStyle DELTA = new PackageStyles.PackageStyle("rare_delta", 12, 10, 21f, true);
+    public static final ItemEntry<PackageItem> DELTA_PACKAGE = createRarePackage(DELTA);
+    public static final PackageStyles.PackageStyle IGLEE = new PackageStyles.PackageStyle("rare_iglee", 12, 10, 21f, true);
+    public static final ItemEntry<PackageItem> IGLEE_PACKAGE = createRarePackage(IGLEE);
+    public static void register(){
+    }
+
+
+    private static ItemEntry<PackageItem> createRarePackage(PackageStyles.PackageStyle style){
+        return REGISTRATE.item(style.getItemId()
+                        .getPath(), p -> new PackageItem(p, style))
+                .properties(p -> p.stacksTo(1)).register();
+    }
 }
