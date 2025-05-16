@@ -1,5 +1,7 @@
 package fr.iglee42.createqualityoflife.items;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
@@ -15,6 +17,9 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +27,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -37,6 +43,18 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
         super(material, properties, textureLoc, placeable);
     }
 
+
+    @Override
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot p_40390_) {
+        if (p_40390_.equals(EquipmentSlot.CHEST)){
+            ImmutableMultimap.Builder<Attribute, AttributeModifier> attributes = ImmutableMultimap.builder();
+            attributes.putAll(super.getDefaultAttributeModifiers(p_40390_));
+            attributes.put(ForgeMod.BLOCK_REACH.get(), new AttributeModifier("shadow_radiance_"+p_40390_.name().toLowerCase()+"_block",1, AttributeModifier.Operation.ADDITION));
+            attributes.put(ForgeMod.ENTITY_REACH.get(), new AttributeModifier("shadow_radiance_"+p_40390_.name().toLowerCase()+"_entity",1, AttributeModifier.Operation.ADDITION));
+            return attributes.build();
+        }
+        return super.getDefaultAttributeModifiers(p_40390_);
+    }
 
     public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
         return hasElytra(stack)
@@ -65,7 +83,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
                 double d1 = 0.1;
                 Vec3 vec32 = player.getDeltaMovement();
                 player.setDeltaMovement(vec32.add(vec31.x * d1 + (vec31.x * (double)d0 - vec32.x) * (double)0.5F, vec31.y * d1 + (vec31.y * (double)d0 - vec32.y) * (double)0.5F, vec31.z * d1 + (vec31.z * (double)d0 - vec32.z) * (double)0.5F));
-                BacktankUtil.consumeAir(player,stack,1);
+                if (!player.isCreative())BacktankUtil.consumeAir(player,stack,1);
             }
             if (player.isCreative() || player.isSpectator()) return;
             if (isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack) && CreateQOLConfigs.server().propellersAllowed.get()) {
