@@ -251,7 +251,8 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
     public List<Rect2i> getExtraAreas() {
         if (!hideBackground)return super.getExtraAreas();
         int x = leftPos + 20 + 67 + 110;
-        return List.of(new Rect2i(x, topPos + 30,imageWidth - 67,160));
+        return List.of(new Rect2i(x, topPos + 30,imageWidth - 67,160),
+                new Rect2i(leftPos + imageWidth +2,topPos + 10,20,(tabs.size()-1) * 20));
     }
 
 

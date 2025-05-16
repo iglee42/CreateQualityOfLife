@@ -15,11 +15,15 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
@@ -38,6 +42,13 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
         super(material, properties, textureLoc, placeable);
     }
 
+    @Override
+    public ItemAttributeModifiers getDefaultAttributeModifiers() {
+        ResourceLocation resourcelocation = ResourceLocation.withDefaultNamespace("armor." + type.getName());
+        return super.getDefaultAttributeModifiers()
+                .withModifierAdded(Attributes.BLOCK_INTERACTION_RANGE,new AttributeModifier(resourcelocation,1, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(type.getSlot()))
+                .withModifierAdded(Attributes.ENTITY_INTERACTION_RANGE,new AttributeModifier(resourcelocation,1, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(type.getSlot()));
+    }
 
     public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
         return hasElytra(stack)
@@ -66,7 +77,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
                 double d1 = 0.1;
                 Vec3 vec32 = player.getDeltaMovement();
                 player.setDeltaMovement(vec32.add(vec31.x * d1 + (vec31.x * (double)d0 - vec32.x) * (double)0.5F, vec31.y * d1 + (vec31.y * (double)d0 - vec32.y) * (double)0.5F, vec31.z * d1 + (vec31.z * (double)d0 - vec32.z) * (double)0.5F));
-                BacktankUtil.consumeAir(player,stack,1);
+                if (!player.isCreative())BacktankUtil.consumeAir(player,stack,1);
             }
             if (player.isCreative() || player.isSpectator()) return;
             if (isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack) && CreateQOLConfigs.server().propellersAllowed.get()) {

@@ -12,6 +12,7 @@ import fr.iglee42.createqualityoflife.registries.ModItems;
 import fr.iglee42.createqualityoflife.statue.animation.StatueAnimation;
 import fr.iglee42.createqualityoflife.statue.animation.StatueAnimationFrame;
 import fr.iglee42.createqualityoflife.statue.animation.StatuePartTable;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Rotations;
@@ -446,6 +447,16 @@ public class Statue extends LivingEntity {
         } else  if (isInvulnerable() && hasOwner() && !player.getUUID().equals(getOwner().get())) {
             return InteractionResult.FAIL;
         } else {
+            if (player.getItemInHand(hand).is(Items.BREAD) && player.getItemInHand(hand).getHoverName().getString().equals("OuiOuiBaguetteUwU")){
+                if (getSkin() == 0) {
+                    setSkin(1);
+                    return InteractionResult.SUCCESS;
+                }
+                else if (getSkin() == 1){
+                    setSkin(0);
+                    return InteractionResult.SUCCESS;
+                }
+            }
             if (player.getItemInHand(hand).is(AllItems.WRENCH) && getAnimation().isPresent()){
                 if (player.isCrouching()){
                     setAnimationProgress(0);
@@ -700,8 +711,6 @@ public class Statue extends LivingEntity {
     @Override
     public void tick() {
         super.tick();
-        if (getCustomName() != null && getCustomName().getString().equals("Delta")) setSkin(1);
-        else if (getSkin() != 0 && getSkin() != 2) setSkin(0);
         Rotations rotations = this.entityData.get(DATA_HEAD_POSE);
         if (!this.headPose.equals(rotations)) {
             this.setHeadPose(rotations);
