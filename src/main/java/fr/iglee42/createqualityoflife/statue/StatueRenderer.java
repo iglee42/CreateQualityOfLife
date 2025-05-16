@@ -29,6 +29,8 @@ import java.util.Optional;
 @OnlyIn(Dist.CLIENT)
 public class StatueRenderer extends LivingEntityRenderer<Statue, StatueModel> {
     public static final ResourceLocation STATUE_LOCATION = CreateQOL.asResource("textures/entity/statue.png");
+    public static final ResourceLocation STATUE_SPECIAL_1 = CreateQOL.asResource("textures/entity/statue_delta.png");
+    public static final ResourceLocation STATUE_SPECIAL_2 = CreateQOL.asResource("textures/entity/statue_sus.png");
 
     public StatueRenderer(EntityRendererProvider.Context context) {
         super(context, new StatueModel(context.bakeLayer(CreateQOLClient.STATUE), false), 0.0F);
@@ -72,6 +74,8 @@ public class StatueRenderer extends LivingEntityRenderer<Statue, StatueModel> {
 
     @Override
     public ResourceLocation getTextureLocation(Statue entity) {
+        if (entity.getSkin() == 1) return STATUE_SPECIAL_1;
+        if (entity.getSkin() == 2) return STATUE_SPECIAL_2;
         return getPlayerProfileTexture(entity).map(PlayerSkin::texture).orElse(STATUE_LOCATION);
     }
 
