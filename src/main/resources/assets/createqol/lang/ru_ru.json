@@ -16,10 +16,10 @@
   "item.createqol.shadow_radiance_leggings": "Поножи из теневого сияния",
   "item.createqol.shadow_radiance_boots": "Ботинки из теневого сияния",
 
-  "create.options.createqol.inventory_linker.label": "Режим привязки инвентаря",
-  "create.options.createqol.inventory_linker.inventory": "Инвентарь",
-  "create.options.createqol.inventory_linker.armor": "Броня",
-  "create.options.createqol.inventory_linker.off_hand": "Вторая рука",
+  "create.options.inventory_linker.label": "Режим привязки инвентаря",
+  "create.options.inventory_linker.inventory": "Инвентарь",
+  "create.options.inventory_linker.armor": "Броня",
+  "create.options.inventory_linker.off_hand": "Вторая рука",
 
   "tooltip.createqol.player_paper.linked_player": "Привязанный игрок: %s",
   "tooltip.createqol.player_paper.no_linked_player": "Игрок не привязан",

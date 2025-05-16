@@ -11,6 +11,7 @@ public enum Features {
     DISPLAY_BOARD_MODIFICATION("display_board_modification", CreateQOLFeaturesConfig.displayBoardModification),
     LIQUID_BLAZE_BURNER("liquid_blaze_burner", CreateQOLFeaturesConfig.blazeBurnerUseLiquids),
     STATUE("statue", CreateQOLFeaturesConfig.statue),
+    TRASH_CAN("trash_can", CreateQOLFeaturesConfig.trashCan),
     ;
 
 

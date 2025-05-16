@@ -9,6 +9,8 @@
   "block.createqol.loom_saw": "Loom Saw",
   "block.createqol.mason_saw": "Mason Saw",
   "block.createqol.tinkering_saw": "Tinkering Saw",
+  "block.createqol.trash_can": "Trash Can",
+  "block.createqol.brass_trash_can": "Brass Trash Can",
 
 
   "item.createqol.player_paper": "Player Paper",
@@ -20,10 +22,13 @@
   "item.createqol.shadow_radiance_boots": "Shadow Radiance Boots",
   "item.createqol.statue": "Statue",
 
-  "create.options.createqol.inventory_linker.label": "Inventory Link Mode",
-  "create.options.createqol.inventory_linker.inventory": "Inventory",
-  "create.options.createqol.inventory_linker.armor": "Armor",
-  "create.options.createqol.inventory_linker.off_hand": "Off Hand",
+  "create.options.inventory_linker.label": "Inventory Link Mode",
+  "create.options.inventory_linker.inventory": "Inventory",
+  "create.options.inventory_linker.armor": "Armor",
+  "create.options.inventory_linker.off_hand": "Off Hand",
+  "create.options.brass_trash_can.label": "Trash Can Mode (only in Contraptions)",
+  "create.options.brass_trash_can.void": "Void All",
+  "create.options.brass_trash_can.keep_64": "Keep a Stack",
 
   "tooltip.createqol.player_paper.linked_player": "Linked Player : %s",
   "tooltip.createqol.player_paper.no_linked_player": "No Player Linked",

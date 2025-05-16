@@ -5,6 +5,7 @@ import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.utility.CreateLang;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
+import fr.iglee42.createqualityoflife.client.screens.widgets.ScrollableEditBox;
 import fr.iglee42.createqualityoflife.packets.PublishAnimationPacket;
 import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
 import fr.iglee42.createqualityoflife.registries.ModIcons;
@@ -51,25 +52,25 @@ public class AnimationTab extends StatueTab {
     private IconButton publishButton;
     private EditBox nameEdit;
 
-    private EditBox globalX, globalY, globalZ;
+    private ScrollableEditBox globalX, globalY, globalZ;
     private IconButton globalButton;
 
-    private EditBox headX, headY, headZ;
+    private ScrollableEditBox headX, headY, headZ;
     private IconButton headButton;
 
-    private EditBox leftArmX, leftArmY, leftArmZ;
+    private ScrollableEditBox leftArmX, leftArmY, leftArmZ;
     private IconButton leftArmButton;
 
-    private EditBox rightArmX, rightArmY, rightArmZ;
+    private ScrollableEditBox rightArmX, rightArmY, rightArmZ;
     private IconButton rightArmButton;
 
-    private EditBox leftLegX, leftLegY, leftLegZ;
+    private ScrollableEditBox leftLegX, leftLegY, leftLegZ;
     private IconButton leftLegButton;
 
-    private EditBox rightLegX, rightLegY, rightLegZ;
+    private ScrollableEditBox rightLegX, rightLegY, rightLegZ;
     private IconButton rightLegButton;
 
-    List<EditBox> boxes;
+    List<ScrollableEditBox> boxes;
 
     private int currentFrame;
 
@@ -329,9 +330,9 @@ public class AnimationTab extends StatueTab {
 
         boxes = new ArrayList<>();
 
-        globalX = new EditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        globalY = new EditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18,CommonComponents.EMPTY);
-        globalZ = new EditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18,CommonComponents.EMPTY);
+        globalX = new ScrollableEditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
+        globalY = new ScrollableEditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18,CommonComponents.EMPTY);
+        globalZ = new ScrollableEditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18,CommonComponents.EMPTY);
         setupEditBoxes(i->updateGlobal(), globalX, globalY, globalZ);
         if (animation != null && getCurrentFrame() != null) updateEditBoxes((int) getCurrentFrame().getGlobal().getXRot(), (int) getCurrentFrame().getGlobal().getYRot(), (int) getCurrentFrame().getGlobal().getZRot(), globalX, globalY, globalZ);
         globalButton = new IconButton(x + BASE_OFFSET,y + 2*BASE_OFFSET + 20, ModIcons.I_STATUE);
@@ -346,9 +347,9 @@ public class AnimationTab extends StatueTab {
 
         offsetY += 20;
 
-        headX = new EditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        headY = new EditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18,CommonComponents.EMPTY);
-        headZ = new EditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18,CommonComponents.EMPTY);
+        headX = new ScrollableEditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
+        headY = new ScrollableEditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18,CommonComponents.EMPTY);
+        headZ = new ScrollableEditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18,CommonComponents.EMPTY);
         setupEditBoxes(i -> updateHead(), headX, headY, headZ);
         if (animation != null && getCurrentFrame() != null) {
             updateEditBoxes((int) getCurrentFrame().getHead().getXRot(), (int) getCurrentFrame().getHead().getYRot(), (int) getCurrentFrame().getHead().getZRot(), headX, headY, headZ);
@@ -365,9 +366,9 @@ public class AnimationTab extends StatueTab {
 
         offsetY += 20;
 
-        leftArmX = new EditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        leftArmY = new EditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        leftArmZ = new EditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
+        leftArmX = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
+        leftArmY = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
+        leftArmZ = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
         setupEditBoxes(i -> updateLeftArm(), leftArmX, leftArmY, leftArmZ);
         if (animation != null && getCurrentFrame() != null) {
             updateEditBoxes((int) getCurrentFrame().getLeftArm().getXRot(), (int) getCurrentFrame().getLeftArm().getYRot(), (int) getCurrentFrame().getLeftArm().getZRot(), leftArmX, leftArmY, leftArmZ);
@@ -384,9 +385,9 @@ public class AnimationTab extends StatueTab {
 
         offsetY += 20;
 
-        rightArmX = new EditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        rightArmY = new EditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        rightArmZ = new EditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
+        rightArmX = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
+        rightArmY = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
+        rightArmZ = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
         setupEditBoxes(i -> updateRightArm(), rightArmX, rightArmY, rightArmZ);
         if (animation != null && getCurrentFrame() != null) {
             updateEditBoxes((int) getCurrentFrame().getRightArm().getXRot(), (int) getCurrentFrame().getRightArm().getYRot(), (int) getCurrentFrame().getRightArm().getZRot(), rightArmX, rightArmY, rightArmZ);
@@ -403,9 +404,9 @@ public class AnimationTab extends StatueTab {
 
         offsetY += 20;
 
-        leftLegX = new EditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        leftLegY = new EditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        leftLegZ = new EditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
+        leftLegX = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
+        leftLegY = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
+        leftLegZ = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
         setupEditBoxes(i -> updateLeftLeg(), leftLegX, leftLegY, leftLegZ);
         if (animation != null && getCurrentFrame() != null) {
             updateEditBoxes((int) getCurrentFrame().getLeftLeg().getXRot(), (int) getCurrentFrame().getLeftLeg().getYRot(), (int) getCurrentFrame().getLeftLeg().getZRot(), leftLegX, leftLegY, leftLegZ);
@@ -422,9 +423,9 @@ public class AnimationTab extends StatueTab {
 
         offsetY += 20;
 
-        rightLegX = new EditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        rightLegY = new EditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        rightLegZ = new EditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
+        rightLegX = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
+        rightLegY = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
+        rightLegZ = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
         setupEditBoxes(i -> updateRightLeg(), rightLegX, rightLegY, rightLegZ);
         if (animation != null && getCurrentFrame() != null) {
             updateEditBoxes((int) getCurrentFrame().getRightLeg().getXRot(), (int) getCurrentFrame().getRightLeg().getYRot(), (int) getCurrentFrame().getRightLeg().getZRot(), rightLegX, rightLegY, rightLegZ);
@@ -449,8 +450,8 @@ public class AnimationTab extends StatueTab {
     }
 
 
-    private void setupEditBoxes(Consumer<Integer> onChanged,EditBox... inputs){
-        for (EditBox widget : inputs) {
+    private void setupEditBoxes(Consumer<Integer> onChanged,ScrollableEditBox... inputs){
+        for (ScrollableEditBox widget : inputs) {
             widget.setMaxLength(4);
             widget.setBordered(false);
             widget.setTextColor(0xFFFFFF);

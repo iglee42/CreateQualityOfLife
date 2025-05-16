@@ -49,7 +49,7 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         super.addBehaviours(behaviours);
         behaviours.add(selectionMode = new ScrollOptionBehaviour<>(Mode.class,
-                CreateLang.translateDirect("options.createqol.inventory_linker.label"), this, new BrassTunnelModeSlot()));
+                CreateLang.translateDirect("options.inventory_linker.label"), this, new BrassTunnelModeSlot()));
     }
 
     public UUID getLinkedPlayer() {
@@ -90,7 +90,7 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
 
         @Override
         public String getTranslationKey() {
-            return "options.createqol.inventory_linker."+name().toLowerCase();
+            return "options.inventory_linker."+name().toLowerCase();
         }
     }
 

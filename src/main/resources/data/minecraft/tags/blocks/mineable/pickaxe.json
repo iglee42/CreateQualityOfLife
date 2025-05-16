@@ -8,6 +8,8 @@
     "createqol:loom_saw",
     "createqol:tinkering_saw",
     "createqol:mason_saw",
-    "createqol:inventory_linker"
+    "createqol:inventory_linker",
+    "createqol:trash_can",
+    "createqol:brass_trash_can"
   ]
 }

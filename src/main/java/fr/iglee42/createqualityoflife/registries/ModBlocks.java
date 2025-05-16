@@ -1,26 +1,34 @@
 package fr.iglee42.createqualityoflife.registries;
 
 import com.simibubi.create.AllTags;
+import com.simibubi.create.content.logistics.chute.ChuteBlock;
+import com.simibubi.create.content.logistics.chute.ChuteGenerator;
+import com.simibubi.create.content.logistics.chute.ChuteItem;
+import com.simibubi.create.content.logistics.chute.SmartChuteBlock;
+import com.simibubi.create.content.logistics.funnel.FunnelMovementBehaviour;
+import com.simibubi.create.foundation.block.render.ReducedDestroyEffects;
 import com.simibubi.create.foundation.data.AssetLookup;
+import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.BuilderTransformers;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.builders.Builder;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
-import fr.iglee42.createqualityoflife.blocks.ChippedSawBlock;
-import fr.iglee42.createqualityoflife.blocks.InventoryLinkerBlock;
-import fr.iglee42.createqualityoflife.blocks.ShadowRadianceBacktankBlock;
+import fr.iglee42.createqualityoflife.behaviours.TrashCanMovementBehaviour;
+import fr.iglee42.createqualityoflife.blocks.*;
 import fr.iglee42.createqualityoflife.config.CQOLStress;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 
 import java.util.function.Supplier;
 
+import static com.simibubi.create.api.behaviour.movement.MovementBehaviour.movementBehaviour;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
@@ -51,6 +59,36 @@ public class ModBlocks {
                     .initialProperties(SharedProperties::netheriteMetal)
                     .transform(backtank(ModItems.SHADOW_RADIANCE_CHESTPLATE::get))
                     .register();
+
+    public static final BlockEntry<TrashCanBlock> TRASH_CAN = REGISTRATE.block("trash_can", TrashCanBlock::new)
+            .initialProperties(SharedProperties::softMetal)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .noOcclusion()
+                    .isSuffocating((level, pos, state) -> false)
+                    .isRedstoneConductor((level, pos, state) -> false))
+            .transform(pickaxeOnly())
+            .addLayer(() -> RenderType::cutoutMipped)
+            .clientExtension(() -> () -> new ReducedDestroyEffects())
+            .onRegister(movementBehaviour(TrashCanMovementBehaviour.normal()))
+            .item()
+            .transform(customItemModel("_", "block"))
+            .register();
+
+    public static final BlockEntry<BrassTrashCanBlock> BRASS_TRASH_CAN = REGISTRATE.block("brass_trash_can", BrassTrashCanBlock::new)
+            .initialProperties(SharedProperties::softMetal)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .noOcclusion()
+                    .isSuffocating((level, pos, state) -> false)
+                    .isRedstoneConductor((level, pos, state) -> false))
+            .addLayer(() -> RenderType::cutoutMipped)
+            .clientExtension(() -> () -> new ReducedDestroyEffects())
+            .onRegister(movementBehaviour(TrashCanMovementBehaviour.brass()))
+            .transform(pickaxeOnly())
+            .item()
+            .transform(customItemModel("trash_can", "block_brass"))
+            .register();
 
 
 
