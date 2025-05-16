@@ -2,9 +2,9 @@ package fr.iglee42.createqualityoflife.client.screens.tabs;
 
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.widget.Label;
-import com.simibubi.create.foundation.gui.widget.ScrollInput;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
+import fr.iglee42.createqualityoflife.client.screens.widgets.ClickableScrollInput;
 import fr.iglee42.createqualityoflife.client.screens.widgets.FloatScrollInput;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
@@ -32,9 +32,9 @@ public class StatueTransformTab extends StatueTab {
     private FloatScrollInput scale;
 
     private Label rotationLabel;
-    private ScrollInput rotationX;
-    private ScrollInput rotationY;
-    private ScrollInput rotationZ;
+    private ClickableScrollInput rotationX;
+    private ClickableScrollInput rotationY;
+    private ClickableScrollInput rotationZ;
 
     public StatueTransformTab(int index, ConfigureStatueScreen parent) {
         super(index, ModItems.STATUE.asItem(), parent, "statue.transformTab");
@@ -42,7 +42,7 @@ public class StatueTransformTab extends StatueTab {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partial, int x, int y) {
-        for (ScrollInput i : new ScrollInput[]{rotationX, rotationY, rotationZ}) {
+        for (ClickableScrollInput i : new ClickableScrollInput[]{rotationX, rotationY, rotationZ}) {
             int inputX = i.getX();
             AllGuiTextures.TRAIN_PROMPT_L.render(graphics, inputX - 3,i.getY());
             AllGuiTextures.TRAIN_PROMPT_R.render(graphics, inputX +i.getWidth(),i.getY());
@@ -192,7 +192,7 @@ public class StatueTransformTab extends StatueTab {
 
         rotationLabel = new Label(x + 2* BASE_OFFSET, y+88 - LABEL_Y_OFFSET*3,CreateQOLLang.translateDirect("statue.rotation.cape"));
         rotationLabel.text = CreateQOLLang.translateDirect("statue.rotation.cape");
-        rotationX = new ScrollInput(x + 2* BASE_OFFSET, y + 88,TEXT_BOX_WIDTH,18);
+        rotationX = new ClickableScrollInput(x + 2* BASE_OFFSET, y + 88,TEXT_BOX_WIDTH,18);
         rotationX.withRange(-180,180);
         rotationX.withStepFunction(ctx->ctx.control ? 90 : ctx.shift ? 45 : 1);
         rotationX.calling(i->{
@@ -203,7 +203,7 @@ public class StatueTransformTab extends StatueTab {
         rotationX.setState((int) getExampleStatue().getEntityRotations().getX());
         rotationX.titled(Component.literal("X: " + rotationX.getState() + "°"));
 
-        rotationY = new ScrollInput(x + 2* BASE_OFFSET, y + 110,TEXT_BOX_WIDTH,18);
+        rotationY = new ClickableScrollInput(x + 2* BASE_OFFSET, y + 110,TEXT_BOX_WIDTH,18);
         rotationY.withRange(-180,180);
         rotationY.withStepFunction(ctx->ctx.control ? 90 : ctx.shift ? 45 : 1);
         rotationY.calling(i->{
@@ -214,7 +214,7 @@ public class StatueTransformTab extends StatueTab {
         rotationY.setState((int) getExampleStatue().getEntityRotations().getY());
         rotationY.titled(Component.literal("Y: " + rotationY.getState() + "°"));
 
-        rotationZ = new ScrollInput(x + 2* BASE_OFFSET, y + 132,TEXT_BOX_WIDTH,18);
+        rotationZ = new ClickableScrollInput(x + 2* BASE_OFFSET, y + 132,TEXT_BOX_WIDTH,18);
         rotationZ.withRange(-180,180);
         rotationZ.withStepFunction(ctx->ctx.control ? 90 : ctx.shift ? 45 : 1);
         rotationZ.calling(i->{

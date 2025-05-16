@@ -8,8 +8,10 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import com.tterrag.registrate.util.RegistrateDistExecutor;
+import fr.iglee42.createqualityoflife.blockentitites.BrassTrashCanBlockEntity;
 import fr.iglee42.createqualityoflife.blockentitites.ChippedSawBlockEntity;
 import fr.iglee42.createqualityoflife.blockentitites.InventoryLinkerBlockEntity;
+import fr.iglee42.createqualityoflife.blockentitites.TrashCanBlockEntity;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.config.CreateQOLFeaturesConfig;
 import fr.iglee42.createqualityoflife.registries.*;
@@ -89,6 +91,8 @@ public class CreateQOL {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(ChippedSawBlockEntity::registerCapabilities);
         modEventBus.addListener(InventoryLinkerBlockEntity::registerCapabilities);
+        modEventBus.addListener(TrashCanBlockEntity::registerCapabilities);
+        modEventBus.addListener(BrassTrashCanBlockEntity::registerCapabilities);
         modEventBus.addListener(this::registerCapabilities);
         modEventBus.addListener(ModEntityTypes::registerEntityAttributes);
 

@@ -20,6 +20,10 @@ public class ModShapes {
             .forHorizontal(NORTH).get(SOUTH)).forHorizontalAxis();
     public static final VoxelShaper SINGLE_BELT = shape(1,3,0,15,13,16).forHorizontalAxis();
 
+    public static final VoxelShape TRASH_CAN = shape(1, 13, 1, 15, 16, 15).add(2, 0, 2, 14, 13, 14)
+            .add(1,8,1,4,13,4).add(12,8,12,15,13,15)
+            .add(1,8,12,4,13,15).add(12,8,1,15,13,4)
+            .build();
 
     private static AllShapes.Builder shape(VoxelShape shape) {
         return new AllShapes.Builder(shape);

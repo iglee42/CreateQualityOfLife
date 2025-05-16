@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "createqol:block/trash_can/block"
+    }
+  }
+}

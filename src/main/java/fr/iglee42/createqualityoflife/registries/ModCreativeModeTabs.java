@@ -123,6 +123,11 @@ public class ModCreativeModeTabs {
 				exclusions.add(ModItems.STATUE.asItem());
 			}
 
+			if (!CreateQOL.isActivate(Features.TRASH_CAN)){
+				exclusions.add(ModBlocks.TRASH_CAN.asItem());
+				exclusions.add(ModBlocks.BRASS_TRASH_CAN.asItem());
+			}
+
 			for (ItemProviderEntry<?, ?> entry : simpleExclusions) {
 				exclusions.add(entry.asItem());
 			}

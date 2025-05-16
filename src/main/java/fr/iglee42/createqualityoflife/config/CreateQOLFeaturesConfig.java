@@ -21,6 +21,7 @@ public class CreateQOLFeaturesConfig {
     public static boolean displayBoardModification = true;
     public static boolean blazeBurnerUseLiquids = true;
     public static boolean statue = false;
+    public static boolean trashCan = true;
 
 
 
@@ -47,6 +48,7 @@ public class CreateQOLFeaturesConfig {
             config.addProperty("displayBoardModification",displayBoardModification);
             config.addProperty("blazeBurnerUseLiquids",blazeBurnerUseLiquids);
             config.addProperty("statue",statue);
+            config.addProperty("trashCan",trashCan);
             FileWriter writer = new FileWriter(configFile);
             writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(config));
             writer.close();

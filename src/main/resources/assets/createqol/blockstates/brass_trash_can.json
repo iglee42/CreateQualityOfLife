@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "open=false": {
+      "model": "createqol:block/trash_can/block_brass"
+    },
+    "open=true": {
+      "model": "createqol:block/trash_can/block_brass_open"
+    }
+  }
+}

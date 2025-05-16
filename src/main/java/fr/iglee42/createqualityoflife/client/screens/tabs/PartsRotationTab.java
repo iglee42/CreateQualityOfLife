@@ -2,9 +2,9 @@ package fr.iglee42.createqualityoflife.client.screens.tabs;
 
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.widget.Label;
-import com.simibubi.create.foundation.gui.widget.ScrollInput;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
+import fr.iglee42.createqualityoflife.client.screens.widgets.ClickableScrollInput;
 import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -24,17 +24,17 @@ public class PartsRotationTab extends StatueTab {
 
     private Label part1Label;
 
-    private ScrollInput part1X;
-    private ScrollInput part1Y;
-    private ScrollInput part1Z;
+    private ClickableScrollInput part1X;
+    private ClickableScrollInput part1Y;
+    private ClickableScrollInput part1Z;
 
     private Label part2Label;
 
-    private ScrollInput part2X;
-    private ScrollInput part2Y;
-    private ScrollInput part2Z;
+    private ClickableScrollInput part2X;
+    private ClickableScrollInput part2Y;
+    private ClickableScrollInput part2Z;
 
-    Map<ScrollInput,Integer> inputs;
+    Map<ClickableScrollInput,Integer> inputs;
     public PartsRotationTab(int index, Item item, ConfigureStatueScreen parent, PlayerModelPart part1) {
         this(index, item, parent, part1,null);
     }
@@ -115,21 +115,21 @@ public class PartsRotationTab extends StatueTab {
         if (part1 != null){
             part1Label = new Label(x + 2* BASE_OFFSET, y-LABEL_Y_OFFSET*2,CreateQOLLang.translateDirect("statue.rotation." + part1.name().toLowerCase()));
             part1Label.text = CreateQOLLang.translateDirect("statue.rotation." + part1.name().toLowerCase());
-            part1X = new ScrollInput(x + 2* BASE_OFFSET, y,TEXT_BOX_WIDTH,18);
+            part1X = new ClickableScrollInput(x + 2* BASE_OFFSET, y,TEXT_BOX_WIDTH,18);
             part1X.calling(i->{
                 setRotation(part1,'x',i);
                 inputs.put(part1X,i);
                 part1X.titled(Component.literal("X: " + i + "°"));
                 getParent().sendUpdatePacket();
             });
-            part1Y = new ScrollInput(x + 2* BASE_OFFSET, y + 22,TEXT_BOX_WIDTH,18);
+            part1Y = new ClickableScrollInput(x + 2* BASE_OFFSET, y + 22,TEXT_BOX_WIDTH,18);
             part1Y.calling(i->{
                 setRotation(part1,'y',i);
                 inputs.put(part1Y,i);
                 part1Y.titled(Component.literal("Y: " + i + "°"));
                 getParent().sendUpdatePacket();
             });
-            part1Z = new ScrollInput(x + 2* BASE_OFFSET, y + 44,TEXT_BOX_WIDTH,18);
+            part1Z = new ClickableScrollInput(x + 2* BASE_OFFSET, y + 44,TEXT_BOX_WIDTH,18);
             part1Z.calling(i->{
                 setRotation(part1,'z',i);
                 inputs.put(part1Z,i);
@@ -141,14 +141,14 @@ public class PartsRotationTab extends StatueTab {
         if (part2 != null){
             part2Label = new Label(x + 2* BASE_OFFSET, y+88 - LABEL_Y_OFFSET*2,CreateQOLLang.translateDirect("statue.rotation." + part2.name().toLowerCase()));
             part2Label.text = CreateQOLLang.translateDirect("statue.rotation." + part2.name().toLowerCase());
-            part2X = new ScrollInput(x + 2* BASE_OFFSET, y + 88,TEXT_BOX_WIDTH,18);
+            part2X = new ClickableScrollInput(x + 2* BASE_OFFSET, y + 88,TEXT_BOX_WIDTH,18);
             part2X.calling(i->{
                 setRotation(part2,'x',i);
                 inputs.put(part2X,i);
                 part2X.titled(Component.literal("X: " + i + "°"));
                 getParent().sendUpdatePacket();
             });
-            part2Y = new ScrollInput(x + 2* BASE_OFFSET, y + 110,TEXT_BOX_WIDTH,18);
+            part2Y = new ClickableScrollInput(x + 2* BASE_OFFSET, y + 110,TEXT_BOX_WIDTH,18);
             part2Y.calling(i->{
                 setRotation(part2,'y',i);
                 inputs.put(part2Y,i);
@@ -156,7 +156,7 @@ public class PartsRotationTab extends StatueTab {
                 getParent().sendUpdatePacket();
 
             });
-            part2Z = new ScrollInput(x + 2* BASE_OFFSET, y + 132,TEXT_BOX_WIDTH,18);
+            part2Z = new ClickableScrollInput(x + 2* BASE_OFFSET, y + 132,TEXT_BOX_WIDTH,18);
             part2Z.calling(i->{
                 setRotation(part2,'z',i);
                 inputs.put(part2Z,i);
@@ -168,9 +168,9 @@ public class PartsRotationTab extends StatueTab {
         }
     }
 
-    private void setupConfigForInputs(Rotations rotations, ScrollInput... inputs){
+    private void setupConfigForInputs(Rotations rotations, ClickableScrollInput... inputs){
         for (int index = 0; index < inputs.length; index++) {
-            ScrollInput input = inputs[index];
+            ClickableScrollInput input = inputs[index];
             input.withRange(-180,180);
             input.withStepFunction(ctx->ctx.control ? 90 : ctx.shift ? 45 : 1);
             input.setState((int) switch (index){
