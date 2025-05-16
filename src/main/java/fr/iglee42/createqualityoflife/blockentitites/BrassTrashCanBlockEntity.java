@@ -73,7 +73,7 @@ public class BrassTrashCanBlockEntity extends TrashCanBlockEntity{
     public void tick() {
         super.tick();
         boolean clientSide = level != null && level.isClientSide && !isVirtual();
-        if (!clientSide) handleInputFromAbove();
+        if (!clientSide && getBlockState().getValue(BrassTrashCanBlock.OPEN)) handleInputFromAbove();
     }
 
     public enum Mode implements INamedIconOptions {
