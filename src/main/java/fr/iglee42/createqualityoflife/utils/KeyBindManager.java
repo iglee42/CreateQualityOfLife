@@ -93,7 +93,7 @@ public class KeyBindManager {
                 ModPackets.getChannel().sendToServer(new ToggleHoverPacket());
             }
             if (ELYTRA_KEY.consumeClick()) {
-                PacketDistributor.sendToServer(ToggleElytraPacket.INSTANCE);
+                ModPackets.getChannel().sendToServer(new ToggleElytraPacket());
             }
             tickEnd();
         }

@@ -125,7 +125,7 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 				entry.setEditable(CreateQOLConfigs.server().propellersAllowed.get() && CreateQOLConfigs.server().hoverAllowed.get());
 			}
 
-			if (entry.getNbtKey().equals(ModDataComponents.BACKTANK_ELYTRA_STATE)){
+			if (entry.getNbtKey().equals(NBTConstants.NBT_ELYTRA_STATE)){
 				if (!CreateQOLConfigs.server().elytraAllowed.get()&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
@@ -245,7 +245,7 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 				}
 
 				if (ShadowRadianceChestplate.hasElytra(armor)){
-					list.children().add(new BooleanEntry("Enable Elytra", armor.getOrDefault(ModDataComponents.BACKTANK_ELYTRA_STATE,false),ModDataComponents.BACKTANK_ELYTRA_STATE,
+					list.children().add(new BooleanEntry("Enable Elytra", NBTConstants.getOrDefault(armor,NBTConstants.NBT_ELYTRA_STATE,false),NBTConstants.NBT_ELYTRA_STATE,
 							"Activate the elytra on the backtank"));
 				}
 			}

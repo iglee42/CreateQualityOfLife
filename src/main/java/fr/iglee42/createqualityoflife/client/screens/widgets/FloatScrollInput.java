@@ -190,13 +190,14 @@ public class FloatScrollInput extends AbstractSimiWidget {
 	}
 
 	@Override
-	public void onClick(double mouseX, double mouseY, int button) {
+	public void onClick(double mouseX, double mouseY) {
 		double clickedX = mouseX - getX();
 		double progress = clickedX / width;
 		float newValue = (float) (progress * max);
 		setState(newValue);
 		onChanged();
 	}
+
 
 	public static class StepContext {
 		public float currentValue;

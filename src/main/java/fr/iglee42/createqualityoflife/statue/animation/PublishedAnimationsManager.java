@@ -2,58 +2,33 @@ package fr.iglee42.createqualityoflife.statue.animation;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.packets.SyncAnimationsConfigPacket;
-import io.netty.buffer.ByteBuf;
+import fr.iglee42.createqualityoflife.registries.ModPackets;
 import net.createmod.catnip.platform.CatnipServices;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.datafix.DataFixTypes;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.network.PacketDistributor;
-import org.apache.commons.lang3.SerializationException;
-import org.jetbrains.annotations.NotNull;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class PublishedAnimationsManager extends SavedData {
 
-    public static final StreamCodec<FriendlyByteBuf, List<PublishedAnimation>> STREAM_CODEC =
-            StreamCodec.of(
-                    (buf, list) -> {
-                        buf.writeInt(list.size());
-                        for (PublishedAnimation anim : list) {
-                            PublishedAnimation.STREAM_CODEC.encode(buf, anim);
-                        }
-                    },
-                    buf -> {
-                        int size = buf.readInt();
-                        List<PublishedAnimation> list = new ArrayList<>(size);
-                        for (int i = 0; i < size; i++) {
-                            list.add(PublishedAnimation.STREAM_CODEC.decode(buf));
-                        }
-                        return list;
-                    }
-            );
+
+
 
     @OnlyIn(Dist.CLIENT)
     public static List<PublishedAnimation> CLIENT_ANIMATIONS = new ArrayList<>();
@@ -64,22 +39,32 @@ public class PublishedAnimationsManager extends SavedData {
     public PublishedAnimationsManager() {
     }
 
-    public PublishedAnimationsManager(CompoundTag tag, HolderLookup.Provider provider) {
-        ListTag list = tag.getList("animations", Tag.TAG_COMPOUND);
-        list.stream().map(CompoundTag.class::cast).forEach(ct->{
-            animations.add(PublishedAnimation.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE,ct)).getOrThrow());
-        });
-        setDirty();
+    public void loadFromBuffer(FriendlyByteBuf buf) {
+        this.animations.clear();
+        this.animations.addAll(PublishedAnimation.decodeList(buf));
     }
 
+    public void writeToBuffer(FriendlyByteBuf buf) {
+        PublishedAnimation.encodeList(buf, this.animations);
+    }
+
+
     @Override
-    public @NotNull CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
+    public CompoundTag save(CompoundTag tag) {
         ListTag list = new ListTag();
         animations.forEach(a->{
-            list.add(PublishedAnimation.CODEC.encodeStart(NbtOps.INSTANCE,a).getOrThrow());
+            list.add(PublishedAnimation.CODEC.encodeStart(NbtOps.INSTANCE,a).getOrThrow(false,(s)->{}));
         });
         tag.put("animations",list);
         return tag;
+    }
+
+    public PublishedAnimationsManager(CompoundTag tag) {
+        ListTag list = tag.getList("animations", Tag.TAG_COMPOUND);
+        list.stream().map(CompoundTag.class::cast).forEach(ct->{
+            animations.add(PublishedAnimation.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE,ct)).getOrThrow(false,(s)->{}));
+        });
+        setDirty();
     }
 
 
@@ -89,7 +74,7 @@ public class PublishedAnimationsManager extends SavedData {
             throw new RuntimeException("You can't access to client side!");
         }
         DimensionDataStorage storage = ((ServerLevel)level).getDataStorage();
-        return storage.computeIfAbsent(new Factory<>(PublishedAnimationsManager::new, PublishedAnimationsManager::new, DataFixTypes.LEVEL), CreateQOL.MODID + "_published_animations");
+        return storage.computeIfAbsent(PublishedAnimationsManager::new, PublishedAnimationsManager::new, CreateQOL.MODID + "_published_animations");
     }
 
     public void publishAnimation(UUID publisher,String name,StatueAnimation animation){
@@ -99,9 +84,11 @@ public class PublishedAnimationsManager extends SavedData {
 
 
 
-    public void tick() {
+    public void tick(ServerLevel level) {
         if (isDirty()) {
-            CatnipServices.NETWORK.sendToAllClients(new SyncAnimationsConfigPacket(animations));
+            level.players().forEach(sp->{
+                ModPackets.sendToPlayer(sp,new SyncAnimationsConfigPacket(animations));
+            });
         }
     }
 
@@ -119,13 +106,36 @@ public class PublishedAnimationsManager extends SavedData {
                 StatueAnimation.CODEC.fieldOf("animation").forGetter(PublishedAnimation::animation)
         ).apply(instance, PublishedAnimation::new));
 
-        public static final StreamCodec<FriendlyByteBuf, PublishedAnimation> STREAM_CODEC = StreamCodec.composite(
-                UUIDUtil.STREAM_CODEC, PublishedAnimation::publisher,
-                UUIDUtil.STREAM_CODEC, PublishedAnimation::id,
-                ByteBufCodecs.STRING_UTF8, PublishedAnimation::name,
-                StatueAnimation.STREAM_CODEC, PublishedAnimation::animation,
-                PublishedAnimation::new
-        );
+        public static void encode(FriendlyByteBuf buf, PublishedAnimation anim) {
+            buf.writeUUID(anim.publisher);
+            buf.writeUUID(anim.id);
+            buf.writeUtf(anim.name);
+            StatueAnimation.encode(buf, anim.animation);
+        }
+
+        public static PublishedAnimation decode(FriendlyByteBuf buf) {
+            UUID publisher = buf.readUUID();
+            UUID id = buf.readUUID();
+            String name = buf.readUtf();
+            StatueAnimation animation = StatueAnimation.decode(buf);
+            return new PublishedAnimation(publisher, id, name, animation);
+        }
+
+        public static void encodeList(FriendlyByteBuf buf, List<PublishedAnimation> list) {
+            buf.writeInt(list.size());
+            for (PublishedAnimation anim : list) {
+                encode(buf, anim);
+            }
+        }
+
+        public static List<PublishedAnimation> decodeList(FriendlyByteBuf buf) {
+            int size = buf.readInt();
+            List<PublishedAnimation> list = new ArrayList<>(size);
+            for (int i = 0; i < size; i++) {
+                list.add(decode(buf));
+            }
+            return list;
+        }
     }
 
 }

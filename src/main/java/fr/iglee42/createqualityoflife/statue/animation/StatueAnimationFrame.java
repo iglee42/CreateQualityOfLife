@@ -3,8 +3,6 @@ package fr.iglee42.createqualityoflife.statue.animation;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
-import org.jetbrains.annotations.NotNull;
 
 public class StatueAnimationFrame{
 
@@ -18,30 +16,27 @@ public class StatueAnimationFrame{
             StatuePartTable.CODEC.fieldOf("rightLeg").forGetter(frame -> frame.rightLeg)
     ).apply(instance, StatueAnimationFrame::new));
 
-    public static final StreamCodec<FriendlyByteBuf,StatueAnimationFrame> STREAM_CODEC = new StreamCodec<FriendlyByteBuf, StatueAnimationFrame>() {
-        @Override
-        public @NotNull StatueAnimationFrame decode(FriendlyByteBuf buf) {
-            int ticks = buf.readInt();
-            StatuePartTable global = StatuePartTable.STREAM_CODEC.decode(buf);
-            StatuePartTable head = StatuePartTable.STREAM_CODEC.decode(buf);
-            StatuePartTable leftArm = StatuePartTable.STREAM_CODEC.decode(buf);
-            StatuePartTable rightArm = StatuePartTable.STREAM_CODEC.decode(buf);
-            StatuePartTable leftLeg = StatuePartTable.STREAM_CODEC.decode(buf);
-            StatuePartTable rightLeg = StatuePartTable.STREAM_CODEC.decode(buf);
-            return new StatueAnimationFrame(ticks,global,head,leftArm,rightArm,leftLeg,rightLeg);
-        }
 
-        @Override
-        public void encode(@NotNull FriendlyByteBuf buf, @NotNull StatueAnimationFrame frame) {
-            buf.writeInt(frame.tick);
-            StatuePartTable.STREAM_CODEC.encode(buf,frame.global);
-            StatuePartTable.STREAM_CODEC.encode(buf,frame.head);
-            StatuePartTable.STREAM_CODEC.encode(buf,frame.leftArm);
-            StatuePartTable.STREAM_CODEC.encode(buf,frame.rightArm);
-            StatuePartTable.STREAM_CODEC.encode(buf,frame.leftLeg);
-            StatuePartTable.STREAM_CODEC.encode(buf,frame.rightLeg);
-        }
-    };
+    public static void encode(FriendlyByteBuf buf, StatueAnimationFrame frame) {
+        buf.writeInt(frame.tick);
+        StatuePartTable.encode(buf, frame.global);
+        StatuePartTable.encode(buf, frame.head);
+        StatuePartTable.encode(buf, frame.leftArm);
+        StatuePartTable.encode(buf, frame.rightArm);
+        StatuePartTable.encode(buf, frame.leftLeg);
+        StatuePartTable.encode(buf, frame.rightLeg);
+    }
+
+    public static StatueAnimationFrame decode(FriendlyByteBuf buf) {
+        int ticks = buf.readInt();
+        StatuePartTable global = StatuePartTable.decode(buf);
+        StatuePartTable head = StatuePartTable.decode(buf);
+        StatuePartTable leftArm = StatuePartTable.decode(buf);
+        StatuePartTable rightArm = StatuePartTable.decode(buf);
+        StatuePartTable leftLeg = StatuePartTable.decode(buf);
+        StatuePartTable rightLeg = StatuePartTable.decode(buf);
+        return new StatueAnimationFrame(ticks, global, head, leftArm, rightArm, leftLeg, rightLeg);
+    }
     private final int tick;
     private StatuePartTable global = new StatuePartTable();
     private StatuePartTable head = new StatuePartTable();

@@ -178,7 +178,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
         }
         chestplate.getOrCreateTag().putBoolean(NBTConstants.NBT_FANS, chestplate.getOrCreateTag().contains(NBTConstants.NBT_FANS) && !chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_FANS));
         boolean fans = chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_FANS);
-        p.displayClientMessage(Component.literal("Fans : ").append(Component.literal(chooseText(fans)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+        p.displayClientMessage(Component.literal("Fans : ").append(Component.literal(chooseState(true,true,fans,false,true)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
     public static void toggleHover(ItemStack chestplate,Player p) {
         if (!CreateQOLConfigs.server().propellersAllowed.get()){
@@ -191,7 +191,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
         }
         chestplate.getOrCreateTag().putBoolean(NBTConstants.NBT_HOVER, chestplate.getOrCreateTag().contains(NBTConstants.NBT_HOVER) && !chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_HOVER));
         boolean hover = chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_HOVER);
-        p.displayClientMessage(Component.literal("Hover : ").append(Component.literal(chooseText(hover)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+        p.displayClientMessage(Component.literal("Hover : ").append(Component.literal(chooseState(true,true,hover,false,true)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
 
     public static void toggleElytra(ItemStack chestplate,Player p) {
@@ -199,7 +199,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
             p.displayClientMessage(Component.literal("Elytra are disabled by the config").withStyle(ChatFormatting.RED),true);
             return;
         }
-        chestplate.set(ModDataComponents.BACKTANK_ELYTRA_STATE, chestplate.has(ModDataComponents.BACKTANK_ELYTRA_STATE) ? !chestplate.get(ModDataComponents.BACKTANK_ELYTRA_STATE) : false);
+        chestplate.getOrCreateTag().putBoolean(NBTConstants.NBT_ELYTRA_STATE, chestplate.getOrCreateTag().contains(NBTConstants.NBT_ELYTRA_STATE) && !chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_ELYTRA_STATE));
         boolean elytra = isElytraEnable(chestplate);
         p.displayClientMessage(Component.literal("Elytra : ").append(Component.literal(chooseState(true,true,elytra,false,true)).withStyle(elytra ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
@@ -208,10 +208,10 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
     }
 
     public static boolean hasElytra(ItemStack chestplate){
-        return chestplate.has(ModDataComponents.BACKTANK_ELYTRA) && Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_ELYTRA));
+        return chestplate.getOrCreateTag().contains(NBTConstants.NBT_ELYTRA) && chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_ELYTRA);
     }
     public static boolean isElytraEnable(ItemStack chestplate){
-        return !chestplate.has(ModDataComponents.BACKTANK_ELYTRA_STATE) ? !isFansEnable(chestplate) : Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_ELYTRA_STATE));
+        return !chestplate.getOrCreateTag().contains(NBTConstants.NBT_ELYTRA_STATE) ? !isFansEnable(chestplate) : chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_ELYTRA_STATE);
     }
     public static boolean isFansEnable(ItemStack chestplate){
         return !chestplate.getOrCreateTag().contains(NBTConstants.NBT_FANS) || chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_FANS);

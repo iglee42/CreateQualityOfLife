@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Rotations;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 
 public class StatuePartTable {
 
@@ -15,22 +14,18 @@ public class StatuePartTable {
                     Codec.FLOAT.fieldOf("zRot").forGetter(StatuePartTable::getZRot)
             ).apply(instance, StatuePartTable::new));
 
-    public static final StreamCodec<FriendlyByteBuf,StatuePartTable> STREAM_CODEC = new StreamCodec<>() {
-        @Override
-        public StatuePartTable decode(FriendlyByteBuf buf) {
-            float x = buf.readFloat();
-            float y = buf.readFloat();
-            float z = buf.readFloat();
-            return new StatuePartTable(x, y, z);
-        }
+    public static void encode(FriendlyByteBuf buf, StatuePartTable table) {
+        buf.writeFloat(table.getXRot());
+        buf.writeFloat(table.getYRot());
+        buf.writeFloat(table.getZRot());
+    }
 
-        @Override
-        public void encode(FriendlyByteBuf buf, StatuePartTable table) {
-            buf.writeFloat(table.getXRot());
-            buf.writeFloat(table.getYRot());
-            buf.writeFloat(table.getZRot());
-        }
-    };
+    public static StatuePartTable decode(FriendlyByteBuf buf) {
+        float x = buf.readFloat();
+        float y = buf.readFloat();
+        float z = buf.readFloat();
+        return new StatuePartTable(x, y, z);
+    }
 
     private final float xRot;
     private final float yRot;

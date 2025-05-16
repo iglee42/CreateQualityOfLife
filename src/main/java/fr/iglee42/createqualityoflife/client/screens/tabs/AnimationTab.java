@@ -9,6 +9,7 @@ import fr.iglee42.createqualityoflife.client.screens.widgets.ScrollableEditBox;
 import fr.iglee42.createqualityoflife.packets.PublishAnimationPacket;
 import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
 import fr.iglee42.createqualityoflife.registries.ModIcons;
+import fr.iglee42.createqualityoflife.registries.ModPackets;
 import fr.iglee42.createqualityoflife.statue.animation.StatueAnimation;
 import fr.iglee42.createqualityoflife.statue.animation.StatueAnimationFrame;
 import net.createmod.catnip.platform.CatnipServices;
@@ -310,7 +311,7 @@ public class AnimationTab extends StatueTab {
 
         publishButton = new IconButton(x + BASE_OFFSET + LOOP_X, y + 173 - 19, AllIcons.I_SEND_ONLY);
         publishButton.withCallback(() -> {
-            if (!nameEdit.getValue().isEmpty())CatnipServices.NETWORK.sendToServer(new PublishAnimationPacket(Minecraft.getInstance().player.getUUID(), nameEdit.getValue(),animation));
+            if (!nameEdit.getValue().isEmpty()) ModPackets.getChannel().sendToServer(new PublishAnimationPacket(Minecraft.getInstance().player.getUUID(), nameEdit.getValue(),animation));
         });
         publishButton.setToolTip(CreateQOLLang.translateDirect("statue.animation.publish"));
 

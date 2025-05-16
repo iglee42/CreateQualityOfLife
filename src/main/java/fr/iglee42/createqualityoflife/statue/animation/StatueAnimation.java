@@ -3,7 +3,6 @@ package fr.iglee42.createqualityoflife.statue.animation;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,27 +17,27 @@ public class StatueAnimation {
     ).apply(instance, (frames, loop,revert) -> new StatueAnimation(calculateDuration(frames), loop,revert, frames)));
 
 
-    public static final StreamCodec<FriendlyByteBuf,StatueAnimation> STREAM_CODEC = new StreamCodec<>() {
-        @Override
-        public StatueAnimation decode(FriendlyByteBuf buf) {
-            int size = buf.readInt();
-            List<StatueAnimationFrame> frames = new ArrayList<>(size);
-            for (int i = 0; i < size; i++) {
-                frames.add(StatueAnimationFrame.STREAM_CODEC.decode(buf));
-            }
-            boolean loop = buf.readBoolean();
-            boolean revert = buf.readBoolean();
-            return new StatueAnimation(calculateDuration(frames), loop,revert, frames);
+    public static void encode(FriendlyByteBuf buf, StatueAnimation animation) {
+        List<StatueAnimationFrame> frames = animation.getFrames();
+        buf.writeInt(frames.size());
+        for (StatueAnimationFrame frame : frames) {
+            StatueAnimationFrame.encode(buf, frame);
         }
+        buf.writeBoolean(animation.isLooping());
+        buf.writeBoolean(animation.canBeRevert());
+    }
 
-        @Override
-        public void encode(FriendlyByteBuf buf, StatueAnimation animation) {
-            buf.writeInt(animation.getFrames().size());
-            animation.getFrames().forEach(f -> StatueAnimationFrame.STREAM_CODEC.encode(buf, f));
-            buf.writeBoolean(animation.isLooping());
-            buf.writeBoolean(animation.canBeRevert());
+    public static StatueAnimation decode(FriendlyByteBuf buf) {
+        int size = buf.readInt();
+        List<StatueAnimationFrame> frames = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            frames.add(StatueAnimationFrame.decode(buf));
         }
-    };
+        boolean loop = buf.readBoolean();
+        boolean revert = buf.readBoolean();
+        return new StatueAnimation(calculateDuration(frames), loop, revert, frames);
+    }
+
 
     private int duration;
     private boolean loop;
@@ -89,7 +88,7 @@ public class StatueAnimation {
         if (frames.isEmpty()) return 0;
         List<StatueAnimationFrame> sortedFrames = new ArrayList<>(frames);
         sortedFrames.sort(Comparator.comparingInt(StatueAnimationFrame::getTick));
-        return sortedFrames.getLast().getTick();
+        return sortedFrames.get(sortedFrames.size() - 1).getTick();
     }
 
     public boolean isLooping() {

@@ -8,6 +8,7 @@ import fr.iglee42.createqualityoflife.packets.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
@@ -26,13 +27,13 @@ public enum ModPackets {
     CONFIGURE_DISPLAY_BOARD(ConfigureDisplayBoardPacket.class,ConfigureDisplayBoardPacket::new,NetworkDirection.PLAY_TO_SERVER),
     TOGGLE_FANS(ToggleFansPacket.class,ToggleFansPacket::new,NetworkDirection.PLAY_TO_SERVER),
     TOGGLE_HOVER(ToggleHoverPacket .class, ToggleHoverPacket::new, NetworkDirection.PLAY_TO_SERVER),
-    TOGGLE_ELYTRA(ToggleElytraPacket .class, ToggleElytraPacket.STREAM_CODEC),
+    TOGGLE_ELYTRA(ToggleElytraPacket .class, ToggleElytraPacket::new,NetworkDirection.PLAY_TO_SERVER),
     INPUTS_UPDATE(UpdateInputsPacket.class, UpdateInputsPacket::new, NetworkDirection.PLAY_TO_SERVER),
     CHANGE_ARMOR_TAG(ChangeArmorTagPacket .class, ChangeArmorTagPacket::new, NetworkDirection.PLAY_TO_SERVER),
     SAVE_STATUE_CONFIG(SaveStatueConfigPacket.class, SaveStatueConfigPacket::new, NetworkDirection.PLAY_TO_SERVER),
-    PUBLISH_ANIMATION(PublishAnimationPacket.class, PublishAnimationPacket.STREAM_CODEC),
-    DELETE_ANIMATION(DeleteAnimationPacket.class, DeleteAnimationPacket.STREAM_CODEC),
-    SYNC_ANIMATIONS(SyncAnimationsConfigPacket.class, SyncAnimationsConfigPacket.STREAM_CODEC),
+    PUBLISH_ANIMATION(PublishAnimationPacket.class, PublishAnimationPacket::new,NetworkDirection.PLAY_TO_SERVER),
+    DELETE_ANIMATION(DeleteAnimationPacket.class, DeleteAnimationPacket::new,NetworkDirection.PLAY_TO_SERVER),
+    SYNC_ANIMATIONS(SyncAnimationsConfigPacket.class, SyncAnimationsConfigPacket::new, NetworkDirection.PLAY_TO_CLIENT),
 
     ;
     public static final ResourceLocation CHANNEL_NAME = CreateQOL.asResource("main");
@@ -67,6 +68,11 @@ public enum ModPackets {
                 PacketDistributor.NEAR.with(PacketDistributor.TargetPoint.p(pos.getX(), pos.getY(), pos.getZ(), range, world.dimension())),
                 message);
     }
+
+    public static <MSG> void sendToPlayer( ServerPlayer player,MSG message) {
+        getChannel().send(PacketDistributor.PLAYER.with(() -> player), message);
+    }
+
 
     private static class PacketType<T extends SimplePacketBase> {
         private static int index = 0;

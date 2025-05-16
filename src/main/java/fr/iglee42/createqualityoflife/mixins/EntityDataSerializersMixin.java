@@ -19,5 +19,6 @@ public abstract class EntityDataSerializersMixin {
     @Inject(method = "<clinit>",at = @At("TAIL"))
     private static void createQOL$addCustomSerializers(CallbackInfo ci){
         registerSerializer(ModEntityDataSerializers.PROFILE_ENTITY_DATA_SERIALIZER);
+        registerSerializer(ModEntityDataSerializers.ANIMATION_DATA_SERIALIZER);
     }
 }

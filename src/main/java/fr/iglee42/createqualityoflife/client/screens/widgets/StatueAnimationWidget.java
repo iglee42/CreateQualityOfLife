@@ -1,39 +1,31 @@
 package fr.iglee42.createqualityoflife.client.screens.widgets;
 
-import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.create.AllKeys;
 import com.simibubi.create.foundation.gui.AllIcons;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
-import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
 import fr.iglee42.createqualityoflife.client.screens.tabs.PublishedAnimationsTab;
 import fr.iglee42.createqualityoflife.packets.DeleteAnimationPacket;
 import fr.iglee42.createqualityoflife.registries.ModEntityTypes;
 import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
 import fr.iglee42.createqualityoflife.registries.ModIcons;
+import fr.iglee42.createqualityoflife.registries.ModPackets;
 import fr.iglee42.createqualityoflife.statue.Statue;
+import fr.iglee42.createqualityoflife.statue.animation.PublishedAnimationsManager.PublishedAnimation;
 import fr.iglee42.createqualityoflife.statue.animation.StatueAnimation;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.gui.widget.AbstractSimiWidget;
-import net.createmod.catnip.platform.CatnipServices;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.component.ResolvableProfile;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-
-import fr.iglee42.createqualityoflife.statue.animation.PublishedAnimationsManager.PublishedAnimation;
 
 public class StatueAnimationWidget extends AbstractSimiWidget {
 
@@ -71,7 +63,7 @@ public class StatueAnimationWidget extends AbstractSimiWidget {
         graphics.pose().pushPose();
         graphics.pose().scale(0.8f,0.8f,0.8f);
         String player = Minecraft.getInstance().level.getPlayerByUUID(animation.publisher()) != null ? Minecraft.getInstance().level.getPlayerByUUID(animation.publisher()).getName().getString() : "Unknown";
-        graphics.drawScrollingString(Minecraft.getInstance().font, Component.literal(player), (int) ((getX() + 2) *1.25), (int) ((getX() + getWidth() - 12) *1.25), (int) ((getY() + getHeight() + 3) *1.25), ModGuiTextures.FONT_COLOR);
+        //graphics.drawScrollingString(Minecraft.getInstance().font, Component.literal(player), (int) ((getX() + 2) *1.25), (int) ((getX() + getWidth() - 12) *1.25), (int) ((getY() + getHeight() + 3) *1.25), ModGuiTextures.FONT_COLOR);
 
         graphics.pose().popPose();
         ModGuiTextures button = !active ? ModGuiTextures.POSE_BUTTON_DISABLED
@@ -84,9 +76,9 @@ public class StatueAnimationWidget extends AbstractSimiWidget {
         float renderTime = AnimationTickHolder.getRenderTime();
 
 
-        int posX = getX() + 10;
-        int posY = getY() + 7;
-        InventoryScreen.renderEntityInInventory(graphics, posX,posY, 24, new Vector3f(statue.getBbWidth(),statue.getBbHeight() ,0), new Quaternionf().rotationXYZ((float) Math.toRadians(180), (float) Math.toRadians(renderTime / 96 * 360), 0),null,statue);
+        int posX = getX() + 22;
+        int posY = getY() + 51;
+        InventoryScreen.renderEntityInInventory(graphics, posX,posY, 24, new Quaternionf().rotationXYZ((float) Math.toRadians(180), (float) Math.toRadians(renderTime / 96 * 360), 0),null,statue);
 
         if (Minecraft.getInstance().player.getUUID().equals(animation.publisher()) || Minecraft.getInstance().player.hasPermissions(1)) {
             boolean hovered = mouseX >= getX() + width -14 && mouseX <= getX() + getWidth() && mouseY >= getY() + getHeight() - 1 && mouseY <= getY() + getHeight() + 11;
@@ -120,7 +112,7 @@ public class StatueAnimationWidget extends AbstractSimiWidget {
 
         if (button == 0 && hovered){
             if (animation.publisher().equals(Minecraft.getInstance().player.getUUID()) || Minecraft.getInstance().player.hasPermissions(1)){
-                CatnipServices.NETWORK.sendToServer(new DeleteAnimationPacket(animation.id()));
+                ModPackets.getChannel().sendToServer(new DeleteAnimationPacket(animation.id()));
                 parent.getAnimations().remove(this);
                 parent.getParent().removeWidget(this);
                 parent.updateAnimationsPos(parent.getParent().getGuiLeft() + 2*10 + 67 + (parent.getParent().isHideBackground()?110:0), parent.getParent().getGuiTop() + 30);

@@ -19,8 +19,7 @@
     "NetheriteDivingHandlerMixin",
     "ScheduleItemMixin",
     "StockTickerInteractionHandlerMixin",
-    "liquidblazeburners.BlazeBurnerBlockEntityMixin",
-    "liquidblazeburners.SmartBlockEntityMixin"
+    "liquidblazeburners.BlazeBurnerBlockEntityMixin"
   ],
   "client": [
     "BacktankArmorLayerMixin",

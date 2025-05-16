@@ -2,7 +2,7 @@ package fr.iglee42.createqualityoflife.utils;
 
 import fr.iglee42.createqualityoflife.blockentitites.TrashCanBlockEntity;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 public class TrashItemHandler extends ItemStackHandler {
 

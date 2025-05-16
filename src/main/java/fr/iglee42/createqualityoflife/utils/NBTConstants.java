@@ -14,6 +14,8 @@ public class NBTConstants {
     public static final String NBT_DIVING = "diving";
     public static final String NBT_ARMS = "arms";
     public static final String NBT_RENDER_TYPE = "renderType";
+    public static final String NBT_ELYTRA = "elytra";
+    public static final String NBT_ELYTRA_STATE = "elytraState";
 
 
     public static boolean getOrDefault(ItemStack stack,String nbt,boolean defaultValue){

@@ -18,7 +18,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Rarity;
 
-import static com.simibubi.create.AllTags.commonItemTag;
+import static com.simibubi.create.AllTags.forgeItemTag;
 import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
 
 public class ModItems {

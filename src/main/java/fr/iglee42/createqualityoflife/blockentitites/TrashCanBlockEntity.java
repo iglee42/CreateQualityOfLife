@@ -6,8 +6,13 @@ import java.util.function.Predicate;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
+import com.simibubi.create.content.logistics.chute.ChuteBlockEntity;
+import com.simibubi.create.content.logistics.chute.SmartChuteBlockEntity;
 import fr.iglee42.createqualityoflife.utils.TrashItemHandler;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +26,6 @@ import com.simibubi.create.foundation.item.ItemHelper.ExtractionCountMode;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -30,10 +34,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.items.IItemHandler;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -41,19 +41,23 @@ public class TrashCanBlockEntity extends SmartBlockEntity implements IHaveGoggle
 
 	TrashItemHandler itemHandler;
 
-	private final EnumMap<Direction, BlockCapabilityCache<IItemHandler, @Nullable Direction>> capCaches = new EnumMap<>(Direction.class);
+	LazyOptional<IItemHandler> lazyHandler;
+
+	LazyOptional<IItemHandler> capAbove;
 
 	public TrashCanBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 		itemHandler = new TrashItemHandler(this);
+		lazyHandler = LazyOptional.of(() -> itemHandler);
+
+		capAbove = LazyOptional.empty();
+
 	}
 
-	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(
-				Capabilities.ItemHandler.BLOCK,
-				ModBlockEntities.TRASH_CAN.get(),
-				(be, context) -> be.itemHandler
-		);
+
+	@Override
+	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+		return cap == ForgeCapabilities.ITEM_HANDLER ? lazyHandler.cast() : super.getCapability(cap, side);
 	}
 
 	@Override
@@ -77,9 +81,10 @@ public class TrashCanBlockEntity extends SmartBlockEntity implements IHaveGoggle
 	}
 
 	protected void handleInputFromAbove() {
-		handleInput(grabCapability(Direction.UP));
+		if (!capAbove.isPresent())
+			capAbove = grabCapability(Direction.UP);
+		handleInput(capAbove.orElse(null));
 	}
-
 	protected void handleInput(@Nullable IItemHandler inv) {
 		if (inv == null)
 			return;
@@ -93,50 +98,35 @@ public class TrashCanBlockEntity extends SmartBlockEntity implements IHaveGoggle
 			ItemHelper.extract(inv, canAccept, mode, count, false);
 		}
 	}
-
-	protected @Nullable IItemHandler grabCapability(@NotNull Direction side) {
+	private LazyOptional<IItemHandler> grabCapability(Direction side) {
 		BlockPos pos = this.worldPosition.relative(side);
 		if (level == null)
-			return null;
+			return LazyOptional.empty();
 		BlockEntity be = level.getBlockEntity(pos);
-		if (be instanceof TrashCanBlockEntity) {
+		if (be == null)
+			return LazyOptional.empty();
+		if (be instanceof ChuteBlockEntity) {
 			if (side != Direction.DOWN)
-				return null;
+				return LazyOptional.empty();
 		}
-		if (capCaches.get(side) == null) {
-			if (level instanceof ServerLevel serverLevel) {
-				BlockCapabilityCache<IItemHandler, @Nullable Direction> cache = BlockCapabilityCache.create(
-						Capabilities.ItemHandler.BLOCK,
-						serverLevel,
-						pos,
-						side.getOpposite()
-				);
-				capCaches.put(side, cache);
-				return cache.getCapability();
-			} else {
-				return level.getCapability(Capabilities.ItemHandler.BLOCK, pos, side.getOpposite());
-			}
-		} else {
-			return capCaches.get(side).getCapability();
-		}
+		return be.getCapability(ForgeCapabilities.ITEM_HANDLER, side.getOpposite());
 	}
 
 	@Override
 	public void invalidate() {
-		if (itemHandler != null)
-			invalidateCapabilities();
-		capCaches.clear();
+		if (lazyHandler != null)
+			lazyHandler.invalidate();
 		super.invalidate();
 	}
 
 	@Override
-	public void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-		super.write(compound, registries, clientPacket);
+	public void write(CompoundTag compound, boolean clientPacket) {
+		super.write(compound, clientPacket);
 	}
 
 	@Override
-	protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-		super.read(compound, registries, clientPacket);
+	protected void read(CompoundTag compound, boolean clientPacket) {
+		super.read(compound, clientPacket);
 	}
 
 

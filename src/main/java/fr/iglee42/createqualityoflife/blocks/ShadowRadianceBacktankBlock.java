@@ -72,7 +72,7 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
     }
 
     @Override
-    protected InteractionResult use(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!level.isClientSide) {
             if (level.getBlockEntity(pos) instanceof ShadowRadianceBacktankBE be){
                 if (!be.hasPropeller() && AllItems.PROPELLER.is(player.getMainHandItem().getItem())) {
@@ -99,7 +99,7 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
                 }
             }
         }
-        return super.use(state, world, pos, player, hand, hit);
+        return super.use(state, level, pos, player, hand, hitResult);
     }
 
     @Override

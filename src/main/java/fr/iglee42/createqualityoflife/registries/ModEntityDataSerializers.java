@@ -2,6 +2,7 @@ package fr.iglee42.createqualityoflife.registries;
 
 import com.mojang.authlib.GameProfile;
 import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.statue.animation.StatueAnimation;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -25,4 +26,6 @@ public class ModEntityDataSerializers {
         }
         friendlyByteBuf.writeGameProfile(gameProfile);
     },FriendlyByteBuf::readGameProfile);
+
+    public static final EntityDataSerializer<Optional<StatueAnimation>> ANIMATION_DATA_SERIALIZER = EntityDataSerializer.optional(StatueAnimation::encode,StatueAnimation::decode);
 }

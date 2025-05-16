@@ -8,7 +8,7 @@ public class ClickableScrollInput extends ScrollInput {
     }
 
     @Override
-    public void onClick(double mouseX, double mouseY, int button) {
+    public void onClick(double mouseX, double mouseY) {
         double clickedX = mouseX - getX();
         double progress = clickedX / width;
         int newValue = (int) (progress * max);

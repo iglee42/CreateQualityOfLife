@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife.statue;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.serialization.Dynamic;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.equipment.wrench.WrenchItem;
@@ -16,10 +17,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.Rotations;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -84,7 +82,7 @@ public class Statue extends LivingEntity {
     public static final EntityDataAccessor<Optional<UUID>> DATA_OWNER = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.OPTIONAL_UUID);
     public static final EntityDataAccessor<Optional<GameProfile>> DATA_PROFILE = SynchedEntityData.defineId(Statue.class, ModEntityDataSerializers.PROFILE_ENTITY_DATA_SERIALIZER);
     public static final EntityDataAccessor<Float> DATA_SCALE = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.FLOAT);
-    public static final EntityDataAccessor<Optional<StatueAnimation>> DATA_ANIMATION = SynchedEntityData.defineId(Statue.class, ModEntityDataSerializers.ANIMATION_ENTITY_DATA_SERIALIZER.get());
+    public static final EntityDataAccessor<Optional<StatueAnimation>> DATA_ANIMATION = SynchedEntityData.defineId(Statue.class, ModEntityDataSerializers.ANIMATION_DATA_SERIALIZER);
     public static final EntityDataAccessor<Integer> DATA_ANIMATION_PROGRESS = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> DATA_ANIMATION_REVERSING = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Boolean> DATA_ANIMATION_PLAYING = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.BOOLEAN);
@@ -246,7 +244,7 @@ public class Statue extends LivingEntity {
         nbt.put("Rotations", getEntityRotations().save());
         nbt.putBoolean("Invulnerable",isInvulnerable());
         this.entityData.get(DATA_ANIMATION).ifPresent(animation -> {
-            nbt.put("Animation", StatueAnimation.CODEC.encodeStart(NbtOps.INSTANCE, animation).getOrThrow());
+            nbt.put("Animation", StatueAnimation.CODEC.encodeStart(NbtOps.INSTANCE, animation).getOrThrow(false,s->{}));
         });
         nbt.putInt("AnimationProgress",getAnimationProgress());
         nbt.putBoolean("AnimationReversing",isAnimationReversing());
@@ -306,9 +304,7 @@ public class Statue extends LivingEntity {
             animationOptional = Optional.of(new Dynamic<>(NbtOps.INSTANCE, nbt.get("Animation")));
         }
         if (animationOptional.isEmpty()) setAnimation(null);
-        else animationOptional.map(StatueAnimation.CODEC::parse).flatMap(dataResult->dataResult.resultOrPartial((s)->{
-            System.out.println(s);
-        })).ifPresent(this::setAnimation);
+        else animationOptional.map(StatueAnimation.CODEC::parse).flatMap(dataResult->dataResult.resultOrPartial(System.out::println)).ifPresent(this::setAnimation);
         setAnimationProgress(nbt.getInt("AnimationProgress"));
         setAnimationReversing(nbt.getBoolean("AnimationReversing"));
         setAnimationPlaying(nbt.getBoolean("AnimationPlaying"));
@@ -433,11 +429,11 @@ public class Statue extends LivingEntity {
             return InteractionResult.SUCCESS;
         } else if (player.level().isClientSide) {
             return InteractionResult.CONSUME;
-        } else  if (isInvulnerable() && hasOwner() && !player.getUUID().equals(getOwner().get())) {
+        } else if (isInvulnerable() && hasOwner() && !player.getUUID().equals(getOwner().get())) {
             return InteractionResult.FAIL;
         } else {
-            if (player.getItemInHand(hand).is(AllItems.WRENCH) && getAnimation().isPresent()){
-                if (player.isCrouching()){
+            if (player.getItemInHand(hand).is(AllItems.WRENCH.asItem()) && getAnimation().isPresent()) {
+                if (player.isCrouching()) {
                     setAnimationProgress(0);
                     setAnimationPlaying(true);
                 } else {
@@ -446,28 +442,29 @@ public class Statue extends LivingEntity {
                 ScrollValueHandler.wrenchCog.bump(30);
             } else {
                 if (player.isCrouching()) {
-                    NetworkHooks.openScreen((ServerPlayer) player,new MenuProvider() {
+                    NetworkHooks.openScreen((ServerPlayer) player, new MenuProvider() {
                         @Override
                         public @NotNull Component getDisplayName() {
                             return Statue.this.getDisplayName();
                         }
 
-                    @Override
-                    public @org.jetbrains.annotations.Nullable AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
-                        return new StatueMenu(i,player.getInventory(),Statue.this);
-                    }
-                },buf->buf.writeInt(getId()));
-                return InteractionResult.SUCCESS;
-            } else {
-                EquipmentSlot equipmentslot = this.getEquipmentSlotForItem(itemstack);
-                if (itemstack.isEmpty()) {
-                    EquipmentSlot slot = this.getClickedSlot(clickedPos);
-                    if (this.swapItem(slot, ItemStack.EMPTY)) {
-                        return InteractionResult.SUCCESS;
-                    }
+                        @Override
+                        public @org.jetbrains.annotations.Nullable AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
+                            return new StatueMenu(i, player.getInventory(), Statue.this);
+                        }
+                    }, buf -> buf.writeInt(getId()));
+                    return InteractionResult.SUCCESS;
                 } else {
-                    if (this.swapItem(equipmentslot, itemstack)) {
-                        return InteractionResult.SUCCESS;
+                    EquipmentSlot equipmentslot = this.getEquipmentSlotForItem(itemstack);
+                    if (itemstack.isEmpty()) {
+                        EquipmentSlot slot = this.getClickedSlot(clickedPos);
+                        if (this.swapItem(slot, ItemStack.EMPTY)) {
+                            return InteractionResult.SUCCESS;
+                        }
+                    } else {
+                        if (this.swapItem(equipmentslot, itemstack)) {
+                            return InteractionResult.SUCCESS;
+                        }
                     }
                 }
             }
@@ -556,10 +553,10 @@ public class Statue extends LivingEntity {
                             }
                         }
                         if (p_31579_.getEntity() instanceof Player player){
-                            if (player.getMainHandItem().is(AllItems.WRENCH)){
+                            if (player.getMainHandItem().is(AllItems.WRENCH.asItem())){
                                 this.playBrokenSound();
                                 if (!p_31579_.isCreativePlayer()){
-                                    this.brokenByPlayer(serverlevel, p_31579_);
+                                    this.brokenByPlayer( p_31579_);
                                 }
                                 this.showBreakingParticles();
                                 this.kill();

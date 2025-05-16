@@ -24,9 +24,6 @@ public class ScrollableEditBox extends EditBox {
 
     private final List<Component> toolTips = new ArrayList<>();
 
-    public ScrollableEditBox(Font font, int x, int y, Component text) {
-        super(font, x, y, text);
-    }
 
     public ScrollableEditBox(Font font, int x, int y, int width, int height, Component text) {
         super(font, x, y, width, height, text);
@@ -37,7 +34,7 @@ public class ScrollableEditBox extends EditBox {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double deltaX, double deltaY) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double deltaY) {
         int state = getCastedValue();
         int priorState = getCastedValue();
         boolean shifted = AllKeys.shiftDown();

@@ -1,32 +1,34 @@
 package fr.iglee42.createqualityoflife.packets;
 
-import fr.iglee42.createqualityoflife.registries.ModPackets;
+import com.simibubi.create.foundation.networking.SimplePacketBase;
 import fr.iglee42.createqualityoflife.statue.animation.PublishedAnimationsManager;
-import io.netty.buffer.ByteBuf;
-import net.createmod.catnip.net.base.ClientboundPacketPayload;
-import net.createmod.catnip.net.base.ServerboundPacketPayload;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.List;
 
-public record SyncAnimationsConfigPacket(List<PublishedAnimationsManager.PublishedAnimation> animations) implements ClientboundPacketPayload {
-    public static final StreamCodec<FriendlyByteBuf, SyncAnimationsConfigPacket> STREAM_CODEC = StreamCodec.composite(
-            PublishedAnimationsManager.STREAM_CODEC, SyncAnimationsConfigPacket::animations,
-            SyncAnimationsConfigPacket::new
-    );
+public class SyncAnimationsConfigPacket extends SimplePacketBase {
 
-    @Override
-    public void handle(LocalPlayer player) {
-        PublishedAnimationsManager.CLIENT_ANIMATIONS = animations();
+    private final List<PublishedAnimationsManager.PublishedAnimation> animations;
+
+    public SyncAnimationsConfigPacket(List<PublishedAnimationsManager.PublishedAnimation> animations) {
+        this.animations = animations;
+    }
+
+    public SyncAnimationsConfigPacket(FriendlyByteBuf buf){
+        this(PublishedAnimationsManager.PublishedAnimation.decodeList(buf));
     }
 
     @Override
-    public PacketTypeProvider getTypeProvider() {
-        return ModPackets.SYNC_ANIMATIONS;
+    public void write(FriendlyByteBuf buffer) {
+        PublishedAnimationsManager.PublishedAnimation.encodeList(buffer,animations);
+    }
+
+    @Override
+    public boolean handle(NetworkEvent.Context context) {
+        context.enqueueWork(()->{
+            PublishedAnimationsManager.CLIENT_ANIMATIONS = animations;
+        });
+        return true;
     }
 }
