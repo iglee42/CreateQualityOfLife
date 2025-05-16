@@ -32,8 +32,7 @@ public class BrassTrashCanBlock extends TrashCanBlock {
 
 	@Override
 	public InteractionResult onWrenched(BlockState state, UseOnContext context) {
-		if (context.getClickedFace() == Direction.UP)
-			state = state.setValue(OPEN,!state.getValue(OPEN));
+		state = state.setValue(OPEN,!state.getValue(OPEN));
 		return super.onWrenched(state, context);
 	}
 
