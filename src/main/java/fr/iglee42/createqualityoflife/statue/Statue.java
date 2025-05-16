@@ -88,6 +88,7 @@ public class Statue extends LivingEntity {
     public static final EntityDataAccessor<Integer> DATA_ANIMATION_PROGRESS = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> DATA_ANIMATION_REVERSING = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Boolean> DATA_ANIMATION_PLAYING = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Integer> DATA_SKIN = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.INT);
     private static final Predicate<Entity> RIDABLE_MINECARTS = p_31582_ -> p_31582_ instanceof AbstractMinecart
             && ((AbstractMinecart)p_31582_).canBeRidden();
     private final NonNullList<ItemStack> handItems = NonNullList.withSize(2, ItemStack.EMPTY);
@@ -158,6 +159,7 @@ public class Statue extends LivingEntity {
         this.entityData.define(DATA_ANIMATION_PROGRESS, 0);
         this.entityData.define(DATA_ANIMATION_REVERSING, false);
         this.entityData.define(DATA_ANIMATION_PLAYING, false);
+        this.entityData.define(DATA_SKIN, 0);
     }
 
     private static byte getAllModelParts() {
@@ -249,6 +251,7 @@ public class Statue extends LivingEntity {
         nbt.putInt("AnimationProgress",getAnimationProgress());
         nbt.putBoolean("AnimationReversing",isAnimationReversing());
         nbt.putBoolean("AnimationPlaying",isAnimationPlaying());
+        nbt.putInt("Skin",getSkin());
     }
 
     @Override
@@ -309,6 +312,15 @@ public class Statue extends LivingEntity {
         setAnimationProgress(nbt.getInt("AnimationProgress"));
         setAnimationReversing(nbt.getBoolean("AnimationReversing"));
         setAnimationPlaying(nbt.getBoolean("AnimationPlaying"));
+        setSkin(nbt.getInt("Skin"));
+    }
+
+    public void setSkin(int skin) {
+        this.entityData.set(DATA_SKIN,skin);
+    }
+
+    public int getSkin(){
+        return this.entityData.get(DATA_SKIN);
     }
 
     public void setAnimation(StatueAnimation statueAnimation) {
@@ -683,6 +695,8 @@ public class Statue extends LivingEntity {
     @Override
     public void tick() {
         super.tick();
+        if (getCustomName() != null && getCustomName().getString().equals("Delta")) setSkin(1);
+        else if (getSkin() != 0 && getSkin() != 2) setSkin(0);
         Rotations rotations = this.entityData.get(DATA_HEAD_POSE);
         if (!this.headPose.equals(rotations)) {
             this.setHeadPose(rotations);

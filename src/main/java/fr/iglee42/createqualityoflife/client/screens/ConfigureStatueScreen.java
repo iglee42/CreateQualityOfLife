@@ -25,11 +25,15 @@ import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PlayerHeadItem;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMenu> {
+
+    private LinkedList<Integer> lastPressedKeys = new LinkedList<>();
 
     private Statue exampleStatue;
     private List<StatueTab> tabs;
@@ -212,6 +216,17 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
 
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+        if (pModifiers == 0) {
+            lastPressedKeys.add(pKeyCode);
+            if (lastPressedKeys.size() > 10) lastPressedKeys.poll();
+            if (checkKonamiCode()) {
+                if (getExampleStatue().getSkin() == 0){
+                    getExampleStatue().setSkin(2);
+                } else if (getExampleStatue().getSkin() == 2) {
+                    getExampleStatue().setSkin(0);
+                }
+            }
+        }
         if (tabs.get(currentTab) instanceof StatueTransformTab tab){
             if (tab.keyPressed(pKeyCode, pScanCode, pModifiers)) return true;
         }
@@ -238,5 +253,20 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
         if (!hideBackground)return super.getExtraAreas();
         int x = leftPos + 20 + 67 + 110;
         return List.of(new Rect2i(x, topPos + 30,imageWidth - 67,160));
+    }
+
+
+    private boolean checkKonamiCode(){
+        //AZERTY KEYBOARD
+        return lastPressedKeys.size() == 10 && lastPressedKeys.get(0).equals(GLFW.GLFW_KEY_UP) &&
+                lastPressedKeys.get(1).equals(GLFW.GLFW_KEY_UP) &&
+                lastPressedKeys.get(2).equals(GLFW.GLFW_KEY_DOWN) &&
+                lastPressedKeys.get(3).equals(GLFW.GLFW_KEY_DOWN) &&
+                lastPressedKeys.get(4).equals(GLFW.GLFW_KEY_LEFT) &&
+                lastPressedKeys.get(5).equals(GLFW.GLFW_KEY_RIGHT) &&
+                lastPressedKeys.get(6).equals(GLFW.GLFW_KEY_LEFT) &&
+                lastPressedKeys.get(7).equals(GLFW.GLFW_KEY_RIGHT) &&
+                lastPressedKeys.get(8).equals(GLFW.GLFW_KEY_B) &&
+                (lastPressedKeys.get(9).equals(GLFW.GLFW_KEY_Q) || lastPressedKeys.get(9).equals(GLFW.GLFW_KEY_A));
     }
 }
