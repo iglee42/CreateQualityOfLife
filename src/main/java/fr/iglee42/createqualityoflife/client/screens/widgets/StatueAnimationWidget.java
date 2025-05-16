@@ -63,7 +63,7 @@ public class StatueAnimationWidget extends AbstractSimiWidget {
         graphics.pose().pushPose();
         graphics.pose().scale(0.8f,0.8f,0.8f);
         String player = Minecraft.getInstance().level.getPlayerByUUID(animation.publisher()) != null ? Minecraft.getInstance().level.getPlayerByUUID(animation.publisher()).getName().getString() : "Unknown";
-        //graphics.drawScrollingString(Minecraft.getInstance().font, Component.literal(player), (int) ((getX() + 2) *1.25), (int) ((getX() + getWidth() - 12) *1.25), (int) ((getY() + getHeight() + 3) *1.25), ModGuiTextures.FONT_COLOR);
+        originalDrawScrollingString(graphics,Minecraft.getInstance().font, Component.literal(player), (int) ((getX() + 2) *1.25), (int) ((getX() + getWidth() - 12) *1.25), (int) ((getY() + getHeight() + 3) *1.25), ModGuiTextures.FONT_COLOR);
 
         graphics.pose().popPose();
         ModGuiTextures button = !active ? ModGuiTextures.POSE_BUTTON_DISABLED
@@ -94,6 +94,16 @@ public class StatueAnimationWidget extends AbstractSimiWidget {
 
     }
 
+    private void originalDrawScrollingString(GuiGraphics graphics, Font font, Component text, int minX, int maxX, int y, int color) {
+        int maxWidth = maxX - minX;
+        int textWidth = font.width(text.getVisualOrderText());
+        if (textWidth <= maxWidth) {
+            graphics.drawString(font, text, minX, y, color);
+        } else {
+            Objects.requireNonNull(font);
+            AbstractWidget.renderScrollingString(graphics, font, text, minX, y, maxX, y + 9, color);
+        }
+    }
 
     private void drawScrollingString(GuiGraphics graphics, Font font, Component text, int minX, int maxX, int y, int color) {
         int maxWidth = maxX - minX;
