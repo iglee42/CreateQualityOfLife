@@ -55,7 +55,6 @@ public class PublishedAnimationsManager extends SavedData {
                     }
             );
 
-    @OnlyIn(Dist.CLIENT)
     public static List<PublishedAnimation> CLIENT_ANIMATIONS = new ArrayList<>();
 
     private final List<PublishedAnimation> animations = new ArrayList<>();
