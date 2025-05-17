@@ -1,0 +1,29 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "trash_can"
+        }
+      ],
+      "recipe": {
+        "type": "create:item_application",
+        "ingredients": [
+          {
+            "item": "create:chute"
+          },
+          {
+            "item": "create:propeller"
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:trash_can"
+          }
+        ]
+      }
+    }
+  ]
+}

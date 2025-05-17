@@ -1,0 +1,29 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "statue"
+        }
+      ],
+     "recipe": {
+       "type": "create:deploying",
+       "ingredients": [
+         {
+           "item": "minecraft:armor_stand"
+         },
+         {
+           "item": "create:cardboard_block"
+         }
+       ],
+       "results": [
+         {
+           "item": "createqol:statue"
+         }
+       ]
+     }
+    }
+  ]
+}
