@@ -5,6 +5,7 @@ import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.utility.CreateLang;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
+import fr.iglee42.createqualityoflife.client.screens.widgets.NotUpdatableEditBox;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ScrollableEditBox;
 import fr.iglee42.createqualityoflife.packets.PublishAnimationPacket;
 import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
@@ -12,22 +13,28 @@ import fr.iglee42.createqualityoflife.registries.ModIcons;
 import fr.iglee42.createqualityoflife.registries.ModPackets;
 import fr.iglee42.createqualityoflife.statue.animation.StatueAnimation;
 import fr.iglee42.createqualityoflife.statue.animation.StatueAnimationFrame;
+import fr.iglee42.createqualityoflife.statue.animation.StatuePartTable;
 import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.core.Rotations;
+import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.Items;
+import org.apache.commons.lang3.function.TriConsumer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class AnimationTab extends StatueTab {
 
@@ -46,32 +53,15 @@ public class AnimationTab extends StatueTab {
     private IconButton revertButton;
     private IconButton createButton;
     private IconButton copyAllButton;
-    private EditBox frameSelector;
+    private NotUpdatableEditBox frameSelector;
     private IconButton previousFrameButton;
     private IconButton nextFrameButton;
     private IconButton deleteFrameButton;
     private IconButton publishButton;
     private EditBox nameEdit;
 
-    private ScrollableEditBox globalX, globalY, globalZ;
-    private IconButton globalButton;
-
-    private ScrollableEditBox headX, headY, headZ;
-    private IconButton headButton;
-
-    private ScrollableEditBox leftArmX, leftArmY, leftArmZ;
-    private IconButton leftArmButton;
-
-    private ScrollableEditBox rightArmX, rightArmY, rightArmZ;
-    private IconButton rightArmButton;
-
-    private ScrollableEditBox leftLegX, leftLegY, leftLegZ;
-    private IconButton leftLegButton;
-
-    private ScrollableEditBox rightLegX, rightLegY, rightLegZ;
-    private IconButton rightLegButton;
-
-    List<ScrollableEditBox> boxes;
+    List<ScrollableEditBox> editWidgets;
+    List<IconButton> iconButtons;
 
     private int currentFrame;
 
@@ -87,13 +77,8 @@ public class AnimationTab extends StatueTab {
         createButton.visible = animation == null || getCurrentFrame() == null;
         loopButton.visible = animation != null;
         revertButton.visible = animation != null;
-        boxes.forEach(b->b.visible = animation != null && getCurrentFrame() != null);
-        globalButton.visible = animation != null && getCurrentFrame() != null;
-        headButton.visible = animation != null && getCurrentFrame() != null;
-        leftArmButton.visible = animation != null && getCurrentFrame() != null;
-        rightArmButton.visible = animation != null && getCurrentFrame() != null;
-        leftLegButton.visible = animation != null && getCurrentFrame() != null;
-        rightLegButton.visible = animation != null && getCurrentFrame() != null;
+        editWidgets.forEach(b->b.visible = animation != null && getCurrentFrame() != null);
+        iconButtons.forEach(b->b.visible = animation != null && getCurrentFrame() != null);
         copyAllButton.visible = animation != null && getCurrentFrame() != null;
         deleteFrameButton.visible = animation != null && getCurrentFrame() != null;
         frameSelector.visible = animation != null;
@@ -147,36 +132,8 @@ public class AnimationTab extends StatueTab {
         function.accept(publishButton);
         function.accept(nameEdit);
 
-        function.accept(globalX);
-        function.accept(globalY);
-        function.accept(globalZ);
-        function.accept(globalButton);
-
-        function.accept(headX);
-        function.accept(headY);
-        function.accept(headZ);
-        function.accept(headButton);
-
-        function.accept(leftArmX);
-        function.accept(leftArmY);
-        function.accept(leftArmZ);
-        function.accept(leftArmButton);
-
-        function.accept(rightArmX);
-        function.accept(rightArmY);
-        function.accept(rightArmZ);
-        function.accept(rightArmButton);
-
-        function.accept(leftLegX);
-        function.accept(leftLegY);
-        function.accept(leftLegZ);
-        function.accept(leftLegButton);
-
-        function.accept(rightLegX);
-        function.accept(rightLegY);
-        function.accept(rightLegZ);
-        function.accept(rightLegButton);
-
+        editWidgets.forEach(function);
+        iconButtons.forEach(function);
     }
 
     @Override
@@ -208,29 +165,7 @@ public class AnimationTab extends StatueTab {
                     .withLeftLegRotation(getExampleStatue().getLeftLegPose().getX(), getExampleStatue().getLeftLegPose().getY(), getExampleStatue().getLeftLegPose().getZ())
                     .withRightLegRotation(getExampleStatue().getRightLegPose().getX(), getExampleStatue().getRightLegPose().getY(), getExampleStatue().getRightLegPose().getZ())
             );
-            globalX.setValue("" + (int) getExampleStatue().getEntityXRotation());
-            globalY.setValue("" + (int) getExampleStatue().getYRot());
-            globalZ.setValue("" + (int) getExampleStatue().getEntityZRotation());
-
-            headX.setValue("" + (int) getExampleStatue().getHeadPose().getX());
-            headY.setValue("" + (int) getExampleStatue().getHeadPose().getY());
-            headZ.setValue("" + (int) getExampleStatue().getHeadPose().getZ());
-
-            leftArmX.setValue("" + (int) getExampleStatue().getLeftArmPose().getX());
-            leftArmY.setValue("" + (int) getExampleStatue().getLeftArmPose().getY());
-            leftArmZ.setValue("" + (int) getExampleStatue().getLeftArmPose().getZ());
-
-            rightArmX.setValue("" + (int) getExampleStatue().getRightArmPose().getX());
-            rightArmY.setValue("" + (int) getExampleStatue().getRightArmPose().getY());
-            rightArmZ.setValue("" + (int) getExampleStatue().getRightArmPose().getZ());
-
-            leftLegX.setValue("" + (int) getExampleStatue().getLeftLegPose().getX());
-            leftLegY.setValue("" + (int) getExampleStatue().getLeftLegPose().getY());
-            leftLegZ.setValue("" + (int) getExampleStatue().getLeftLegPose().getZ());
-
-            rightLegX.setValue("" + (int) getExampleStatue().getRightLegPose().getX());
-            rightLegY.setValue("" + (int) getExampleStatue().getRightLegPose().getY());
-            rightLegZ.setValue("" + (int) getExampleStatue().getRightLegPose().getZ());
+            updateBoxesFromFrame(currentFrame);
         });
 
         copyAllButton.getToolTip().addAll(COPY_ALL_TOOLTIPS);
@@ -241,7 +176,7 @@ public class AnimationTab extends StatueTab {
         });
         deleteFrameButton.setToolTip(CreateQOLLang.translateDirect("statue.animation.delete_frame"));
 
-        frameSelector = new EditBox(Minecraft.getInstance().font, getParent().getGuiLeft() + getParent().imageWidth /2 - 23 + Minecraft.getInstance().font.width(CreateQOLLang.translateDirect("statue.animation.frame")), getParent().getGuiTop() + getParent().imageHeight - 24 + TEXT_Y_OFFSET,32,18,CommonComponents.EMPTY);
+        frameSelector = new NotUpdatableEditBox(Minecraft.getInstance().font, getParent().getGuiLeft() + getParent().imageWidth /2 - 23 + Minecraft.getInstance().font.width(CreateQOLLang.translateDirect("statue.animation.frame")), getParent().getGuiTop() + getParent().imageHeight - 24 + TEXT_Y_OFFSET,32,18,CommonComponents.EMPTY);
         frameSelector.setBordered(false);
         frameSelector.setValue(""+currentFrame);
         frameSelector.setMaxLength(4);
@@ -250,32 +185,7 @@ public class AnimationTab extends StatueTab {
         frameSelector.mouseClicked(0,0, 0);
         frameSelector.setResponder(s->{if (!s.isEmpty()){
             try {
-                currentFrame = Integer.parseInt(s);
-                if (getCurrentFrame() != null) {
-                    globalX.setValue("" + (int) getCurrentFrame().getGlobal().getXRot());
-                    globalY.setValue("" + (int) getCurrentFrame().getGlobal().getYRot());
-                    globalZ.setValue("" + (int) getCurrentFrame().getGlobal().getZRot());
-
-                    headX.setValue("" + (int) getCurrentFrame().getHead().getXRot());
-                    headY.setValue("" + (int) getCurrentFrame().getHead().getYRot());
-                    headZ.setValue("" + (int) getCurrentFrame().getHead().getZRot());
-
-                    leftArmX.setValue("" + (int) getCurrentFrame().getLeftArm().getXRot());
-                    leftArmY.setValue("" + (int) getCurrentFrame().getLeftArm().getYRot());
-                    leftArmZ.setValue("" + (int) getCurrentFrame().getLeftArm().getZRot());
-
-                    rightArmX.setValue("" + (int) getCurrentFrame().getRightArm().getXRot());
-                    rightArmY.setValue("" + (int) getCurrentFrame().getRightArm().getYRot());
-                    rightArmZ.setValue("" + (int) getCurrentFrame().getRightArm().getZRot());
-
-                    leftLegX.setValue("" + (int) getCurrentFrame().getLeftLeg().getXRot());
-                    leftLegY.setValue("" + (int) getCurrentFrame().getLeftLeg().getYRot());
-                    leftLegZ.setValue("" + (int) getCurrentFrame().getLeftLeg().getZRot());
-
-                    rightLegX.setValue("" + (int) getCurrentFrame().getRightLeg().getXRot());
-                    rightLegY.setValue("" + (int) getCurrentFrame().getRightLeg().getYRot());
-                    rightLegZ.setValue("" + (int) getCurrentFrame().getRightLeg().getZRot());
-                }
+                changeFrame(Integer.parseInt(s),true);
             } catch (NumberFormatException ignored){}
         }});
         frameSelector.setFilter(s -> {
@@ -293,7 +203,7 @@ public class AnimationTab extends StatueTab {
         previousFrameButton.withCallback(() -> {
             if (animation != null){
                 if (animation.getPreviousFrame(getCurrentFrame()) != null){
-                    frameSelector.setValue(""+animation.getPreviousFrame(getCurrentFrame()).getTick());
+                    changeFrame(animation.getPreviousFrame(getCurrentFrame()).getTick(),false);
                 }
             }
         });
@@ -303,7 +213,7 @@ public class AnimationTab extends StatueTab {
         nextFrameButton.withCallback(() -> {
             if (animation != null){
                 if (animation.getNextFrame(getCurrentFrame()) != null){
-                    frameSelector.setValue(""+animation.getNextFrame(getCurrentFrame()).getTick());
+                    changeFrame(animation.getNextFrame(getCurrentFrame()).getTick(),false);
                 }
             }
         });
@@ -319,6 +229,7 @@ public class AnimationTab extends StatueTab {
         nameEdit.setBordered(false);
         nameEdit.setFocused(false);
         nameEdit.setHint(Component.literal("Animation Name"));
+        nameEdit.setTooltip(Tooltip.create(CreateQOLLang.translateDirect("statue.name_utility")));
 
         if (animation != null) {
             loopButton.green = animation.isLooping();
@@ -327,122 +238,156 @@ public class AnimationTab extends StatueTab {
 
         //ROTATIONS
 
-        int offsetY = 20;
+        int offsetY = 22;
 
-        boxes = new ArrayList<>();
+        editWidgets = new ArrayList<>();
+        iconButtons = new ArrayList<>();
 
-        globalX = new ScrollableEditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        globalY = new ScrollableEditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18,CommonComponents.EMPTY);
-        globalZ = new ScrollableEditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18,CommonComponents.EMPTY);
-        setupEditBoxes(i->updateGlobal(), globalX, globalY, globalZ);
-        if (animation != null && getCurrentFrame() != null) updateEditBoxes((int) getCurrentFrame().getGlobal().getXRot(), (int) getCurrentFrame().getGlobal().getYRot(), (int) getCurrentFrame().getGlobal().getZRot(), globalX, globalY, globalZ);
-        globalButton = new IconButton(x + BASE_OFFSET,y + 2*BASE_OFFSET + 20, ModIcons.I_STATUE);
-        globalButton.withCallback(()->{
-            Rotations rotation = getExampleStatue().getEntityRotations();
-            updateRotation(frame -> frame.withGlobalRotation(rotation.getX(),rotation.getY(),rotation.getZ()));
-            globalX.setValue(""+(int)rotation.getX());
-            globalY.setValue(""+(int)rotation.getY());
-            globalZ.setValue(""+(int)rotation.getZ());
-        });
-        globalButton.getToolTip().addAll(createTooltipFor(PlayerModelPart.CAPE));
 
-        offsetY += 20;
+        setupRotationControls(
+                x, y + offsetY, ModIcons.I_STATUE,
+                () -> getCurrentFrame().getGlobal(),
+                () -> getExampleStatue().getEntityRotations(),
+                this::updateGlobal,
+                rot -> frame -> frame.withGlobalRotation(rot.getX(), rot.getY(), rot.getZ()),
+                PlayerModelPart.CAPE,
+                editWidgets,
+                iconButtons
+        );
+        offsetY += 22;
 
-        headX = new ScrollableEditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        headY = new ScrollableEditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18,CommonComponents.EMPTY);
-        headZ = new ScrollableEditBox(Minecraft.getInstance().font,x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18,CommonComponents.EMPTY);
-        setupEditBoxes(i -> updateHead(), headX, headY, headZ);
-        if (animation != null && getCurrentFrame() != null) {
-            updateEditBoxes((int) getCurrentFrame().getHead().getXRot(), (int) getCurrentFrame().getHead().getYRot(), (int) getCurrentFrame().getHead().getZRot(), headX, headY, headZ);
-        }
-        headButton = new IconButton(x + BASE_OFFSET,y + (offsetY / 20 + 1) * BASE_OFFSET + offsetY, ModIcons.I_HAT);
-        headButton.withCallback(()->{
-            Rotations rotation = getExampleStatue().getHeadPose();
-            updateRotation(frame -> frame.withHeadRotation(rotation.getX(),rotation.getY(),rotation.getZ()));
-            headX.setValue(""+(int)rotation.getX());
-            headY.setValue(""+(int)rotation.getY());
-            headZ.setValue(""+(int)rotation.getZ());
-        });
-        headButton.getToolTip().addAll(createTooltipFor(PlayerModelPart.HAT));
+        setupRotationControls(
+                x, y + offsetY, ModIcons.I_HAT,
+                () -> getCurrentFrame().getHead(),
+                () -> getExampleStatue().getHeadPose(),
+                this::updateHead,
+                rot -> frame -> frame.withHeadRotation(rot.getX(), rot.getY(), rot.getZ()),
+                PlayerModelPart.HAT,
+                editWidgets,
+                iconButtons
+        );
+        offsetY += 22;
 
-        offsetY += 20;
+        setupRotationControls(
+                x, y + offsetY, ModIcons.I_LEFT_SLEEVE,
+                () -> getCurrentFrame().getLeftArm(),
+                () -> getExampleStatue().getLeftArmPose(),
+                this::updateLeftArm,
+                rot -> frame -> frame.withLeftArmRotation(rot.getX(), rot.getY(), rot.getZ()),
+                PlayerModelPart.LEFT_SLEEVE,
+                editWidgets,
+                iconButtons
+        );
+        offsetY += 22;
 
-        leftArmX = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        leftArmY = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        leftArmZ = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        setupEditBoxes(i -> updateLeftArm(), leftArmX, leftArmY, leftArmZ);
-        if (animation != null && getCurrentFrame() != null) {
-            updateEditBoxes((int) getCurrentFrame().getLeftArm().getXRot(), (int) getCurrentFrame().getLeftArm().getYRot(), (int) getCurrentFrame().getLeftArm().getZRot(), leftArmX, leftArmY, leftArmZ);
-        }
-        leftArmButton = new IconButton(x + BASE_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET + offsetY, ModIcons.I_LEFT_SLEEVE);
-        leftArmButton.withCallback(() -> {
-            Rotations rot = getExampleStatue().getLeftArmPose();
-            updateRotation(f -> f.withLeftArmRotation(rot.getX(), rot.getY(), rot.getZ()));
-            leftArmX.setValue("" + (int) rot.getX());
-            leftArmY.setValue("" + (int) rot.getY());
-            leftArmZ.setValue("" + (int) rot.getZ());
-        });
-        leftArmButton.getToolTip().addAll(createTooltipFor(PlayerModelPart.LEFT_SLEEVE));
+        setupRotationControls(
+                x, y + offsetY, ModIcons.I_RIGHT_SLEEVE,
+                () -> getCurrentFrame().getRightArm(),
+                () -> getExampleStatue().getRightArmPose(),
+                this::updateRightArm,
+                rot -> frame -> frame.withRightArmRotation(rot.getX(), rot.getY(), rot.getZ()),
+                PlayerModelPart.RIGHT_SLEEVE,
+                editWidgets,
+                iconButtons
+        );
+        offsetY += 22;
 
-        offsetY += 20;
+        setupRotationControls(
+                x, y + offsetY, ModIcons.I_LEFT_PANTS,
+                () -> getCurrentFrame().getLeftLeg(),
+                () -> getExampleStatue().getLeftLegPose(),
+                this::updateLeftLeg,
+                rot -> frame -> frame.withLeftLegRotation(rot.getX(), rot.getY(), rot.getZ()),
+                PlayerModelPart.LEFT_PANTS_LEG,
+                editWidgets,
+                iconButtons
+        );
+        offsetY += 22;
 
-        rightArmX = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        rightArmY = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        rightArmZ = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        setupEditBoxes(i -> updateRightArm(), rightArmX, rightArmY, rightArmZ);
-        if (animation != null && getCurrentFrame() != null) {
-            updateEditBoxes((int) getCurrentFrame().getRightArm().getXRot(), (int) getCurrentFrame().getRightArm().getYRot(), (int) getCurrentFrame().getRightArm().getZRot(), rightArmX, rightArmY, rightArmZ);
-        }
-        rightArmButton = new IconButton(x + BASE_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET + offsetY, ModIcons.I_RIGHT_SLEEVE);
-        rightArmButton.withCallback(() -> {
-            Rotations rot = getExampleStatue().getRightArmPose();
-            updateRotation(f -> f.withRightArmRotation(rot.getX(), rot.getY(), rot.getZ()));
-            rightArmX.setValue("" + (int) rot.getX());
-            rightArmY.setValue("" + (int) rot.getY());
-            rightArmZ.setValue("" + (int) rot.getZ());
-        });
-        rightArmButton.getToolTip().addAll(createTooltipFor(PlayerModelPart.RIGHT_SLEEVE));
-
-        offsetY += 20;
-
-        leftLegX = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        leftLegY = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        leftLegZ = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        setupEditBoxes(i -> updateLeftLeg(), leftLegX, leftLegY, leftLegZ);
-        if (animation != null && getCurrentFrame() != null) {
-            updateEditBoxes((int) getCurrentFrame().getLeftLeg().getXRot(), (int) getCurrentFrame().getLeftLeg().getYRot(), (int) getCurrentFrame().getLeftLeg().getZRot(), leftLegX, leftLegY, leftLegZ);
-        }
-        leftLegButton = new IconButton(x + BASE_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET + offsetY, ModIcons.I_LEFT_PANTS);
-        leftLegButton.withCallback(() -> {
-            Rotations rot = getExampleStatue().getLeftLegPose();
-            updateRotation(f -> f.withLeftLegRotation(rot.getX(), rot.getY(), rot.getZ()));
-            leftLegX.setValue("" + (int) rot.getX());
-            leftLegY.setValue("" + (int) rot.getY());
-            leftLegZ.setValue("" + (int) rot.getZ());
-        });
-        leftLegButton.getToolTip().addAll(createTooltipFor(PlayerModelPart.LEFT_PANTS_LEG));
-
-        offsetY += 20;
-
-        rightLegX = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        rightLegY = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        rightLegZ = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, y + (offsetY / 20 + 1) * BASE_OFFSET +TEXT_Y_OFFSET + offsetY, 32, 18, CommonComponents.EMPTY);
-        setupEditBoxes(i -> updateRightLeg(), rightLegX, rightLegY, rightLegZ);
-        if (animation != null && getCurrentFrame() != null) {
-            updateEditBoxes((int) getCurrentFrame().getRightLeg().getXRot(), (int) getCurrentFrame().getRightLeg().getYRot(), (int) getCurrentFrame().getRightLeg().getZRot(), rightLegX, rightLegY, rightLegZ);
-        }
-        rightLegButton = new IconButton(x + BASE_OFFSET, y + (offsetY / 20 + 1) * BASE_OFFSET + offsetY, ModIcons.I_RIGHT_PANTS);
-        rightLegButton.withCallback(() -> {
-            Rotations rot = getExampleStatue().getRightLegPose();
-            updateRotation(f -> f.withRightLegRotation(rot.getX(), rot.getY(), rot.getZ()));
-            rightLegX.setValue("" + (int) rot.getX());
-            rightLegY.setValue("" + (int) rot.getY());
-            rightLegZ.setValue("" + (int) rot.getZ());
-        });
-        rightLegButton.getToolTip().addAll(createTooltipFor(PlayerModelPart.RIGHT_PANTS_LEG));
+        setupRotationControls(
+                x, y + offsetY, ModIcons.I_RIGHT_PANTS,
+                () -> getCurrentFrame().getRightLeg(),
+                () -> getExampleStatue().getRightLegPose(),
+                this::updateRightLeg,
+                rot -> frame -> frame.withRightLegRotation(rot.getX(), rot.getY(), rot.getZ()),
+                PlayerModelPart.RIGHT_PANTS_LEG,
+                editWidgets,
+                iconButtons
+        );
 
 
     }
+    private void setupRotationControls(
+            int x, int yOffset, ModIcons icon,
+            Supplier<StatuePartTable> currentFrameSupplier,
+            Supplier<Rotations> defaultPoseSupplier,
+            BiConsumer<Character, Integer> updater,
+            Function<Rotations, Function<StatueAnimationFrame, StatueAnimationFrame>> rotationSetter,
+            PlayerModelPart tooltipPart,
+            List<ScrollableEditBox> collector,
+            List<IconButton> buttons) {
+
+        ScrollableEditBox boxX = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET, yOffset + TEXT_Y_OFFSET + BASE_OFFSET, 32, 18, CommonComponents.EMPTY);
+        ScrollableEditBox boxY = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 30, yOffset + TEXT_Y_OFFSET + BASE_OFFSET, 32, 18, CommonComponents.EMPTY);
+        ScrollableEditBox boxZ = new ScrollableEditBox(Minecraft.getInstance().font, x + 20 + BASE_OFFSET + TEXT_BOX_X_OFFSET + 60, yOffset + TEXT_Y_OFFSET + BASE_OFFSET, 32, 18, CommonComponents.EMPTY);
+
+        boxX.setPrefix(Component.literal("X: "));
+        boxY.setPrefix(Component.literal("Y: "));
+        boxZ.setPrefix(Component.literal("Z: "));
+        setupEditBoxes((value, widget) -> {
+            char axis = widget == boxX ? 'x' : widget == boxY ? 'y' : 'z';
+            updater.accept(axis, value);
+        }, boxX, boxY, boxZ);
+
+        if (animation != null && getCurrentFrame() != null) {
+            StatuePartTable part = currentFrameSupplier.get();
+            updateEditBoxes((int) part.getXRot(), (int) part.getYRot(), (int) part.getZRot(), boxX, boxY, boxZ);
+        }
+
+        IconButton button = new IconButton(x + BASE_OFFSET, yOffset + 2, icon);
+        button.withCallback(() -> {
+            Rotations rot = defaultPoseSupplier.get();
+            updateRotation(rotationSetter.apply(rot));
+            boxX.setValue("" + (int) rot.getX());
+            boxY.setValue("" + (int) rot.getY());
+            boxZ.setValue("" + (int) rot.getZ());
+        });
+        button.getToolTip().addAll(createTooltipFor(tooltipPart));
+
+        buttons.add(button);
+        collector.add(boxX);
+        collector.add(boxY);
+        collector.add(boxZ);
+    }
+
+
+    private void changeFrame(int newFrame, boolean fromSelector) {
+        this.currentFrame = newFrame;
+        if (!fromSelector) frameSelector.setValueNoUpdate(newFrame + "");
+        updateBoxesFromFrame(newFrame);
+    }
+
+    private void updateBoxesFromFrame(int currentFrame){
+        StatueAnimationFrame frame = animation.getPreciseFrame(currentFrame);
+        if (frame != null) {
+            List<StatuePartTable> rotations = List.of(
+                    frame.getGlobal(),
+                    frame.getHead(),
+                    frame.getLeftArm(),
+                    frame.getRightArm(),
+                    frame.getLeftLeg(),
+                    frame.getRightLeg()
+            );
+
+            int widgetIndex = 0;
+            for (StatuePartTable rot : rotations) {
+                editWidgets.get(widgetIndex++).setValue("" + (int) rot.getXRot());
+                editWidgets.get(widgetIndex++).setValue("" + (int) rot.getYRot());
+                editWidgets.get(widgetIndex++).setValue("" + (int) rot.getZRot());
+            }
+        }
+    }
+
 
     private List<Component> createTooltipFor(PlayerModelPart part){
         List<Component> components = new ArrayList<>();
@@ -451,7 +396,7 @@ public class AnimationTab extends StatueTab {
     }
 
 
-    private void setupEditBoxes(Consumer<Integer> onChanged,ScrollableEditBox... inputs){
+    private void setupEditBoxes(BiConsumer<Integer,ScrollableEditBox> onChanged, ScrollableEditBox... inputs){
         for (ScrollableEditBox widget : inputs) {
             widget.setMaxLength(4);
             widget.setBordered(false);
@@ -461,7 +406,7 @@ public class AnimationTab extends StatueTab {
             widget.setResponder(s->{if (!s.isEmpty()){
                 try {
                     int i = Integer.parseInt(s);
-                    onChanged.accept(i);
+                    onChanged.accept(i,widget);
                 } catch (NumberFormatException ignored){}
             }});
             widget.setFilter(s -> {
@@ -474,7 +419,6 @@ public class AnimationTab extends StatueTab {
                     return false;
                 }
             });
-            boxes.add(widget);
         }
     }
 
@@ -506,30 +450,107 @@ public class AnimationTab extends StatueTab {
         animation.updateFrame(currentFrame,frame);
     }
 
-    private void updateGlobal(){
-        updateRotation(f->f.withGlobalRotation(Integer.parseInt(globalX.getValue()),Integer.parseInt(globalY.getValue()),Integer.parseInt(globalZ.getValue())));
+    private void updateGlobal(char axis, int value) {
+        updateRotation(f -> {
+            StatuePartTable current = f.getGlobal();
+            float x = current.getXRot();
+            float y = current.getYRot();
+            float z = current.getZRot();
+
+            switch (axis) {
+                case 'x' -> x = value;
+                case 'y' -> y = value;
+                case 'z' -> z = value;
+            }
+
+            return f.withGlobalRotation(x, y, z);
+        });
     }
 
-    private void updateHead(){
-        updateRotation(f->f.withHeadRotation(Integer.parseInt(headX.getValue()),Integer.parseInt(headY.getValue()),Integer.parseInt(headZ.getValue())));
+    private void updateHead(char axis, int value) {
+        updateRotation(f -> {
+            StatuePartTable current = f.getHead();
+            float x = current.getXRot();
+            float y = current.getYRot();
+            float z = current.getZRot();
+
+            switch (axis) {
+                case 'x' -> x = value;
+                case 'y' -> y = value;
+                case 'z' -> z = value;
+            }
+
+            return f.withHeadRotation(x, y, z);
+        });
     }
 
-    private void updateLeftArm() {
-        updateRotation(f -> f.withLeftArmRotation(Integer.parseInt(leftArmX.getValue()), Integer.parseInt(leftArmY.getValue()), Integer.parseInt(leftArmZ.getValue())));
+    private void updateLeftArm(char axis, int value) {
+        updateRotation(f -> {
+            StatuePartTable current = f.getLeftArm();
+            float x = current.getXRot();
+            float y = current.getYRot();
+            float z = current.getZRot();
+
+            switch (axis) {
+                case 'x' -> x = value;
+                case 'y' -> y = value;
+                case 'z' -> z = value;
+            }
+
+            return f.withLeftArmRotation(x, y, z);
+        });
     }
 
-    private void updateRightArm() {
-        updateRotation(f -> f.withRightArmRotation(Integer.parseInt(rightArmX.getValue()), Integer.parseInt(rightArmY.getValue()), Integer.parseInt(rightArmZ.getValue())));
+    private void updateRightArm(char axis, int value) {
+        updateRotation(f -> {
+            StatuePartTable current = f.getRightArm();
+            float x = current.getXRot();
+            float y = current.getYRot();
+            float z = current.getZRot();
+
+            switch (axis) {
+                case 'x' -> x = value;
+                case 'y' -> y = value;
+                case 'z' -> z = value;
+            }
+
+            return f.withRightArmRotation(x, y, z);
+        });
     }
 
-    private void updateLeftLeg() {
-        updateRotation(f -> f.withLeftLegRotation(Integer.parseInt(leftLegX.getValue()), Integer.parseInt(leftLegY.getValue()), Integer.parseInt(leftLegZ.getValue())));
+    private void updateLeftLeg(char axis, int value) {
+        updateRotation(f -> {
+            StatuePartTable current = f.getLeftLeg();
+            float x = current.getXRot();
+            float y = current.getYRot();
+            float z = current.getZRot();
+
+            switch (axis) {
+                case 'x' -> x = value;
+                case 'y' -> y = value;
+                case 'z' -> z = value;
+            }
+
+            return f.withLeftLegRotation(x, y, z);
+        });
     }
 
-    private void updateRightLeg() {
-        updateRotation(f -> f.withRightLegRotation(Integer.parseInt(rightLegX.getValue()), Integer.parseInt(rightLegY.getValue()), Integer.parseInt(rightLegZ.getValue())));
-    }
+    private void updateRightLeg(char axis, int value) {
+        updateRotation(f -> {
+            StatuePartTable current = f.getRightLeg();
+            float x = current.getXRot();
+            float y = current.getYRot();
+            float z = current.getZRot();
 
+            switch (axis) {
+                case 'x' -> x = value;
+                case 'y' -> y = value;
+                case 'z' -> z = value;
+            }
+
+            return f.withRightLegRotation(x, y, z);
+        });
+    }
 
     private void createButtonCallback() {
         if (animation == null) {

@@ -13,6 +13,8 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ public class ScrollableEditBox extends EditBox {
 
     private final List<Component> toolTips = new ArrayList<>();
 
+    private MutableComponent prefix = Component.empty();
 
     public ScrollableEditBox(Font font, int x, int y, int width, int height, Component text) {
         super(font, x, y, width, height, text);
@@ -31,6 +34,12 @@ public class ScrollableEditBox extends EditBox {
 
     public ScrollableEditBox(Font font, int x, int y, int width, int height, @Nullable EditBox copiable, Component text) {
         super(font, x, y, width, height, copiable, text);
+    }
+
+
+    public ScrollableEditBox setPrefix(Component prefix) {
+        this.prefix = prefix.copy();
+        return this;
     }
 
     @Override
@@ -83,7 +92,7 @@ public class ScrollableEditBox extends EditBox {
 
     protected void updateTooltip() {
         toolTips.clear();
-        Component title = Component.literal(getValue() + "°");
+        Component title = prefix.append(Component.literal(getValue() + "°"));
         final Component scrollToModify = CreateLang.translateDirect("gui.scrollInput.scrollToModify");
         toolTips.add(title.plainCopy()
                 .withStyle(s -> s.withColor(HEADER_RGB.getRGB())));
