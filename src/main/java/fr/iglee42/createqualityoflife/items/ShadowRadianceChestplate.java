@@ -20,12 +20,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,6 +60,28 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
         return true;
     }
 
+    private static boolean hasPlayerStackInInventory(Player player, Item item) {
+        for(int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack currentStack = player.getInventory().getItem(i);
+            if (!currentStack.isEmpty() && currentStack.is(item)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static int getFirstInventoryIndex(Player player, Item item) {
+        for(int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack currentStack = player.getInventory().getItem(i);
+            if (!currentStack.isEmpty() && currentStack.is(item)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean offHand) {
         super.inventoryTick(stack, level, entity, slot, offHand);
@@ -71,16 +91,31 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
             if (stack.getOrDefault(ModDataComponents.ARMOR_EFFECT,true) && CreateQOLConfigs.server().armorEffects.get())
                 player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 1, false, false));
-            if (player.isFallFlying() && isElytraEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && CreateQOLConfigs.server().elytraAllowed.get() && CreateQOLConfigs.server().elytraBoostAllowed.get() && level.getGameTime() % 10==0 && CommonKeysHandler.isHoldingUp(player)){
-                Vec3 vec31 =  player.getLookAngle();
-                double d0 = 1.5F;
-                double d1 = 0.1;
-                Vec3 vec32 = player.getDeltaMovement();
-                player.setDeltaMovement(vec32.add(vec31.x * d1 + (vec31.x * (double)d0 - vec32.x) * (double)0.5F, vec31.y * d1 + (vec31.y * (double)d0 - vec32.y) * (double)0.5F, vec31.z * d1 + (vec31.z * (double)d0 - vec32.z) * (double)0.5F));
-                if (!player.isCreative())BacktankUtil.consumeAir(player,stack,1);
+            if (player.isFallFlying() && isElytraEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && CreateQOLConfigs.server().elytraAllowed.get() && CreateQOLConfigs.server().elytraBoostAllowed.get() && CommonKeysHandler.isHoldingUp(player))
+            {
+                if (CreateQOLConfigs.server().useFireworksForBoost.get()) {
+                    if (hasPlayerStackInInventory(player,Items.FIREWORK_ROCKET)) {
+                        int rocketSlot = getFirstInventoryIndex(player,Items.FIREWORK_ROCKET);
+                        ItemStack firework = player.getInventory().getItem(rocketSlot);
+                        if (player.getFallFlyingTicks() % CreateQOLConfigs.server().fireworkDuration.get() == 0 || player.getFallFlyingTicks() == 0) {
+                            FireworkRocketEntity fireworkrocketentity = new FireworkRocketEntity(level, firework, player);
+                            level.addFreshEntity(fireworkrocketentity);
+                            player.getInventory().removeItem(rocketSlot,1);
+                        }
+                    }
+                } else {
+                    if ( level.getGameTime() % 10==0 ){
+                        Vec3 vec31 = player.getLookAngle();
+                        double d0 = 1.5F;
+                        double d1 = 0.1;
+                        Vec3 vec32 = player.getDeltaMovement();
+                        player.setDeltaMovement(vec32.add(vec31.x * d1 + (vec31.x * (double) d0 - vec32.x) * (double) 0.5F, vec31.y * d1 + (vec31.y * (double) d0 - vec32.y) * (double) 0.5F, vec31.z * d1 + (vec31.z * (double) d0 - vec32.z) * (double) 0.5F));
+                        if (!player.isCreative()) BacktankUtil.consumeAir(player, stack, 1);
+                    }
+                }
             }
             if (player.isCreative() || player.isSpectator()) return;
-            if (isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack) && CreateQOLConfigs.server().propellersAllowed.get()) {
+            if (isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack) && CreateQOLConfigs.server().propellerAllowed.get()) {
                 boolean hover = isHoverEnable(stack) && CreateQOLConfigs.server().hoverAllowed.get();
                 boolean jumpKeyActive = CommonKeysHandler.isHoldingUp(player);
                 boolean shiftKeyActive = CommonKeysHandler.isHoldingDown(player);
@@ -157,11 +192,11 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
         components.add(Component.literal("Propeller : ")
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.literal(
-                chooseState(CreateQOLConfigs.server().propellersAllowed.get() ,hasPropeller(stack) ,true,false,false))
-                .withStyle(!CreateQOLConfigs.server().propellersAllowed.get()? ChatFormatting.RED : ChatFormatting.YELLOW)));
-        if (hasPropeller(stack) && CreateQOLConfigs.server().propellersAllowed.get()) {
+                chooseState(CreateQOLConfigs.server().propellerAllowed.get() ,hasPropeller(stack) ,true,false,false))
+                .withStyle(!CreateQOLConfigs.server().propellerAllowed.get()? ChatFormatting.RED : ChatFormatting.YELLOW)));
+        if (hasPropeller(stack) && CreateQOLConfigs.server().propellerAllowed.get()) {
             components.add(Component.empty());
-            components.add(Component.literal("Fans : ")
+            components.add(Component.literal("Fan : ")
                     .withStyle(ChatFormatting.GOLD)
                     .append(Component.literal(chooseState(true,true,isFansEnable(stack),false,true))
                             .withStyle(ChatFormatting.YELLOW)));
@@ -184,24 +219,28 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
 
 
     public static void toggleFans(ItemStack chestplate,Player p) {
-        if (!CreateQOLConfigs.server().propellersAllowed.get()){
-            p.displayClientMessage(Component.literal("Propellers are disabled by the config").withStyle(ChatFormatting.RED),true);
+        if (!CreateQOLConfigs.server().propellerAllowed.get()){
+            p.displayClientMessage(Component.literal("Propeller is disabled by the config").withStyle(ChatFormatting.RED),true);
             return;
         }
-        chestplate.set(ModDataComponents.BACKTANK_FANS, chestplate.has(ModDataComponents.BACKTANK_FANS) ? !chestplate.get(ModDataComponents.BACKTANK_FANS) : true);
+        if (isElytraEnable(chestplate)){
+            p.displayClientMessage(Component.literal("Fan can't be enabled if the elytra are enabled").withStyle(ChatFormatting.RED),true);
+            return;
+        }
+        chestplate.set(ModDataComponents.BACKTANK_FANS, !chestplate.has(ModDataComponents.BACKTANK_FANS) || Boolean.FALSE.equals(chestplate.get(ModDataComponents.BACKTANK_FANS)));
         boolean fans = isFansEnable(chestplate);
-        p.displayClientMessage(Component.literal("Fans : ").append(Component.literal(chooseState(true,true,fans,false,true)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+        p.displayClientMessage(Component.literal("Fan : ").append(Component.literal(chooseState(true,true,fans,false,true)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
     public static void toggleHover(ItemStack chestplate,Player p) {
-        if (!CreateQOLConfigs.server().propellersAllowed.get()){
-            p.displayClientMessage(Component.literal("Propellers are disabled by the config").withStyle(ChatFormatting.RED),true);
+        if (!CreateQOLConfigs.server().propellerAllowed.get()){
+            p.displayClientMessage(Component.literal("Propeller is disabled by the config").withStyle(ChatFormatting.RED),true);
             return;
         }
         if (!CreateQOLConfigs.server().hoverAllowed.get()){
             p.displayClientMessage(Component.literal("Hover is disabled by the config").withStyle(ChatFormatting.RED),true);
             return;
         }
-        chestplate.set(ModDataComponents.BACKTANK_HOVER, chestplate.has(ModDataComponents.BACKTANK_HOVER) ? !chestplate.get(ModDataComponents.BACKTANK_HOVER) : false);
+        chestplate.set(ModDataComponents.BACKTANK_HOVER, chestplate.has(ModDataComponents.BACKTANK_HOVER) && Boolean.FALSE.equals(chestplate.get(ModDataComponents.BACKTANK_HOVER)));
         boolean hover = isHoverEnable(chestplate);
         p.displayClientMessage(Component.literal("Hover : ").append(Component.literal(chooseState(true,true,hover,false,true)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
@@ -211,7 +250,11 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
             p.displayClientMessage(Component.literal("Elytra are disabled by the config").withStyle(ChatFormatting.RED),true);
             return;
         }
-        chestplate.set(ModDataComponents.BACKTANK_ELYTRA_STATE, chestplate.has(ModDataComponents.BACKTANK_ELYTRA_STATE) ? !chestplate.get(ModDataComponents.BACKTANK_ELYTRA_STATE) : false);
+        if (isFansEnable(chestplate)){
+            p.displayClientMessage(Component.literal("Elytra can't be enabled if the fans is enabled").withStyle(ChatFormatting.RED),true);
+            return;
+        }
+        chestplate.set(ModDataComponents.BACKTANK_ELYTRA_STATE, chestplate.has(ModDataComponents.BACKTANK_ELYTRA_STATE) && Boolean.FALSE.equals(chestplate.get(ModDataComponents.BACKTANK_ELYTRA_STATE)));
         boolean elytra = isElytraEnable(chestplate);
         p.displayClientMessage(Component.literal("Elytra : ").append(Component.literal(chooseState(true,true,elytra,false,true)).withStyle(elytra ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }

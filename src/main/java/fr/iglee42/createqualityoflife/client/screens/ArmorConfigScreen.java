@@ -12,6 +12,7 @@ import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.ModArmorMaterials;
 import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
@@ -107,23 +108,27 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 				entry.setEditable(CreateQOLConfigs.server().helmetHaveGoggles.get());
 			}
 			if (entry.getComponent().equals(ModDataComponents.BACKTANK_FANS)){
-				if (!CreateQOLConfigs.server().propellersAllowed.get() && entry.isEditable()){
+				if (!CreateQOLConfigs.server().propellerAllowed.get() && entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
-				entry.setEditable(CreateQOLConfigs.server().propellersAllowed.get());
+				boolean flag = list.children().stream()
+						.anyMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(ModDataComponents.BACKTANK_ELYTRA_STATE) && !oEntry.getValue());
+				entry.setEditable(CreateQOLConfigs.server().propellerAllowed.get() && flag);
 			}
 			if (entry.getComponent().equals(ModDataComponents.BACKTANK_HOVER)){
-				if ((!CreateQOLConfigs.server().hoverAllowed.get() || !CreateQOLConfigs.server().propellersAllowed.get() )&& entry.isEditable()){
+				if ((!CreateQOLConfigs.server().hoverAllowed.get() || !CreateQOLConfigs.server().propellerAllowed.get() )&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
-				entry.setEditable(CreateQOLConfigs.server().propellersAllowed.get() && CreateQOLConfigs.server().hoverAllowed.get());
+				entry.setEditable(CreateQOLConfigs.server().propellerAllowed.get() && CreateQOLConfigs.server().hoverAllowed.get());
 			}
 
 			if (entry.getComponent().equals(ModDataComponents.BACKTANK_ELYTRA_STATE)){
 				if (!CreateQOLConfigs.server().elytraAllowed.get()&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
-				entry.setEditable(CreateQOLConfigs.server().elytraAllowed.get());
+				boolean flag = list.children().stream()
+						.anyMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(ModDataComponents.BACKTANK_FANS) && !oEntry.getValue());
+				entry.setEditable(CreateQOLConfigs.server().elytraAllowed.get() && flag);
 			}
 
 			if (entry.getComponent().equals(ModDataComponents.ARMOR_EFFECT)){
@@ -230,15 +235,15 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 						"Should the player's arms be replaced with the armor in first person"));
 
 				if (ShadowRadianceChestplate.hasPropeller(armor)){
-					list.children().add(new BooleanEntry("Enable Fans", armor.getOrDefault(ModDataComponents.BACKTANK_FANS,true),ModDataComponents.BACKTANK_FANS,
-							"Activate the propeller on the backtank"));
+					list.children().add(new BooleanEntry("Enable Fan", armor.getOrDefault(ModDataComponents.BACKTANK_FANS,true),ModDataComponents.BACKTANK_FANS,
+							"Activate the propeller on the backtank", "_Can't be enabled if the elytra are enabled_"));
 					list.children().add(new BooleanEntry("Enable Hover", armor.getOrDefault(ModDataComponents.BACKTANK_HOVER,false),ModDataComponents.BACKTANK_HOVER,
 							"Activate the hover mode"));
 				}
 
 				if (ShadowRadianceChestplate.hasElytra(armor)){
 					list.children().add(new BooleanEntry("Enable Elytra", armor.getOrDefault(ModDataComponents.BACKTANK_ELYTRA_STATE,false),ModDataComponents.BACKTANK_ELYTRA_STATE,
-							"Activate the elytra on the backtank"));
+							"Activate the elytra on the backtank", "_Can't be enabled if the fan is enabled_"));
 				}
 				list.children().add(new EnumEntry("Preferred Render",armor.getOrDefault(ModDataComponents.PREFERRED_RENDER, PreferredRender.BOTH),
 						ModDataComponents.PREFERRED_RENDER,
@@ -297,5 +302,11 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 		});
 
 
+	}
+
+	@Override
+	public void resize(Minecraft p_96575_, int p_96576_, int p_96577_) {
+		super.resize(p_96575_, p_96576_, p_96577_);
+		selectedItem = -1;
 	}
 }

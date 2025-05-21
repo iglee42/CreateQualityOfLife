@@ -12,6 +12,7 @@ import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
 import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -23,6 +24,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -72,7 +74,7 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
         if (!level.isClientSide) {
             if (level.getBlockEntity(pos) instanceof ShadowRadianceBacktankBE be){
                 if (!be.hasPropeller() && AllItems.PROPELLER.is(player.getMainHandItem().getItem())) {
-                    if (!CreateQOLConfigs.server().propellersAllowed.get()) {
+                    if (!CreateQOLConfigs.server().propellerAllowed.get()) {
                         player.displayClientMessage(Component.literal("Propellers are disabled by the config").withStyle(ChatFormatting.RED), true);
                         level.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
                         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
@@ -89,6 +91,12 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
                         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
                     }
                     be.setElytra(true);
+                    ItemEnchantments enchantments = stack.get(DataComponents.ENCHANTMENTS);
+                    if (enchantments != null && !enchantments.isEmpty()){
+                        ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
+                        book.set(DataComponents.STORED_ENCHANTMENTS, enchantments);
+                        Block.popResource(level,pos,book);
+                    }
                     player.getMainHandItem().shrink(1);
                     level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
                     return ItemInteractionResult.CONSUME;

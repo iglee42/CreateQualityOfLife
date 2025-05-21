@@ -39,6 +39,7 @@ public class GoggleArmorLayer<T extends LivingEntity, M extends EntityModel<T>> 
             return;
         if (!entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).shouldRenderAddition()) return;
         if (!CreateQOLConfigs.server().helmetHaveGoggles.get()) return;
+        if (!entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(ModDataComponents.HELMET_GOGGLES,true))return;
 
         M entityModel = getParentModel();
         if (!(entityModel instanceof HumanoidModel<?> model))

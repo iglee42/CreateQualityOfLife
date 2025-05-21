@@ -3,6 +3,7 @@ package fr.iglee42.createqualityoflife.registries;
 import com.mojang.serialization.Codec;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
