@@ -5,6 +5,7 @@ import com.simibubi.create.foundation.networking.BlockEntityConfigurationPacket;
 import fr.iglee42.createqualityoflife.registries.ModDataComponents;
 import fr.iglee42.createqualityoflife.registries.ModPackets;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
@@ -52,6 +53,8 @@ public class ChangeArmorComponentPacket implements ServerboundPacketPayload {
             player.getInventory().getArmor(slot).set(ModDataComponents.BACKTANK_HOVER, value != 0);
         } else if (component.equals(ModDataComponents.ARMOR_RENDER_TYPE)){
           player.getInventory().getArmor(slot).set(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.BY_ID.apply(value));
+        } else if (component.equals(ModDataComponents.PREFERRED_RENDER)){
+          player.getInventory().getArmor(slot).set(ModDataComponents.PREFERRED_RENDER, PreferredRender.BY_ID.apply(value));
         }
     }
 }

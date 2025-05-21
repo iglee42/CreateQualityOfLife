@@ -23,6 +23,7 @@
   ],
   "client": [
     "BacktankArmorLayerMixin",
+    "ElytraLayerMixin",
     "HumanoidArmorLayerMixin"
   ],
   "injectors": {

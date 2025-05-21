@@ -14,6 +14,7 @@ import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.items.*;
 import fr.iglee42.createqualityoflife.statue.StatueItem;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Rarity;
@@ -57,7 +58,7 @@ public class ModItems {
                     p -> new ShadowRadianceChestplate(ModArmorMaterials.SHADOW_RADIANCE, p, CreateQOL.asResource("shadow_radiance"),
                             SHADOW_RADIANCE_CHESTPLATE_PLACEABLE))
             .model(AssetLookup.customGenericItemModel("_", "item"))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1184).component(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1184).component(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).component(ModDataComponents.PREFERRED_RENDER, PreferredRender.BOTH))
             .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
             .tag(commonItemTag("armors/chestplates"))
             .register();

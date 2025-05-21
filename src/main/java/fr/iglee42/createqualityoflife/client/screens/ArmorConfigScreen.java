@@ -240,6 +240,23 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 					list.children().add(new BooleanEntry("Enable Elytra", armor.getOrDefault(ModDataComponents.BACKTANK_ELYTRA_STATE,false),ModDataComponents.BACKTANK_ELYTRA_STATE,
 							"Activate the elytra on the backtank"));
 				}
+				list.children().add(new EnumEntry("Preferred Render",armor.getOrDefault(ModDataComponents.PREFERRED_RENDER, PreferredRender.BOTH),
+						ModDataComponents.PREFERRED_RENDER,
+						"Define how the additions should be rendered.",
+						"\"Elytra\" renders only the elytra",
+						"\"Backtank\" renders only the backtank"){
+					@Override
+					protected void cycleValue(int direction) {
+						List<Integer> armors = ((ArmorConfigScreen)Minecraft.getInstance().screen).getArmors();
+						int selected = ((ArmorConfigScreen)Minecraft.getInstance().screen).getSelectedItem();
+						ArmorItem item = (ArmorItem) Minecraft.getInstance().player.getInventory().getArmor(armors.get(selected)).getItem();
+						PreferredRender e = (PreferredRender) getValue();
+						PreferredRender[] options = Arrays.stream(PreferredRender.values()).filter(it->it.canBeSelected(item)).toArray(PreferredRender[]::new);
+						e = options[Math.floorMod(e.ordinal() + direction, options.length)];
+						setValue(e);
+						bumpCog(direction * 15f);
+					}
+				});
 			}
 			case BOOTS -> {
 				list.children().add(new BooleanEntry("Enable Diving", armor.getOrDefault(ModDataComponents.BOOTS_DIVING,false),ModDataComponents.BOOTS_DIVING,
