@@ -18,6 +18,7 @@ import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.createmod.catnip.config.ui.ConfigScreen;
 import net.createmod.catnip.config.ui.ConfigScreenList;
+import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
@@ -116,20 +117,24 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 				if (!CreateQOLConfigs.server().propellersAllowed.get() && entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
-				entry.setEditable(CreateQOLConfigs.server().propellersAllowed.get());
+				boolean flag = list.children().stream()
+						.anyMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(ModDataComponents.BACKTANK_ELYTRA_STATE) && !oEntry.getValue());
+				entry.setEditable(CreateQOLConfigs.server().propellerAllowed.get() && flag);
 			}
 			if (entry.getNbtKey().equals(NBTConstants.NBT_HOVER)){
 				if ((!CreateQOLConfigs.server().hoverAllowed.get() || !CreateQOLConfigs.server().propellersAllowed.get() )&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
-				entry.setEditable(CreateQOLConfigs.server().propellersAllowed.get() && CreateQOLConfigs.server().hoverAllowed.get());
+				entry.setEditable(CreateQOLConfigs.server().propellerAllowed.get() && CreateQOLConfigs.server().hoverAllowed.get());
 			}
 
 			if (entry.getNbtKey().equals(NBTConstants.NBT_ELYTRA_STATE)){
 				if (!CreateQOLConfigs.server().elytraAllowed.get()&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
-				entry.setEditable(CreateQOLConfigs.server().elytraAllowed.get());
+				boolean flag = list.children().stream()
+						.anyMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(ModDataComponents.BACKTANK_FANS) && !oEntry.getValue());
+				entry.setEditable(CreateQOLConfigs.server().elytraAllowed.get() && flag);
 			}
 
 			if (entry.getNbtKey().equals(NBTConstants.NBT_EFFECTS)){
@@ -239,14 +244,14 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 
 				if (ShadowRadianceChestplate.hasPropeller(armor)){
 					list.children().add(new BooleanEntry("Enable Fans", NBTConstants.getOrDefault(armor,NBTConstants.NBT_FANS,true),NBTConstants.NBT_FANS,
-                            "Activate the propeller on the backtank"));
+                            "Activate the propeller on the backtank", "_Can't be enabled if the elytra are enabled_"));
 					list.children().add(new BooleanEntry("Enable Hover",NBTConstants.getOrDefault(armor,NBTConstants.NBT_HOVER,false),NBTConstants.NBT_HOVER,
                             "Activate the hover mode"));
 				}
 
 				if (ShadowRadianceChestplate.hasElytra(armor)){
 					list.children().add(new BooleanEntry("Enable Elytra", NBTConstants.getOrDefault(armor,NBTConstants.NBT_ELYTRA_STATE,false),NBTConstants.NBT_ELYTRA_STATE,
-							"Activate the elytra on the backtank"));
+							"Activate the elytra on the backtank", "_Can't be enabled if the fan is enabled_"));
 				}
 				list.children().add(new EnumEntry("Preferred Render",armor.getOrDefault(ModDataComponents.PREFERRED_RENDER, PreferredRender.BOTH),
 						ModDataComponents.PREFERRED_RENDER,
@@ -305,5 +310,11 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 		});
 
 
+	}
+
+	@Override
+	public void resize(Minecraft p_96575_, int p_96576_, int p_96577_) {
+		super.resize(p_96575_, p_96576_, p_96577_);
+		selectedItem = -1;
 	}
 }

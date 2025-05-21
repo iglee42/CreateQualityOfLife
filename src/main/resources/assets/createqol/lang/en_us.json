@@ -153,13 +153,13 @@
   "createqol.statue.hatTab.desc": "The slider are normally parts of the UI of Create trains.",
   "createqol.statue.left_sleeveTab.desc": "",
   "createqol.statue.left_pants_legTab.desc": "",
-  "createqol.statue.animationTab.desc": "Originally, Animations were designed to be coded in Lua.",
-  "createqol.statue.publishedAnimationTab.desc": "Animation can be started/paused with a right with the Wrench.\nIt can be restarted with a sneak-right click with the Wrench.",
+  "createqol.statue.publishedAnimationTab.desc": "Originally, Animations were designed to be coded in Lua.",
+  "createqol.statue.animationTab.desc": "Animation can be started/paused with a right with the Wrench.\nIt can be restarted with a sneak-right click with the Wrench.",
 
   "createqol.statue.animation.frame": "Frame ",
   "createqol.statue.animation.copy_from": "Copy current %s",
-  "createqol.statue.animation.create": "Click on the button to create an animation. Statues can only hold 1 animation at the same time.",
-  "createqol.statue.animation.frame.create": "Click on the button to create a frame. There can only be one frame per tick. Each frame corresponds to 1 tick of the animation.",
+  "createqol.statue.animation.create": "Click on the button to create an animation. Statues can only store 1 animation.",
+  "createqol.statue.animation.frame.create": "Click on the button to create a frame. 1 frame corresponds to 1 tick of the animation. Interpolation between frame is automatically made.",
 
   "createqol.statue.animation.revert": "Revert",
   "createqol.statue.animation.revert_1": "Should the animation go backwards",
@@ -171,5 +171,13 @@
   "createqol.statue.animation.next_frame": "Next existing frame",
   "createqol.statue.animation.delete_frame": "Delete current frame",
   "createqol.statue.animation.publish": "Share animation to other players",
-  "createqol.statue.animation.delete": "Delete Shared Animation"
+  "createqol.statue.animation.delete": "Delete Shared Animation",
+
+  "createqol.statue.owner": "Owner: %s",
+  "createqol.statue.unknow_owner": "Unknow Owner",
+  "createqol.statue.no_owner": "No Owner",
+  "createqol.statue.locked": "This statue is locked ! Only the owner can modify it.",
+  "createqol.statue.name_utility": "The name is used when you share the animation. It won't be kept if you close the gui.",
+
+  "createqol.chestplate.use_fireworks": "Can be used as a boost with the shadow radiance chestplate by keeping pressed the jump key."
 }

@@ -76,7 +76,7 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
         if (!level.isClientSide) {
             if (level.getBlockEntity(pos) instanceof ShadowRadianceBacktankBE be){
                 if (!be.hasPropeller() && AllItems.PROPELLER.is(player.getMainHandItem().getItem())) {
-                    if (!CreateQOLConfigs.server().propellersAllowed.get()) {
+                    if (!CreateQOLConfigs.server().propellerAllowed.get()) {
                         player.displayClientMessage(Component.literal("Propellers are disabled by the config").withStyle(ChatFormatting.RED), true);
                         level.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
                         return InteractionResult.PASS;
@@ -93,6 +93,12 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
                         return InteractionResult.PASS;
                     }
                     be.setElytra(true);
+                    ItemEnchantments enchantments = stack.get(DataComponents.ENCHANTMENTS);
+                    if (enchantments != null && !enchantments.isEmpty()){
+                        ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
+                        book.set(DataComponents.STORED_ENCHANTMENTS, enchantments);
+                        Block.popResource(level,pos,book);
+                    }
                     player.getMainHandItem().shrink(1);
                     level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
                     return InteractionResult.CONSUME;

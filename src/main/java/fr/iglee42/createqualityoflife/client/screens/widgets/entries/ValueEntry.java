@@ -31,7 +31,7 @@ public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 		labelTooltip.addAll(commentLines.stream()
 				.map(s -> s.equals(".") ? " " : s)
 				.map(Component::literal)
-				.flatMap(stc -> FontHelper.cutTextComponent(stc, FontHelper.Palette.ALL_GRAY).stream())
+				.flatMap(stc -> FontHelper.cutTextComponent(stc, FontHelper.Palette.GRAY_AND_RED).stream())
 				.toList()
 		);
 	}
@@ -45,7 +45,7 @@ public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 		labelTooltip.addAll(commentLines.stream()
 				.map(s -> s.equals(".") ? " " : s)
 				.map(Component::literal)
-				.flatMap(stc -> FontHelper.cutTextComponent(stc, FontHelper.Palette.ALL_GRAY).stream())
+				.flatMap(stc -> FontHelper.cutTextComponent(stc, FontHelper.Palette.GRAY_AND_RED).stream())
 				.toList()
 		);
 		if (!b)labelTooltip.add(Component.literal("Disabled by the config").withStyle(ChatFormatting.RED));

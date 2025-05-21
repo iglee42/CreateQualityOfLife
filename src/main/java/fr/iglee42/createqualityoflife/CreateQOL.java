@@ -32,6 +32,7 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -88,6 +89,7 @@ public class CreateQOL {
         forgeEventBus.addListener(this::registerReloadListener);
         forgeEventBus.addListener(this::playerJoin);
         forgeEventBus.addListener(this::onWorldTick);
+        forgeEventBus.addListener(this::itemTooltips);
 
         //if (isActivate(Features.SHADOW_RADIANCE)){
         //    MysteriousItemConversionCategory.RECIPES.add(BlazeBurnerLiquidRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.SHADOW_STEEL.asStack()));
@@ -148,5 +150,10 @@ public class CreateQOL {
         manager.tick((ServerLevel) event.level);
     }
 
-
+    public void itemTooltips(ItemTooltipEvent event){
+        if (!event.getItemStack().is(Items.FIREWORK_ROCKET)) return;
+        if (isActivate(Features.SHADOW_RADIANCE) && CreateQOLConfigs.server().elytraBoostAllowed.get() && CreateQOLConfigs.server().useFireworksForBoost.get()){
+            event.getToolTip().add(2,CreateQOLLang.translateDirect("chestplate.use_fireworks").withStyle(ChatFormatting.YELLOW));
+        }
+    }
 }
