@@ -44,7 +44,7 @@ public class BrassTrashCanBlockEntity extends TrashCanBlockEntity{
 
     @Override
     public boolean canAcceptItem(ItemStack stack) {
-        return super.canAcceptItem(stack) && canActivate() && filtering.test(stack);
+        return super.canAcceptItem(stack) && canActivate() && filtering.test(stack) && !getBlockState().getValue(BrassTrashCanBlock.POWERED);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class BrassTrashCanBlockEntity extends TrashCanBlockEntity{
     public void tick() {
         super.tick();
         boolean clientSide = level != null && level.isClientSide && !isVirtual();
-        if (!clientSide && getBlockState().getValue(BrassTrashCanBlock.OPEN)) handleInputFromAbove();
+        if (!clientSide && getBlockState().getValue(BrassTrashCanBlock.OPEN) && !getBlockState().getValue(BrassTrashCanBlock.POWERED)) handleInputFromAbove();
     }
 
     public enum Mode implements INamedIconOptions {

@@ -25,10 +25,11 @@ public class BrassTrashCanBlock extends TrashCanBlock {
 
 	public BrassTrashCanBlock(Properties properties) {
 		super(properties);
-		registerDefaultState(defaultBlockState().setValue(OPEN, false));
+		registerDefaultState(defaultBlockState().setValue(OPEN, false).setValue(POWERED,false));
 	}
 
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
+	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
 	@Override
 	public InteractionResult onWrenched(BlockState state, UseOnContext context) {
@@ -37,8 +38,29 @@ public class BrassTrashCanBlock extends TrashCanBlock {
 	}
 
 	@Override
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos,
+								boolean isMoving) {
+		super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+		if (level.isClientSide)
+			return;
+		if (!level.getBlockTicks()
+				.willTickThisTick(pos, this))
+			level.scheduleTick(pos, this, 1);
+	}
+
+
+	@Override
+	public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource r) {
+		boolean previouslyPowered = state.getValue(POWERED);
+		if (previouslyPowered != worldIn.hasNeighborSignal(pos))
+			worldIn.setBlock(pos, state.cycle(POWERED), 2);
+	}
+
+
+	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext p_196258_1_) {
-		return super.getStateForPlacement(p_196258_1_).setValue(OPEN, false);
+		return super.getStateForPlacement(p_196258_1_).setValue(OPEN, false).setValue(POWERED,p_196258_1_.getLevel()
+				.hasNeighborSignal(p_196258_1_.getClickedPos()));
 	}
 
 	@Override
@@ -53,7 +75,7 @@ public class BrassTrashCanBlock extends TrashCanBlock {
 
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> p_206840_1_) {
-		super.createBlockStateDefinition(p_206840_1_.add(OPEN));
+		super.createBlockStateDefinition(p_206840_1_.add(OPEN,POWERED));
 	}
 
 
