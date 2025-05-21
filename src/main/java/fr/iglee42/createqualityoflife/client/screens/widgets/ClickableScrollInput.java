@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife.client.screens.widgets;
 
 import com.simibubi.create.foundation.gui.widget.ScrollInput;
+import net.minecraft.util.Mth;
 
 public class ClickableScrollInput extends ScrollInput {
     public ClickableScrollInput(int xIn, int yIn, int widthIn, int heightIn) {
@@ -11,8 +12,8 @@ public class ClickableScrollInput extends ScrollInput {
     public void onClick(double mouseX, double mouseY, int button) {
         double clickedX = mouseX - getX();
         double progress = clickedX / width;
-        int newValue = (int) (progress * max);
-        setState(newValue);
+        int newValue = (int) (progress * (max + Mth.abs(min)));
+        setState(newValue - Mth.abs(min));
         onChanged();
     }
 

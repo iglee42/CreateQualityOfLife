@@ -192,8 +192,8 @@ public class FloatScrollInput extends AbstractSimiWidget {
 	public void onClick(double mouseX, double mouseY, int button) {
 		double clickedX = mouseX - getX();
 		double progress = clickedX / width;
-		float newValue = (float) (progress * max);
-		setState(newValue);
+		float newValue = (float) (progress * (max + Math.abs(min)));
+		setState(newValue - Math.abs(min));
 		onChanged();
 	}
 

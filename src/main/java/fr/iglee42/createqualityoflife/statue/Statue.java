@@ -6,6 +6,7 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.equipment.wrench.WrenchItem;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueHandler;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.registries.ModEntityDataSerializers;
 import fr.iglee42.createqualityoflife.registries.ModEntityTypes;
 import fr.iglee42.createqualityoflife.registries.ModItems;
@@ -25,6 +26,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
@@ -444,7 +446,8 @@ public class Statue extends LivingEntity {
             return InteractionResult.SUCCESS;
         } else if (player.level().isClientSide) {
             return InteractionResult.CONSUME;
-        } else  if (isInvulnerable() && hasOwner() && !player.getUUID().equals(getOwner().get())) {
+        } else  if (isInvulnerable() && hasOwner() && !player.getUUID().equals(getOwner().get()) && !player.isCreative()) {
+            player.displayClientMessage(CreateQOLLang.translateDirect("statue.locked").withStyle(ChatFormatting.RED),true);
             return InteractionResult.FAIL;
         } else {
             if (player.getItemInHand(hand).is(Items.BREAD) && player.getItemInHand(hand).getHoverName().getString().equals("OuiOuiBaguetteUwU")){
@@ -550,7 +553,10 @@ public class Statue extends LivingEntity {
             if (p_31579_.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
                 this.kill();
                 return false;
-            } else if (this.isInvulnerableTo(p_31579_) || this.invisible || this.isMarker()) {
+            } else if (p_31579_.getEntity() instanceof ServerPlayer player && !player.isCreative() && isInvulnerable() && hasOwner() && !getOwner().get().equals(player.getUUID())){
+                return false;
+            }
+            else if (this.isInvulnerableTo(p_31579_) || this.invisible || this.isMarker()) {
                 return false;
             } else if (p_31579_.is(DamageTypeTags.IS_EXPLOSION)) {
                 this.brokenByAnything(serverlevel, p_31579_);
@@ -909,7 +915,7 @@ public class Statue extends LivingEntity {
     }
 
     public boolean hasOwner() {
-        return this.entityData.get(DATA_OWNER).isPresent();
+        return getOwner().isPresent();
     }
 
     public Optional<UUID> getOwner() {
