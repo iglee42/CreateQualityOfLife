@@ -51,6 +51,8 @@ public class ChangeArmorComponentPacket implements ServerboundPacketPayload {
             player.getInventory().getArmor(slot).set(ModDataComponents.BACKTANK_FANS, value != 0);
         } else if (component.equals(ModDataComponents.BACKTANK_HOVER)){
             player.getInventory().getArmor(slot).set(ModDataComponents.BACKTANK_HOVER, value != 0);
+        } else if (component.equals(ModDataComponents.BOOTS_BELT)){
+            player.getInventory().getArmor(slot).set(ModDataComponents.BOOTS_BELT, value != 0);
         } else if (component.equals(ModDataComponents.ARMOR_RENDER_TYPE)){
           player.getInventory().getArmor(slot).set(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.BY_ID.apply(value));
         } else if (component.equals(ModDataComponents.PREFERRED_RENDER)){

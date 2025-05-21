@@ -263,7 +263,8 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 						"Enable diving, which makes the player descends quicker in liquids"));
 				list.children().add(new BooleanEntry("Enable Lava Walking", armor.getOrDefault(ModDataComponents.BOOTS_LAVA,true),ModDataComponents.BOOTS_LAVA,
 						"Enable walking under lava, which makes the player walks normally under lava"));
-
+				list.children().add(new BooleanEntry("Enable Belt Blocking", armor.getOrDefault(ModDataComponents.BOOTS_BELT,true),ModDataComponents.BOOTS_BELT,
+						"You won't be pushed by belt if enabled"));
 			}
 			default -> {}
 		}

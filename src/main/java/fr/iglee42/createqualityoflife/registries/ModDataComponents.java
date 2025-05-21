@@ -27,9 +27,11 @@ public class ModDataComponents {
     public static final DataComponentType<Boolean> HELMET_GOGGLES = register("goggles",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> BOOTS_DIVING = register("diving",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> BOOTS_LAVA = register("lava",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DataComponentType<Boolean> BOOTS_BELT = register("boots_belt",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> BACKTANK_ELYTRA = register("elytra",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> BACKTANK_ELYTRA_STATE = register("elytra_state",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<ArmorRenderType> ARMOR_RENDER_TYPE = register("render_type",b->b.persistent(ArmorRenderType.CODEC).networkSynchronized(ArmorRenderType.STREAM_CODEC));
+    public static final DataComponentType<PreferredRender> PREFERRED_RENDER = register("preferred_render", b->b.persistent(PreferredRender.CODEC).networkSynchronized(PreferredRender.STREAM_CODEC));
 
 
     private static <T> DataComponentType<T> register(String name, UnaryOperator<DataComponentType.Builder<T>> builder) {
