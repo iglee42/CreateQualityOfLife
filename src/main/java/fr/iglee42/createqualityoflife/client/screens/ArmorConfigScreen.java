@@ -267,6 +267,8 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 				});
 			}
 			case BOOTS -> {
+				list.children().add(new BooleanEntry("Enable Belt Blocking", NBTConstants.getOrDefault(armor,NBTConstants.NBT_BELT,true),NBTConstants.NBT_BELT,
+						"You won't be pushed by belt if enabled"));
 				list.children().add(new BooleanEntry("Enable Diving", NBTConstants.getOrDefault(armor,NBTConstants.NBT_DIVING,false),NBTConstants.NBT_DIVING,
                         "Enable diving, which makes the player descends quicker in liquids"));
                 list.children().add(new BooleanEntry("Enable Lava Walking", NBTConstants.getOrDefault(armor,NBTConstants.NBT_LAVA,true),NBTConstants.NBT_LAVA,
