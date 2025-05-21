@@ -12,6 +12,7 @@ import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.ModItems;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
+import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.math.AngleHelper;
 import net.createmod.catnip.render.CachedBuffers;
@@ -19,7 +20,6 @@ import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -43,7 +43,11 @@ public class BacktankArmorLayerMixin {
                 ci.cancel();
                 return;
             }
-            renderedState = renderedState.setValue(ShadowRadianceBacktankBlock.PROPELLER,ShadowRadianceChestplate.hasPropeller(stack) && CreateQOLConfigs.server().propellersAllowed.get());
+            if (!stack.getOrDefault(ModDataComponents.PREFERRED_RENDER, PreferredRender.BOTH).shouldRenderBacktank()){
+                ci.cancel();
+                return;
+            }
+            renderedState = renderedState.setValue(ShadowRadianceBacktankBlock.PROPELLER,ShadowRadianceChestplate.hasPropeller(stack) && CreateQOLConfigs.server().propellerAllowed.get());
             backtank = CachedBuffers.block(renderedState);
 
             ms.pushPose();
