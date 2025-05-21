@@ -1,0 +1,7 @@
+{
+	"parent": "createqol:block/trash_can/block_brass_open",
+	"textures": {
+		"3": "createqol:block/brass_trash_open_powered",
+		"particle": "createqol:block/brass_trash_open_powered"
+	}
+}
