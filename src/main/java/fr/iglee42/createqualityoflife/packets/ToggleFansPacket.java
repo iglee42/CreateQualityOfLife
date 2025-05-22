@@ -1,10 +1,12 @@
 package fr.iglee42.createqualityoflife.packets;
 
 import com.simibubi.create.content.equipment.armor.BacktankItem;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.ModItems;
 import fr.iglee42.createqualityoflife.registries.ModPackets;
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,6 +29,8 @@ public class ToggleFansPacket implements ServerboundPacketPayload {
                 if (backtank == null) return;
                 if (ModItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && ShadowRadianceChestplate.hasPropeller(chestplate)){
                     ShadowRadianceChestplate.toggleFans(chestplate,player);
+                }else if (ModItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && !ShadowRadianceChestplate.hasPropeller(chestplate)){
+                    player.sendSystemMessage(CreateQOLLang.translateDirect("chestplate.no_propeller").withStyle(ChatFormatting.RED),true);
                 }
             }
     }

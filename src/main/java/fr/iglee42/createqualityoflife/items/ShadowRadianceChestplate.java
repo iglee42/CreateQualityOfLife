@@ -269,9 +269,11 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
         return !chestplate.has(ModDataComponents.BACKTANK_ELYTRA_STATE) ? !isFansEnable(chestplate) : Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_ELYTRA_STATE));
     }
     public static boolean isFansEnable(ItemStack chestplate){
+        if (!hasPropeller(chestplate)) return false;
         return !chestplate.has(ModDataComponents.BACKTANK_FANS) || Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_FANS));
     }
     public static boolean isHoverEnable(ItemStack chestplate){
+        if (!hasPropeller(chestplate)) return false;
         return chestplate.has(ModDataComponents.BACKTANK_HOVER) && Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_HOVER));
     }
 }
