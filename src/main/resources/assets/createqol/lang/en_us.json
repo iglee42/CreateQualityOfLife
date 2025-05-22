@@ -179,5 +179,7 @@
   "createqol.statue.locked": "This statue is locked ! Only the owner can modify it.",
   "createqol.statue.name_utility": "The name is used when you share the animation. It won't be kept if you close the gui.",
 
-  "createqol.chestplate.use_fireworks": "Can be used as a boost with the shadow radiance chestplate by keeping pressed the jump key."
+  "createqol.chestplate.use_fireworks": "Can be used as a boost with the shadow radiance chestplate by keeping pressed the jump key.",
+  "createqol.chestplate.no_propeller": "You can't switch the fan/hover because the chestplate doesn't have a propeller installed.",
+  "createqol.chestplate.no_elytra": "You can't switch the elytra because the chestplate doesn't have elytra installed"
 }

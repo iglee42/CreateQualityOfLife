@@ -154,7 +154,7 @@ public class CreateQOL {
     public void itemTooltips(ItemTooltipEvent event){
         if (!event.getItemStack().is(Items.FIREWORK_ROCKET)) return;
         if (isActivate(Features.SHADOW_RADIANCE) && CreateQOLConfigs.server().elytraBoostAllowed.get() && CreateQOLConfigs.server().useFireworksForBoost.get()){
-            event.getToolTip().add(2,CreateQOLLang.translateDirect("chestplate.use_fireworks").withStyle(ChatFormatting.YELLOW));
+            event.getToolTip().add(CreateQOLLang.translateDirect("chestplate.use_fireworks").withStyle(ChatFormatting.YELLOW));
         }
     }
 }

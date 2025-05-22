@@ -275,9 +275,11 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
         return !chestplate.getOrCreateTag().contains(NBTConstants.NBT_ELYTRA_STATE) ? !isFansEnable(chestplate) : chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_ELYTRA_STATE);
     }
     public static boolean isFansEnable(ItemStack chestplate){
+        if (!hasPropeller(chestplate)) return false;
         return !chestplate.getOrCreateTag().contains(NBTConstants.NBT_FANS) || chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_FANS);
     }
     public static boolean isHoverEnable(ItemStack chestplate){
+        if (!hasPropeller(chestplate)) return false;
         return chestplate.getOrCreateTag().contains(NBTConstants.NBT_HOVER) && chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_HOVER);
     }
 }
