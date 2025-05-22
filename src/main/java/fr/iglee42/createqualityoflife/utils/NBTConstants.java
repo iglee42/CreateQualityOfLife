@@ -16,6 +16,8 @@ public class NBTConstants {
     public static final String NBT_RENDER_TYPE = "renderType";
     public static final String NBT_ELYTRA = "elytra";
     public static final String NBT_ELYTRA_STATE = "elytraState";
+    public static final String NBT_BELT = "belt";
+    public static final String NBT_PREFERRED_RENDER = "preferredRender";
 
 
     public static boolean getOrDefault(ItemStack stack,String nbt,boolean defaultValue){
@@ -24,5 +26,9 @@ public class NBTConstants {
 
     public static ArmorRenderType getOrDefault(ItemStack stack,String nbt){
         return stack.getOrCreateTag().contains(nbt) ? ArmorRenderType.BY_ID.apply(stack.getOrCreateTag().getInt(nbt)) : ArmorRenderType.ALL;
+    }
+
+    public static PreferredRender getOrDefault(String nbt, ItemStack stack){
+        return stack.getOrCreateTag().contains(nbt) ? PreferredRender.BY_ID.apply(stack.getOrCreateTag().getInt(nbt)) : PreferredRender.BOTH;
     }
 }

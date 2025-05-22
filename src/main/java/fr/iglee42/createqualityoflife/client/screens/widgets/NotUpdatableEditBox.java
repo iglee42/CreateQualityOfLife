@@ -23,8 +23,8 @@ public class NotUpdatableEditBox extends EditBox {
                 this.value = p_94145_;
             }
 
-            this.moveCursorToEnd(false);
-            this.setHighlightPos(this.cursorPos);
+            this.moveCursorToEnd();
+            this.setHighlightPos(cursorPos);
         }
 
     }

@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.gui.widget.IconButton;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.tabs.*;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ItemButton;
+import fr.iglee42.createqualityoflife.client.screens.widgets.StatueAnimationWidget;
 import fr.iglee42.createqualityoflife.packets.SaveStatueConfigPacket;
 import fr.iglee42.createqualityoflife.registries.ModEntityTypes;
 import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
@@ -171,7 +172,7 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
                 .forEach(btn->btn.visible = !hideBackground);
         confirmButton.visible = !hideBackground;
         Component toDraw = exampleStatue.hasOwner() && Minecraft.getInstance().level != null ? (Minecraft.getInstance().level.getPlayerByUUID(exampleStatue.getOwner().get()) != null ? CreateQOLLang.translateDirect("statue.owner" ,Minecraft.getInstance().level.getPlayerByUUID(exampleStatue.getOwner().get()).getName().getString() ):CreateQOLLang.translateDirect( "statue.unknow_owner")): CreateQOLLang.translateDirect("statue.no_owner");
-        if (!hideBackground)graphics.drawScrollingString(font,toDraw, leftPos + 5, leftPos + 66,topPos + ModGuiTextures.STATUE.height - 21, 0xffffff);
+        if (!hideBackground) StatueAnimationWidget.originalDrawScrollingString(graphics,font,toDraw, leftPos + 5, leftPos + 66,topPos + ModGuiTextures.STATUE.height - 21, 0xffffff);
 
         if (!CreateQOLLang.translateDirect(tabs.get(currentTab).getKey()+".desc").getString().isEmpty() && !hideBackground) {
             boolean infoHovered = mouseX >= getGuiLeft() + imageWidth - 18 && mouseX <= getGuiLeft() + imageWidth - 2 && mouseY >= getGuiTop() && mouseY <= getGuiTop() + 16;
@@ -188,6 +189,8 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
 
 
     }
+
+
 
 
 

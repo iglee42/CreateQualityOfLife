@@ -94,7 +94,7 @@ public class StatueAnimationWidget extends AbstractSimiWidget {
 
     }
 
-    private void originalDrawScrollingString(GuiGraphics graphics, Font font, Component text, int minX, int maxX, int y, int color) {
+    public static void originalDrawScrollingString(GuiGraphics graphics, Font font, Component text, int minX, int maxX, int y, int color) {
         int maxWidth = maxX - minX;
         int textWidth = font.width(text.getVisualOrderText());
         if (textWidth <= maxWidth) {

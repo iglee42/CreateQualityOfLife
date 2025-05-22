@@ -1,8 +1,7 @@
 package fr.iglee42.createqualityoflife.mixins;
 
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
-import fr.iglee42.createqualityoflife.utils.PreferredRender;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.client.renderer.entity.layers.ElytraLayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +15,7 @@ public class ElytraLayerMixin {
 
     @Inject(method = "shouldRender", at = @At("HEAD"),cancellable = true)
     private <T extends LivingEntity> void qol$shadowRadianceRenderElytra(ItemStack stack, T entity, CallbackInfoReturnable<Boolean> cir){
-        if (stack.getItem() instanceof ShadowRadianceChestplate && ShadowRadianceChestplate.hasElytra(stack) && stack.getOrDefault(ModDataComponents.PREFERRED_RENDER, PreferredRender.BOTH).shouldRenderElytra()){
+        if (stack.getItem() instanceof ShadowRadianceChestplate && ShadowRadianceChestplate.hasElytra(stack) && NBTConstants.getOrDefault(NBTConstants.NBT_PREFERRED_RENDER,stack).shouldRenderElytra()){
             cir.setReturnValue(true);
             return;
         }

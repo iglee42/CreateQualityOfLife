@@ -23,11 +23,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -38,6 +37,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.util.FakePlayer;
 
+import java.util.Map;
 import java.util.Optional;
 
 public class ShadowRadianceBacktankBlock extends BacktankBlock {
@@ -93,12 +93,13 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
                         return InteractionResult.PASS;
                     }
                     be.setElytra(true);
-                    ItemEnchantments enchantments = stack.get(DataComponents.ENCHANTMENTS);
-                    if (enchantments != null && !enchantments.isEmpty()){
+                    Map<Enchantment,Integer> enchantments = EnchantmentHelper.getEnchantments(player.getMainHandItem());
+                    if (!enchantments.isEmpty()){
                         ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
-                        book.set(DataComponents.STORED_ENCHANTMENTS, enchantments);
+                        EnchantmentHelper.setEnchantments(enchantments,book);
                         Block.popResource(level,pos,book);
                     }
+
                     player.getMainHandItem().shrink(1);
                     level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
                     return InteractionResult.CONSUME;

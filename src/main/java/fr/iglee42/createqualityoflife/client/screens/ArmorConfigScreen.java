@@ -114,15 +114,15 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 				entry.setEditable(CreateQOLConfigs.server().helmetHaveGoggles.get());
 			}
 			if (entry.getNbtKey().equals(NBTConstants.NBT_FANS)){
-				if (!CreateQOLConfigs.server().propellersAllowed.get() && entry.isEditable()){
+				if (!CreateQOLConfigs.server().propellerAllowed.get() && entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
 				boolean flag = list.children().stream()
-						.anyMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(ModDataComponents.BACKTANK_ELYTRA_STATE) && !oEntry.getValue());
+						.noneMatch(e->e instanceof BooleanEntry oEntry && oEntry.getNbtKey().equals(NBTConstants.NBT_ELYTRA_STATE) && oEntry.getValue());
 				entry.setEditable(CreateQOLConfigs.server().propellerAllowed.get() && flag);
 			}
 			if (entry.getNbtKey().equals(NBTConstants.NBT_HOVER)){
-				if ((!CreateQOLConfigs.server().hoverAllowed.get() || !CreateQOLConfigs.server().propellersAllowed.get() )&& entry.isEditable()){
+				if ((!CreateQOLConfigs.server().hoverAllowed.get() || !CreateQOLConfigs.server().propellerAllowed.get() )&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
 				entry.setEditable(CreateQOLConfigs.server().propellerAllowed.get() && CreateQOLConfigs.server().hoverAllowed.get());
@@ -133,7 +133,7 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 					((BooleanEntry)entry).setValue(false);
 				}
 				boolean flag = list.children().stream()
-						.anyMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(ModDataComponents.BACKTANK_FANS) && !oEntry.getValue());
+						.noneMatch(e->e instanceof BooleanEntry oEntry && oEntry.getNbtKey().equals(NBTConstants.NBT_FANS) && oEntry.getValue());
 				entry.setEditable(CreateQOLConfigs.server().elytraAllowed.get() && flag);
 			}
 
@@ -253,8 +253,8 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 					list.children().add(new BooleanEntry("Enable Elytra", NBTConstants.getOrDefault(armor,NBTConstants.NBT_ELYTRA_STATE,false),NBTConstants.NBT_ELYTRA_STATE,
 							"Activate the elytra on the backtank", "_Can't be enabled if the fan is enabled_"));
 				}
-				list.children().add(new EnumEntry("Preferred Render",armor.getOrDefault(ModDataComponents.PREFERRED_RENDER, PreferredRender.BOTH),
-						ModDataComponents.PREFERRED_RENDER,
+				list.children().add(new EnumEntry("Preferred Render",NBTConstants.getOrDefault(NBTConstants.NBT_PREFERRED_RENDER,armor),
+						NBTConstants.NBT_PREFERRED_RENDER,
 						"Define how the additions should be rendered.",
 						"\"Elytra\" renders only the elytra",
 						"\"Backtank\" renders only the backtank"){

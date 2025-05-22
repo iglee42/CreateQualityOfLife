@@ -21,9 +21,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
@@ -101,7 +100,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
             if (player.isFallFlying() && isElytraEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && CreateQOLConfigs.server().elytraAllowed.get() && CreateQOLConfigs.server().elytraBoostAllowed.get() && CommonKeysHandler.isHoldingUp(player))
             {
                 if (CreateQOLConfigs.server().useFireworksForBoost.get()) {
-                    if (hasPlayerStackInInventory(player,Items.FIREWORK_ROCKET)) {
+                    if (hasPlayerStackInInventory(player, Items.FIREWORK_ROCKET)) {
                         int rocketSlot = getFirstInventoryIndex(player,Items.FIREWORK_ROCKET);
                         ItemStack firework = player.getInventory().getItem(rocketSlot);
                         if (player.getFallFlyingTicks() % CreateQOLConfigs.server().fireworkDuration.get() == 0 || player.getFallFlyingTicks() == 0) {

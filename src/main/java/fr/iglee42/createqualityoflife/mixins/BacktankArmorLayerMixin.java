@@ -43,7 +43,7 @@ public class BacktankArmorLayerMixin {
                 ci.cancel();
                 return;
             }
-            if (!stack.getOrDefault(ModDataComponents.PREFERRED_RENDER, PreferredRender.BOTH).shouldRenderBacktank()){
+            if (!NBTConstants.getOrDefault(NBTConstants.NBT_PREFERRED_RENDER,stack).shouldRenderBacktank()){
                 ci.cancel();
                 return;
             }
