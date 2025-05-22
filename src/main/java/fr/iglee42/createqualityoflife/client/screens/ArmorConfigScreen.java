@@ -112,7 +112,7 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 					((BooleanEntry)entry).setValue(false);
 				}
 				boolean flag = list.children().stream()
-						.anyMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(ModDataComponents.BACKTANK_ELYTRA_STATE) && !oEntry.getValue());
+						.noneMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(ModDataComponents.BACKTANK_ELYTRA_STATE) && oEntry.getValue());
 				entry.setEditable(CreateQOLConfigs.server().propellerAllowed.get() && flag);
 			}
 			if (entry.getComponent().equals(ModDataComponents.BACKTANK_HOVER)){
@@ -127,7 +127,7 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 					((BooleanEntry)entry).setValue(false);
 				}
 				boolean flag = list.children().stream()
-						.anyMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(ModDataComponents.BACKTANK_FANS) && !oEntry.getValue());
+						.noneMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(ModDataComponents.BACKTANK_FANS) && oEntry.getValue());
 				entry.setEditable(CreateQOLConfigs.server().elytraAllowed.get() && flag);
 			}
 
