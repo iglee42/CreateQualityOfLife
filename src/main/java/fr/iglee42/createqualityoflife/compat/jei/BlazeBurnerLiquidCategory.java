@@ -1,46 +1,20 @@
 package fr.iglee42.createqualityoflife.compat.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllPartialModels;
-import com.simibubi.create.AllSpriteShifts;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.compat.jei.category.animations.AnimatedBlazeBurner;
-import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
-import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.utility.CreateLang;
-import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import fr.iglee42.createqualityoflife.recipes.BlazeBurnerLiquidRecipe;
-import mezz.jei.api.constants.VanillaTypes;
+import fr.iglee42.createqualityoflife.utils.liquidblazeburners.LiquidBlazeBurnerManager;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.createmod.catnip.animation.AnimationTickHolder;
-import net.createmod.catnip.gui.element.GuiGameElement;
-import net.createmod.catnip.render.CachedBuffers;
-import net.createmod.catnip.render.SpriteShiftEntry;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.util.Mth;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
-import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 public class BlazeBurnerLiquidCategory extends CreateRecipeCategory<BlazeBurnerLiquidRecipe> {
@@ -69,9 +43,34 @@ public class BlazeBurnerLiquidCategory extends CreateRecipeCategory<BlazeBurnerL
 
 		burner.withHeat(recipe.getBurnerLevel()).draw(graphics,73,12);
 
+		if (recipe.getFluidIngredients().get(0).getMatchingFluidStacks().get(0) != null) {
+			LiquidBlazeBurnerManager.LiquidEntry entry = LiquidBlazeBurnerManager.BLAZE_BURNER_LIQUIDS.get(recipe.getFluidIngredients().get(0).getMatchingFluidStacks().get(0).getFluid() );
+			int time =  (entry.burnTime() * entry.consumption() * 1000 / 20);
 
+			graphics.drawCenteredString(Minecraft.getInstance().font,Component.literal("1 ").append(Component.translatable("item.minecraft.bucket")).append(Component.literal(" = " + formatDuration(time))), 94,60,0xffffff);
+
+		}
 		//matrixStack.translate(74, 51, 100);
 
+	}
+
+	public static String formatDuration(int totalSeconds) {
+		int hours = totalSeconds / 3600;
+		int minutes = (totalSeconds % 3600) / 60;
+		int seconds = totalSeconds % 60;
+		StringBuilder result = new StringBuilder();
+
+		if (hours > 0) {
+			result.append(hours).append("h ");
+		}
+		if (minutes > 0) {
+			result.append(minutes).append("min ");
+		}
+		if (seconds > 0 || result.isEmpty()) { // always show at least seconds
+			result.append(seconds).append("s");
+		}
+
+		return result.toString().trim();
 	}
 
 }
