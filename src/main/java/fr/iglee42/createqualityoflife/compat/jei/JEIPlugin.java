@@ -85,7 +85,7 @@ public class JEIPlugin implements IModPlugin {
         CreateRecipeCategory<?>
 
                 blazeBurnerLiquids = builder(BlazeBurnerLiquidRecipe.class)
-                .enableIf((c)->CreateQOL.isActivate(Features.LIQUID_BLAZE_BURNER))
+                .enableWhen(()->CreateQOL.isActivate(Features.LIQUID_BLAZE_BURNER))
                 .addRecipes(()->{
                     List<RecipeHolder<BlazeBurnerLiquidRecipe>> recipes = new ArrayList<>();
                     LiquidBlazeBurnerManager.BLAZE_BURNER_LIQUIDS.forEach((fluid,entry)->{
@@ -119,181 +119,22 @@ public class JEIPlugin implements IModPlugin {
 
 
 
-    private class CategoryBuilder<T extends Recipe<? extends RecipeInput>> {
-        private final Class<? extends T> recipeClass;
-        private Predicate<CRecipes> predicate = cRecipes -> true;
 
-        private IDrawable background;
-        private IDrawable icon;
-
-        private final List<Consumer<List<RecipeHolder<T>>>> recipeListConsumers = new ArrayList<>();
-        private final List<Supplier<? extends ItemStack>> catalysts = new ArrayList<>();
-
+    private class CategoryBuilder<T extends Recipe<?>> extends CreateRecipeCategory.Builder<T> {
         public CategoryBuilder(Class<? extends T> recipeClass) {
-            this.recipeClass = recipeClass;
+            super(recipeClass);
         }
 
-        public CategoryBuilder<T> enableIf(Predicate<CRecipes> predicate) {
-            this.predicate = predicate;
-            return this;
-        }
-
-        public CategoryBuilder<T> enableWhen(Function<CRecipes, ConfigBase.ConfigBool> configValue) {
-            predicate = c -> configValue.apply(c).get();
-            return this;
-        }
-
-        public CategoryBuilder<T> addRecipeListConsumer(Consumer<List<RecipeHolder<T>>> consumer) {
-            recipeListConsumers.add(consumer);
-            return this;
-        }
-
-        public CategoryBuilder<T> addRecipes(Supplier<Collection<? extends RecipeHolder<T>>> collection) {
-            return addRecipeListConsumer(recipes -> recipes.addAll(collection.get()));
-        }
-
-        @SuppressWarnings("unchecked")
-        public CategoryBuilder<T> addAllRecipesIf(Predicate<RecipeHolder<T>> pred) {
-            return addRecipeListConsumer(recipes -> consumeAllRecipesOfType(recipe -> {
-                if (pred.test(recipe))
-                    recipes.add(recipe);
-            }));
-        }
-
-        public CategoryBuilder<T> addAllRecipesIf(Predicate<RecipeHolder<?>> pred, Function<RecipeHolder<?>, RecipeHolder<T>> converter) {
-            return addRecipeListConsumer(recipes -> consumeAllRecipes(recipe -> {
-                if (pred.test(recipe)) {
-                    recipes.add(converter.apply(recipe));
-                }
-            }));
-        }
-
-        public CategoryBuilder<T> addTypedRecipes(IRecipeTypeInfo recipeTypeEntry) {
-            return addTypedRecipes(recipeTypeEntry::getType);
-        }
-        public <I extends RecipeInput, R extends Recipe<I>> CategoryBuilder<T> addTypedRecipes(Supplier<RecipeType<R>> recipeType) {
-            return addRecipeListConsumer(recipes -> JEIPlugin.<T>consumeTypedRecipes(recipe -> {
-                if (recipeClass.isInstance(recipe.value()))
-                    //noinspection unchecked - checked by if statement above
-                    recipes.add((RecipeHolder<T>) recipe);
-            }, recipeType.get()));
-        }
-
-        public CategoryBuilder<T> addTypedRecipes(Supplier<RecipeType<T>> recipeType, Function<RecipeHolder<?>, RecipeHolder<T>> converter) {
-            return addRecipeListConsumer(recipes -> JEIPlugin.<T>consumeTypedRecipes(recipe -> recipes.add(converter.apply(recipe)), recipeType.get()));
-        }
-
-        public CategoryBuilder<T> addTypedRecipesIf(Supplier<RecipeType<? extends T>> recipeType, Predicate<RecipeHolder<?>> pred) {
-            return addRecipeListConsumer(recipes -> consumeTypedRecipesTyped(recipe -> {
-                if (pred.test(recipe)) {
-                    recipes.add(recipe);
-                }
-            }, recipeType.get()));
-        }
-
-        public CategoryBuilder<T> addTypedRecipesExcluding(Supplier<RecipeType<? extends T>> recipeType,
-                                                           Supplier<RecipeType<? extends T>> excluded) {
-            return addRecipeListConsumer(recipes -> {
-                List<RecipeHolder<?>> excludedRecipes = getTypedRecipes(excluded.get());
-                consumeTypedRecipesTyped(recipe -> {
-                    for (RecipeHolder<?> excludedRecipe : excludedRecipes) {
-                        if (doInputsMatch(recipe.value(), excludedRecipe.value())) {
-                            return;
-                        }
-                    }
-                    recipes.add(recipe);
-                }, recipeType.get());
-            });
-        }
-
-        public CategoryBuilder<T> removeRecipes(Supplier<RecipeType<? extends T>> recipeType) {
-            return addRecipeListConsumer(recipes -> {
-                List<RecipeHolder<?>> excludedRecipes = getTypedRecipes(recipeType.get());
-                recipes.removeIf(recipe -> {
-                    for (RecipeHolder<?> excludedRecipe : excludedRecipes)
-                        if (doInputsMatch(recipe.value(), excludedRecipe.value()) && doOutputsMatch(recipe.value(), excludedRecipe.value()))
-                            return true;
-                    return false;
-                });
-            });
-        }
-
-        public CategoryBuilder<T> removeNonAutomation() {
-            return addRecipeListConsumer(recipes -> recipes.removeIf(AllRecipeTypes.CAN_BE_AUTOMATED.negate()));
-        }
-
-        public CategoryBuilder<T> catalystStack(Supplier<ItemStack> supplier) {
-            catalysts.add(supplier);
-            return this;
-        }
-
-        public CategoryBuilder<T> catalyst(Supplier<ItemLike> supplier) {
-            return catalystStack(() -> new ItemStack(supplier.get()
-                    .asItem()));
-        }
-
-        public CategoryBuilder<T> icon(IDrawable icon) {
-            this.icon = icon;
-            return this;
-        }
-
-        public CategoryBuilder<T> itemIcon(ItemLike item) {
-            icon(new ItemIcon(() -> new ItemStack(item)));
-            return this;
-        }
-
-        public CategoryBuilder<T> doubleItemIcon(ItemLike item1, ItemLike item2) {
-            icon(new DoubleItemIcon(() -> new ItemStack(item1), () -> new ItemStack(item2)));
-            return this;
-        }
-
-        public CategoryBuilder<T> background(IDrawable background) {
-            this.background = background;
-            return this;
-        }
-
-        public CategoryBuilder<T> emptyBackground(int width, int height) {
-            background(new EmptyBackground(width, height));
-            return this;
-        }
-
+        @Override
         public CreateRecipeCategory<T> build(String name, CreateRecipeCategory.Factory<T> factory) {
-            Supplier<List<RecipeHolder<T>>> recipesSupplier;
-            if (predicate.test(AllConfigs.server().recipes)) {
-                recipesSupplier = () -> {
-                    List<RecipeHolder<T>> recipes = new ArrayList<>();
-                    for (Consumer<List<RecipeHolder<T>>> consumer : recipeListConsumers)
-                        consumer.accept(recipes);
-                    return recipes;
-                };
-            } else {
-                recipesSupplier = Collections::emptyList;
-            }
+            return build(CreateQOL.asResource(name), factory);
+        }
 
-            CreateRecipeCategory.Info<T> info = new CreateRecipeCategory.Info<>(
-                    new mezz.jei.api.recipe.RecipeType<>(CreateQOL.asResource(name), recipeClass),
-                    Component.translatable(CreateQOL.MODID + ".recipe." + name), background, icon, recipesSupplier, catalysts);
-            CreateRecipeCategory<T> category = factory.create(info);
+        @Override
+        public CreateRecipeCategory<T> build(ResourceLocation id, CreateRecipeCategory.Factory<T> factory) {
+            CreateRecipeCategory<T> category = super.build(id, factory);
             allCategories.add(category);
             return category;
-        }
-
-        private void consumeAllRecipesOfType(Consumer<RecipeHolder<T>> consumer) {
-            consumeAllRecipes(recipeHolder -> {
-                if (recipeClass.isInstance(recipeHolder.value())) {
-                    //noinspection unchecked - this is checked by the if statement
-                    consumer.accept((RecipeHolder<T>) recipeHolder);
-                }
-            });
-        }
-
-        private void consumeTypedRecipesTyped(Consumer<RecipeHolder<T>> consumer, RecipeType<?> type) {
-            consumeTypedRecipes(recipeHolder -> {
-                if (recipeClass.isInstance(recipeHolder.value())) {
-                    //noinspection unchecked - this is checked by the if statement
-                    consumer.accept((RecipeHolder<T>) recipeHolder);
-                }
-            }, type);
         }
     }
 

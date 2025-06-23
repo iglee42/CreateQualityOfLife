@@ -6,8 +6,9 @@ import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
 
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.registries.ModRecipeTypes;
@@ -15,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
@@ -23,14 +25,14 @@ import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
  * Helper recipe type for displaying an item relationship in JEI
  */
 @ParametersAreNonnullByDefault
-public class BlazeBurnerLiquidRecipe extends ProcessingRecipe<RecipeWrapper> {
+public class BlazeBurnerLiquidRecipe extends StandardProcessingRecipe<RecipeInput> {
 
 	static int counter = 0;
 	private final BlazeBurnerBlock.HeatLevel burnerLevel;
 
 	public static RecipeHolder<BlazeBurnerLiquidRecipe> create(Fluid from, BlazeBurnerBlock.HeatLevel to) {
 		ResourceLocation recipeId = CreateQOL.asResource("blaze_burner_liquid_" + counter++);
-		BlazeBurnerLiquidRecipe recipe = new ProcessingRecipeBuilder<>(p->new BlazeBurnerLiquidRecipe(p,to), recipeId)
+		BlazeBurnerLiquidRecipe recipe = new StandardProcessingRecipe.Builder<>(p->new BlazeBurnerLiquidRecipe(p,to), recipeId)
 			.withFluidIngredients(FluidIngredient.fromFluid(from,1000))
 			.build();
 		return new RecipeHolder<>(recipeId, recipe);
@@ -52,11 +54,6 @@ public class BlazeBurnerLiquidRecipe extends ProcessingRecipe<RecipeWrapper> {
 	}
 
 	@Override
-	public boolean matches(RecipeWrapper inv, Level worldIn) {
-		return false;
-	}
-
-	@Override
 	protected int getMaxInputCount() {
 		return 1;
 	}
@@ -66,4 +63,8 @@ public class BlazeBurnerLiquidRecipe extends ProcessingRecipe<RecipeWrapper> {
 		return 1;
 	}
 
+	@Override
+	public boolean matches(RecipeInput recipeInput, Level level) {
+		return false;
+	}
 }
