@@ -16,6 +16,7 @@ import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CRecipes;
 import earth.terrarium.chipped.common.compat.jei.ChippedRecipeCategory;
 import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
 import fr.iglee42.createqualityoflife.recipes.BlazeBurnerLiquidRecipe;
 import fr.iglee42.createqualityoflife.registries.ModBlocks;
@@ -266,8 +267,8 @@ public class JEIPlugin implements IModPlugin {
             }
 
             CreateRecipeCategory.Info<T> info = new CreateRecipeCategory.Info<>(
-                    new mezz.jei.api.recipe.RecipeType<>(Create.asResource(name), recipeClass),
-                    CreateLang.translateDirect("recipe." + name), background, icon, recipesSupplier, catalysts);
+                    new mezz.jei.api.recipe.RecipeType<>(CreateQOL.asResource(name), recipeClass),
+                    CreateQOLLang.translateDirect("recipe." + name), background, icon, recipesSupplier, catalysts);
             CreateRecipeCategory<T> category = factory.create(info);
             allCategories.add(category);
             return category;
