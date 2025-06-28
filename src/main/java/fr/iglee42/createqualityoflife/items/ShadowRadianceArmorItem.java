@@ -42,13 +42,12 @@ public class ShadowRadianceArmorItem extends BaseArmorItem {
             ImmutableMultimap.Builder<Attribute, AttributeModifier> attributes = ImmutableMultimap.builder();
             attributes.putAll(super.getDefaultAttributeModifiers(p_40390_));
 			
-			String reference = "shadow_radiance_"+p_40390_.name().toLowerCase();
+            String reference = "shadow_radiance_"+p_40390_.name().toLowerCase();	
+            UUID uuidBlock = UUID.nameUUIDFromBytes((reference+"_block").getBytes());
+            UUID uuidEntity = UUID.nameUUIDFromBytes((reference+"_entity").getBytes());
 			
-			UUID block_uuid = UUID.nameUUIDFromBytes((reference+"_block").getBytes());
-			UUID entity_uuid = UUID.nameUUIDFromBytes((reference+"_entity").getBytes());
-			
-            attributes.put(ForgeMod.BLOCK_REACH.get(), new AttributeModifier(block_uuid,reference+"_block",1, AttributeModifier.Operation.ADDITION));
-            attributes.put(ForgeMod.ENTITY_REACH.get(), new AttributeModifier(entity_uuid,reference+"_entity",1, AttributeModifier.Operation.ADDITION));
+            attributes.put(ForgeMod.BLOCK_REACH.get(), new AttributeModifier(uuidBlock,reference+"_block",1, AttributeModifier.Operation.ADDITION));
+            attributes.put(ForgeMod.ENTITY_REACH.get(), new AttributeModifier(uuidEntity,reference+"_entity",1, AttributeModifier.Operation.ADDITION));
             return attributes.build();
         }
         return super.getDefaultAttributeModifiers(p_40390_);
