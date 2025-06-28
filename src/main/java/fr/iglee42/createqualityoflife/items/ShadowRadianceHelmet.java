@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.common.ForgeMod;
+import java.util.UUID;
 
 public class ShadowRadianceHelmet extends DivingHelmetItem {
     public ShadowRadianceHelmet(ArmorMaterial material, Properties properties, ResourceLocation textureLoc) {
@@ -44,8 +45,13 @@ public class ShadowRadianceHelmet extends DivingHelmetItem {
         if (p_40390_.equals(EquipmentSlot.HEAD)){
             ImmutableMultimap.Builder<Attribute, AttributeModifier> attributes = ImmutableMultimap.builder();
             attributes.putAll(super.getDefaultAttributeModifiers(p_40390_));
-            attributes.put(ForgeMod.BLOCK_REACH.get(), new AttributeModifier("shadow_radiance_"+p_40390_.name().toLowerCase()+"_block",1, AttributeModifier.Operation.ADDITION));
-            attributes.put(ForgeMod.ENTITY_REACH.get(), new AttributeModifier("shadow_radiance_"+p_40390_.name().toLowerCase()+"_entity",1, AttributeModifier.Operation.ADDITION));
+
+            String reference = "shadow_radiance_"+p_40390_.name().toLowerCase();	
+            UUID uuidBlock = UUID.nameUUIDFromBytes((reference+"_block").getBytes());
+            UUID uuidEntity = UUID.nameUUIDFromBytes((reference+"_entity").getBytes());
+
+            attributes.put(ForgeMod.BLOCK_REACH.get(), new AttributeModifier(uuidBlock,reference+"_block",1, AttributeModifier.Operation.ADDITION));
+            attributes.put(ForgeMod.ENTITY_REACH.get(), new AttributeModifier(uuidEntity,reference+"_entity",1, AttributeModifier.Operation.ADDITION));
             return attributes.build();
         }
         return super.getDefaultAttributeModifiers(p_40390_);
