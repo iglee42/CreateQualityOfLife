@@ -4,7 +4,6 @@ import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.statue.animation.StatueAnimation;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.syncher.EntityDataSerializer;
-import net.minecraft.world.item.AnimalArmorItem;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -12,7 +11,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.Optional;
 
-public class ModEntityDataSerializers {
+public class QOLEntityDataSerializers {
 
     public static final DeferredRegister<EntityDataSerializer<?>> ENTITY_SERIALIZERS = DeferredRegister.create(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, CreateQOL.MODID);
 

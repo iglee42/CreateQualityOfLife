@@ -2,24 +2,18 @@ package fr.iglee42.createqualityoflife.recipes;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import fr.iglee42.createqualityoflife.CreateQOL;
-import fr.iglee42.createqualityoflife.registries.ModRecipeTypes;
+import fr.iglee42.createqualityoflife.registries.QOLRecipeTypes;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
 /**
  * Helper recipe type for displaying an item relationship in JEI
@@ -39,12 +33,12 @@ public class BlazeBurnerLiquidRecipe extends StandardProcessingRecipe<RecipeInpu
 	}
 
 	public BlazeBurnerLiquidRecipe(ProcessingRecipeParams params) {
-		super(ModRecipeTypes.BLAZE_BURNER_LIQUIDS, params);
+		super(QOLRecipeTypes.BLAZE_BURNER_LIQUIDS, params);
 		this.burnerLevel = BlazeBurnerBlock.HeatLevel.NONE;
 	}
 
 	public BlazeBurnerLiquidRecipe(ProcessingRecipeParams params, BlazeBurnerBlock.HeatLevel burnerLevel) {
-		super(ModRecipeTypes.BLAZE_BURNER_LIQUIDS, params);
+		super(QOLRecipeTypes.BLAZE_BURNER_LIQUIDS, params);
 		this.burnerLevel = burnerLevel;
 	}
 

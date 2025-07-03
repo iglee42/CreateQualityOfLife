@@ -1,6 +1,5 @@
 package fr.iglee42.createqualityoflife.blockentitites;
 
-import com.simibubi.create.content.logistics.chute.SmartChuteFilterSlotPositioning;
 import com.simibubi.create.content.logistics.tunnel.BrassTunnelModeSlot;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
@@ -9,10 +8,8 @@ import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOp
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.utility.CreateLang;
-import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.blocks.BrassTrashCanBlock;
-import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
-import fr.iglee42.createqualityoflife.registries.ModIcons;
+import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
 import fr.iglee42.createqualityoflife.utils.BrassTrashCanFilterSlotPositioning;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
@@ -37,7 +34,7 @@ public class BrassTrashCanBlockEntity extends TrashCanBlockEntity{
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
-                ModBlockEntities.BRASS_TRASH_CAN.get(),
+                QOLBlockEntities.BRASS_TRASH_CAN.get(),
                 (be, context) -> be.itemHandler
         );
     }

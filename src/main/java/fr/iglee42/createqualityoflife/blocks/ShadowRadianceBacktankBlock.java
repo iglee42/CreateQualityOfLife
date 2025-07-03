@@ -8,8 +8,8 @@ import com.simibubi.create.content.equipment.armor.BacktankItem;
 import fr.iglee42.createqualityoflife.blockentitites.ShadowRadianceBacktankBE;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
-import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
+import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
+import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -120,10 +120,10 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
             boolean fans = be.isFans();
             boolean hover = be.isHover();
             boolean elytra = be.hasElytra();
-            stack.set(ModDataComponents.BACKTANK_PROPELLERS,propeller);
-            stack.set(ModDataComponents.BACKTANK_FANS,fans);
-            stack.set(ModDataComponents.BACKTANK_HOVER,hover);
-            stack.set(ModDataComponents.BACKTANK_ELYTRA,elytra);
+            stack.set(QOLDataComponents.BACKTANK_PROPELLERS,propeller);
+            stack.set(QOLDataComponents.BACKTANK_FANS,fans);
+            stack.set(QOLDataComponents.BACKTANK_HOVER,hover);
+            stack.set(QOLDataComponents.BACKTANK_ELYTRA,elytra);
         });
         return stack;
     }
@@ -135,7 +135,7 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
 
     @Override
     public BlockEntityType<? extends BacktankBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.SHADOW_CHEST_BE
+        return QOLBlockEntities.SHADOW_CHEST_BE
                 .get();
     }
 }

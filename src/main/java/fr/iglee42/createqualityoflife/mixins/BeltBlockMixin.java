@@ -3,7 +3,7 @@ package fr.iglee42.createqualityoflife.mixins;
 import com.simibubi.create.content.equipment.armor.DivingBootsItem;
 import com.simibubi.create.content.kinetics.belt.BeltBlock;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceArmorItem;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
+import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +16,7 @@ public class BeltBlockMixin {
     @Redirect(method = "entityInside",at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/equipment/armor/DivingBootsItem;isWornBy(Lnet/minecraft/world/entity/Entity;)Z"))
     private boolean qol$disableBoots(Entity entity){
         ItemStack wornItem = DivingBootsItem.getWornItem(entity);
-        if (wornItem.getItem() instanceof ShadowRadianceArmorItem )return wornItem.getOrDefault(ModDataComponents.BOOTS_BELT,true);
+        if (wornItem.getItem() instanceof ShadowRadianceArmorItem )return wornItem.getOrDefault(QOLDataComponents.BOOTS_BELT,true);
         return !wornItem.isEmpty();
     }
 }

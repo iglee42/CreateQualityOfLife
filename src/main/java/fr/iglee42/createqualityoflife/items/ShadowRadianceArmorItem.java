@@ -3,8 +3,7 @@ package fr.iglee42.createqualityoflife.items;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.content.equipment.armor.BaseArmorItem;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
-import fr.iglee42.createqualityoflife.registries.ModArmorMaterials;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
+import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -15,9 +14,7 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
@@ -33,11 +30,11 @@ public class ShadowRadianceArmorItem extends BaseArmorItem {
         if (!CreateQOLConfigs.server().armorEffects.get()) return;
         if (player.getItemBySlot(EquipmentSlot.LEGS).equals(stack) && ((ShadowRadianceArmorItem)stack.getItem()).getType().equals(Type.LEGGINGS)) {
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
-            if (stack.getOrDefault(ModDataComponents.ARMOR_EFFECT,true))player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,20,1,false,false));
+            if (stack.getOrDefault(QOLDataComponents.ARMOR_EFFECT,true))player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,20,1,false,false));
         }
         if (player.getItemBySlot(EquipmentSlot.FEET).equals(stack) && ((ShadowRadianceArmorItem)stack.getItem()).getType().equals(Type.BOOTS)) {
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
-            if (stack.getOrDefault(ModDataComponents.ARMOR_EFFECT,true))player.addEffect(new MobEffectInstance(MobEffects.JUMP,20,0,false,false));
+            if (stack.getOrDefault(QOLDataComponents.ARMOR_EFFECT,true))player.addEffect(new MobEffectInstance(MobEffects.JUMP,20,0,false,false));
         }
     }
     

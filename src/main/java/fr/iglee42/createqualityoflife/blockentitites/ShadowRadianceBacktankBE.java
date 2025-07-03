@@ -2,7 +2,7 @@ package fr.iglee42.createqualityoflife.blockentitites;
 
 import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
 import fr.iglee42.createqualityoflife.blocks.ShadowRadianceBacktankBlock;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
+import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
@@ -82,18 +82,18 @@ public class ShadowRadianceBacktankBE extends BacktankBlockEntity {
     @Override
     protected void applyImplicitComponents(DataComponentInput componentInput) {
         super.applyImplicitComponents(componentInput);
-        propeller = componentInput.getOrDefault(ModDataComponents.BACKTANK_PROPELLERS,false);
-        fans = componentInput.getOrDefault(ModDataComponents.BACKTANK_FANS,true);
-        hover = componentInput.getOrDefault(ModDataComponents.BACKTANK_HOVER,false);
-        elytra = componentInput.getOrDefault(ModDataComponents.BACKTANK_ELYTRA,false);
+        propeller = componentInput.getOrDefault(QOLDataComponents.BACKTANK_PROPELLERS,false);
+        fans = componentInput.getOrDefault(QOLDataComponents.BACKTANK_FANS,true);
+        hover = componentInput.getOrDefault(QOLDataComponents.BACKTANK_HOVER,false);
+        elytra = componentInput.getOrDefault(QOLDataComponents.BACKTANK_ELYTRA,false);
     }
 
     @Override
     protected void collectImplicitComponents(DataComponentMap.Builder components) {
         super.collectImplicitComponents(components);
-        components.set(ModDataComponents.BACKTANK_PROPELLERS,propeller);
-        components.set(ModDataComponents.BACKTANK_FANS,fans);
-        components.set(ModDataComponents.BACKTANK_HOVER,hover);
-        components.set(ModDataComponents.BACKTANK_ELYTRA,elytra);
+        components.set(QOLDataComponents.BACKTANK_PROPELLERS,propeller);
+        components.set(QOLDataComponents.BACKTANK_FANS,fans);
+        components.set(QOLDataComponents.BACKTANK_HOVER,hover);
+        components.set(QOLDataComponents.BACKTANK_ELYTRA,elytra);
     }
 }

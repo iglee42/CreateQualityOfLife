@@ -15,7 +15,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
-public class ModDataComponents {
+public class QOLDataComponents {
 
     private static final DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, CreateQOL.MODID);
 

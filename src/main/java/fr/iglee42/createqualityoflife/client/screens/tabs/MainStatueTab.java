@@ -6,8 +6,8 @@ import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.utility.CreateLang;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
-import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
-import fr.iglee42.createqualityoflife.registries.ModIcons;
+import fr.iglee42.createqualityoflife.registries.QOLGuiTextures;
+import fr.iglee42.createqualityoflife.registries.QOLIcons;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -168,14 +168,14 @@ public class MainStatueTab extends StatueTab {
         tipEnabled = new ArrayList<>(tip);
         tipEnabled.set(1, CreateLang.translateDirect("gui.schematicannon.optionEnabled")
                 .withStyle(ChatFormatting.DARK_GREEN));
-        invulnerableButton = new IconButton(x + BASE_OFFSET, y + INVUlNERABLE_Y, getExampleStatue().isInvulnerable() ? ModIcons.I_LOCKED_STATUE : ModIcons.I_UNLOCKED_STATUE);
+        invulnerableButton = new IconButton(x + BASE_OFFSET, y + INVUlNERABLE_Y, getExampleStatue().isInvulnerable() ? QOLIcons.I_LOCKED_STATUE : QOLIcons.I_UNLOCKED_STATUE);
         List<Component> finalTipEnabled4 = tipEnabled;
         invulnerableButton.withCallback(() -> {
             getExampleStatue().setInvulnerable(!getExampleStatue().isInvulnerable());
             invulnerableButton.green = getExampleStatue().isInvulnerable();
             invulnerableButton.getToolTip().clear();
             invulnerableButton.getToolTip().addAll(getExampleStatue().isInvulnerable() ? finalTipEnabled4 : tip);
-            invulnerableButton.setIcon(getExampleStatue().isInvulnerable() ? ModIcons.I_LOCKED_STATUE : ModIcons.I_UNLOCKED_STATUE);
+            invulnerableButton.setIcon(getExampleStatue().isInvulnerable() ? QOLIcons.I_LOCKED_STATUE : QOLIcons.I_UNLOCKED_STATUE);
             getParent().sendUpdatePacket();
         });
         invulnerableButton.green = getExampleStatue().isInvulnerable();
@@ -218,7 +218,7 @@ public class MainStatueTab extends StatueTab {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partial, int x, int y) {
-        ModGuiTextures.TEXT_BOX.render(graphics,x + BASE_OFFSET, y + NAME_Y);
+        QOLGuiTextures.TEXT_BOX.render(graphics,x + BASE_OFFSET, y + NAME_Y);
     }
 
 

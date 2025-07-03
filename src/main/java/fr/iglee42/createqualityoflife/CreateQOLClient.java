@@ -1,64 +1,15 @@
 package fr.iglee42.createqualityoflife;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.CreateClient;
-import com.simibubi.create.content.contraptions.ContraptionHandler;
-import com.simibubi.create.content.contraptions.actors.seat.ContraptionPlayerPassengerRotation;
-import com.simibubi.create.content.contraptions.actors.trainControls.ControlsHandler;
-import com.simibubi.create.content.contraptions.chassis.ChassisRangeDisplay;
-import com.simibubi.create.content.contraptions.minecart.CouplingHandlerClient;
-import com.simibubi.create.content.contraptions.minecart.CouplingPhysics;
-import com.simibubi.create.content.contraptions.minecart.CouplingRenderer;
-import com.simibubi.create.content.contraptions.minecart.capability.CapabilityMinecartController;
-import com.simibubi.create.content.contraptions.render.ContraptionRenderInfoManager;
-import com.simibubi.create.content.contraptions.wrench.RadialWrenchHandler;
-import com.simibubi.create.content.decoration.girder.GirderWrenchBehavior;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
-import com.simibubi.create.content.equipment.armor.CardboardArmorStealthOverlay;
-import com.simibubi.create.content.equipment.armor.NetheriteBacktankFirstPersonRenderer;
-import com.simibubi.create.content.equipment.blueprint.BlueprintOverlayRenderer;
-import com.simibubi.create.content.equipment.clipboard.ClipboardValueSettingsHandler;
-import com.simibubi.create.content.equipment.extendoGrip.ExtendoGripRenderHandler;
-import com.simibubi.create.content.equipment.toolbox.ToolboxHandlerClient;
-import com.simibubi.create.content.equipment.zapper.terrainzapper.WorldshaperRenderHandler;
-import com.simibubi.create.content.kinetics.KineticDebugger;
-import com.simibubi.create.content.kinetics.belt.item.BeltConnectorHandler;
-import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorConnectionHandler;
-import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorInteractionHandler;
-import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorRidingHandler;
-import com.simibubi.create.content.kinetics.fan.AirCurrent;
-import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointHandler;
-import com.simibubi.create.content.logistics.depot.EjectorTargetHandler;
-import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelConnectionHandler;
-import com.simibubi.create.content.logistics.packagePort.PackagePortTargetSelectionHandler;
-import com.simibubi.create.content.logistics.packagerLink.LogisticallyLinkedClientHandler;
-import com.simibubi.create.content.logistics.tableCloth.TableClothOverlayRenderer;
-import com.simibubi.create.content.redstone.displayLink.ClickToLinkBlockItem;
-import com.simibubi.create.content.redstone.link.LinkRenderer;
-import com.simibubi.create.content.redstone.link.controller.LinkedControllerClientHandler;
-import com.simibubi.create.content.trains.CameraDistanceModifier;
-import com.simibubi.create.content.trains.TrainHUD;
-import com.simibubi.create.content.trains.entity.TrainRelocator;
-import com.simibubi.create.content.trains.track.CurvedTrackInteraction;
-import com.simibubi.create.content.trains.track.TrackPlacement;
-import com.simibubi.create.content.trains.track.TrackTargetingClient;
-import com.simibubi.create.foundation.blockEntity.behaviour.edgeInteraction.EdgeInteractionRenderer;
-import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringRenderer;
-import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueHandler;
-import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueRenderer;
 import com.simibubi.create.foundation.particle.AirParticleData;
 
-import com.simibubi.create.foundation.sound.SoundScapes;
-import com.simibubi.create.foundation.utility.CameraAngleAnimationService;
-import com.simibubi.create.foundation.utility.ServerSpeedProvider;
-import com.simibubi.create.foundation.utility.TickBasedCache;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import fr.iglee42.createqualityoflife.client.GoggleArmorLayer;
 import fr.iglee42.createqualityoflife.client.ShadowRadianceFirstPersonRenderer;
 import fr.iglee42.createqualityoflife.client.renderer.EnderRenderer;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.*;
-import fr.iglee42.createqualityoflife.statue.StatueArmorModel;
 import fr.iglee42.createqualityoflife.statue.StatueModel;
 import fr.iglee42.createqualityoflife.statue.StatueRenderer;
 import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;
@@ -79,7 +30,6 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -100,7 +50,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
-import static fr.iglee42.createqualityoflife.CreateQOL.MODID;
 import static net.createmod.ponder.PonderClient.isGameActive;
 
 public class CreateQOLClient {
@@ -111,7 +60,7 @@ public class CreateQOLClient {
     private static final Logger log = LoggerFactory.getLogger(CreateQOLClient.class);
 
     public static void onCtorClient(IEventBus modEventBus, IEventBus forgeEventBus) {
-        ModPartialModels.init();
+        QOLPartialModels.init();
         //if (CreateCasing.isExtendedCogsLoaded())CreateExtendedCogwheelsPartials.init();
 
         modEventBus.addListener(CreateQOLClient::clientInit);
@@ -154,14 +103,14 @@ public class CreateQOLClient {
     }
 
     public static void clientInit(final FMLClientSetupEvent event) {
-        new ModSprites();
+        new QOLSprites();
 
         event.enqueueWork(() -> {
-            ItemProperties.register(ModItems.PLAYER_PAPER.get(),
-                    CreateQOL.asResource("hasplayer"), (stack, level, living, id) -> stack.has(ModDataComponents.LINKED_PLAYER) ? 1.0f : 0.0f);
+            ItemProperties.register(QOLItems.PLAYER_PAPER.get(),
+                    CreateQOL.asResource("hasplayer"), (stack, level, living, id) -> stack.has(QOLDataComponents.LINKED_PLAYER) ? 1.0f : 0.0f);
         });
 
-        EntityRenderers.register(ModEntityTypes.STATUE.get(), StatueRenderer::new);
+        EntityRenderers.register(QOLEntityTypes.STATUE.get(), StatueRenderer::new);
         //MinecraftForge.EVENT_BUS.register(new KeyBindManager());
         //ModPonderTags.register();
         //PonderIndex.register();
@@ -170,7 +119,7 @@ public class CreateQOLClient {
 
 
     public static void showPropellers(BlockState renderedState, int light, PoseStack ms, MultiBufferSource buffer, RenderType renderType, LevelAccessor level) {
-        PartialModel partial = (AnimationTickHolder.getRenderTime(level)) % 10 >= 5 ? ModPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS : ModPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS_ALT;
+        PartialModel partial = (AnimationTickHolder.getRenderTime(level)) % 10 >= 5 ? QOLPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS : QOLPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS_ALT;
         SuperByteBuffer propellers = CachedBuffers.partial(partial,renderedState);
         propellers
                 .light(light)

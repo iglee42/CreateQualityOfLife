@@ -9,8 +9,8 @@ import fr.iglee42.createqualityoflife.client.screens.widgets.entries.EnumEntry;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.ValueEntry;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
-import fr.iglee42.createqualityoflife.registries.ModArmorMaterials;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
+import fr.iglee42.createqualityoflife.registries.QOLArmorMaterials;
+import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import net.minecraft.core.Direction;
@@ -75,7 +75,7 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 
 		Minecraft.getInstance().player.getInventory().armor.forEach(it->{
 			if (!(it.getItem() instanceof ArmorItem))return;
-			if (((ArmorItem)it.getItem()).getMaterial().equals(ModArmorMaterials.SHADOW_RADIANCE)) armors.add(Minecraft.getInstance().player.getInventory().armor.indexOf(it));
+			if (((ArmorItem)it.getItem()).getMaterial().equals(QOLArmorMaterials.SHADOW_RADIANCE)) armors.add(Minecraft.getInstance().player.getInventory().armor.indexOf(it));
 		});
 		armors = armors.reversed();
 		for (int index = 0; index < armors.size(); index++) {
@@ -101,50 +101,50 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 				.filter(e->e instanceof ValueEntry<?>)
 				.map(e->(ValueEntry<?>)e)
 				.forEach(entry->{
-			if (entry.getComponent().equals(ModDataComponents.HELMET_GOGGLES)){
+			if (entry.getComponent().equals(QOLDataComponents.HELMET_GOGGLES)){
 				if (!CreateQOLConfigs.server().helmetHaveGoggles.get() && entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
 				entry.setEditable(CreateQOLConfigs.server().helmetHaveGoggles.get());
 			}
-			if (entry.getComponent().equals(ModDataComponents.BACKTANK_FANS)){
+			if (entry.getComponent().equals(QOLDataComponents.BACKTANK_FANS)){
 				if (!CreateQOLConfigs.server().propellerAllowed.get() && entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
 				boolean flag = list.children().stream()
-						.noneMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(ModDataComponents.BACKTANK_ELYTRA_STATE) && oEntry.getValue());
+						.noneMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(QOLDataComponents.BACKTANK_ELYTRA_STATE) && oEntry.getValue());
 				entry.setEditable(CreateQOLConfigs.server().propellerAllowed.get() && flag);
 			}
-			if (entry.getComponent().equals(ModDataComponents.BACKTANK_HOVER)){
+			if (entry.getComponent().equals(QOLDataComponents.BACKTANK_HOVER)){
 				if ((!CreateQOLConfigs.server().hoverAllowed.get() || !CreateQOLConfigs.server().propellerAllowed.get() )&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
 				entry.setEditable(CreateQOLConfigs.server().propellerAllowed.get() && CreateQOLConfigs.server().hoverAllowed.get());
 			}
 
-			if (entry.getComponent().equals(ModDataComponents.BACKTANK_ELYTRA_STATE)){
+			if (entry.getComponent().equals(QOLDataComponents.BACKTANK_ELYTRA_STATE)){
 				if (!CreateQOLConfigs.server().elytraAllowed.get()&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
 				boolean flag = list.children().stream()
-						.noneMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(ModDataComponents.BACKTANK_FANS) && oEntry.getValue());
+						.noneMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(QOLDataComponents.BACKTANK_FANS) && oEntry.getValue());
 				entry.setEditable(CreateQOLConfigs.server().elytraAllowed.get() && flag);
 			}
 
-			if (entry.getComponent().equals(ModDataComponents.ARMOR_EFFECT)){
+			if (entry.getComponent().equals(QOLDataComponents.ARMOR_EFFECT)){
 				if (!CreateQOLConfigs.server().armorEffects.get()&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
 				entry.setEditable(CreateQOLConfigs.server().armorEffects.get());
 			}
 
-			if (entry.getComponent().equals(ModDataComponents.BOOTS_DIVING)){
+			if (entry.getComponent().equals(QOLDataComponents.BOOTS_DIVING)){
 				if (!CreateQOLConfigs.server().bootsDiving.get()&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
 				entry.setEditable(CreateQOLConfigs.server().bootsDiving.get());
 			}
-			if (entry.getComponent().equals(ModDataComponents.BOOTS_LAVA)){
+			if (entry.getComponent().equals(QOLDataComponents.BOOTS_LAVA)){
 				if (!CreateQOLConfigs.server().bootsLavaWalking.get()&& entry.isEditable()){
 					((BooleanEntry)entry).setValue(false);
 				}
@@ -228,25 +228,25 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 		ItemStack armor = Minecraft.getInstance().player.getInventory().getArmor(armors.get(selectedItem));
 
 		switch (((ArmorItem)armor.getItem()).getType()){
-			case HELMET -> list.children().add(new BooleanEntry("Enable Goggles", armor.getOrDefault(ModDataComponents.HELMET_GOGGLES,true),ModDataComponents.HELMET_GOGGLES,
+			case HELMET -> list.children().add(new BooleanEntry("Enable Goggles", armor.getOrDefault(QOLDataComponents.HELMET_GOGGLES,true), QOLDataComponents.HELMET_GOGGLES,
 					"Should engineer's goggle's information be displayed"));
 			case CHESTPLATE -> {
-				list.children().add(new BooleanEntry("Enable Custom Arms", armor.getOrDefault(ModDataComponents.BACKTANK_ARMS,true),ModDataComponents.BACKTANK_ARMS,
+				list.children().add(new BooleanEntry("Enable Custom Arms", armor.getOrDefault(QOLDataComponents.BACKTANK_ARMS,true), QOLDataComponents.BACKTANK_ARMS,
 						"Should the player's arms be replaced with the armor in first person"));
 
 				if (ShadowRadianceChestplate.hasPropeller(armor)){
-					list.children().add(new BooleanEntry("Enable Fan", armor.getOrDefault(ModDataComponents.BACKTANK_FANS,true),ModDataComponents.BACKTANK_FANS,
+					list.children().add(new BooleanEntry("Enable Fan", armor.getOrDefault(QOLDataComponents.BACKTANK_FANS,true), QOLDataComponents.BACKTANK_FANS,
 							"Activate the propeller on the backtank", "_Can't be enabled if the elytra are enabled_"));
-					list.children().add(new BooleanEntry("Enable Hover", armor.getOrDefault(ModDataComponents.BACKTANK_HOVER,false),ModDataComponents.BACKTANK_HOVER,
+					list.children().add(new BooleanEntry("Enable Hover", armor.getOrDefault(QOLDataComponents.BACKTANK_HOVER,false), QOLDataComponents.BACKTANK_HOVER,
 							"Activate the hover mode"));
 				}
 
 				if (ShadowRadianceChestplate.hasElytra(armor)){
-					list.children().add(new BooleanEntry("Enable Elytra", armor.getOrDefault(ModDataComponents.BACKTANK_ELYTRA_STATE,false),ModDataComponents.BACKTANK_ELYTRA_STATE,
+					list.children().add(new BooleanEntry("Enable Elytra", armor.getOrDefault(QOLDataComponents.BACKTANK_ELYTRA_STATE,false), QOLDataComponents.BACKTANK_ELYTRA_STATE,
 							"Activate the elytra on the backtank", "_Can't be enabled if the fan is enabled_"));
 				}
-				list.children().add(new EnumEntry("Preferred Render",armor.getOrDefault(ModDataComponents.PREFERRED_RENDER, PreferredRender.BOTH),
-						ModDataComponents.PREFERRED_RENDER,
+				list.children().add(new EnumEntry("Preferred Render",armor.getOrDefault(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH),
+						QOLDataComponents.PREFERRED_RENDER,
 						"Define how the additions should be rendered.",
 						"\"Elytra\" renders only the elytra",
 						"\"Backtank\" renders only the backtank"){
@@ -264,11 +264,11 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 				});
 			}
 			case BOOTS -> {
-				list.children().add(new BooleanEntry("Enable Diving", armor.getOrDefault(ModDataComponents.BOOTS_DIVING,false),ModDataComponents.BOOTS_DIVING,
+				list.children().add(new BooleanEntry("Enable Diving", armor.getOrDefault(QOLDataComponents.BOOTS_DIVING,false), QOLDataComponents.BOOTS_DIVING,
 						"Enable diving, which makes the player descends quicker in liquids"));
-				list.children().add(new BooleanEntry("Enable Lava Walking", armor.getOrDefault(ModDataComponents.BOOTS_LAVA,true),ModDataComponents.BOOTS_LAVA,
+				list.children().add(new BooleanEntry("Enable Lava Walking", armor.getOrDefault(QOLDataComponents.BOOTS_LAVA,true), QOLDataComponents.BOOTS_LAVA,
 						"Enable walking under lava, which makes the player walks normally under lava"));
-				list.children().add(new BooleanEntry("Enable Belt Blocking", armor.getOrDefault(ModDataComponents.BOOTS_BELT,true),ModDataComponents.BOOTS_BELT,
+				list.children().add(new BooleanEntry("Enable Belt Blocking", armor.getOrDefault(QOLDataComponents.BOOTS_BELT,true), QOLDataComponents.BOOTS_BELT,
 						"You won't be pushed by belt if enabled"));
 			}
 			default -> {}
@@ -280,11 +280,11 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 			case HELMET -> MobEffects.NIGHT_VISION.value();
 			default -> MobEffects.DIG_SLOWDOWN.value();
 		};
-		list.children().add(new BooleanEntry("Apply Potion Effect",armor.getOrDefault(ModDataComponents.ARMOR_EFFECT,true),ModDataComponents.ARMOR_EFFECT,
+		list.children().add(new BooleanEntry("Apply Potion Effect",armor.getOrDefault(QOLDataComponents.ARMOR_EFFECT,true), QOLDataComponents.ARMOR_EFFECT,
 				"Enable the potion effect granted by the armor piece",
 				"For this piece, the effect is " + Component.translatable(effect.getDescriptionId()).getString()));
-		list.children().add(new EnumEntry("Render Type",armor.getOrDefault(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL),
-				ModDataComponents.ARMOR_RENDER_TYPE,
+		list.children().add(new EnumEntry("Render Type",armor.getOrDefault(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL),
+				QOLDataComponents.ARMOR_RENDER_TYPE,
 				"Define how the armor piece should be rendered.",
 				"\"Armor only\" renders only the armor",
 				"\"Addition only\" renders only the additions (E.g. Backtank, Goggles)"){

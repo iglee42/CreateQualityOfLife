@@ -2,7 +2,7 @@ package fr.iglee42.createqualityoflife.packets;
 
 import com.simibubi.create.content.trains.display.FlapDisplayBlockEntity;
 import com.simibubi.create.foundation.networking.BlockEntityConfigurationPacket;
-import fr.iglee42.createqualityoflife.registries.ModPackets;
+import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -45,6 +45,6 @@ public class ConfigureDisplayBoardPacket extends BlockEntityConfigurationPacket<
 
     @Override
     public PacketTypeProvider getTypeProvider() {
-        return ModPackets.CONFIGURE_DISPLAY_BOARD;
+        return QOLPackets.CONFIGURE_DISPLAY_BOARD;
     }
 }

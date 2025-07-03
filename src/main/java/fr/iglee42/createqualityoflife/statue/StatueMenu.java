@@ -1,9 +1,7 @@
 package fr.iglee42.createqualityoflife.statue;
 
-import com.mojang.datafixers.util.Pair;
 import com.simibubi.create.foundation.gui.menu.GhostItemMenu;
-import com.simibubi.create.foundation.gui.menu.MenuBase;
-import fr.iglee42.createqualityoflife.registries.ModMenuTypes;
+import fr.iglee42.createqualityoflife.registries.QOLMenuTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -13,10 +11,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.ItemHandlerCopySlot;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
-import org.jetbrains.annotations.Nullable;
 
 public class StatueMenu extends GhostItemMenu<Statue> {
 
@@ -34,7 +30,7 @@ public class StatueMenu extends GhostItemMenu<Statue> {
     }
 
     public StatueMenu(int id, Inventory inv, Statue contentHolder) {
-        super(ModMenuTypes.STATUE.get(), id, inv, contentHolder);
+        super(QOLMenuTypes.STATUE.get(), id, inv, contentHolder);
     }
 
     @Override

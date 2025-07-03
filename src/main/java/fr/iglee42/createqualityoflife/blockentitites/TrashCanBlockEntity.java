@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
+import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
 import fr.iglee42.createqualityoflife.utils.TrashItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +51,7 @@ public class TrashCanBlockEntity extends SmartBlockEntity implements IHaveGoggle
 	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(
 				Capabilities.ItemHandler.BLOCK,
-				ModBlockEntities.TRASH_CAN.get(),
+				QOLBlockEntities.TRASH_CAN.get(),
 				(be, context) -> be.itemHandler
 		);
 	}

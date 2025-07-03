@@ -18,7 +18,7 @@ import org.joml.Matrix4f;
 import static fr.iglee42.createqualityoflife.CreateQOL.MODID;
 
 
-public class ModIcons extends AllIcons {
+public class QOLIcons extends AllIcons {
 
 	public static final ResourceLocation ICON_ATLAS =ResourceLocation.fromNamespaceAndPath(MODID,"textures/gui/icons.png");
 	public static final int ICON_ATLAS_SIZE = 256;
@@ -28,12 +28,12 @@ public class ModIcons extends AllIcons {
 
 
 
-	public static final ModIcons
+	public static final QOLIcons
 		I_INVENTORY = newRow(),
 		I_ARMOR = next(),
 		I_OFF_HAND = next();
 
-	public static final ModIcons
+	public static final QOLIcons
 			I_UNLOCKED_STATUE = newRow(),
 			I_LOCKED_STATUE = next(),
 			I_HAT = next(),
@@ -47,18 +47,18 @@ public class ModIcons extends AllIcons {
 			I_STATUE = next(),
 			I_DISCARD_HOVER = next();
 
-	public ModIcons(int x, int y) {
+	public QOLIcons(int x, int y) {
 		super(x,y);
 		iconX = x * 16;
 		iconY = y * 16;
 	}
 
-	private static ModIcons next() {
-		return new ModIcons(++x, y);
+	private static QOLIcons next() {
+		return new QOLIcons(++x, y);
 	}
 
-	private static ModIcons newRow() {
-		return new ModIcons(x = 0, ++y);
+	private static QOLIcons newRow() {
+		return new QOLIcons(x = 0, ++y);
 	}
 
 	@OnlyIn(Dist.CLIENT)

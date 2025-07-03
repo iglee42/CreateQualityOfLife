@@ -2,26 +2,15 @@ package fr.iglee42.createqualityoflife.blockentitites;
 
 import java.util.List;
 
-import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.content.logistics.BigItemStack;
 import com.simibubi.create.content.logistics.box.PackageItem;
 import com.simibubi.create.content.logistics.packagePort.frogport.FrogportBlockEntity;
-import com.simibubi.create.content.logistics.packager.InventorySummary;
-import com.simibubi.create.content.logistics.packager.PackagerBlock;
-import com.simibubi.create.content.logistics.packager.PackagerItemHandler;
-import com.simibubi.create.content.logistics.packager.PackagingRequest;
-import com.simibubi.create.content.logistics.packagerLink.PackagerLinkBlockEntity;
-import com.simibubi.create.content.logistics.stockTicker.PackageOrderWithCrafts;
-import com.simibubi.create.foundation.advancement.AllAdvancements;
 import fr.iglee42.createqualityoflife.behaviours.EnderPackagerBehaviour;
 import fr.iglee42.createqualityoflife.blocks.EnderPackagerBlock;
-import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
+import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
 import fr.iglee42.createqualityoflife.utils.EnderPackagerFrequencySlot;
 import fr.iglee42.createqualityoflife.utils.EnderPackagerItemHandler;
-import net.createmod.catnip.codecs.CatnipCodecUtils;
 import net.createmod.catnip.data.Iterate;
-import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.HolderLookup;
 
 import net.minecraft.network.chat.Component;
@@ -34,13 +23,8 @@ import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.entity.SignText;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelSupportBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
@@ -78,7 +62,7 @@ public class EnderPackagerBlockEntity extends SmartBlockEntity {
 	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(
 				Capabilities.ItemHandler.BLOCK,
-				ModBlockEntities.ENDER_PACKAGER.get(),
+				QOLBlockEntities.ENDER_PACKAGER.get(),
 				(be, context) -> be.inventory
 		);
 	}

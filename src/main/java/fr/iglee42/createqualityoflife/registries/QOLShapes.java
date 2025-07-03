@@ -1,9 +1,7 @@
 package fr.iglee42.createqualityoflife.registries;
 
 import com.simibubi.create.AllShapes;
-import com.simibubi.create.content.kinetics.belt.BeltShapes;
 import net.createmod.catnip.math.VoxelShaper;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -11,7 +9,7 @@ import static net.minecraft.core.Direction.NORTH;
 import static net.minecraft.core.Direction.SOUTH;
 import static net.minecraft.world.level.block.Block.box;
 
-public class ModShapes {
+public class QOLShapes {
 
 
 

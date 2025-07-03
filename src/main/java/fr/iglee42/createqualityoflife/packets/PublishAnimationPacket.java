@@ -1,12 +1,10 @@
 package fr.iglee42.createqualityoflife.packets;
 
-import fr.iglee42.createqualityoflife.registries.ModPackets;
+import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import fr.iglee42.createqualityoflife.statue.animation.PublishedAnimationsManager;
 import fr.iglee42.createqualityoflife.statue.animation.StatueAnimation;
-import io.netty.buffer.ByteBuf;
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
 import net.minecraft.core.UUIDUtil;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -32,6 +30,6 @@ public record PublishAnimationPacket(UUID publisher,String name, StatueAnimation
 
     @Override
     public PacketTypeProvider getTypeProvider() {
-        return ModPackets.PUBLISH_ANIMATION;
+        return QOLPackets.PUBLISH_ANIMATION;
     }
 }

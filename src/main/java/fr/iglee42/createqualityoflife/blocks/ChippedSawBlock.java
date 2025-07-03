@@ -5,20 +5,14 @@ import java.util.function.Predicate;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.simibubi.create.AllBlockEntityTypes;
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllShapes;
-import com.simibubi.create.content.kinetics.base.DirectionalAxisKineticBlock;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.content.kinetics.drill.DrillBlock;
-import com.simibubi.create.content.kinetics.saw.SawBlockEntity;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.damageTypes.CreateDamageSources;
 
-import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.blockentitites.ChippedSawBlockEntity;
-import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
-import fr.iglee42.createqualityoflife.utils.Features;
+import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
 import net.createmod.catnip.placement.IPlacementHelper;
 import net.createmod.catnip.placement.PlacementHelpers;
 import net.createmod.catnip.placement.PlacementOffset;
@@ -27,16 +21,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -195,7 +185,7 @@ public class ChippedSawBlock extends HorizontalKineticBlock implements IBE<Chipp
 
 	@Override
 	public BlockEntityType<? extends ChippedSawBlockEntity> getBlockEntityType() {
-		return ModBlockEntities.CHIPPED_SAW.get();
+		return QOLBlockEntities.CHIPPED_SAW.get();
 	}
 
 	@Override

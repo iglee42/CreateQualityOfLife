@@ -1,12 +1,8 @@
 package fr.iglee42.createqualityoflife.packets;
 
-import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
-import fr.iglee42.createqualityoflife.registries.ModPackets;
+import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import io.netty.buffer.ByteBuf;
-import net.createmod.catnip.net.base.ClientboundPacketPayload;
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -30,6 +26,6 @@ public record SaveStatueConfigPacket(int id, CompoundTag nbts) implements Server
 
     @Override
     public PacketTypeProvider getTypeProvider() {
-        return ModPackets.SAVE_STATUE_CONFIG;
+        return QOLPackets.SAVE_STATUE_CONFIG;
     }
 }

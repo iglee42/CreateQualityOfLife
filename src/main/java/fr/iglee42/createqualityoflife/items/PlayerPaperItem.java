@@ -1,14 +1,10 @@
 package fr.iglee42.createqualityoflife.items;
 
-import fr.iglee42.createqualityoflife.CreateQOL;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
-import fr.iglee42.createqualityoflife.utils.Features;
-import net.minecraft.core.NonNullList;
+import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -29,14 +25,14 @@ public class PlayerPaperItem extends Item {
         if (p_41432_.isClientSide) return InteractionResultHolder.sidedSuccess(player.getMainHandItem(),p_41432_.isClientSide);
         ItemStack handItem = player.getMainHandItem();
         if (player instanceof FakePlayer) return InteractionResultHolder.pass(handItem);
-        if (handItem.has(ModDataComponents.LINKED_PLAYER)){
+        if (handItem.has(QOLDataComponents.LINKED_PLAYER)){
             if(player.isCrouching()){
-                handItem.remove(ModDataComponents.LINKED_PLAYER);
+                handItem.remove(QOLDataComponents.LINKED_PLAYER);
                 return InteractionResultHolder.success(handItem);
             }
         } else {
             if (!player.isCrouching()){
-                handItem.set(ModDataComponents.LINKED_PLAYER,player.getUUID());
+                handItem.set(QOLDataComponents.LINKED_PLAYER,player.getUUID());
                 return InteractionResultHolder.success(handItem);
             }
         }
@@ -45,8 +41,8 @@ public class PlayerPaperItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
-        if (stack.has(ModDataComponents.LINKED_PLAYER)){
-            components.add(Component.translatable("tooltip.createqol.player_paper.linked_player",p_41422_.level().getPlayerByUUID(stack.get(ModDataComponents.LINKED_PLAYER)).getName()));
+        if (stack.has(QOLDataComponents.LINKED_PLAYER)){
+            components.add(Component.translatable("tooltip.createqol.player_paper.linked_player",p_41422_.level().getPlayerByUUID(stack.get(QOLDataComponents.LINKED_PLAYER)).getName()));
         } else {
             components.add(Component.translatable("tooltip.createqol.player_paper.no_linked_player"));
         }

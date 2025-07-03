@@ -3,7 +3,6 @@ package fr.iglee42.createqualityoflife.registries;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllCreativeModeTabs;
 import com.simibubi.create.AllDataComponents;
-import com.simibubi.create.AllItems;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.content.logistics.box.PackageStyles;
 import com.simibubi.create.foundation.data.CreateRegistrate;
@@ -25,7 +24,6 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.apache.commons.lang3.mutable.MutableObject;
@@ -37,7 +35,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class ModCreativeModeTabs {
+public class QOLCreativeModeTabs {
 
 	private static final DeferredRegister<CreativeModeTab> TAB_REGISTER =
 		DeferredRegister.create(Registries.CREATIVE_MODE_TAB, CreateQOL.MODID);
@@ -46,8 +44,8 @@ public class ModCreativeModeTabs {
 		() -> CreativeModeTab.builder()
 			.title(Component.translatable("itemGroup.createqol"))
 			.withTabsBefore(AllCreativeModeTabs.BASE_CREATIVE_TAB.getKey())
-			.icon(ModItems.SHADOW_RADIANCE::asStack)
-				.displayItems(new RegistrateDisplayItemsGenerator(true,ModCreativeModeTabs.MAIN_TAB))
+			.icon(QOLItems.SHADOW_RADIANCE::asStack)
+				.displayItems(new RegistrateDisplayItemsGenerator(true, QOLCreativeModeTabs.MAIN_TAB))
 			.build());
 
 	
@@ -92,40 +90,40 @@ public class ModCreativeModeTabs {
 			Set<Item> exclusions = new ReferenceOpenHashSet<>();
 
 			List<ItemProviderEntry<?, ?>> simpleExclusions = List.of(
-					ModItems.SHADOW_RADIANCE_CHESTPLATE_PLACEABLE
+					QOLItems.SHADOW_RADIANCE_CHESTPLATE_PLACEABLE
 			);
 
 			List<ItemEntry<TagDependentIngredientItem>> tagDependentExclusions = List.of(
 			);
 
 			if (!CreateQOL.isActivate(Features.INVENTORY_LINKER)) {
-				exclusions.add(ModBlocks.INVENTORY_LINKER.asItem());
-				exclusions.add(ModItems.PLAYER_PAPER.asItem());
+				exclusions.add(QOLBlocks.INVENTORY_LINKER.asItem());
+				exclusions.add(QOLItems.PLAYER_PAPER.asItem());
 			}
 			if (!CreateQOL.isChippedLoaded() || !CreateQOL.isActivate(Features.CHIPPED_SAW)){
-				exclusions.add(ModBlocks.ALCHEMY_SAW.asItem());
-				exclusions.add(ModBlocks.BOTANIST_SAW.asItem());
-				exclusions.add(ModBlocks.CARPENTERS_SAW.asItem());
-				exclusions.add(ModBlocks.LOOM_SAW.asItem());
-				exclusions.add(ModBlocks.MASON_SAW.asItem());
-				exclusions.add(ModBlocks.GLASSBLOWER_SAW.asItem());
-				exclusions.add(ModBlocks.TINKERING_SAW.asItem());
+				exclusions.add(QOLBlocks.ALCHEMY_SAW.asItem());
+				exclusions.add(QOLBlocks.BOTANIST_SAW.asItem());
+				exclusions.add(QOLBlocks.CARPENTERS_SAW.asItem());
+				exclusions.add(QOLBlocks.LOOM_SAW.asItem());
+				exclusions.add(QOLBlocks.MASON_SAW.asItem());
+				exclusions.add(QOLBlocks.GLASSBLOWER_SAW.asItem());
+				exclusions.add(QOLBlocks.TINKERING_SAW.asItem());
 			}
 			if (!CreateQOL.isActivate(Features.SHADOW_RADIANCE)) {
-				exclusions.add(ModItems.SHADOW_RADIANCE.asItem());
-				exclusions.add(ModItems.SHADOW_RADIANCE_HELMET.asItem());
-				exclusions.add(ModItems.SHADOW_RADIANCE_CHESTPLATE.asItem());
-				exclusions.add(ModItems.SHADOW_RADIANCE_LEGGINGS.asItem());
-				exclusions.add(ModItems.SHADOW_RADIANCE_BOOTS.asItem());
+				exclusions.add(QOLItems.SHADOW_RADIANCE.asItem());
+				exclusions.add(QOLItems.SHADOW_RADIANCE_HELMET.asItem());
+				exclusions.add(QOLItems.SHADOW_RADIANCE_CHESTPLATE.asItem());
+				exclusions.add(QOLItems.SHADOW_RADIANCE_LEGGINGS.asItem());
+				exclusions.add(QOLItems.SHADOW_RADIANCE_BOOTS.asItem());
 			}
 
 			if (!CreateQOL.isActivate(Features.STATUE)){
-				exclusions.add(ModItems.STATUE.asItem());
+				exclusions.add(QOLItems.STATUE.asItem());
 			}
 
 			if (!CreateQOL.isActivate(Features.TRASH_CAN)){
-				exclusions.add(ModBlocks.TRASH_CAN.asItem());
-				exclusions.add(ModBlocks.BRASS_TRASH_CAN.asItem());
+				exclusions.add(QOLBlocks.TRASH_CAN.asItem());
+				exclusions.add(QOLBlocks.BRASS_TRASH_CAN.asItem());
 			}
 
 			for (ItemProviderEntry<?, ?> entry : simpleExclusions) {
@@ -172,7 +170,7 @@ public class ModCreativeModeTabs {
 			Map<Item, Function<Item, ItemStack>> factories = new Reference2ReferenceOpenHashMap<>();
 
 			Map<ItemProviderEntry<?, ?>, Function<Item, ItemStack>> simpleFactories = Map.of(
-					ModItems.SHADOW_RADIANCE_CHESTPLATE, item -> {
+					QOLItems.SHADOW_RADIANCE_CHESTPLATE, item -> {
 						ItemStack stack = new ItemStack(item);
 						stack.set(AllDataComponents.BACKTANK_AIR, BacktankUtil.maxAirWithoutEnchants());
 						return stack;

@@ -4,10 +4,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.google.common.base.Suppliers;
-import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.Create;
-
 import fr.iglee42.createqualityoflife.CreateQOL;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
@@ -17,14 +13,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorItem.Type;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
-import static fr.iglee42.createqualityoflife.CreateQOL.MODID;
-
-public class ModArmorMaterials {
+public class QOLArmorMaterials {
 
     public static final Holder<ArmorMaterial> SHADOW_RADIANCE = register(
             CreateQOL.asResource("shadow_radiance"),
@@ -39,7 +31,7 @@ public class ModArmorMaterials {
             SoundEvents.ARMOR_EQUIP_NETHERITE,
             4.0F,
             0.2F,
-            () -> Ingredient.of(ModItems.SHADOW_RADIANCE),
+            () -> Ingredient.of(QOLItems.SHADOW_RADIANCE),
             List.of(
                     new ArmorMaterial.Layer(CreateQOL.asResource("shadow_radiance"))
             )

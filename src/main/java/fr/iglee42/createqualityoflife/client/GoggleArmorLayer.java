@@ -5,8 +5,8 @@ import com.mojang.math.Axis;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllPartialModels;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
-import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
+import fr.iglee42.createqualityoflife.registries.QOLItems;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
@@ -35,11 +35,11 @@ public class GoggleArmorLayer<T extends LivingEntity, M extends EntityModel<T>> 
     public void render(PoseStack ms, MultiBufferSource buffer, int light, LivingEntity entity, float yaw, float pitch, float pt, float p_117356_, float p_117357_, float p_117358_) {
         if (entity.getPose() == Pose.SLEEPING)
             return;
-        if (!ModItems.SHADOW_RADIANCE_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)))
+        if (!QOLItems.SHADOW_RADIANCE_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)))
             return;
-        if (!entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).shouldRenderAddition()) return;
+        if (!entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).shouldRenderAddition()) return;
         if (!CreateQOLConfigs.server().helmetHaveGoggles.get()) return;
-        if (!entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(ModDataComponents.HELMET_GOGGLES,true))return;
+        if (!entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.HELMET_GOGGLES,true))return;
 
         M entityModel = getParentModel();
         if (!(entityModel instanceof HumanoidModel<?> model))

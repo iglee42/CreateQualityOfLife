@@ -1,10 +1,8 @@
 package fr.iglee42.createqualityoflife.blockentitites;
 
-import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
-import com.simibubi.create.content.kinetics.saw.CuttingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingInventory;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -16,8 +14,7 @@ import com.simibubi.create.infrastructure.config.AllConfigs;
 import earth.terrarium.chipped.common.recipes.ChippedRecipe;
 import earth.terrarium.chipped.common.registry.ModRecipeTypes;
 import fr.iglee42.createqualityoflife.blocks.ChippedSawBlock;
-import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
-import fr.iglee42.createqualityoflife.registries.ModBlocks;
+import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
 import fr.iglee42.createqualityoflife.utils.ChippedSawFilterSlot;
 import net.createmod.catnip.math.VecHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -81,7 +78,7 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(
 				Capabilities.ItemHandler.BLOCK,
-				ModBlockEntities.CHIPPED_SAW.get(),
+				QOLBlockEntities.CHIPPED_SAW.get(),
 				(be, context) -> {
 					if (context != Direction.DOWN)
 						return be.inventory;
@@ -368,7 +365,7 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 
 	private List<RecipeHolder<? extends Recipe<?>>> getRecipes() {
 /*		Optional<CuttingRecipe> assemblyRecipe = SequencedAssemblyRecipe.getRecipe(level, inventory.getStackInSlot(0),
-			ModRecipeTypes.ALCHEMY_BENCH_TYPE.getType(), CuttingRecipe.class);
+			QOLRecipeTypes.ALCHEMY_BENCH_TYPE.getType(), CuttingRecipe.class);
 		if (assemblyRecipe.isPresent() && filtering.test(assemblyRecipe.get()
 			.getResultItem()))
 			return ImmutableList.of(assemblyRecipe.get());*/

@@ -3,8 +3,8 @@ package fr.iglee42.createqualityoflife.packets;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
-import fr.iglee42.createqualityoflife.registries.ModItems;
-import fr.iglee42.createqualityoflife.registries.ModPackets;
+import fr.iglee42.createqualityoflife.registries.QOLItems;
+import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
@@ -26,9 +26,9 @@ public class ToggleHoverPacket implements ServerboundPacketPayload {
             Item backtank = BacktankItem.getWornBy(player);
 
             if (backtank == null) return;
-            if (ModItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && ShadowRadianceChestplate.hasPropeller(chestplate)){
+            if (QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && ShadowRadianceChestplate.hasPropeller(chestplate)){
                 ShadowRadianceChestplate.toggleHover(chestplate,player);
-            } else if (ModItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && !ShadowRadianceChestplate.hasPropeller(chestplate)){
+            } else if (QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && !ShadowRadianceChestplate.hasPropeller(chestplate)){
                 player.sendSystemMessage(CreateQOLLang.translateDirect("chestplate.no_propeller").withStyle(ChatFormatting.RED),true);
             }
         }
@@ -36,6 +36,6 @@ public class ToggleHoverPacket implements ServerboundPacketPayload {
 
     @Override
     public PacketTypeProvider getTypeProvider() {
-        return ModPackets.TOGGLE_HOVER;
+        return QOLPackets.TOGGLE_HOVER;
     }
 }

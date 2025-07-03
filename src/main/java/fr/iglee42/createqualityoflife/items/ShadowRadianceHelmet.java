@@ -4,8 +4,8 @@ import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.content.equipment.armor.DivingHelmetItem;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
-import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
+import fr.iglee42.createqualityoflife.registries.QOLItems;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -29,7 +29,7 @@ public class ShadowRadianceHelmet extends DivingHelmetItem {
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     }
     static {
-        GogglesItem.addIsWearingPredicate(player -> ModItems.SHADOW_RADIANCE_HELMET.isIn(player.getItemBySlot(EquipmentSlot.HEAD)) && player.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(ModDataComponents.HELMET_GOGGLES,true) && CreateQOLConfigs.server().helmetHaveGoggles.get());
+        GogglesItem.addIsWearingPredicate(player -> QOLItems.SHADOW_RADIANCE_HELMET.isIn(player.getItemBySlot(EquipmentSlot.HEAD)) && player.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.HELMET_GOGGLES,true) && CreateQOLConfigs.server().helmetHaveGoggles.get());
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ShadowRadianceHelmet extends DivingHelmetItem {
         if (player.getItemBySlot(EquipmentSlot.HEAD).equals(stack)){
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
             if (!CreateQOLConfigs.server().armorEffects.get()) return;
-            if (stack.getOrDefault(ModDataComponents.ARMOR_EFFECT,true))player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION,20*11,1,false,false));
+            if (stack.getOrDefault(QOLDataComponents.ARMOR_EFFECT,true))player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION,20*11,1,false,false));
         }
     }
 

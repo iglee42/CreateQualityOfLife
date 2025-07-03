@@ -1,6 +1,6 @@
 package fr.iglee42.createqualityoflife.packets;
 
-import fr.iglee42.createqualityoflife.registries.ModPackets;
+import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;
 import io.netty.buffer.ByteBuf;
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
@@ -28,6 +28,6 @@ public record UpdateInputsPacket(boolean up, boolean down, boolean forwards, boo
 
     @Override
     public PacketTypeProvider getTypeProvider() {
-        return ModPackets.INPUTS_UPDATE;
+        return QOLPackets.INPUTS_UPDATE;
     }
 }

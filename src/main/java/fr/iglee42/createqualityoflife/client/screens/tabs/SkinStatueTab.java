@@ -7,8 +7,8 @@ import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.utility.CreateLang;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
-import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
-import fr.iglee42.createqualityoflife.registries.ModIcons;
+import fr.iglee42.createqualityoflife.registries.QOLGuiTextures;
+import fr.iglee42.createqualityoflife.registries.QOLIcons;
 import fr.iglee42.createqualityoflife.statue.Statue;
 import fr.iglee42.createqualityoflife.statue.StatueRenderer;
 import net.createmod.catnip.gui.element.ScreenElement;
@@ -64,13 +64,13 @@ public class SkinStatueTab extends StatueTab {
 
         partsButtons = new ArrayList<>();
         partsLabels = new ArrayList<>();
-        addPartWidget(x,y,PlayerModelPart.CAPE,ModIcons.I_CAPE_OFF);
-        addPartWidget(x,y,PlayerModelPart.HAT, ModIcons.I_HAT);
-        addPartWidget(x,y,PlayerModelPart.JACKET, ModIcons.I_JACKET);
-        addPartWidget(x,y,PlayerModelPart.LEFT_SLEEVE, ModIcons.I_LEFT_SLEEVE);
-        addPartWidget(x,y,PlayerModelPart.RIGHT_SLEEVE, ModIcons.I_RIGHT_SLEEVE);
-        addPartWidget(x,y,PlayerModelPart.LEFT_PANTS_LEG, ModIcons.I_LEFT_PANTS);
-        addPartWidget(x,y,PlayerModelPart.RIGHT_PANTS_LEG, ModIcons.I_RIGHT_PANTS);
+        addPartWidget(x,y,PlayerModelPart.CAPE, QOLIcons.I_CAPE_OFF);
+        addPartWidget(x,y,PlayerModelPart.HAT, QOLIcons.I_HAT);
+        addPartWidget(x,y,PlayerModelPart.JACKET, QOLIcons.I_JACKET);
+        addPartWidget(x,y,PlayerModelPart.LEFT_SLEEVE, QOLIcons.I_LEFT_SLEEVE);
+        addPartWidget(x,y,PlayerModelPart.RIGHT_SLEEVE, QOLIcons.I_RIGHT_SLEEVE);
+        addPartWidget(x,y,PlayerModelPart.LEFT_PANTS_LEG, QOLIcons.I_LEFT_PANTS);
+        addPartWidget(x,y,PlayerModelPart.RIGHT_PANTS_LEG, QOLIcons.I_RIGHT_PANTS);
     }
 
     private void addPartWidget(int x, int y, PlayerModelPart part, ScreenElement icon){
@@ -87,7 +87,7 @@ public class SkinStatueTab extends StatueTab {
 
         IconButton btn = new IconButton(x + BASE_OFFSET, y, icon);
         if (part == PlayerModelPart.CAPE) {
-            btn.setIcon(isPartActive.test(getExampleStatue()) ? ModIcons.I_CAPE_ON : ModIcons.I_CAPE_OFF);
+            btn.setIcon(isPartActive.test(getExampleStatue()) ? QOLIcons.I_CAPE_ON : QOLIcons.I_CAPE_OFF);
             capeButton = btn;
         }
         btn.withCallback(() -> {
@@ -95,7 +95,7 @@ public class SkinStatueTab extends StatueTab {
             btn.green = isPartActive.test(getExampleStatue());
             btn.getToolTip().clear();
             btn.getToolTip().addAll(isPartActive.test(getExampleStatue()) ? tipEnabled : tip);
-            if (part == PlayerModelPart.CAPE) btn.setIcon(isPartActive.test(getExampleStatue())? ModIcons.I_CAPE_ON : ModIcons.I_CAPE_OFF);
+            if (part == PlayerModelPart.CAPE) btn.setIcon(isPartActive.test(getExampleStatue())? QOLIcons.I_CAPE_ON : QOLIcons.I_CAPE_OFF);
             getParent().sendUpdatePacket();
         });
         btn.green = isPartActive.test(getExampleStatue());
@@ -137,7 +137,7 @@ public class SkinStatueTab extends StatueTab {
             getParent().sendUpdatePacket();
         }
 
-        ModGuiTextures.TEXT_BOX.render(graphics,x + BASE_OFFSET, y + SKIN_Y);
+        QOLGuiTextures.TEXT_BOX.render(graphics,x + BASE_OFFSET, y + SKIN_Y);
     }
 
 

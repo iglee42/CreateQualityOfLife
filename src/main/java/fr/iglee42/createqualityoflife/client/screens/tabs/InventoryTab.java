@@ -2,7 +2,7 @@ package fr.iglee42.createqualityoflife.client.screens.tabs;
 
 import com.simibubi.create.AllItems;
 import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
-import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
+import fr.iglee42.createqualityoflife.registries.QOLGuiTextures;
 import fr.iglee42.createqualityoflife.statue.StatueMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -19,7 +19,7 @@ public class InventoryTab extends StatueTab {
         StatueMenu menu = getParent().getMenu();
         if (menu.isShowSlots()) {
             menu.slots.forEach(s -> {
-                ModGuiTextures.SLOT.render(graphics, s.x + getParent().getGuiLeft() - 1, s.y + getParent().getGuiTop() - 1);
+                QOLGuiTextures.SLOT.render(graphics, s.x + getParent().getGuiLeft() - 1, s.y + getParent().getGuiTop() - 1);
             });
         }
     }

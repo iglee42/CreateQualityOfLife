@@ -1,10 +1,8 @@
 package fr.iglee42.createqualityoflife.client;
 
-import com.simibubi.create.AllItems;
-import com.simibubi.create.Create;
 import fr.iglee42.createqualityoflife.CreateQOL;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
-import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
+import fr.iglee42.createqualityoflife.registries.QOLItems;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
@@ -36,7 +34,7 @@ public class ShadowRadianceFirstPersonRenderer {
 	public static void clientTick() {
 		Minecraft mc = Minecraft.getInstance();
 		rendererActive =
-			mc.player != null && ModItems.SHADOW_RADIANCE_CHESTPLATE.isIn(mc.player.getItemBySlot(EquipmentSlot.CHEST)) && mc.player.getItemBySlot(EquipmentSlot.CHEST).getOrDefault(ModDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).shouldRenderArmor() && mc.player.getItemBySlot(EquipmentSlot.CHEST).getOrDefault(ModDataComponents.BACKTANK_ARMS,true);
+			mc.player != null && QOLItems.SHADOW_RADIANCE_CHESTPLATE.isIn(mc.player.getItemBySlot(EquipmentSlot.CHEST)) && mc.player.getItemBySlot(EquipmentSlot.CHEST).getOrDefault(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).shouldRenderArmor() && mc.player.getItemBySlot(EquipmentSlot.CHEST).getOrDefault(QOLDataComponents.BACKTANK_ARMS,true);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)

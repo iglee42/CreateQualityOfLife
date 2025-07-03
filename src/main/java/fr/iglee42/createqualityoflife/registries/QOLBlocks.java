@@ -26,10 +26,10 @@ import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
 
-public class ModBlocks {
+public class QOLBlocks {
 
     static {
-        REGISTRATE.setCreativeTab(ModCreativeModeTabs.MAIN_TAB);
+        REGISTRATE.setCreativeTab(QOLCreativeModeTabs.MAIN_TAB);
     }
 
     public static BlockEntry<InventoryLinkerBlock> INVENTORY_LINKER = REGISTRATE.block("inventory_linker", InventoryLinkerBlock::new)
@@ -49,7 +49,7 @@ public class ModBlocks {
     public static final BlockEntry<ShadowRadianceBacktankBlock> SHADOW_RADIANCE_CHESTPLATE =
             REGISTRATE.block("shadow_radiance_chestplate", ShadowRadianceBacktankBlock::new)
                     .initialProperties(SharedProperties::netheriteMetal)
-                    .transform(backtank(ModItems.SHADOW_RADIANCE_CHESTPLATE::get))
+                    .transform(backtank(QOLItems.SHADOW_RADIANCE_CHESTPLATE::get))
                     .register();
 
     public static final BlockEntry<TrashCanBlock> TRASH_CAN = REGISTRATE.block("trash_can", TrashCanBlock::new)

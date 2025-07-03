@@ -3,7 +3,7 @@ package fr.iglee42.createqualityoflife.items;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
+import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
@@ -89,7 +89,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
         if (player.getItemBySlot(EquipmentSlot.CHEST).equals(stack)){
             boolean second = level.getGameTime() % 20 == 0;
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
-            if (stack.getOrDefault(ModDataComponents.ARMOR_EFFECT,true) && CreateQOLConfigs.server().armorEffects.get())
+            if (stack.getOrDefault(QOLDataComponents.ARMOR_EFFECT,true) && CreateQOLConfigs.server().armorEffects.get())
                 player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 1, false, false));
             if (player.isFallFlying() && isElytraEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && CreateQOLConfigs.server().elytraAllowed.get() && CreateQOLConfigs.server().elytraBoostAllowed.get() && CommonKeysHandler.isHoldingUp(player))
             {
@@ -227,7 +227,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
             p.displayClientMessage(Component.literal("Fan can't be enabled if the elytra are enabled").withStyle(ChatFormatting.RED),true);
             return;
         }
-        chestplate.set(ModDataComponents.BACKTANK_FANS, !chestplate.has(ModDataComponents.BACKTANK_FANS) || Boolean.FALSE.equals(chestplate.get(ModDataComponents.BACKTANK_FANS)));
+        chestplate.set(QOLDataComponents.BACKTANK_FANS, !chestplate.has(QOLDataComponents.BACKTANK_FANS) || Boolean.FALSE.equals(chestplate.get(QOLDataComponents.BACKTANK_FANS)));
         boolean fans = isFansEnable(chestplate);
         p.displayClientMessage(Component.literal("Fan : ").append(Component.literal(chooseState(true,true,fans,false,true)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
@@ -240,7 +240,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
             p.displayClientMessage(Component.literal("Hover is disabled by the config").withStyle(ChatFormatting.RED),true);
             return;
         }
-        chestplate.set(ModDataComponents.BACKTANK_HOVER, chestplate.has(ModDataComponents.BACKTANK_HOVER) && Boolean.FALSE.equals(chestplate.get(ModDataComponents.BACKTANK_HOVER)));
+        chestplate.set(QOLDataComponents.BACKTANK_HOVER, chestplate.has(QOLDataComponents.BACKTANK_HOVER) && Boolean.FALSE.equals(chestplate.get(QOLDataComponents.BACKTANK_HOVER)));
         boolean hover = isHoverEnable(chestplate);
         p.displayClientMessage(Component.literal("Hover : ").append(Component.literal(chooseState(true,true,hover,false,true)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
@@ -254,26 +254,26 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
             p.displayClientMessage(Component.literal("Elytra can't be enabled if the fans is enabled").withStyle(ChatFormatting.RED),true);
             return;
         }
-        chestplate.set(ModDataComponents.BACKTANK_ELYTRA_STATE, chestplate.has(ModDataComponents.BACKTANK_ELYTRA_STATE) && Boolean.FALSE.equals(chestplate.get(ModDataComponents.BACKTANK_ELYTRA_STATE)));
+        chestplate.set(QOLDataComponents.BACKTANK_ELYTRA_STATE, chestplate.has(QOLDataComponents.BACKTANK_ELYTRA_STATE) && Boolean.FALSE.equals(chestplate.get(QOLDataComponents.BACKTANK_ELYTRA_STATE)));
         boolean elytra = isElytraEnable(chestplate);
         p.displayClientMessage(Component.literal("Elytra : ").append(Component.literal(chooseState(true,true,elytra,false,true)).withStyle(elytra ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
     public static boolean hasPropeller(ItemStack chestplate){
-        return chestplate.has(ModDataComponents.BACKTANK_PROPELLERS) && Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_PROPELLERS));
+        return chestplate.has(QOLDataComponents.BACKTANK_PROPELLERS) && Boolean.TRUE.equals(chestplate.get(QOLDataComponents.BACKTANK_PROPELLERS));
     }
 
     public static boolean hasElytra(ItemStack chestplate){
-        return chestplate.has(ModDataComponents.BACKTANK_ELYTRA) && Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_ELYTRA));
+        return chestplate.has(QOLDataComponents.BACKTANK_ELYTRA) && Boolean.TRUE.equals(chestplate.get(QOLDataComponents.BACKTANK_ELYTRA));
     }
     public static boolean isElytraEnable(ItemStack chestplate){
-        return !chestplate.has(ModDataComponents.BACKTANK_ELYTRA_STATE) ? !isFansEnable(chestplate) : Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_ELYTRA_STATE));
+        return !chestplate.has(QOLDataComponents.BACKTANK_ELYTRA_STATE) ? !isFansEnable(chestplate) : Boolean.TRUE.equals(chestplate.get(QOLDataComponents.BACKTANK_ELYTRA_STATE));
     }
     public static boolean isFansEnable(ItemStack chestplate){
         if (!hasPropeller(chestplate)) return false;
-        return !chestplate.has(ModDataComponents.BACKTANK_FANS) || Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_FANS));
+        return !chestplate.has(QOLDataComponents.BACKTANK_FANS) || Boolean.TRUE.equals(chestplate.get(QOLDataComponents.BACKTANK_FANS));
     }
     public static boolean isHoverEnable(ItemStack chestplate){
         if (!hasPropeller(chestplate)) return false;
-        return chestplate.has(ModDataComponents.BACKTANK_HOVER) && Boolean.TRUE.equals(chestplate.get(ModDataComponents.BACKTANK_HOVER));
+        return chestplate.has(QOLDataComponents.BACKTANK_HOVER) && Boolean.TRUE.equals(chestplate.get(QOLDataComponents.BACKTANK_HOVER));
     }
 }

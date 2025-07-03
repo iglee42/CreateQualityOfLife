@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public enum ModRecipeTypes implements IRecipeTypeInfo,StringRepresentable {
+public enum QOLRecipeTypes implements IRecipeTypeInfo,StringRepresentable {
     BLAZE_BURNER_LIQUIDS(BlazeBurnerLiquidRecipe::new),
     ;
 
@@ -36,9 +36,9 @@ public enum ModRecipeTypes implements IRecipeTypeInfo,StringRepresentable {
 
     private boolean isProcessingRecipe;
 
-    public static final Codec<ModRecipeTypes> CODEC = StringRepresentable.fromEnum(ModRecipeTypes::values);
+    public static final Codec<QOLRecipeTypes> CODEC = StringRepresentable.fromEnum(QOLRecipeTypes::values);
 
-    ModRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier, Supplier<RecipeType<?>> typeSupplier, boolean registerType) {
+    QOLRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier, Supplier<RecipeType<?>> typeSupplier, boolean registerType) {
         String name = Lang.asId(name());
         id = Create.asResource(name);
         this.serializerSupplier = serializerSupplier;
@@ -53,7 +53,7 @@ public enum ModRecipeTypes implements IRecipeTypeInfo,StringRepresentable {
         isProcessingRecipe = false;
     }
 
-    ModRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
+    QOLRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
         String name = Lang.asId(name());
         id = Create.asResource(name);
         this.serializerSupplier = serializerSupplier;
@@ -63,7 +63,7 @@ public enum ModRecipeTypes implements IRecipeTypeInfo,StringRepresentable {
         isProcessingRecipe = false;
     }
 
-    ModRecipeTypes(StandardProcessingRecipe.Factory<?> processingFactory) {
+    QOLRecipeTypes(StandardProcessingRecipe.Factory<?> processingFactory) {
         this(() -> new StandardProcessingRecipe.Serializer<>(processingFactory));
         isProcessingRecipe = true;
     }

@@ -1,16 +1,12 @@
 package fr.iglee42.createqualityoflife.registries;
 
-import com.simibubi.create.AllItems;
 import com.simibubi.create.AllPartialModels;
-import com.simibubi.create.Create;
 import com.simibubi.create.content.logistics.box.PackageStyles;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import net.minecraft.resources.ResourceLocation;
 
-import static fr.iglee42.createqualityoflife.CreateQOL.MODID;
-
-public class ModPartialModels {
+public class QOLPartialModels {
 
     public static final PartialModel
 
@@ -29,9 +25,9 @@ public class ModPartialModels {
     }
 
     public static void init(){
-        registerPackageStyle(ModItems.FURTI);
-        registerPackageStyle(ModItems.DELTA);
-        registerPackageStyle(ModItems.IGLEE);
+        registerPackageStyle(QOLItems.FURTI);
+        registerPackageStyle(QOLItems.DELTA);
+        registerPackageStyle(QOLItems.IGLEE);
     }
 
     private static void registerPackageStyle(PackageStyles.PackageStyle style){

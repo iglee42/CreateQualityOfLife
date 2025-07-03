@@ -1,6 +1,5 @@
 package fr.iglee42.createqualityoflife.registries;
 
-import com.simibubi.create.Create;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.packets.*;
 import net.createmod.catnip.net.base.BasePacketPayload;
@@ -11,7 +10,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 import java.util.Locale;
 
-public enum ModPackets implements BasePacketPayload.PacketTypeProvider {
+public enum QOLPackets implements BasePacketPayload.PacketTypeProvider {
 
     //Client to Server
 
@@ -31,7 +30,7 @@ public enum ModPackets implements BasePacketPayload.PacketTypeProvider {
     ;
     private final CatnipPacketRegistry.PacketType<?> type;
 
-    <T extends BasePacketPayload> ModPackets(Class<T> clazz, StreamCodec<? super RegistryFriendlyByteBuf, T> codec) {
+    <T extends BasePacketPayload> QOLPackets(Class<T> clazz, StreamCodec<? super RegistryFriendlyByteBuf, T> codec) {
         String name = this.name().toLowerCase(Locale.ROOT);
         this.type = new CatnipPacketRegistry.PacketType<>(
                 new CustomPacketPayload.Type<>(CreateQOL.asResource(name)),
@@ -47,7 +46,7 @@ public enum ModPackets implements BasePacketPayload.PacketTypeProvider {
 
     public static void register() {
         CatnipPacketRegistry packetRegistry = new CatnipPacketRegistry(CreateQOL.MODID, 1);
-        for (ModPackets packet : ModPackets.values()) {
+        for (QOLPackets packet : QOLPackets.values()) {
             packetRegistry.registerPacket(packet.type);
         }
         packetRegistry.registerAllPackets();

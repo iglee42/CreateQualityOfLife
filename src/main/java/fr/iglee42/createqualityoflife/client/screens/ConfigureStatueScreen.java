@@ -7,9 +7,9 @@ import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.tabs.*;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ItemButton;
 import fr.iglee42.createqualityoflife.packets.SaveStatueConfigPacket;
-import fr.iglee42.createqualityoflife.registries.ModEntityTypes;
-import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
-import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.registries.QOLEntityTypes;
+import fr.iglee42.createqualityoflife.registries.QOLGuiTextures;
+import fr.iglee42.createqualityoflife.registries.QOLItems;
 import fr.iglee42.createqualityoflife.statue.Statue;
 import fr.iglee42.createqualityoflife.statue.StatueMenu;
 import net.minecraft.client.Minecraft;
@@ -53,7 +53,7 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
 
     @Override
     protected void init() {
-        ModGuiTextures bg = ModGuiTextures.STATUE;
+        QOLGuiTextures bg = QOLGuiTextures.STATUE;
         setWindowSize(bg.width,bg.height);
         setWindowOffset(0,0);
         super.init();
@@ -79,7 +79,7 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
         hideButton.getToolTip().add(CreateQOLLang.translateDirect("statue.hideBackground1"));
         addRenderableWidget(confirmButton);
         addRenderableWidget(hideButton);
-        this.exampleStatue = new Statue(ModEntityTypes.STATUE.get(),Minecraft.getInstance().level);
+        this.exampleStatue = new Statue(QOLEntityTypes.STATUE.get(),Minecraft.getInstance().level);
         if (menu.contentHolder != null) {
             CompoundTag tag = new CompoundTag();
             menu.contentHolder.saveWithoutId(tag);
@@ -90,8 +90,8 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
         tabs.add(new SkinStatueTab(tabs.size(),this));
         tabs.add(new StatueTransformTab(tabs.size(), this));
         tabs.add(new PartsRotationTab(tabs.size(), Items.PLAYER_HEAD.asItem(), this, PlayerModelPart.HAT));
-        tabs.add(new PartsRotationTab(tabs.size(), ModItems.SHADOW_RADIANCE_CHESTPLATE.asItem(), this, PlayerModelPart.LEFT_SLEEVE,PlayerModelPart.RIGHT_SLEEVE));
-        tabs.add(new PartsRotationTab(tabs.size(), ModItems.SHADOW_RADIANCE_LEGGINGS.asItem(), this, PlayerModelPart.LEFT_PANTS_LEG,PlayerModelPart.RIGHT_PANTS_LEG));
+        tabs.add(new PartsRotationTab(tabs.size(), QOLItems.SHADOW_RADIANCE_CHESTPLATE.asItem(), this, PlayerModelPart.LEFT_SLEEVE,PlayerModelPart.RIGHT_SLEEVE));
+        tabs.add(new PartsRotationTab(tabs.size(), QOLItems.SHADOW_RADIANCE_LEGGINGS.asItem(), this, PlayerModelPart.LEFT_PANTS_LEG,PlayerModelPart.RIGHT_PANTS_LEG));
         tabs.add(new InventoryTab(tabs.size(), this));
         tabs.add(new RotationPresetsTab(tabs.size(), this));
         tabs.add(new AnimationTab(tabs.size(),this));
@@ -131,7 +131,7 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
 
     @Override
     protected void renderBg(GuiGraphics graphics, float v, int i, int i1) {
-        ModGuiTextures.STATUE.render(graphics, leftPos, topPos);
+        QOLGuiTextures.STATUE.render(graphics, leftPos, topPos);
     }
 
     @Override
@@ -170,13 +170,13 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
                 .forEach(btn->btn.visible = !hideBackground);
         confirmButton.visible = !hideBackground;
         Component toDraw = exampleStatue.hasOwner() && Minecraft.getInstance().level != null ? (Minecraft.getInstance().level.getPlayerByUUID(exampleStatue.getOwner().get()) != null ? CreateQOLLang.translateDirect("statue.owner" ,Minecraft.getInstance().level.getPlayerByUUID(exampleStatue.getOwner().get()).getName().getString() ):CreateQOLLang.translateDirect( "statue.unknow_owner")): CreateQOLLang.translateDirect("statue.no_owner");
-        if (!hideBackground)graphics.drawScrollingString(font,toDraw, leftPos + 5, leftPos + 66,topPos + ModGuiTextures.STATUE.height - 21, 0xffffff);
+        if (!hideBackground)graphics.drawScrollingString(font,toDraw, leftPos + 5, leftPos + 66,topPos + QOLGuiTextures.STATUE.height - 21, 0xffffff);
 
         if (!CreateQOLLang.translateDirect(tabs.get(currentTab).getKey()+".desc").getString().isEmpty() && !hideBackground) {
             boolean infoHovered = mouseX >= getGuiLeft() + imageWidth - 18 && mouseX <= getGuiLeft() + imageWidth - 2 && mouseY >= getGuiTop() && mouseY <= getGuiTop() + 16;
             if (infoHovered)
-                ModGuiTextures.INFO_ICON_HOVER.render(graphics, getGuiLeft() + imageWidth - 18, getGuiTop());
-            else ModGuiTextures.INFO_ICON.render(graphics, getGuiLeft() + imageWidth - 18, getGuiTop());
+                QOLGuiTextures.INFO_ICON_HOVER.render(graphics, getGuiLeft() + imageWidth - 18, getGuiTop());
+            else QOLGuiTextures.INFO_ICON.render(graphics, getGuiLeft() + imageWidth - 18, getGuiTop());
 
             if (infoHovered)
                 graphics.renderComponentTooltip(font, List.of(CreateQOLLang.translateDirect(tabs.get(currentTab).getKey() + ".desc")), mouseX, mouseY);

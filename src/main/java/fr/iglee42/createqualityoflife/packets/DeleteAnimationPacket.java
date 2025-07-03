@@ -1,12 +1,10 @@
 package fr.iglee42.createqualityoflife.packets;
 
-import fr.iglee42.createqualityoflife.registries.ModPackets;
+import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import fr.iglee42.createqualityoflife.statue.animation.PublishedAnimationsManager;
-import fr.iglee42.createqualityoflife.statue.animation.StatueAnimation;
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -28,6 +26,6 @@ public record DeleteAnimationPacket(UUID animation) implements ServerboundPacket
 
     @Override
     public PacketTypeProvider getTypeProvider() {
-        return ModPackets.DELETE_ANIMATION;
+        return QOLPackets.DELETE_ANIMATION;
     }
 }

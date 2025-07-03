@@ -6,7 +6,7 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import fr.iglee42.createqualityoflife.blockentitites.InventoryLinkerBlockEntity;
-import fr.iglee42.createqualityoflife.registries.ModPartialModels;
+import fr.iglee42.createqualityoflife.registries.QOLPartialModels;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -20,7 +20,7 @@ public class InventoryLinkerRenderer extends SafeBlockEntityRenderer<InventoryLi
 
     @Override
     protected void renderSafe(InventoryLinkerBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-        PartialModel model = be.getPlayerPaperItemStack().isEmpty() ? ModPartialModels.INVENTORY_LINKER : ModPartialModels.INVENTORY_LINKER_ON;
+        PartialModel model = be.getPlayerPaperItemStack().isEmpty() ? QOLPartialModels.INVENTORY_LINKER : QOLPartialModels.INVENTORY_LINKER_ON;
         SuperByteBuffer buffer = CachedBuffers.partial(model, be.getBlockState());
         VertexConsumer vb = bufferSource.getBuffer(RenderType.solid());
         KineticBlockEntityRenderer.renderRotatingBuffer(be,buffer,ms,vb,light);

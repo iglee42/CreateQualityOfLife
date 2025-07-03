@@ -7,9 +7,9 @@ import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIc
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.utility.CreateLang;
-import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
-import fr.iglee42.createqualityoflife.registries.ModDataComponents;
-import fr.iglee42.createqualityoflife.registries.ModIcons;
+import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
+import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
+import fr.iglee42.createqualityoflife.registries.QOLIcons;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -46,7 +46,7 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
-                ModBlockEntities.INVENTORY_LINKER.get(),
+                QOLBlockEntities.INVENTORY_LINKER.get(),
                 (be, context) -> {
                     if (context != Direction.DOWN)
                         return be.getPlayerInventory(be.getLevel());
@@ -67,9 +67,9 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
     }
 
     public enum Mode implements INamedIconOptions {
-        INVENTORY(0,36, ModIcons.I_INVENTORY),
-        ARMOR(1,4,ModIcons.I_ARMOR),
-        OFF_HAND(2,1,ModIcons.I_OFF_HAND);
+        INVENTORY(0,36, QOLIcons.I_INVENTORY),
+        ARMOR(1,4, QOLIcons.I_ARMOR),
+        OFF_HAND(2,1, QOLIcons.I_OFF_HAND);
 
         private int id;
         private int slotCount;
@@ -113,7 +113,7 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
         if (!isSpeedRequirementFulfilled()) return;
 
         if (!playerPaperItemStack.isEmpty()){
-            linkedPlayer = playerPaperItemStack.get(ModDataComponents.LINKED_PLAYER);
+            linkedPlayer = playerPaperItemStack.get(QOLDataComponents.LINKED_PLAYER);
         } else {
             linkedPlayer = null;
         }
