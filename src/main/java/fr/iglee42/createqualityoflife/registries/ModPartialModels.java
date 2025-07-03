@@ -17,8 +17,12 @@ public class ModPartialModels {
             INVENTORY_LINKER = block("inventory_linker/inner_off"), INVENTORY_LINKER_ON = block("inventory_linker/inner_on"),
 
             SHADOW_RADIANCE_TANK_COGS = block("shadow_radiance_chestplate/cogs"), SHADOW_RADIANCE_TANK_SHAFT = block("shadow_radiance_chestplate/block_shaft_input"),
-            SHADOW_RADIANCE_CHESTPLATE_PROPELLERS = block("shadow_radiance_chestplate/propellers"),SHADOW_RADIANCE_CHESTPLATE_PROPELLERS_ALT = block("shadow_radiance_chestplate/propellers_alt")
-            ;
+            SHADOW_RADIANCE_CHESTPLATE_PROPELLERS = block("shadow_radiance_chestplate/propellers"),SHADOW_RADIANCE_CHESTPLATE_PROPELLERS_ALT = block("shadow_radiance_chestplate/propellers_alt"),
+
+
+            ENDER_PACKAGER_HATCH_CLOSED = block("ender_packager/hatch_closed"),
+            ENDER_PACKAGER_HATCH_OPEN = block("ender_packager/hatch_open")
+    ;
 
     private static PartialModel block(String path) {
         return PartialModel.of(CreateQOL.asResource("block/"+path));

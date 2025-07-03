@@ -12,6 +12,7 @@
     "ChromaticCompoundItemMixin",
     "DivingBootsItemMixin",
     "FlapDisplayBlockMixin",
+    "FrogportBlockEntityMixin",
     "LavaSwimmingMixin",
     "ModelBuilderMixin",
     "ModelFileMixin",

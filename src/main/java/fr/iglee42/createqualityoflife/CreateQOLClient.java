@@ -1,12 +1,61 @@
 package fr.iglee42.createqualityoflife;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.simibubi.create.CreateClient;
+import com.simibubi.create.content.contraptions.ContraptionHandler;
+import com.simibubi.create.content.contraptions.actors.seat.ContraptionPlayerPassengerRotation;
+import com.simibubi.create.content.contraptions.actors.trainControls.ControlsHandler;
+import com.simibubi.create.content.contraptions.chassis.ChassisRangeDisplay;
+import com.simibubi.create.content.contraptions.minecart.CouplingHandlerClient;
+import com.simibubi.create.content.contraptions.minecart.CouplingPhysics;
+import com.simibubi.create.content.contraptions.minecart.CouplingRenderer;
+import com.simibubi.create.content.contraptions.minecart.capability.CapabilityMinecartController;
+import com.simibubi.create.content.contraptions.render.ContraptionRenderInfoManager;
+import com.simibubi.create.content.contraptions.wrench.RadialWrenchHandler;
+import com.simibubi.create.content.decoration.girder.GirderWrenchBehavior;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
+import com.simibubi.create.content.equipment.armor.CardboardArmorStealthOverlay;
+import com.simibubi.create.content.equipment.armor.NetheriteBacktankFirstPersonRenderer;
+import com.simibubi.create.content.equipment.blueprint.BlueprintOverlayRenderer;
+import com.simibubi.create.content.equipment.clipboard.ClipboardValueSettingsHandler;
+import com.simibubi.create.content.equipment.extendoGrip.ExtendoGripRenderHandler;
+import com.simibubi.create.content.equipment.toolbox.ToolboxHandlerClient;
+import com.simibubi.create.content.equipment.zapper.terrainzapper.WorldshaperRenderHandler;
+import com.simibubi.create.content.kinetics.KineticDebugger;
+import com.simibubi.create.content.kinetics.belt.item.BeltConnectorHandler;
+import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorConnectionHandler;
+import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorInteractionHandler;
+import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorRidingHandler;
+import com.simibubi.create.content.kinetics.fan.AirCurrent;
+import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointHandler;
+import com.simibubi.create.content.logistics.depot.EjectorTargetHandler;
+import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelConnectionHandler;
+import com.simibubi.create.content.logistics.packagePort.PackagePortTargetSelectionHandler;
+import com.simibubi.create.content.logistics.packagerLink.LogisticallyLinkedClientHandler;
+import com.simibubi.create.content.logistics.tableCloth.TableClothOverlayRenderer;
+import com.simibubi.create.content.redstone.displayLink.ClickToLinkBlockItem;
+import com.simibubi.create.content.redstone.link.LinkRenderer;
+import com.simibubi.create.content.redstone.link.controller.LinkedControllerClientHandler;
+import com.simibubi.create.content.trains.CameraDistanceModifier;
+import com.simibubi.create.content.trains.TrainHUD;
+import com.simibubi.create.content.trains.entity.TrainRelocator;
+import com.simibubi.create.content.trains.track.CurvedTrackInteraction;
+import com.simibubi.create.content.trains.track.TrackPlacement;
+import com.simibubi.create.content.trains.track.TrackTargetingClient;
+import com.simibubi.create.foundation.blockEntity.behaviour.edgeInteraction.EdgeInteractionRenderer;
+import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringRenderer;
+import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueHandler;
+import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueRenderer;
 import com.simibubi.create.foundation.particle.AirParticleData;
 
+import com.simibubi.create.foundation.sound.SoundScapes;
+import com.simibubi.create.foundation.utility.CameraAngleAnimationService;
+import com.simibubi.create.foundation.utility.ServerSpeedProvider;
+import com.simibubi.create.foundation.utility.TickBasedCache;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import fr.iglee42.createqualityoflife.client.GoggleArmorLayer;
 import fr.iglee42.createqualityoflife.client.ShadowRadianceFirstPersonRenderer;
+import fr.iglee42.createqualityoflife.client.renderer.EnderRenderer;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.statue.StatueArmorModel;
@@ -35,9 +84,13 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -48,6 +101,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Random;
 
 import static fr.iglee42.createqualityoflife.CreateQOL.MODID;
+import static net.createmod.ponder.PonderClient.isGameActive;
 
 public class CreateQOLClient {
 
@@ -67,6 +121,30 @@ public class CreateQOLClient {
 
         forgeEventBus.addListener(CreateQOLClient::onClientTick);
 
+    }
+
+    @EventBusSubscriber(Dist.CLIENT)
+    public static class TickEvents {
+        @SubscribeEvent
+        public static void onTickPre(ClientTickEvent.Pre event) {
+            onTick(true);
+        }
+
+        @SubscribeEvent
+        public static void onTickPost(ClientTickEvent.Post event) {
+            onTick(false);
+        }
+
+        public static void onTick(boolean isPreEvent) {
+            if (!isGameActive())
+                return;
+
+            Level world = Minecraft.getInstance().level;
+            if (isPreEvent) {
+                return;
+            }
+            EnderRenderer.tick();
+        }
     }
     public static void registerKeys(RegisterKeyMappingsEvent event){
         event.register(KeyBindManager.FANS_KEY);

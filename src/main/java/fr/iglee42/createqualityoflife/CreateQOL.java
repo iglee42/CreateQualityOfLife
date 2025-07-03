@@ -8,14 +8,12 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import com.tterrag.registrate.util.RegistrateDistExecutor;
-import fr.iglee42.createqualityoflife.blockentitites.BrassTrashCanBlockEntity;
-import fr.iglee42.createqualityoflife.blockentitites.ChippedSawBlockEntity;
-import fr.iglee42.createqualityoflife.blockentitites.InventoryLinkerBlockEntity;
-import fr.iglee42.createqualityoflife.blockentitites.TrashCanBlockEntity;
+import fr.iglee42.createqualityoflife.blockentitites.*;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.config.CreateQOLFeaturesConfig;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.statue.animation.PublishedAnimationsManager;
+import fr.iglee42.createqualityoflife.utils.EnderPackagersNetworkHandler;
 import fr.iglee42.createqualityoflife.utils.Features;
 import fr.iglee42.createqualityoflife.utils.IHaveTankMixin;
 import fr.iglee42.createqualityoflife.utils.liquidblazeburners.LiquidBlazeBurnerReloadListener;
@@ -32,7 +30,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
@@ -58,6 +55,9 @@ public class CreateQOL {
 
     public static final String MODID = "createqol";
     public static final Logger LOGGER = LogUtils.getLogger();
+
+    public static final EnderPackagersNetworkHandler ENDER_PACKAGER_NETWORK_HANDLER = new EnderPackagersNetworkHandler();
+
 
     public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID)
             .defaultCreativeTab((ResourceKey<CreativeModeTab>) null);
@@ -95,6 +95,7 @@ public class CreateQOL {
         modEventBus.addListener(InventoryLinkerBlockEntity::registerCapabilities);
         modEventBus.addListener(TrashCanBlockEntity::registerCapabilities);
         modEventBus.addListener(BrassTrashCanBlockEntity::registerCapabilities);
+        modEventBus.addListener(EnderPackagerBlockEntity::registerCapabilities);
         modEventBus.addListener(this::registerCapabilities);
         modEventBus.addListener(ModEntityTypes::registerEntityAttributes);
 
