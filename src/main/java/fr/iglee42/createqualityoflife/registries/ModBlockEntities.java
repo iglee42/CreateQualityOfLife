@@ -1,14 +1,15 @@
 package fr.iglee42.createqualityoflife.registries;
 
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.equipment.armor.BacktankRenderer;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import fr.iglee42.createqualityoflife.blockentitites.*;
 import fr.iglee42.createqualityoflife.blockentitites.renderers.ChippedSawRenderer;
+import fr.iglee42.createqualityoflife.blockentitites.renderers.EnderPackagerRenderer;
 import fr.iglee42.createqualityoflife.blockentitites.renderers.InventoryLinkerRenderer;
 import fr.iglee42.createqualityoflife.blockentitites.visuals.ChippedSawVisual;
+import fr.iglee42.createqualityoflife.blockentitites.visuals.EnderPackagerVisual;
 
 import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
 
@@ -45,6 +46,13 @@ public class ModBlockEntities {
             .blockEntity("brass_trash_can", BrassTrashCanBlockEntity::new)
             .validBlocks(ModBlocks.BRASS_TRASH_CAN)
             .renderer(()->SmartBlockEntityRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<EnderPackagerBlockEntity> ENDER_PACKAGER = REGISTRATE
+            .blockEntity("ender_packager", EnderPackagerBlockEntity::new)
+            .visual(() -> EnderPackagerVisual::new, true)
+            .validBlocks(ModBlocks.ENDER_PACKAGER)
+            .renderer(() -> EnderPackagerRenderer::new)
             .register();
     public static void register() {}
 }

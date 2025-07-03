@@ -7,6 +7,7 @@ import com.simibubi.create.foundation.particle.AirParticleData;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import fr.iglee42.createqualityoflife.client.GoggleArmorLayer;
 import fr.iglee42.createqualityoflife.client.ShadowRadianceFirstPersonRenderer;
+import fr.iglee42.createqualityoflife.client.renderer.EnderRenderer;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.statue.StatueArmorModel;
@@ -36,12 +37,16 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +54,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Random;
 
 import static fr.iglee42.createqualityoflife.CreateQOL.MODID;
+import static net.createmod.ponder.PonderClient.isGameActive;
 
 public class CreateQOLClient {
 
@@ -68,6 +74,32 @@ public class CreateQOLClient {
 
         forgeEventBus.addListener(CreateQOLClient::onClientTick);
 
+    }
+
+    @Mod.EventBusSubscriber(Dist.CLIENT)
+    public static class TickEvents {
+        @SubscribeEvent
+        public static void onTickPre(TickEvent.ClientTickEvent event) {
+            if (event.phase != TickEvent.Phase.START) return;
+            onTick(true);
+        }
+
+        @SubscribeEvent
+        public static void onTickPost(TickEvent.ClientTickEvent event) {
+            if (event.phase != TickEvent.Phase.START) return;
+            onTick(false);
+        }
+
+        public static void onTick(boolean isPreEvent) {
+            if (!isGameActive())
+                return;
+
+            Level world = Minecraft.getInstance().level;
+            if (isPreEvent) {
+                return;
+            }
+            EnderRenderer.tick();
+        }
     }
     public static void registerKeys(RegisterKeyMappingsEvent event){
         event.register(KeyBindManager.FANS_KEY);

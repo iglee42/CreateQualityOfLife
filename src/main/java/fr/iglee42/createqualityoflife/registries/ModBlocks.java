@@ -1,18 +1,10 @@
 package fr.iglee42.createqualityoflife.registries;
 
 import com.simibubi.create.AllTags;
-import com.simibubi.create.content.logistics.chute.ChuteBlock;
-import com.simibubi.create.content.logistics.chute.ChuteGenerator;
-import com.simibubi.create.content.logistics.chute.ChuteItem;
-import com.simibubi.create.content.logistics.chute.SmartChuteBlock;
-import com.simibubi.create.content.logistics.funnel.FunnelMovementBehaviour;
 import com.simibubi.create.foundation.block.render.ReducedDestroyEffects;
 import com.simibubi.create.foundation.data.AssetLookup;
-import com.simibubi.create.foundation.data.BlockStateGen;
-import com.simibubi.create.foundation.data.BuilderTransformers;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.builders.BlockBuilder;
-import com.tterrag.registrate.builders.Builder;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import fr.iglee42.createqualityoflife.behaviours.TrashCanMovementBehaviour;
@@ -88,6 +80,19 @@ public class ModBlocks {
             .transform(customItemModel("trash_can", "block_brass"))
             .register();
 
+    public static final BlockEntry<EnderPackagerBlock> ENDER_PACKAGER = REGISTRATE.block("ender_packager", EnderPackagerBlock::new)
+            .initialProperties(SharedProperties::softMetal)
+            .properties(BlockBehaviour.Properties::noOcclusion)
+            .properties(p -> p.isRedstoneConductor(($1, $2, $3) -> false))
+            .properties(p -> p.mapColor(MapColor.TERRACOTTA_BLUE)
+            .sound(SoundType.NETHERITE_BLOCK))
+            .transform(pickaxeOnly())
+            .addLayer(() -> RenderType::cutoutMipped)
+            //.blockstate(new PackagerGenerator()::generate)
+            .item()
+			.model(AssetLookup::customItemModel)
+			.build()
+            .register();
 
 
     public static BlockEntry<ChippedSawBlock>

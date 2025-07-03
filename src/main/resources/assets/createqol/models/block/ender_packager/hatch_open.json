@@ -1,0 +1,6 @@
+{
+	"parent": "createqol:block/ender_packager/hatch_closed",
+	"textures": {
+		"3": "createqol:block/ender_packager_iris_open"
+	}
+}

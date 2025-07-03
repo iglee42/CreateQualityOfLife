@@ -7,10 +7,12 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import fr.iglee42.createqualityoflife.conditions.FeatureLoadedCondition;
+import fr.iglee42.createqualityoflife.blockentitites.*;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.config.CreateQOLFeaturesConfig;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.statue.animation.PublishedAnimationsManager;
+import fr.iglee42.createqualityoflife.utils.EnderPackagersNetworkHandler;
 import fr.iglee42.createqualityoflife.utils.Features;
 import fr.iglee42.createqualityoflife.utils.IHaveTankMixin;
 import fr.iglee42.createqualityoflife.utils.liquidblazeburners.LiquidBlazeBurnerReloadListener;
@@ -53,6 +55,9 @@ public class CreateQOL {
 
     public static final String MODID = "createqol";
     public static final Logger LOGGER = LogUtils.getLogger();
+
+    public static final EnderPackagersNetworkHandler ENDER_PACKAGER_NETWORK_HANDLER = new EnderPackagersNetworkHandler();
+
 
     public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID)
             .defaultCreativeTab((ResourceKey<CreativeModeTab>) null);

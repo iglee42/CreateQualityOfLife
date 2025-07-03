@@ -13,6 +13,7 @@
     "DivingBootsItemMixin",
     "EntityDataSerializersMixin",
     "FlapDisplayBlockMixin",
+    "FrogportBlockEntityMixin",
     "LavaSwimmingMixin",
     "ModelBuilderMixin",
     "ModelFileMixin",
