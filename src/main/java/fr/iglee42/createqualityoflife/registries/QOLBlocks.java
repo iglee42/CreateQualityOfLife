@@ -50,6 +50,16 @@ public class QOLBlocks {
                     .initialProperties(SharedProperties::netheriteMetal)
                     .transform(backtank(QOLItems.SHADOW_RADIANCE_CHESTPLATE::get))
                     .register();
+    public static final BlockEntry<RefinedRadianceBacktankBlock> REFINED_RADIANCE_CHESTPLATE =
+            REGISTRATE.block("refined_radiance_chestplate", RefinedRadianceBacktankBlock::new)
+                    .initialProperties(SharedProperties::netheriteMetal)
+                    .transform(backtank(QOLItems.REFINED_RADIANCE_CHESTPLATE::get))
+                    .register();
+    public static final BlockEntry<ShadowSteelBacktankBlock> SHADOW_STEEL_CHESTPLATE =
+            REGISTRATE.block("shadow_steel_chestplate", ShadowSteelBacktankBlock::new)
+                    .initialProperties(SharedProperties::netheriteMetal)
+                    .transform(backtank(QOLItems.SHADOW_STEEL_CHESTPLATE::get))
+                    .register();
 
     public static final BlockEntry<TrashCanBlock> TRASH_CAN = REGISTRATE.block("trash_can", TrashCanBlock::new)
             .initialProperties(SharedProperties::softMetal)

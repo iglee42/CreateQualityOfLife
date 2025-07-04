@@ -2,7 +2,7 @@ package fr.iglee42.createqualityoflife.mixins;
 
 import com.simibubi.create.content.equipment.armor.DivingBootsItem;
 import com.simibubi.create.content.kinetics.belt.BeltBlock;
-import fr.iglee42.createqualityoflife.items.ShadowRadianceArmorItem;
+import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceArmorItem;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;

@@ -34,7 +34,7 @@ public class GoggleArmorLayer<T extends LivingEntity, M extends EntityModel<T>> 
     public void render(PoseStack ms, MultiBufferSource buffer, int light, LivingEntity entity, float yaw, float pitch, float pt, float p_117356_, float p_117357_, float p_117358_) {
         if (entity.getPose() == Pose.SLEEPING)
             return;
-        if (!QOLItems.SHADOW_RADIANCE_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)))
+        if (!QOLItems.SHADOW_RADIANCE_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)) && !QOLItems.SHADOW_STEEL_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)) &&  !QOLItems.REFINED_RADIANCE_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)))
             return;
         if (!NBTConstants.getOrDefault(entity.getItemBySlot(EquipmentSlot.HEAD),NBTConstants.NBT_RENDER_TYPE).shouldRenderAddition()) return;
         if (!CreateQOLConfigs.server().helmetHaveGoggles.get()) return;

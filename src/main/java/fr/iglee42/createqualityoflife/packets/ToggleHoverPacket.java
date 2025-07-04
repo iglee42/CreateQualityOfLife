@@ -3,7 +3,7 @@ package fr.iglee42.createqualityoflife.packets;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
-import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
+import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.QOLItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;

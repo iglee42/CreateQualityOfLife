@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife.client.screens.widgets.entries;
 
-import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.client.screens.itemsconfig.ItemConfigScreen;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ArmorConfigScreenList;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.ChatFormatting;
@@ -11,6 +12,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 
 public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 
@@ -18,13 +20,15 @@ public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 	protected String nbtKey;
 	protected boolean editable = true;
 	protected List<String> commentLines = new ArrayList<>(List.of("."));
+	private final BiFunction<ValueEntry<?>, List<ValueEntry<?>>, Boolean> enable;
 
-	public ValueEntry(String label, T value, String nbtKey,String... comments) {
+	public ValueEntry(String label, T value, String nbtKey,String[] comments, BiFunction<ValueEntry<?>,List<ValueEntry<?>>,Boolean> enable) {
 		super(label);
 		this.value = value;
 		this.nbtKey = nbtKey;
+        this.enable = enable;
 
-		labelTooltip.add(Component.literal(label).withStyle(ChatFormatting.WHITE));
+        labelTooltip.add(Component.literal(label).withStyle(ChatFormatting.WHITE));
 
 		commentLines.addAll(Arrays.stream(comments).toList());
 
@@ -86,7 +90,7 @@ public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 
 	protected void bumpCog() {bumpCog(10f);}
 	protected void bumpCog(float force) {
-		ArmorConfigScreen.cogSpin.bump(3, force);
+		ItemConfigScreen.cogSpin.bump(3, force);
 	}
 
 	public String getNbtKey() {
@@ -95,5 +99,9 @@ public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 
 	public boolean isEditable() {
 		return editable;
+	}
+
+	public BiFunction<ValueEntry<?>, List<ValueEntry<?>>, Boolean> getEnableFunction() {
+		return enable;
 	}
 }

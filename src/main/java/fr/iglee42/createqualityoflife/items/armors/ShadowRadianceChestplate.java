@@ -1,10 +1,13 @@
-package fr.iglee42.createqualityoflife.items;
+package fr.iglee42.createqualityoflife.items.armors;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
+import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.client.screens.widgets.entries.BooleanEntry;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
+import fr.iglee42.createqualityoflife.registries.QOLArmorMaterials;
 import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.ChatFormatting;
@@ -15,7 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -28,20 +31,20 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.UUID;
 
-public class ShadowRadianceChestplate extends BacktankItem.Layered{
+public class ShadowRadianceChestplate extends BacktankItem.Layered implements QOLConfigurableItem {
 
     private static final double FANS_ACCELERATION = 0.15D;
     private static final double FANS_SPEED = 0.25D;
     private static final double FANS_HOVER_SPEED = 0.20D;
 
-    public ShadowRadianceChestplate(ArmorMaterial material, Properties properties, ResourceLocation textureLoc, Supplier<BacktankBlockItem> placeable) {
-        super(material, properties, textureLoc, placeable);
+    public ShadowRadianceChestplate(Properties properties, Supplier<BacktankBlockItem> placeable) {
+        super(QOLArmorMaterials.SHADOW_RADIANCE, properties, CreateQOL.asResource("shadow_radiance"), placeable);
     }
-
 
     @Override
 	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot p_40390_) {
@@ -49,7 +52,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
             ImmutableMultimap.Builder<Attribute, AttributeModifier> attributes = ImmutableMultimap.builder();
             attributes.putAll(super.getDefaultAttributeModifiers(p_40390_));
 
-            String reference = "shadow_radiance_"+p_40390_.name().toLowerCase();	
+            String reference = "shadow_radiance_"+p_40390_.name().toLowerCase();
             UUID uuidBlock = UUID.nameUUIDFromBytes((reference+"_block").getBytes());
             UUID uuidEntity = UUID.nameUUIDFromBytes((reference+"_entity").getBytes());
 
@@ -97,19 +100,21 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean offHand) {
         super.inventoryTick(stack, level, entity, slot, offHand);
-        if (!(entity instanceof Player player)) return;
-        if (player.getItemBySlot(EquipmentSlot.CHEST).equals(stack)){
+        invTick(stack, level, entity, slot, offHand);
+    }
+
+    @Override
+    public void tick(ItemStack stack, Level level, Player player, int slot, boolean offHand) {
             boolean second = level.getGameTime() % 20 == 0;
-            if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
-            if (NBTConstants.getOrDefault(stack,NBTConstants.NBT_EFFECTS,true) && CreateQOLConfigs.server().armorEffects.get())
-                player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 1, false, false));
             if (player.isFallFlying() && isElytraEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && CreateQOLConfigs.server().elytraAllowed.get() && CreateQOLConfigs.server().elytraBoostAllowed.get() && CommonKeysHandler.isHoldingUp(player))
             {
                 if (CreateQOLConfigs.server().useFireworksForBoost.get()) {
-                    if (hasPlayerStackInInventory(player, Items.FIREWORK_ROCKET)) {
+                    if (hasPlayerStackInInventory(player,Items.FIREWORK_ROCKET)) {
                         int rocketSlot = getFirstInventoryIndex(player,Items.FIREWORK_ROCKET);
                         ItemStack firework = player.getInventory().getItem(rocketSlot);
-                        if (player.getFallFlyingTicks() % CreateQOLConfigs.server().fireworkDuration.get() == 0 || player.getFallFlyingTicks() == 0) {
+                        if ( (NBTConstants.getOrDefault(stack,NBTConstants.NBT_BOOST_ON_LAUNCH,false) || player.getFallFlyingTicks() >20) &&
+                                player.getFallFlyingTicks() % CreateQOLConfigs.server().fireworkDuration.get() == 0 ||
+                                (NBTConstants.getOrDefault(stack,NBTConstants.NBT_BOOST_ON_LAUNCH, false) && player.getFallFlyingTicks() == 0)) {
                             FireworkRocketEntity fireworkrocketentity = new FireworkRocketEntity(level, firework, player);
                             level.addFreshEntity(fireworkrocketentity);
                             player.getInventory().removeItem(rocketSlot,1);
@@ -165,24 +170,23 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
                         }
                     }
 
-                    if (CommonKeysHandler.isHoldingForwards(player)) {
-                        player.moveRelative(1, new Vec3(0, 0, player.isSprinting() ? 0.05 * 1.125 : 0.05));
-                    }
-                    if (CommonKeysHandler.isHoldingBackwards(player)) {
-                        player.moveRelative(1, new Vec3(0, 0, -0.05 * 0.75F));
-                    }
-                    if (CommonKeysHandler.isHoldingLeft(player)) {
-                        player.moveRelative(1, new Vec3(0.05, 0, 0));
-                    }
-                    if (CommonKeysHandler.isHoldingRight(player)) {
-                        player.moveRelative(1, new Vec3(-0.05, 0, 0));
-                    }
+                if (CommonKeysHandler.isHoldingForwards(player)) {
+                    player.moveRelative(1, new Vec3(0, 0, player.isSprinting() ? 0.05 * 1.125 : 0.05));
+                }
+                if (CommonKeysHandler.isHoldingBackwards(player)) {
+                    player.moveRelative(1, new Vec3(0, 0, -0.05 * 0.75F));
+                }
+                if (CommonKeysHandler.isHoldingLeft(player)) {
+                    player.moveRelative(1, new Vec3(0.05, 0, 0));
+                }
+                if (CommonKeysHandler.isHoldingRight(player)) {
+                    player.moveRelative(1, new Vec3(-0.05, 0, 0));
+                }
 
-                }else {
-                    if (jumpKeyActive) {
-                        player.moveRelative(1, new Vec3(0, 0, 0.05 * 1.125));
-                        if (second)BacktankUtil.consumeAir(player,stack,1);
-                    }
+            }else {
+                if (jumpKeyActive) {
+                    player.moveRelative(1, new Vec3(0, 0, 0.05 * 1.125));
+                    if (second)BacktankUtil.consumeAir(player,stack,1);
                 }
             }
         }
@@ -287,5 +291,95 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered{
     public static boolean isHoverEnable(ItemStack chestplate){
         if (!hasPropeller(chestplate)) return false;
         return chestplate.getOrCreateTag().contains(NBTConstants.NBT_HOVER) && chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_HOVER);
+    }
+
+    @Override
+    public QOLConfigurableItem.Type type() {
+        return QOLConfigurableItem.Type.ARMOR;
+    }
+
+    @Override
+    public List<ArmorRenderType> renderTypes(ItemStack stack) {
+        return Arrays.stream(ArmorRenderType.values()).toList();
+    }
+
+    @Override
+    public Holder<MobEffect> providedEffect(ItemStack stack) {
+        return stack.getOrDefault(QOLDataComponents.EFFECT, ShadowRadianceEffects.REGENERATION).getEffectHolder();
+    }
+
+    @Override
+    public void addConfigurations(List<Configuration<?>> list, ItemStack stack) {
+        list.add(Configuration.ofBool("Enable Custom Arms",
+                stack.getOrDefault(QOLDataComponents.BACKTANK_ARMS,true),
+                QOLDataComponents.BACKTANK_ARMS,
+                Arrays.asList("Should the player's arms be replaced with the armor in first person"),
+                (e,oe)->true));
+
+        if (hasPropeller(stack)){
+            list.add(Configuration.ofBool("Enable Fan",
+                    stack.getOrDefault(QOLDataComponents.BACKTANK_FANS,true),
+                    QOLDataComponents.BACKTANK_FANS,
+                    Arrays.asList("Activate the propeller on the backtank", "_Can't be enabled if the elytra are enabled_"),
+                    (entry,oe)-> {
+                        boolean flag = oe.stream()
+                                .noneMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(QOLDataComponents.BACKTANK_ELYTRA_STATE) && oEntry.getValue());
+                        return CreateQOLConfigs.server().propellerAllowed.get() && flag;
+                    }));
+            list.add(Configuration.ofBool("Enable Hover",
+                    stack.getOrDefault(QOLDataComponents.BACKTANK_HOVER,false),
+                    QOLDataComponents.BACKTANK_HOVER,
+                    Arrays.asList("Activate the hover mode"),
+                    (e,oe)->CreateQOLConfigs.server().propellerAllowed.get() && CreateQOLConfigs.server().hoverAllowed.get()));
+        }
+
+        if (hasElytra(stack)){
+            list.add(Configuration.ofBool("Enable Elytra",
+                    stack.getOrDefault(QOLDataComponents.BACKTANK_ELYTRA_STATE,false),
+                    QOLDataComponents.BACKTANK_ELYTRA_STATE,
+                    Arrays.asList("Activate the elytra on the backtank", "_Can't be enabled if the fan is enabled_"),
+                    (entry,oe)-> {
+                        boolean flag = oe.stream()
+                                .noneMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(QOLDataComponents.BACKTANK_FANS) && oEntry.getValue());
+                        return CreateQOLConfigs.server().elytraAllowed.get() && flag;
+                    }));
+
+            if (CreateQOLConfigs.server().elytraBoostAllowed.get()){
+                list.add(Configuration.ofBool("Boost on Launch",
+                        stack.getOrDefault(QOLDataComponents.BACKTANK_BOOST_ON_LAUNCH,false),
+                        QOLDataComponents.BACKTANK_BOOST_ON_LAUNCH,
+                        Arrays.asList("Define if you should be boost when you start flying with elytra","Works only with fireworks","(The air boost doesn't have the same behaviour)"),
+                        (e,oe)->CreateQOLConfigs.server().elytraAllowed.get() && CreateQOLConfigs.server().elytraBoostAllowed.get() && CreateQOLConfigs.server().useFireworksForBoost.get()));
+            }
+        }
+
+        list.add(new Configuration<>("Preferred Render", stack.getOrDefault(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH),QOLDataComponents.PREFERRED_RENDER,
+                Configuration.ConfigType.ENUM,Arrays.asList("Define how the additions should be rendered.",
+                        "\"Elytra\" renders only the elytra",
+                        "\"Backtank\" renders only the backtank"),(direction,entry)->{
+
+            PreferredRender e = (PreferredRender) entry.getValue();
+            PreferredRender[] options = Arrays.stream(PreferredRender.values()).toArray(PreferredRender[]::new);
+            e = options[Math.floorMod(e.ordinal() + direction, options.length)];
+            return e;
+        },(e,oe)->true));
+
+        ShadowRadianceEffects[] valids = Arrays.stream(ShadowRadianceEffects.values()).filter(ef->ef.isValidForItem(stack)).toArray(ShadowRadianceEffects[]::new);
+
+        list.add(new Configuration<>("Effect", stack.getOrDefault(QOLDataComponents.EFFECT, ShadowRadianceEffects.REGENERATION),QOLDataComponents.EFFECT,
+                Configuration.ConfigType.ENUM,Arrays.asList("Define which mob effect should be provided.",
+                "For this item, there is " + Component.translatable(valids[0].getEffectHolder().value().getDescriptionId()).getString() + " and " + Component.translatable(valids[1].getEffectHolder().value().getDescriptionId()).getString()),(direction,entry)->{
+
+            ShadowRadianceEffects e = (ShadowRadianceEffects) entry.getValue();
+            ShadowRadianceEffects[] options = Arrays.stream(ShadowRadianceEffects.values()).filter(ef->ef.isValidForItem(stack)).toArray(ShadowRadianceEffects[]::new);
+            e = options[Math.floorMod(e.ordinal() + direction, options.length)];
+            return e;
+        },(e,oe)->true));
+
+    }
+
+    @Override
+    public boolean isBarVisible(ItemStack stack) {
+        return super.isBarVisible(stack) && BacktankUtil.getAir(stack) < BacktankUtil.maxAir(stack);
     }
 }

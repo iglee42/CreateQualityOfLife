@@ -1,7 +1,8 @@
 package fr.iglee42.createqualityoflife.utils;
 
 import com.simibubi.create.content.equipment.armor.BacktankItem;
-import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.client.screens.itemsconfig.InventoryConfigScreen;
+import fr.iglee42.createqualityoflife.client.screens.itemsconfig.ItemConfigScreen;
 import fr.iglee42.createqualityoflife.packets.ToggleElytraPacket;
 import fr.iglee42.createqualityoflife.packets.ToggleFansPacket;
 import fr.iglee42.createqualityoflife.packets.ToggleHoverPacket;
@@ -72,14 +73,16 @@ public class KeyBindManager {
             }
 
             if (OPEN_ARMOR_CONFIG.consumeClick()){
-                AtomicBoolean hasArmor = new AtomicBoolean(false);
+                /*AtomicBoolean hasArmor = new AtomicBoolean(false);
                 player.getArmorSlots().forEach(it->{
                     if (!(it.getItem() instanceof ArmorItem))return;
                     if (((ArmorItem)it.getItem()).getMaterial().equals(QOLArmorMaterials.SHADOW_RADIANCE)) hasArmor.set(true);
                 });
                 if (hasArmor.get()) {
-                    ScreenOpener.open(new ArmorConfigScreen());
-                }
+                    ScreenOpener.open(new ItemConfigScreen(0));
+                }*/
+
+                ScreenOpener.open(new InventoryConfigScreen());
             }
 
             Item backtank = BacktankItem.getWornBy(player);

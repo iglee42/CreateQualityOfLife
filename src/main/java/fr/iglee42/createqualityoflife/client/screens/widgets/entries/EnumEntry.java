@@ -1,6 +1,6 @@
 package fr.iglee42.createqualityoflife.client.screens.widgets.entries;
 
-import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.client.screens.itemsconfig.ItemConfigScreen;
 import fr.iglee42.createqualityoflife.packets.ChangeArmorTagPacket;
 import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import net.createmod.catnip.config.ui.ConfigScreen;
@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiFunction;
 
 public class EnumEntry extends ValueEntry<Enum<?>> {
 
@@ -25,8 +26,8 @@ public class EnumEntry extends ValueEntry<Enum<?>> {
 	protected BoxWidget cycleLeft;
 	protected BoxWidget cycleRight;
 
-	public EnumEntry(String label, Enum<?> value, String key,String... comments) {
-		super(label, value, key,comments);
+	public EnumEntry(String label, Enum<?> value, String key,String[] comments, BiFunction<ValueEntry<?>,List<ValueEntry<?>>,Boolean> enable) {
+		super(label, value, key,comments,enable);
 
 		valueText = new TextStencilElement(Minecraft.getInstance().font, "YEP").centered(true, true);
 		valueText.withElementRenderer((ms, width, height, alpha) -> UIRenderHelper.angledGradient(ms, 0, 0, height / 2,
@@ -83,6 +84,9 @@ public class EnumEntry extends ValueEntry<Enum<?>> {
 					   boolean p_230432_9_, float partialTicks) {
 		super.render(graphics, index, y, x, width, height, mouseX, mouseY, p_230432_9_, partialTicks);
 
+		cycleLeft.updateGradientFromState();
+		cycleRight.updateGradientFromState();
+
 		cycleLeft.setX(x + getLabelWidth(width) + 4);
 		cycleLeft.setY(y + 10);
 		cycleLeft.render(graphics, mouseX, mouseY, partialTicks);
@@ -107,16 +111,16 @@ public class EnumEntry extends ValueEntry<Enum<?>> {
 	public void onValueChange(Enum<?> newValue) {
 		super.onValueChange(newValue);
 		valueText.withText(ConfigScreen.toHumanReadable(newValue.name().toLowerCase(Locale.ROOT)));
-		List<Integer> armors = ((ArmorConfigScreen)Minecraft.getInstance().screen).getArmors();
-		int selected = ((ArmorConfigScreen)Minecraft.getInstance().screen).getSelectedItem();
-		Minecraft.getInstance().player.getInventory().getArmor(armors.get(selected)).getOrCreateTag().putInt(nbtKey,newValue.ordinal());
 	}
 
 	@Override
 	public void setValue(@NotNull Enum<?> value) {
-		List<Integer> armors = ((ArmorConfigScreen)Minecraft.getInstance().screen).getArmors();
-		int selected = ((ArmorConfigScreen)Minecraft.getInstance().screen).getSelectedItem();
-		QOLPackets.getChannel().sendToServer(new ChangeArmorTagPacket(armors.get(selected),value.ordinal(), nbtKey));
+		if (Minecraft.getInstance().screen == null) {
+			CreateQOL.LOGGER.error("Cannot change nbt on a ValueEntry because the screen is null");
+			return;
+		}
+		int slot = ((ItemConfigScreen)Minecraft.getInstance().screen).getItemSlot();
+        QOLPackets.getChannel().sendToServer(new ChangeArmorTagPacket(slot,value.ordinal(), nbtKey));
 		super.setValue(value);
 	}
 }

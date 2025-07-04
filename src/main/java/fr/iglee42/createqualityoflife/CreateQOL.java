@@ -45,8 +45,8 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 
-import static fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate.hasPropeller;
-import static fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate.isFansEnable;
+import static fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate.hasPropeller;
+import static fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate.isFansEnable;
 
 @Mod(CreateQOL.MODID)
 public class CreateQOL {

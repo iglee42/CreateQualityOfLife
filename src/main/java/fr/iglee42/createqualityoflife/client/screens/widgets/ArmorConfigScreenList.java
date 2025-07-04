@@ -11,7 +11,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.client.screens.itemsconfig.ItemConfigScreen;
 import net.createmod.catnip.gui.TickableGuiEventListener;
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.gui.element.TextStencilElement;
@@ -29,9 +29,9 @@ import net.minecraft.network.chat.MutableComponent;
 public class ArmorConfigScreenList extends ObjectSelectionList<ArmorConfigScreenList.Entry> implements TickableGuiEventListener {
 
 
-	protected final ArmorConfigScreen parent;
+	protected final ItemConfigScreen parent;
 
-	public ArmorConfigScreenList(Minecraft client, int width, int height, int top, int bottom, int elementHeight,ArmorConfigScreen parent) {
+	public ArmorConfigScreenList(Minecraft client, int width, int height, int top, int bottom, int elementHeight,ItemConfigScreen parent) {
 		super(client, width, height, top,bottom, elementHeight);
 		setRenderBackground(false);
 		setRenderTopAndBottom(false);
@@ -52,7 +52,7 @@ public class ArmorConfigScreenList extends ObjectSelectionList<ArmorConfigScreen
 		super.render(graphics, mouseX, mouseY, partialTicks);
 
 		if (children().isEmpty()){
-			graphics.drawCenteredString(minecraft.font,"Please Select an item to configure", getLeft() + width / 2,getTop() + getHeight() / 2 - 9,UIRenderHelper.COLOR_TEXT.getFirst().getRGB());
+			graphics.drawCenteredString(minecraft.font,"No configs for this item, it's strange... ¯\\_(ツ)_/¯", getLeft() + width / 2,getTop() + getHeight() / 2 - 9,UIRenderHelper.COLOR_TEXT.getFirst().getRGB());
 		}
 	}
 
@@ -90,7 +90,7 @@ public class ArmorConfigScreenList extends ObjectSelectionList<ArmorConfigScreen
 	}
 
 	public void bumpCog(float force) {
-		ArmorConfigScreen.cogSpin.bump(3, force);
+        ItemConfigScreen.cogSpin.bump(3, force);
 	}
 
 	public static abstract class Entry extends ObjectSelectionList.Entry<Entry> implements TickableGuiEventListener {

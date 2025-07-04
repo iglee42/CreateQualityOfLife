@@ -15,7 +15,7 @@ public class ElytraLayerMixin {
 
     @Inject(method = "shouldRender", at = @At("HEAD"),cancellable = true)
     private <T extends LivingEntity> void qol$shadowRadianceRenderElytra(ItemStack stack, T entity, CallbackInfoReturnable<Boolean> cir){
-        if (stack.getItem() instanceof ShadowRadianceChestplate && ShadowRadianceChestplate.hasElytra(stack) && NBTConstants.getOrDefault(NBTConstants.NBT_PREFERRED_RENDER,stack).shouldRenderElytra()){
+        if (stack.getItem() instanceof ShadowRadianceChestplate && ShadowRadianceChestplate.hasElytra(stack) &&NBTConstants.getOrDefault(stack,NBTConstants.NBT_RENDER_TYPE).shouldRenderAddition() && NBTConstants.getOrDefault(NBTConstants.NBT_PREFERRED_RENDER,stack).shouldRenderElytra()){
             cir.setReturnValue(true);
             return;
         }

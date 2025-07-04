@@ -15,6 +15,8 @@ public class QOLPartialModels {
             SHADOW_RADIANCE_TANK_COGS = block("shadow_radiance_chestplate/cogs"), SHADOW_RADIANCE_TANK_SHAFT = block("shadow_radiance_chestplate/block_shaft_input"),
             SHADOW_RADIANCE_CHESTPLATE_PROPELLERS = block("shadow_radiance_chestplate/propellers"),SHADOW_RADIANCE_CHESTPLATE_PROPELLERS_ALT = block("shadow_radiance_chestplate/propellers_alt"),
 
+            SHADOW_STEEL_TANK_COGS = block("shadow_steel_chestplate/cogs"), SHADOW_STEEL_TANK_SHAFT = block("shadow_steel_chestplate/block_shaft_input"),
+            REFINED_RADIANCE_TANK_COGS = block("refined_radiance_chestplate/cogs"), REFINED_RADIANCE_TANK_SHAFT = block("refined_radiance_chestplate/block_shaft_input"),
 
             ENDER_PACKAGER_HATCH_CLOSED = block("ender_packager/hatch_closed"),
             ENDER_PACKAGER_HATCH_OPEN = block("ender_packager/hatch_open")

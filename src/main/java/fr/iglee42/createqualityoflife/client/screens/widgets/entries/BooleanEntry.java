@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife.client.screens.widgets.entries;
 
-import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.client.screens.itemsconfig.ItemConfigScreen;
 import fr.iglee42.createqualityoflife.packets.ChangeArmorTagPacket;
 import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import net.createmod.catnip.gui.UIRenderHelper;
@@ -13,6 +14,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
 public class BooleanEntry extends ValueEntry<Boolean> {
 
@@ -20,8 +22,8 @@ public class BooleanEntry extends ValueEntry<Boolean> {
 	RenderElement disabled;
 	BoxWidget button;
 
-	public BooleanEntry(String label, Boolean value, String key,String... comments) {
-		super(label, value, key,comments);
+	public BooleanEntry(String label, Boolean value, String key,String[] comments,BiFunction<ValueEntry<?>,List<ValueEntry<?>>,Boolean> enable) {
+		super(label, value, key,comments,enable);
 
 		enabled = PonderGuiTextures.ICON_CONFIRM.asStencil()
 			.withElementRenderer((ms, width, height, alpha) -> UIRenderHelper.angledGradient(ms, 0, 0, height / 2, height, width, AbstractSimiWidget.COLOR_SUCCESS))
@@ -59,6 +61,7 @@ public class BooleanEntry extends ValueEntry<Boolean> {
 		button.setY(y + 10);
 		button.setWidth(35);
 		button.setHeight(height - 20);
+		button.updateGradientFromState();
 		button.render(graphics, mouseX, mouseY, partialTicks);
 	}
 
@@ -74,9 +77,12 @@ public class BooleanEntry extends ValueEntry<Boolean> {
 
 	@Override
 	public void setValue(@NotNull Boolean value) {
-		List<Integer> armors = ((ArmorConfigScreen) Minecraft.getInstance().screen).getArmors();
-		int selected = ((ArmorConfigScreen)Minecraft.getInstance().screen).getSelectedItem();
-		QOLPackets.getChannel().sendToServer(new ChangeArmorTagPacket(armors.get(selected), !value ? 0 : 1, nbtKey));
+		if (Minecraft.getInstance().screen == null) {
+			CreateQOL.LOGGER.error("Cannot change nbt on a ValueEntry because the screen is null");
+			return;
+		}
+		int slot = ((ItemConfigScreen)Minecraft.getInstance().screen).getItemSlot();
+        QOLPackets.getChannel().sendToServer(new ChangeArmorTagPacket(slot, !value ? 0 : 1, nbtKey));
 		super.setValue(value);
 	}
 }

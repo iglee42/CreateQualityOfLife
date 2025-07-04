@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import com.google.common.base.Suppliers;
 
+import com.simibubi.create.AllItems;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -13,9 +14,13 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public enum QOLArmorMaterials implements ArmorMaterial {
 
-    SHADOW_RADIANCE(CreateQOL.asResource("shadow_radiance").toString(), 40, new int[] { 4, 9, 7, 4 }, 25, () -> SoundEvents.ARMOR_EQUIP_NETHERITE, 4.0F, 0.2F,
-            () -> Ingredient.of(QOLItems.SHADOW_RADIANCE.asItem()))
+    SHADOW_RADIANCE(CreateQOL.asResource("shadow_radiance").toString(), 40, new int[] { 5, 10, 8, 5 }, 25, () -> SoundEvents.ARMOR_EQUIP_NETHERITE, 4.0F, 0.2F,
+            () -> Ingredient.of(QOLItems.SHADOW_RADIANCE.asItem())),
 
+    SHADOW_STEEL(CreateQOL.asResource("shadow_steel").toString(), 35, new int[] { 4, 9, 7, 4 }, 25, () -> SoundEvents.ARMOR_EQUIP_NETHERITE, 4.0F, 0.2F,
+            () -> Ingredient.of(AllItems.SHADOW_STEEL.asItem())),
+    REFINED_RADIANCE(CreateQOL.asResource("refined_radiance").toString(), 35, new int[] { 4, 9, 7, 4 }, 25, () -> SoundEvents.ARMOR_EQUIP_NETHERITE, 4.0F, 0.2F,
+            () -> Ingredient.of(AllItems.REFINED_RADIANCE.asItem()))
     ;
 
     private static final int[] MAX_DAMAGE_ARRAY = new int[] { 814, 1184, 1110, 962 };
