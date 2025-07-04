@@ -1,5 +1,6 @@
 package fr.iglee42.createqualityoflife.registries;
 
+import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
 import com.simibubi.create.content.equipment.armor.BacktankRenderer;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
@@ -36,6 +37,20 @@ public class QOLBlockEntities {
             .validBlocks(QOLBlocks.SHADOW_RADIANCE_CHESTPLATE)
             .renderer(() -> BacktankRenderer::new)
             .register();
+
+    public static final BlockEntityEntry<BacktankBlockEntity> REFINED_RADIANCE_CHEST_BE = REGISTRATE
+            .blockEntity("refined_radiance_backtank", BacktankBlockEntity::new)
+            .visual(() -> SingleAxisRotatingVisual::backtank)
+            .validBlocks(QOLBlocks.REFINED_RADIANCE_CHESTPLATE)
+            .renderer(() -> BacktankRenderer::new)
+            .register();
+    public static final BlockEntityEntry<BacktankBlockEntity> SHADOW_STEEL_CHEST_BE = REGISTRATE
+            .blockEntity("shadow_steel_backtank", BacktankBlockEntity::new)
+            .visual(() -> SingleAxisRotatingVisual::backtank)
+            .validBlocks(QOLBlocks.SHADOW_STEEL_CHESTPLATE)
+            .renderer(() -> BacktankRenderer::new)
+            .register();
+
 
     public static final BlockEntityEntry<TrashCanBlockEntity> TRASH_CAN = REGISTRATE
             .blockEntity("trash_can", TrashCanBlockEntity::new)

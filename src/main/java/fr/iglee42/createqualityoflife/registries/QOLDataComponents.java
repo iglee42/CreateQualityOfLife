@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import fr.iglee42.createqualityoflife.utils.PreferredRender;
+import fr.iglee42.createqualityoflife.utils.ShadowRadianceEffects;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
@@ -31,8 +32,10 @@ public class QOLDataComponents {
     public static final DataComponentType<Boolean> BOOTS_BELT = register("boots_belt",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> BACKTANK_ELYTRA = register("elytra",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> BACKTANK_ELYTRA_STATE = register("elytra_state",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DataComponentType<Boolean> BACKTANK_BOOST_ON_LAUNCH = register("boost_launch",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<ArmorRenderType> ARMOR_RENDER_TYPE = register("render_type",b->b.persistent(ArmorRenderType.CODEC).networkSynchronized(ArmorRenderType.STREAM_CODEC));
     public static final DataComponentType<PreferredRender> PREFERRED_RENDER = register("preferred_render", b->b.persistent(PreferredRender.CODEC).networkSynchronized(PreferredRender.STREAM_CODEC));
+    public static final DataComponentType<ShadowRadianceEffects> EFFECT = register("preferred_effect", b->b.persistent(ShadowRadianceEffects.CODEC).networkSynchronized(ShadowRadianceEffects.STREAM_CODEC));
 
 
     private static <T> DataComponentType<T> register(String name, UnaryOperator<DataComponentType.Builder<T>> builder) {

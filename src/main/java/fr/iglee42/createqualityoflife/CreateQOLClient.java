@@ -8,7 +8,7 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import fr.iglee42.createqualityoflife.client.GoggleArmorLayer;
 import fr.iglee42.createqualityoflife.client.ShadowRadianceFirstPersonRenderer;
 import fr.iglee42.createqualityoflife.client.renderer.EnderRenderer;
-import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
+import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.statue.StatueModel;
 import fr.iglee42.createqualityoflife.statue.StatueRenderer;
@@ -108,6 +108,14 @@ public class CreateQOLClient {
         event.enqueueWork(() -> {
             ItemProperties.register(QOLItems.PLAYER_PAPER.get(),
                     CreateQOL.asResource("hasplayer"), (stack, level, living, id) -> stack.has(QOLDataComponents.LINKED_PLAYER) ? 1.0f : 0.0f);
+        });
+        event.enqueueWork(() -> {
+            ItemProperties.register(QOLItems.SHADOW_RADIANCE_CHESTPLATE.get(),
+                    CreateQOL.asResource("elytra"), (stack, level, living, id) -> ShadowRadianceChestplate.hasElytra(stack) ? 1.0f : 0.0f);
+            ItemProperties.register(QOLItems.SHADOW_STEEL_CHESTPLATE.get(),
+                    CreateQOL.asResource("elytra"), (stack, level, living, id) -> ShadowRadianceChestplate.hasElytra(stack) ? 1.0f : 0.0f);
+            ItemProperties.register(QOLItems.REFINED_RADIANCE_CHESTPLATE.get(),
+                    CreateQOL.asResource("elytra"), (stack, level, living, id) -> ShadowRadianceChestplate.hasElytra(stack) ? 1.0f : 0.0f);
         });
 
         EntityRenderers.register(QOLEntityTypes.STATUE.get(), StatueRenderer::new);

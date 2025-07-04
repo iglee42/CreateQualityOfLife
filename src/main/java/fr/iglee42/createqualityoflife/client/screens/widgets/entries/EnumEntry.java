@@ -2,9 +2,11 @@ package fr.iglee42.createqualityoflife.client.screens.widgets.entries;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiFunction;
 
-import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
-import fr.iglee42.createqualityoflife.packets.ChangeArmorComponentPacket;
+import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.client.screens.itemsconfig.ItemConfigScreen;
+import fr.iglee42.createqualityoflife.packets.ChangeItemComponentPacket;
 import net.createmod.catnip.config.ui.ConfigScreen;
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.gui.element.BoxElement;
@@ -27,8 +29,8 @@ public class EnumEntry extends ValueEntry<Enum<?>> {
 	protected BoxWidget cycleLeft;
 	protected BoxWidget cycleRight;
 
-	public EnumEntry(String label, Enum<?> value, DataComponentType<?> component,String... comments) {
-		super(label, value, component,comments);
+	public EnumEntry(String label, Enum<?> value, DataComponentType<?> component,String[] comments, BiFunction<ValueEntry<?>,List<ValueEntry<?>>,Boolean> enable) {
+		super(label, value, component,comments,enable);
 
 		valueText = new TextStencilElement(Minecraft.getInstance().font, "YEP").centered(true, true);
 		valueText.withElementRenderer((ms, width, height, alpha) -> UIRenderHelper.angledGradient(ms, 0, 0, height / 2,
@@ -85,6 +87,9 @@ public class EnumEntry extends ValueEntry<Enum<?>> {
 					   boolean p_230432_9_, float partialTicks) {
 		super.render(graphics, index, y, x, width, height, mouseX, mouseY, p_230432_9_, partialTicks);
 
+		cycleLeft.updateGradientFromState();
+		cycleRight.updateGradientFromState();
+
 		cycleLeft.setX(x + getLabelWidth(width) + 4);
 		cycleLeft.setY(y + 10);
 		cycleLeft.render(graphics, mouseX, mouseY, partialTicks);
@@ -113,9 +118,12 @@ public class EnumEntry extends ValueEntry<Enum<?>> {
 
 	@Override
 	public void setValue(@NotNull Enum<?> value) {
-		List<Integer> armors = ((ArmorConfigScreen)Minecraft.getInstance().screen).getArmors();
-		int selected = ((ArmorConfigScreen)Minecraft.getInstance().screen).getSelectedItem();
-		PacketDistributor.sendToServer(new ChangeArmorComponentPacket(armors.get(selected),value.ordinal(), BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(component).toString()));
+		if (Minecraft.getInstance().screen == null) {
+			CreateQOL.LOGGER.error("Cannot change component on a ValueEntry because the screen is null");
+			return;
+		}
+		int slot = ((ItemConfigScreen)Minecraft.getInstance().screen).getItemSlot();
+		PacketDistributor.sendToServer(new ChangeItemComponentPacket(slot,value.ordinal(), BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(component).toString()));
 		super.setValue(value);
 	}
 }

@@ -90,7 +90,9 @@ public class QOLCreativeModeTabs {
 			Set<Item> exclusions = new ReferenceOpenHashSet<>();
 
 			List<ItemProviderEntry<?, ?>> simpleExclusions = List.of(
-					QOLItems.SHADOW_RADIANCE_CHESTPLATE_PLACEABLE
+					QOLItems.SHADOW_RADIANCE_CHESTPLATE_PLACEABLE,
+					QOLItems.SHADOW_STEEL_CHESTPLATE_PLACEABLE,
+					QOLItems.REFINED_RADIANCE_CHESTPLATE_PLACEABLE
 			);
 
 			List<ItemEntry<TagDependentIngredientItem>> tagDependentExclusions = List.of(
@@ -171,6 +173,14 @@ public class QOLCreativeModeTabs {
 
 			Map<ItemProviderEntry<?, ?>, Function<Item, ItemStack>> simpleFactories = Map.of(
 					QOLItems.SHADOW_RADIANCE_CHESTPLATE, item -> {
+						ItemStack stack = new ItemStack(item);
+						stack.set(AllDataComponents.BACKTANK_AIR, BacktankUtil.maxAirWithoutEnchants());
+						return stack;
+					},QOLItems.SHADOW_STEEL_CHESTPLATE, item -> {
+						ItemStack stack = new ItemStack(item);
+						stack.set(AllDataComponents.BACKTANK_AIR, BacktankUtil.maxAirWithoutEnchants());
+						return stack;
+					},QOLItems.REFINED_RADIANCE_CHESTPLATE, item -> {
 						ItemStack stack = new ItemStack(item);
 						stack.set(AllDataComponents.BACKTANK_AIR, BacktankUtil.maxAirWithoutEnchants());
 						return stack;

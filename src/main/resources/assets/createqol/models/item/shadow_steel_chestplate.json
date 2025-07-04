@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "createqol:item/shadow_steel_chestplate"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "createqol:elytra": 1
+      },
+      "model": "createqol:item/shadow_steel_chestplate_elytra"
+    }
+  ]
+}

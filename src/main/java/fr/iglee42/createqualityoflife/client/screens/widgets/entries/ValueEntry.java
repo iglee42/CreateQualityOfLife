@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife.client.screens.widgets.entries;
 
-import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
+import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.client.screens.itemsconfig.ItemConfigScreen;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ArmorConfigScreenList;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.ChatFormatting;
@@ -13,6 +14,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 
 public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 
@@ -20,11 +22,14 @@ public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 	protected DataComponentType<?> component;
 	protected boolean editable = true;
 	protected List<String> commentLines = new ArrayList<>(List.of("."));
+	private final BiFunction<ValueEntry<?>, List<ValueEntry<?>>, Boolean> enable;
 
-	public ValueEntry(String label, T value, DataComponentType<?> component,String... comments) {
+
+	public ValueEntry(String label, T value, DataComponentType<?> component, String[] comments, BiFunction<ValueEntry<?>,List<ValueEntry<?>>,Boolean> enable) {
 		super(label);
 		this.value = value;
 		this.component = component;
+		this.enable = enable;
 
 		labelTooltip.add(Component.literal(label).withStyle(ChatFormatting.WHITE));
 
@@ -83,14 +88,17 @@ public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 		onValueChange(getValue());
 	}
 	public void onValueChange(T newValue) {
-		List<Integer> armors = ((ArmorConfigScreen)Minecraft.getInstance().screen).getArmors();
-		int selected = ((ArmorConfigScreen)Minecraft.getInstance().screen).getSelectedItem();
-		Minecraft.getInstance().player.getInventory().getArmor(armors.get(selected)).set(((DataComponentType<? super T>) component), value);
+		if (Minecraft.getInstance().screen == null) {
+			CreateQOL.LOGGER.error("Cannot change component on a ValueEntry because the screen is null");
+			return;
+		}
+		int slot = ((ItemConfigScreen)Minecraft.getInstance().screen).getItemSlot();
+		Minecraft.getInstance().player.getInventory().getItem(slot).set(((DataComponentType<? super T>) component), value);
 	}
 
 	protected void bumpCog() {bumpCog(10f);}
 	protected void bumpCog(float force) {
-		ArmorConfigScreen.cogSpin.bump(3, force);
+		ItemConfigScreen.cogSpin.bump(3, force);
 	}
 
 	public DataComponentType<?> getComponent() {
@@ -99,5 +107,9 @@ public class ValueEntry<T> extends ArmorConfigScreenList.LabeledEntry {
 
 	public boolean isEditable() {
 		return editable;
+	}
+
+	public BiFunction<ValueEntry<?>, List<ValueEntry<?>>, Boolean> getEnableFunction() {
+		return enable;
 	}
 }

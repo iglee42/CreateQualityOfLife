@@ -12,6 +12,7 @@ import java.util.Map;
 public class CommonKeysHandler {
 
     private static final Map<Player, Boolean> HOLDING_UP = new HashMap<>();
+    private static final Map<Player, Boolean> PREVIOUS_HOLDING_UP = new HashMap<>();
     private static final Map<Player, Boolean> HOLDING_DOWN = new HashMap<>();
     private static final Map<Player, Boolean> HOLDING_FORWARDS = new HashMap<>();
     private static final Map<Player, Boolean> HOLDING_BACKWARDS = new HashMap<>();
@@ -20,6 +21,9 @@ public class CommonKeysHandler {
 
     public static boolean isHoldingUp(Player player) {
         return HOLDING_UP.containsKey(player) && HOLDING_UP.get(player);
+    }
+    public static boolean hasHoldingUpBefore(Player player) {
+        return PREVIOUS_HOLDING_UP.containsKey(player) && PREVIOUS_HOLDING_UP.get(player);
     }
 
     public static boolean isHoldingDown(Player player) {
@@ -43,6 +47,7 @@ public class CommonKeysHandler {
     }
 
     public static void update(Player player, boolean up, boolean down, boolean forwards, boolean backwards, boolean left, boolean right) {
+        PREVIOUS_HOLDING_UP.put(player,isHoldingUp(player));
         HOLDING_UP.put(player, up);
         HOLDING_DOWN.put(player, down);
         HOLDING_FORWARDS.put(player, forwards);
@@ -52,6 +57,7 @@ public class CommonKeysHandler {
     }
 
     public static void clear() {
+        PREVIOUS_HOLDING_UP.clear();
         HOLDING_UP.clear();
         HOLDING_FORWARDS.clear();
         HOLDING_DOWN.clear();
@@ -61,6 +67,7 @@ public class CommonKeysHandler {
     }
 
     public static void remove(Player player) {
+        PREVIOUS_HOLDING_UP.remove(player);
         HOLDING_UP.remove(player);
         HOLDING_FORWARDS.remove(player);
         HOLDING_DOWN.remove(player);

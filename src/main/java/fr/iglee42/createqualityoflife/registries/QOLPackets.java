@@ -19,7 +19,7 @@ public enum QOLPackets implements BasePacketPayload.PacketTypeProvider {
     TOGGLE_HOVER(ToggleHoverPacket .class, ToggleHoverPacket.STREAM_CODEC),
     TOGGLE_ELYTRA(ToggleElytraPacket .class, ToggleElytraPacket.STREAM_CODEC),
     INPUTS_UPDATE(UpdateInputsPacket.class, UpdateInputsPacket.STREAM_CODEC),
-    CHANGE_ARMOR_COMPONENT(ChangeArmorComponentPacket.class, ChangeArmorComponentPacket.STREAM_CODEC),
+    CHANGE_ARMOR_COMPONENT(ChangeItemComponentPacket.class, ChangeItemComponentPacket.STREAM_CODEC),
     SAVE_STATUE_CONFIG(SaveStatueConfigPacket.class, SaveStatueConfigPacket.STREAM_CODEC),
     PUBLISH_ANIMATION(PublishAnimationPacket.class, PublishAnimationPacket.STREAM_CODEC),
     DELETE_ANIMATION(DeleteAnimationPacket.class, DeleteAnimationPacket.STREAM_CODEC),

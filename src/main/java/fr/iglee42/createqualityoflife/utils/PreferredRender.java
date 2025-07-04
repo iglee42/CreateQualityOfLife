@@ -14,8 +14,8 @@ import java.util.function.IntFunction;
 public enum PreferredRender implements StringRepresentable{
 
     BOTH(true,true),
-    BACKTANK(true,false,ArmorItem.Type.CHESTPLATE),
-    ELYTRA(false,true,ArmorItem.Type.CHESTPLATE);
+    BACKTANK(true,false),
+    ELYTRA(false,true);
 
 
     public static final Codec<PreferredRender> CODEC = StringRepresentable.fromValues(PreferredRender::values);
@@ -23,21 +23,11 @@ public enum PreferredRender implements StringRepresentable{
     public static final StreamCodec<ByteBuf, PreferredRender> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, Enum::ordinal);
 
 
-    private final ArmorItem.Type[] allowedTypes;
     private final boolean renderBacktank, renderElytra;
 
-    PreferredRender(boolean renderBacktank, boolean renderElytra, ArmorItem.Type... allowedTypes) {
-        this.allowedTypes = allowedTypes;
+    PreferredRender(boolean renderBacktank, boolean renderElytra) {
         this.renderBacktank = renderBacktank;
         this.renderElytra = renderElytra;
-    }
-
-    PreferredRender(boolean renderBacktank, boolean renderElytra){
-        this(renderBacktank, renderElytra,ArmorItem.Type.values());
-    }
-
-    public boolean canBeSelected(ArmorItem item){
-        return Arrays.stream(allowedTypes).anyMatch(t->item.getType().equals(t));
     }
 
     @Override

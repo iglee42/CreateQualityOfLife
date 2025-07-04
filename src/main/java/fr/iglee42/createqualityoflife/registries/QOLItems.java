@@ -11,6 +11,7 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.items.*;
+import fr.iglee42.createqualityoflife.items.armors.*;
 import fr.iglee42.createqualityoflife.statue.StatueItem;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import fr.iglee42.createqualityoflife.utils.PreferredRender;
@@ -39,8 +40,8 @@ public class QOLItems {
 
     public static final ItemEntry<? extends ShadowRadianceHelmet> SHADOW_RADIANCE_HELMET = REGISTRATE
             .item("shadow_radiance_helmet",
-                    p -> new ShadowRadianceHelmet(QOLArmorMaterials.SHADOW_RADIANCE, p, CreateQOL.asResource("shadow_radiance")))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(814).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+                    ShadowRadianceHelmet::new)
+            .properties(p -> p.fireResistant().rarity(Rarity.EPIC).durability(814).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
             .tag(commonItemTag("armors/helmets"))
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
@@ -52,32 +53,83 @@ public class QOLItems {
             .register();
     public static final ItemEntry<? extends BacktankItem> SHADOW_RADIANCE_CHESTPLATE = REGISTRATE
             .item("shadow_radiance_chestplate",
-                    p -> new ShadowRadianceChestplate(QOLArmorMaterials.SHADOW_RADIANCE, p, CreateQOL.asResource("shadow_radiance"),
+                    p -> new ShadowRadianceChestplate(p,
                             SHADOW_RADIANCE_CHESTPLATE_PLACEABLE))
             .model(AssetLookup.customGenericItemModel("_", "item"))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1184).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).component(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH))
+            .properties(p -> p.fireResistant().rarity(Rarity.EPIC).durability(1184).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).component(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH))
             .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
             .tag(commonItemTag("armors/chestplates"))
             .register();
 
+
+
     public static final ItemEntry<? extends BaseArmorItem> SHADOW_RADIANCE_LEGGINGS = REGISTRATE
             .item("shadow_radiance_leggings",
-                    p -> new ShadowRadianceArmorItem(QOLArmorMaterials.SHADOW_RADIANCE, ArmorItem.Type.LEGGINGS, p, CreateQOL.asResource("shadow_radiance")))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1110).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+                    p -> new ShadowRadianceArmorItem(ArmorItem.Type.LEGGINGS, p))
+            .properties(p -> p.fireResistant().rarity(Rarity.EPIC).durability(1110).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
             .tag(commonItemTag("armors/leggings"))
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
 
     public static final ItemEntry<? extends BaseArmorItem> SHADOW_RADIANCE_BOOTS = REGISTRATE
             .item("shadow_radiance_boots",
-                    p -> new ShadowRadianceArmorItem(QOLArmorMaterials.SHADOW_RADIANCE, ArmorItem.Type.BOOTS, p, CreateQOL.asResource("shadow_radiance")))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(962).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+                    p -> new ShadowRadianceArmorItem(ArmorItem.Type.BOOTS, p))
+            .properties(p -> p.fireResistant().rarity(Rarity.EPIC).durability(962).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
             .tag(commonItemTag("armors/boots"))
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
 
     public static final ItemEntry<StatueItem> STATUE = REGISTRATE.item("statue", StatueItem::new)
             .properties(p->p.stacksTo(16))
+            .register();
+
+    //REFINED RADIANCE
+    public static final ItemEntry<? extends RefinedRadianceHelmet> REFINED_RADIANCE_HELMET = REGISTRATE
+            .item("refined_radiance_helmet",
+                    RefinedRadianceHelmet::new)
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(814).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .tag(commonItemTag("armors/helmets"))
+            .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
+            .register();
+    public static final ItemEntry<BacktankItem.BacktankBlockItem> REFINED_RADIANCE_CHESTPLATE_PLACEABLE = REGISTRATE
+            .item("refined_radiance_chestplate_placeable",
+                    p -> new BacktankItem.BacktankBlockItem(QOLBlocks.REFINED_RADIANCE_CHESTPLATE.get(), QOLItems.REFINED_RADIANCE_CHESTPLATE::get, p))
+            .model((c, p) -> p.withExistingParent(c.getName(), p.mcLoc("item/barrier")))
+            .register();
+    public static final ItemEntry<? extends BacktankItem> REFINED_RADIANCE_CHESTPLATE = REGISTRATE
+            .item("refined_radiance_chestplate",
+                    p -> new RefinedRadianceChestplate(p,
+                    REFINED_RADIANCE_CHESTPLATE_PLACEABLE))
+            .model(AssetLookup.customGenericItemModel("_", "item"))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1184).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).component(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH))
+            .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
+            .tag(commonItemTag("armors/chestplates"))
+            .register();
+
+
+
+
+    //SHADOW STEEL
+    public static final ItemEntry<? extends ShadowSteelHelmet> SHADOW_STEEL_HELMET = REGISTRATE
+            .item("shadow_steel_helmet",
+                    ShadowSteelHelmet::new)
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(814).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .tag(commonItemTag("armors/helmets"))
+            .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
+            .register();
+    public static final ItemEntry<BacktankItem.BacktankBlockItem> SHADOW_STEEL_CHESTPLATE_PLACEABLE = REGISTRATE
+            .item("shadow_steel_chestplate_placeable",
+                    p -> new BacktankItem.BacktankBlockItem(QOLBlocks.SHADOW_STEEL_CHESTPLATE.get(), QOLItems.SHADOW_STEEL_CHESTPLATE::get, p))
+            .model((c, p) -> p.withExistingParent(c.getName(), p.mcLoc("item/barrier")))
+            .register();
+    public static final ItemEntry<? extends BacktankItem> SHADOW_STEEL_CHESTPLATE = REGISTRATE
+            .item("shadow_steel_chestplate",
+                    p -> new ShadowSteelChestplate(p,
+                            SHADOW_STEEL_CHESTPLATE_PLACEABLE))
+            .model(AssetLookup.customGenericItemModel("_", "item"))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1184).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).component(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH))
+            .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
+            .tag(commonItemTag("armors/chestplates"))
             .register();
 
 

@@ -7,7 +7,7 @@ import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import fr.iglee42.createqualityoflife.blockentitites.ShadowRadianceBacktankBE;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
-import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
+import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
 import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import net.minecraft.ChatFormatting;
