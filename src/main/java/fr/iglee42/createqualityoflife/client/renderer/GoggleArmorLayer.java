@@ -1,4 +1,4 @@
-package fr.iglee42.createqualityoflife.client;
+package fr.iglee42.createqualityoflife.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

@@ -14,7 +14,7 @@ public class NetheriteDivingHandlerMixin {
 
     @Inject(method = "isNetheriteArmor", at = @At("HEAD"),cancellable = true)
     private static void inject(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        if (stack.getItem() instanceof ArmorItem armorItem && armorItem.getMaterial() == QOLArmorMaterials.SHADOW_RADIANCE)
+        if (stack.getItem() instanceof ArmorItem armorItem && (armorItem.getMaterial() == QOLArmorMaterials.SHADOW_RADIANCE || armorItem.getMaterial() == QOLArmorMaterials.SHADOW_STEEL || armorItem.getMaterial() == QOLArmorMaterials.REFINED_RADIANCE))
             cir.setReturnValue(true);
     }
 }

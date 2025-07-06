@@ -11,8 +11,10 @@ import com.tterrag.registrate.util.RegistrateDistExecutor;
 import fr.iglee42.createqualityoflife.blockentitites.*;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.config.CreateQOLFeaturesConfig;
+import fr.iglee42.createqualityoflife.items.armors.ShadowSteelArmorItem;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.statue.animation.PublishedAnimationsManager;
+import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;
 import fr.iglee42.createqualityoflife.utils.EnderPackagersNetworkHandler;
 import fr.iglee42.createqualityoflife.utils.Features;
 import fr.iglee42.createqualityoflife.utils.IHaveTankMixin;
@@ -28,6 +30,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -43,9 +48,13 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import static fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate.hasPropeller;
 import static fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate.isFansEnable;
@@ -104,6 +113,7 @@ public class CreateQOL {
         forgeEventBus.addListener(this::playerJoin);
         forgeEventBus.addListener(this::onWorldTick);
         forgeEventBus.addListener(this::itemTooltips);
+        forgeEventBus.addListener(this::onPlayerTick);
 
         //if (isActivate(Features.SHADOW_RADIANCE)){
         //    MysteriousItemConversionCategory.RECIPES.add(BlazeBurnerLiquidRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.SHADOW_STEEL.asStack()));
@@ -151,7 +161,13 @@ public class CreateQOL {
         if (player.getItemBySlot(EquipmentSlot.CHEST).is(QOLItems.SHADOW_RADIANCE_CHESTPLATE)) {
             ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
-            if (isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack)) {
+            if ((isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack)) || CreateQOLConfigs.server().dashAllowed.get()) {
+                event.setCanceled(true);
+            }
+        }
+        if (player.getItemBySlot(EquipmentSlot.CHEST).is(QOLItems.SHADOW_STEEL_CHESTPLATE)) {
+            if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
+            if (!CreateQOLConfigs.server().dashAllowed.get()) {
                 event.setCanceled(true);
             }
         }
@@ -166,6 +182,34 @@ public class CreateQOL {
         if (isActivate(Features.STATUE) && CreateQOLConfigs.server().experimentalWarning.get())
             player.displayClientMessage(Component.literal("Warning: Statue are still a beta feature, some bugs and crash might appear.\nPlease report them on https://issues-qol.iglee.fr").withStyle(ChatFormatting.YELLOW),false);
     }
+
+    private static final Map<UUID, Double> jumpHeights = new HashMap<>();
+
+    public void onPlayerTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        if (!player.level().isClientSide) return;
+
+        ItemStack boots = player.getItemBySlot(EquipmentSlot.LEGS);
+        if (!(boots.getItem() instanceof ShadowSteelArmorItem)) return;
+
+        Level level = player.level();
+
+        UUID id = player.getUUID();
+        boolean isOverVoid = (level.isEmptyBlock(player.blockPosition().below()) ||
+                !level.loadedAndEntityCanStandOn(player.blockPosition().below(), player)) && (level.getHeight(Heightmap.Types.MOTION_BLOCKING,player.blockPosition().getX(),player.blockPosition().getZ()) == level.getMinBuildHeight() || player.blockPosition().getY() <= level.getMinBuildHeight());
+
+
+        boolean isSneaking = player.isCrouching();
+        if (isOverVoid && !isSneaking) {
+            if (player.getDeltaMovement().y < 0) {
+                player.setDeltaMovement(player.getDeltaMovement().x, 0, player.getDeltaMovement().z);
+                player.setOnGround(true);
+                player.hasImpulse = false;
+                player.hurtMarked = true;
+            }
+        }
+    }
+
 
     public void onWorldTick(LevelTickEvent.Post event) {
         if (event.getLevel().isClientSide) {

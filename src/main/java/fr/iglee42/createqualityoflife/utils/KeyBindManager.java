@@ -2,18 +2,12 @@ package fr.iglee42.createqualityoflife.utils;
 
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import fr.iglee42.createqualityoflife.client.screens.itemsconfig.InventoryConfigScreen;
-import fr.iglee42.createqualityoflife.client.screens.itemsconfig.ItemConfigScreen;
-import fr.iglee42.createqualityoflife.packets.ToggleElytraPacket;
-import fr.iglee42.createqualityoflife.packets.ToggleFansPacket;
-import fr.iglee42.createqualityoflife.packets.ToggleHoverPacket;
-import fr.iglee42.createqualityoflife.packets.UpdateInputsPacket;
-import fr.iglee42.createqualityoflife.registries.QOLArmorMaterials;
+import fr.iglee42.createqualityoflife.packets.*;
 import fr.iglee42.createqualityoflife.registries.QOLItems;
 import net.createmod.catnip.gui.ScreenOpener;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -21,8 +15,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @EventBusSubscriber(Dist.CLIENT)
 public class KeyBindManager {
@@ -35,11 +27,11 @@ public class KeyBindManager {
     private static boolean lastRightState = false;
 
 
-
     public static KeyMapping FANS_KEY = new KeyMapping("keybind.createqol.shadow_radiance_chestplate_fans", GLFW.GLFW_KEY_Y, "keybind.createqol.category");
     public static KeyMapping HOVER_KEY = new KeyMapping("keybind.createqol.shadow_radiance_chestplate_hover", GLFW.GLFW_KEY_H, "keybind.createqol.category");
     public static KeyMapping ELYTRA_KEY = new KeyMapping("keybind.createqol.shadow_radiance_chestplate_elytra", GLFW.GLFW_KEY_I, "keybind.createqol.category");
     public static KeyMapping OPEN_ARMOR_CONFIG = new KeyMapping("keybind.createqol.open_armor_config", GLFW.GLFW_KEY_C, "keybind.createqol.category");
+    public static KeyMapping DASH_KEY = new KeyMapping("keybind.createqol.dash", GLFW.GLFW_KEY_W, "keybind.createqol.category");
 
 
     private static void tickEnd() {
@@ -66,12 +58,12 @@ public class KeyBindManager {
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post evt) {
-            Player player = Minecraft.getInstance().player;
-            if (player == null) {
-                return;
-            }
+        Player player = Minecraft.getInstance().player;
+        if (player == null) {
+            return;
+        }
 
-            if (OPEN_ARMOR_CONFIG.consumeClick()){
+        if (OPEN_ARMOR_CONFIG.consumeClick()) {
                 /*AtomicBoolean hasArmor = new AtomicBoolean(false);
                 player.getArmorSlots().forEach(it->{
                     if (!(it.getItem() instanceof ArmorItem))return;
@@ -81,13 +73,19 @@ public class KeyBindManager {
                     ScreenOpener.open(new ItemConfigScreen(0));
                 }*/
 
-                ScreenOpener.open(new InventoryConfigScreen());
+            ScreenOpener.open(new InventoryConfigScreen());
+        }
+
+        Item backtank = BacktankItem.getWornBy(player);
+
+        if (backtank == null) return;
+        if (QOLItems.SHADOW_STEEL_CHESTPLATE.is(backtank) || QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank)) {
+            if (DASH_KEY.consumeClick()) {
+                PacketDistributor.sendToServer(DashPacket.INSTANCE);
             }
+        }
 
-            Item backtank = BacktankItem.getWornBy(player);
-
-            if (backtank == null) return;
-            if (!QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank)) return;
+        if (QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank)) {
             if (FANS_KEY.consumeClick()) {
                 PacketDistributor.sendToServer(ToggleFansPacket.INSTANCE);
             }
@@ -97,6 +95,7 @@ public class KeyBindManager {
             if (ELYTRA_KEY.consumeClick()) {
                 PacketDistributor.sendToServer(ToggleElytraPacket.INSTANCE);
             }
-            tickEnd();
+        }
+        tickEnd();
     }
 }

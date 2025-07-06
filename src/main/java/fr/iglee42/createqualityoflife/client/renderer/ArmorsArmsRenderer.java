@@ -1,4 +1,4 @@
-package fr.iglee42.createqualityoflife.client;
+package fr.iglee42.createqualityoflife.client.renderer;
 
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
@@ -24,17 +24,26 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderArmEvent;
 
 @EventBusSubscriber(value = Dist.CLIENT)
-public class ShadowRadianceFirstPersonRenderer {
+public class ArmorsArmsRenderer {
 
-	private static final ResourceLocation BACKTANK_ARMOR_LOCATION =
+	private static final ResourceLocation SHADOW_RADIANCE_ARMS =
 		CreateQOL.asResource("textures/models/armor/shadow_radiance_arm.png");
+	private static final ResourceLocation SHADOW_STEEL_ARMS =
+		CreateQOL.asResource("textures/models/armor/shadow_steel_arm.png");
+	private static final ResourceLocation REFINED_RADIANCE_ARMS =
+		CreateQOL.asResource("textures/models/armor/refined_radiance_arm.png");
 
 	private static boolean rendererActive = false;
 
 	public static void clientTick() {
 		Minecraft mc = Minecraft.getInstance();
 		rendererActive =
-			mc.player != null && QOLItems.SHADOW_RADIANCE_CHESTPLATE.isIn(mc.player.getItemBySlot(EquipmentSlot.CHEST)) && mc.player.getItemBySlot(EquipmentSlot.CHEST).getOrDefault(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).shouldRenderArmor() && mc.player.getItemBySlot(EquipmentSlot.CHEST).getOrDefault(QOLDataComponents.BACKTANK_ARMS,true);
+			mc.player != null
+					&& (QOLItems.SHADOW_RADIANCE_CHESTPLATE.isIn(mc.player.getItemBySlot(EquipmentSlot.CHEST))
+						|| QOLItems.REFINED_RADIANCE_CHESTPLATE.isIn(mc.player.getItemBySlot(EquipmentSlot.CHEST))
+						|| QOLItems.SHADOW_STEEL_CHESTPLATE.isIn(mc.player.getItemBySlot(EquipmentSlot.CHEST)))
+					&& mc.player.getItemBySlot(EquipmentSlot.CHEST).getOrDefault(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).shouldRenderArmor()
+					&& mc.player.getItemBySlot(EquipmentSlot.CHEST).getOrDefault(QOLDataComponents.BACKTANK_ARMS,true);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -56,7 +65,9 @@ public class ShadowRadianceFirstPersonRenderer {
 		model.setupAnim(player, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
 		ModelPart armPart = event.getArm() == HumanoidArm.LEFT ? model.leftSleeve : model.rightSleeve;
 		armPart.xRot = 0.0F;
-		armPart.render(event.getPoseStack(), buffer.getBuffer(RenderType.entitySolid(BACKTANK_ARMOR_LOCATION)),
+		ResourceLocation texture = QOLItems.SHADOW_RADIANCE_CHESTPLATE.isIn(mc.player.getItemBySlot(EquipmentSlot.CHEST)) ? SHADOW_RADIANCE_ARMS
+				: (QOLItems.SHADOW_STEEL_CHESTPLATE.isIn(mc.player.getItemBySlot(EquipmentSlot.CHEST)) ? SHADOW_STEEL_ARMS : REFINED_RADIANCE_ARMS);
+		armPart.render(event.getPoseStack(), buffer.getBuffer(RenderType.entitySolid(texture)),
 			LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
 		event.setCanceled(true);
 	}
