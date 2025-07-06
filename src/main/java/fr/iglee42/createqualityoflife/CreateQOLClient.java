@@ -5,8 +5,8 @@ import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.foundation.particle.AirParticleData;
 
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
-import fr.iglee42.createqualityoflife.client.GoggleArmorLayer;
-import fr.iglee42.createqualityoflife.client.ShadowRadianceFirstPersonRenderer;
+import fr.iglee42.createqualityoflife.client.renderer.GoggleArmorLayer;
+import fr.iglee42.createqualityoflife.client.renderer.ArmorsArmsRenderer;
 import fr.iglee42.createqualityoflife.client.renderer.EnderRenderer;
 import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.*;
@@ -103,6 +103,7 @@ public class CreateQOLClient {
         event.register(KeyBindManager.HOVER_KEY);
         event.register(KeyBindManager.ELYTRA_KEY);
         event.register(KeyBindManager.OPEN_ARMOR_CONFIG);
+        event.register(KeyBindManager.DASH_KEY);
     }
 
     public static void clientInit(final FMLClientSetupEvent event) {
@@ -151,9 +152,9 @@ public class CreateQOLClient {
     }
 
     public static void onClientTick(TickEvent.ClientTickEvent event){
-        ShadowRadianceFirstPersonRenderer.clientTick();
         Minecraft minecraft = Minecraft.getInstance();
         if (event.phase == TickEvent.Phase.END) {
+            ArmorsArmsRenderer.clientTick();
             if (minecraft.player != null && minecraft.level != null) {
                 if (!minecraft.isPaused() && !minecraft.player.isSpectator()) {
                     ItemStack chest = minecraft.player.getItemBySlot(EquipmentSlot.CHEST);

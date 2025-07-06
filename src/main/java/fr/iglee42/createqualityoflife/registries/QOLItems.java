@@ -102,7 +102,21 @@ public class QOLItems {
             .tag(forgeItemTag("armors/chestplates"))
             .register();
 
+    public static final ItemEntry<? extends BaseArmorItem> REFINED_RADIANCE_LEGGINGS = REGISTRATE
+            .item("refined_radiance_leggings",
+                    p -> new RefinedRadianceArmorItem(ArmorItem.Type.LEGGINGS, p))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1110).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .tag(commonItemTag("armors/leggings"))
+            .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
+            .register();
 
+    public static final ItemEntry<? extends BaseArmorItem> REFINED_RADIANCE_BOOTS = REGISTRATE
+            .item("refined_radiance_boots",
+                    p -> new RefinedRadianceArmorItem(ArmorItem.Type.BOOTS, p))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(962).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .tag(commonItemTag("armors/boots"))
+            .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
+            .register();
 
 
     //SHADOW STEEL
@@ -128,6 +142,21 @@ public class QOLItems {
             .tag(forgeItemTag("armors/chestplates"))
             .register();
 
+    public static final ItemEntry<? extends BaseArmorItem> SHADOW_STEEL_LEGGINGS = REGISTRATE
+            .item("shadow_steel_leggings",
+                    p -> new ShadowSteelArmorItem(ArmorItem.Type.LEGGINGS, p))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1110).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .tag(commonItemTag("armors/leggings"))
+            .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
+            .register();
+
+    public static final ItemEntry<? extends BaseArmorItem> SHADOW_STEEL_BOOTS = REGISTRATE
+            .item("shadow_steel_boots",
+                    p -> new ShadowSteelArmorItem(ArmorItem.Type.BOOTS, p))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(962).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .tag(commonItemTag("armors/boots"))
+            .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
+            .register();
 
     public static final PackageStyles.PackageStyle FURTI = new PackageStyles.PackageStyle("rare_furti", 12, 10, 21f, true);
     public static final ItemEntry<PackageItem> FURTI_PACKAGE = createRarePackage(FURTI);
