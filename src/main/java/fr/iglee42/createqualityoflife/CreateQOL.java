@@ -113,7 +113,6 @@ public class CreateQOL {
         forgeEventBus.addListener(this::playerJoin);
         forgeEventBus.addListener(this::onWorldTick);
         forgeEventBus.addListener(this::itemTooltips);
-        forgeEventBus.addListener(this::onPlayerTick);
 
         //if (isActivate(Features.SHADOW_RADIANCE)){
         //    MysteriousItemConversionCategory.RECIPES.add(BlazeBurnerLiquidRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.SHADOW_STEEL.asStack()));
@@ -183,32 +182,7 @@ public class CreateQOL {
             player.displayClientMessage(Component.literal("Warning: Statue are still a beta feature, some bugs and crash might appear.\nPlease report them on https://issues-qol.iglee.fr").withStyle(ChatFormatting.YELLOW),false);
     }
 
-    private static final Map<UUID, Double> jumpHeights = new HashMap<>();
 
-    public void onPlayerTick(PlayerTickEvent.Post event) {
-        Player player = event.getEntity();
-        if (!player.level().isClientSide) return;
-
-        ItemStack boots = player.getItemBySlot(EquipmentSlot.LEGS);
-        if (!(boots.getItem() instanceof ShadowSteelArmorItem)) return;
-
-        Level level = player.level();
-
-        UUID id = player.getUUID();
-        boolean isOverVoid = (level.isEmptyBlock(player.blockPosition().below()) ||
-                !level.loadedAndEntityCanStandOn(player.blockPosition().below(), player)) && (level.getHeight(Heightmap.Types.MOTION_BLOCKING,player.blockPosition().getX(),player.blockPosition().getZ()) == level.getMinBuildHeight() || player.blockPosition().getY() <= level.getMinBuildHeight());
-
-
-        boolean isSneaking = player.isCrouching();
-        if (isOverVoid && !isSneaking) {
-            if (player.getDeltaMovement().y < 0) {
-                player.setDeltaMovement(player.getDeltaMovement().x, 0, player.getDeltaMovement().z);
-                player.setOnGround(true);
-                player.hasImpulse = false;
-                player.hurtMarked = true;
-            }
-        }
-    }
 
 
     public void onWorldTick(LevelTickEvent.Post event) {

@@ -9,6 +9,7 @@ import fr.iglee42.createqualityoflife.client.renderer.GoggleArmorLayer;
 import fr.iglee42.createqualityoflife.client.renderer.ArmorsArmsRenderer;
 import fr.iglee42.createqualityoflife.client.renderer.EnderRenderer;
 import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate;
+import fr.iglee42.createqualityoflife.items.armors.ShadowSteelArmorItem;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.statue.StatueModel;
 import fr.iglee42.createqualityoflife.statue.StatueRenderer;
@@ -23,6 +24,7 @@ import net.minecraft.client.ParticleStatus;
 import net.minecraft.client.model.ArmorStandArmorModel;
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -30,6 +32,7 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -37,6 +40,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -45,10 +50,15 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 
 import static net.createmod.ponder.PonderClient.isGameActive;
 
@@ -69,6 +79,8 @@ public class CreateQOLClient {
         modEventBus.addListener(CreateQOLClient::registerEntityRendererLayers);
 
         forgeEventBus.addListener(CreateQOLClient::onClientTick);
+        forgeEventBus.addListener(CreateQOLClient::onPlayerTick);
+        forgeEventBus.addListener(CreateQOLClient::onLivingJump);
 
     }
 
@@ -194,5 +206,58 @@ public class CreateQOLClient {
             }
         }
         return false;
+    }
+
+
+    public static void onLivingJump(LivingEvent.LivingJumpEvent event) {
+        if (!(event.getEntity() instanceof LocalPlayer player)) return;
+
+        ItemStack boots = player.getItemBySlot(EquipmentSlot.LEGS);
+        if (!(boots.getItem() instanceof ShadowSteelArmorItem)) return;
+
+        Level level = player.level();
+        boolean isOverVoid = (level.isEmptyBlock(player.blockPosition().below()) ||
+                !level.loadedAndEntityCanStandOn(player.blockPosition().below(), player)) &&
+                (level.getHeight(Heightmap.Types.MOTION_BLOCKING, player.getBlockX(), player.getBlockZ()) == level.getMinBuildHeight() ||
+                        player.getY() <= level.getMinBuildHeight());
+
+        boolean isSneaking = player.isCrouching();
+        if (isOverVoid && !isSneaking) {
+            // Annule le saut immédiatement
+            player.setDeltaMovement(player.getDeltaMovement().x, 0, player.getDeltaMovement().z);
+            player.setOnGround(true);
+            player.hurtMarked = true;
+        }
+    }
+
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        Player p = event.getEntity();
+        if (!p.level().isClientSide || !(p instanceof LocalPlayer)) return;
+
+        LocalPlayer player = (LocalPlayer) p;
+
+        ItemStack boots = player.getItemBySlot(EquipmentSlot.LEGS);
+        if (!(boots.getItem() instanceof ShadowSteelArmorItem)) return;
+
+        Level level = player.level();
+
+        boolean isOverVoid = (level.isEmptyBlock(player.blockPosition().below()) ||
+                !level.loadedAndEntityCanStandOn(player.blockPosition().below(), player))
+                && (level.getHeight(Heightmap.Types.MOTION_BLOCKING,player.blockPosition().getX(),player.blockPosition().getZ()) == level.getMinBuildHeight() || player.blockPosition().getY() <= level.getMinBuildHeight());
+
+
+        if (isOverVoid) {
+            player.setDeltaMovement(new Vec3(player.getDeltaMovement().x,0,player.getDeltaMovement().z));
+            player.hurtMarked = true;
+            player.setOnGround(true);
+                float f;
+                if (player.onGround() && !player.isDeadOrDying() && !player.isSwimming()) {
+                    f = Math.min(0.1F, (float)player.getDeltaMovement().horizontalDistance());
+                } else {
+                    f = 0.0F;
+                }
+
+                player.bob += (f - player.bob) * 0.4F;
+        }
     }
 }
