@@ -3,6 +3,7 @@ package fr.iglee42.createqualityoflife.registries;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.content.equipment.armor.BaseArmorItem;
+import com.simibubi.create.content.equipment.tool.AllToolMaterials;
 import com.simibubi.create.content.legacy.NoGravMagicalDohickyItem;
 import com.simibubi.create.content.logistics.box.PackageItem;
 import com.simibubi.create.content.logistics.box.PackageStyles;
@@ -12,10 +13,10 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.items.*;
 import fr.iglee42.createqualityoflife.items.armors.*;
+import fr.iglee42.createqualityoflife.items.tools.shadowsteel.ShadowSteelPickaxe;
 import fr.iglee42.createqualityoflife.statue.StatueItem;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 
 import static com.simibubi.create.AllTags.forgeItemTag;
 import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
@@ -158,12 +159,23 @@ public class QOLItems {
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
 
+    //TOOLS
+
+    public static final ItemEntry<ShadowSteelPickaxe> SHADOW_STEEL_PICKAXE = REGISTRATE
+            .item("shadow_steel_pickaxe",ShadowSteelPickaxe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(PickaxeItem
+                    .createAttributes(QOLTiers.SHADOW_STEEL, 1, -2.8f)))
+            .model(AssetLookup.itemModelWithPartials())
+            .register();
+
+    public static final PackageStyles.PackageStyle IGLEE = new PackageStyles.PackageStyle("rare_iglee", 12, 10, 21f, true);
+    public static final ItemEntry<PackageItem> IGLEE_PACKAGE = createRarePackage(IGLEE);
     public static final PackageStyles.PackageStyle FURTI = new PackageStyles.PackageStyle("rare_furti", 12, 10, 21f, true);
     public static final ItemEntry<PackageItem> FURTI_PACKAGE = createRarePackage(FURTI);
     public static final PackageStyles.PackageStyle DELTA = new PackageStyles.PackageStyle("rare_delta", 12, 10, 21f, true);
     public static final ItemEntry<PackageItem> DELTA_PACKAGE = createRarePackage(DELTA);
-    public static final PackageStyles.PackageStyle IGLEE = new PackageStyles.PackageStyle("rare_iglee", 12, 10, 21f, true);
-    public static final ItemEntry<PackageItem> IGLEE_PACKAGE = createRarePackage(IGLEE);
     public static void register(){
     }
 
