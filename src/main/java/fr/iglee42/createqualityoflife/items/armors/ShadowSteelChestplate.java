@@ -7,6 +7,7 @@ import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLArmorMaterials;
 import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import fr.iglee42.createqualityoflife.utils.KeyBindManager;
 import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
 import net.minecraft.ChatFormatting;
@@ -19,6 +20,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +34,7 @@ public class ShadowSteelChestplate extends BacktankItem.Layered implements QOLCo
     }
 
     public static void dash(ItemStack chestplate, ServerPlayer player) {
+        if (!chestplate.getOrDefault(QOLDataComponents.DASH,true)) return;
         if (!CreateQOLConfigs.server().dashAllowed.get()){
             player.displayClientMessage(Component.literal("Dashing is disabled on this server !").withStyle(ChatFormatting.RED),true);
             return;
@@ -46,6 +49,22 @@ public class ShadowSteelChestplate extends BacktankItem.Layered implements QOLCo
     public void inventoryTick(ItemStack p_41404_, Level p_41405_, Entity p_41406_, int p_41407_, boolean p_41408_) {
         super.inventoryTick(p_41404_, p_41405_, p_41406_, p_41407_, p_41408_);
         invTick(p_41404_, p_41405_, p_41406_, p_41407_, p_41408_);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
+        components.add(Component.literal("Air : ")
+                .withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(String.valueOf(BacktankUtil.getAir(stack)))
+                        .withStyle(ChatFormatting.YELLOW))
+                .append(Component.literal("/" + BacktankUtil.maxAir(stack))
+                        .withStyle(ChatFormatting.GOLD)));
+        components.add(Component.literal("Dash : ")
+                .withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(
+                                QOLConfigurableItem.chooseState(CreateQOLConfigs.server().dashAllowed.get(), true, stack.getOrDefault(QOLDataComponents.DASH,true), false, true))
+                        .withStyle(!CreateQOLConfigs.server().dashAllowed.get() ? ChatFormatting.RED : ChatFormatting.YELLOW)));
+        super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 
     @Override
@@ -65,16 +84,16 @@ public class ShadowSteelChestplate extends BacktankItem.Layered implements QOLCo
 
     @Override
     public void addConfigurations(List<Configuration<?>> list, ItemStack stack) {
-        list.add(new Configuration<>("Preferred Render", stack.getOrDefault(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH),QOLDataComponents.PREFERRED_RENDER,
-                Configuration.ConfigType.ENUM,Arrays.asList("Define how the additions should be rendered.",
-                "\"Elytra\" renders only the elytra",
-                "\"Backtank\" renders only the backtank"),(direction,entry)->{
+        list.add(Configuration.ofBool("Enable Custom Arms",
+                stack.getOrDefault(QOLDataComponents.BACKTANK_ARMS,true),
+                QOLDataComponents.BACKTANK_ARMS,
+                List.of("Should the player's arms be replaced with the armor in first person"),
+                (e,oe)->true));
+        list.add(Configuration.ofBool("Enable Dash",stack.getOrDefault(QOLDataComponents.DASH,true),QOLDataComponents.DASH,
+                List.of("Should the player dash when pressing "+ KeyBindManager.DASH_KEY.getTranslatedKeyMessage().getString()),
+                (o,oe)->CreateQOLConfigs.server().dashAllowed.get()));
 
-            PreferredRender e = (PreferredRender) entry.getValue();
-            PreferredRender[] options = Arrays.stream(PreferredRender.values()).toArray(PreferredRender[]::new);
-            e = options[Math.floorMod(e.ordinal() + direction, options.length)];
-            return e;
-        },(e,oe)->true));
+
     }
 
     @Override
