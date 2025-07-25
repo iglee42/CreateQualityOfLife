@@ -10,6 +10,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -33,7 +34,7 @@ public interface QOLConfigurableItem {
 
     default void invTick(ItemStack stack, Level level, Entity entity, int slot, boolean offHand) {
         if (!(entity instanceof Player player)) return;
-        if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
+        if (doesEffectRequiresAir() && BacktankUtil.getAllWithAir(player).isEmpty()) return;
         if (type().equals(Type.ARMOR)) {
             if (!(stack.getItem() instanceof ArmorItem it)) throw new IllegalArgumentException(BuiltInRegistries.ITEM.getKey(stack.getItem()) + " is defined with Type.ARMOR even if it isn't a ArmorItem");
             ArmorItem.Type type = it.getType();
@@ -44,9 +45,11 @@ public interface QOLConfigurableItem {
                 }
             }
         } else if (type().equals(Type.ITEM)){
-            if (hasEffectEnable(stack) && providedEffect(stack) != null && providedEffect(stack).value() != null){
-                applyEffect(player,providedEffect(stack),effectTime(stack), effectLevel(stack));
-                tick(stack, level, player, slot, offHand);
+            if (player.getItemInHand(InteractionHand.MAIN_HAND).equals(stack) || player.getItemInHand(InteractionHand.OFF_HAND).equals(stack)) {
+                if (hasEffectEnable(stack) && providedEffect(stack) != null && providedEffect(stack).value() != null){
+                    applyEffect(player,providedEffect(stack),effectTime(stack), effectLevel(stack));
+                    tick(stack, level, player, slot, offHand);
+                }
             }
         }
     }
@@ -102,6 +105,8 @@ public interface QOLConfigurableItem {
 
     Type type();
 
+    default boolean doesEffectRequiresAir() { return true; }
+
     default List<ArmorRenderType> renderTypes(ItemStack stack) { return null; }
 
     enum Type{
@@ -138,4 +143,10 @@ public interface QOLConfigurableItem {
             }
         }
     }
+
+    static String chooseState(boolean config, boolean installed, boolean active, boolean activeReplaceInstall, boolean activeOnly){
+        if (activeOnly) return  !config ? "Disabled By Config" : (active ? "Enable" : "Disable");
+        return !config ? "Disabled By Config" : (installed ? (activeReplaceInstall ? (active ? "Enable" : "Disable") : "Installed") : "Not Installed");
+    }
+
 }
