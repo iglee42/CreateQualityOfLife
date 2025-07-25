@@ -30,6 +30,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.InteractionHand;
@@ -232,21 +233,26 @@ public class CreateQOLClient {
 
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player p = event.getEntity();
-        if (!p.level().isClientSide || !(p instanceof LocalPlayer)) return;
+        if (!p.level().isClientSide || !(p instanceof LocalPlayer player)) return;
 
-        LocalPlayer player = (LocalPlayer) p;
+        if (player.getAbilities().flying) return;
 
-        ItemStack boots = player.getItemBySlot(EquipmentSlot.LEGS);
-        if (!(boots.getItem() instanceof ShadowSteelArmorItem)) return;
+        ItemStack legs = player.getItemBySlot(EquipmentSlot.LEGS);
+        if (!(legs.getItem() instanceof ShadowSteelArmorItem)) return;
 
         Level level = player.level();
 
-        boolean isOverVoid = (level.isEmptyBlock(player.blockPosition().below()) ||
-                !level.loadedAndEntityCanStandOn(player.blockPosition().below(), player))
-                && (level.getHeight(Heightmap.Types.MOTION_BLOCKING,player.blockPosition().getX(),player.blockPosition().getZ()) == level.getMinBuildHeight() || player.blockPosition().getY() <= level.getMinBuildHeight());
+        boolean hasVoidUnder = true;
 
 
-        if (isOverVoid) {
+        for (int y = player.getBlockY(); y >= level.getMinBuildHeight(); y--) {
+            if (!level.getBlockState(new BlockPos(player.getBlockX(),y,player.getBlockZ())).isAir()) {
+                hasVoidUnder = false;
+                break;
+            }
+        }
+
+        if (hasVoidUnder) {
             player.setDeltaMovement(new Vec3(player.getDeltaMovement().x,0,player.getDeltaMovement().z));
             player.hurtMarked = true;
             player.setOnGround(true);
