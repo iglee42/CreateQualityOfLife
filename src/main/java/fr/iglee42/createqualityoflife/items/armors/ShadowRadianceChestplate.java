@@ -55,7 +55,6 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
         return hasElytra(stack)
                 && isElytraEnable(stack)
                 && (!hasPropeller(stack) || !isFansEnable(stack))
-                && !BacktankUtil.getAllWithAir(entity).isEmpty()
                 && CreateQOLConfigs.server().elytraAllowed.get();
     }
 
@@ -196,22 +195,22 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
         components.add(Component.literal("Propeller : ")
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.literal(
-                chooseState(CreateQOLConfigs.server().propellerAllowed.get() ,hasPropeller(stack) ,true,false,false))
+                QOLConfigurableItem.chooseState(CreateQOLConfigs.server().propellerAllowed.get() ,hasPropeller(stack) ,true,false,false))
                 .withStyle(!CreateQOLConfigs.server().propellerAllowed.get()? ChatFormatting.RED : ChatFormatting.YELLOW)));
         if (hasPropeller(stack) && CreateQOLConfigs.server().propellerAllowed.get()) {
             components.add(Component.empty());
             components.add(Component.literal("Fan : ")
                     .withStyle(ChatFormatting.GOLD)
-                    .append(Component.literal(chooseState(true,true,isFansEnable(stack),false,true))
+                    .append(Component.literal(QOLConfigurableItem.chooseState(true,true,isFansEnable(stack),false,true))
                             .withStyle(ChatFormatting.YELLOW)));
             components.add(Component.literal("Hover : ")
                     .withStyle(ChatFormatting.GOLD)
-                    .append(Component.literal(chooseState(CreateQOLConfigs.server().hoverAllowed.get() ,true,isHoverEnable(stack),false,true))
+                    .append(Component.literal(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().hoverAllowed.get() ,true,isHoverEnable(stack),false,true))
                             .withStyle(!CreateQOLConfigs.server().hoverAllowed.get()? ChatFormatting.RED :ChatFormatting.YELLOW)));
         }
         components.add(Component.literal("Elytra : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(Component.literal(chooseState(CreateQOLConfigs.server().elytraAllowed.get() ,hasElytra(stack) ,isElytraEnable(stack), true,false))
+                .append(Component.literal(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().elytraAllowed.get() ,hasElytra(stack) ,isElytraEnable(stack), true,false))
                 .withStyle(!CreateQOLConfigs.server().elytraAllowed.get()? ChatFormatting.RED : ChatFormatting.YELLOW)));
         components.add(Component.literal("Dash : ")
                 .withStyle(ChatFormatting.GOLD)
@@ -220,12 +219,6 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
                         .withStyle(!CreateQOLConfigs.server().dashAllowed.get() ? ChatFormatting.RED : ChatFormatting.YELLOW)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
-
-    private static String chooseState(boolean config,boolean installed, boolean active, boolean activeReplaceInstall, boolean activeOnly){
-        if (activeOnly) return  !config ? "Disabled By Config" : (active ? "Enable" : "Disable");
-        return !config ? "Disabled By Config" : (installed ? (activeReplaceInstall ? (active ? "Enable" : "Disable") : "Installed") : "Not Installed");
-    }
-
 
     public static void toggleFans(ItemStack chestplate,Player p) {
         if (!CreateQOLConfigs.server().propellerAllowed.get()){
@@ -238,7 +231,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
         }
         chestplate.set(QOLDataComponents.BACKTANK_FANS, !chestplate.has(QOLDataComponents.BACKTANK_FANS) || Boolean.FALSE.equals(chestplate.get(QOLDataComponents.BACKTANK_FANS)));
         boolean fans = isFansEnable(chestplate);
-        p.displayClientMessage(Component.literal("Fan : ").append(Component.literal(chooseState(true,true,fans,false,true)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+        p.displayClientMessage(Component.literal("Fan : ").append(Component.literal(QOLConfigurableItem.chooseState(true,true,fans,false,true)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
     public static void toggleHover(ItemStack chestplate,Player p) {
         if (!CreateQOLConfigs.server().propellerAllowed.get()){
@@ -251,7 +244,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
         }
         chestplate.set(QOLDataComponents.BACKTANK_HOVER, chestplate.has(QOLDataComponents.BACKTANK_HOVER) && Boolean.FALSE.equals(chestplate.get(QOLDataComponents.BACKTANK_HOVER)));
         boolean hover = isHoverEnable(chestplate);
-        p.displayClientMessage(Component.literal("Hover : ").append(Component.literal(chooseState(true,true,hover,false,true)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+        p.displayClientMessage(Component.literal("Hover : ").append(Component.literal(QOLConfigurableItem.chooseState(true,true,hover,false,true)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
 
     public static void toggleElytra(ItemStack chestplate,Player p) {
@@ -265,7 +258,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
         }
         chestplate.set(QOLDataComponents.BACKTANK_ELYTRA_STATE, chestplate.has(QOLDataComponents.BACKTANK_ELYTRA_STATE) && Boolean.FALSE.equals(chestplate.get(QOLDataComponents.BACKTANK_ELYTRA_STATE)));
         boolean elytra = isElytraEnable(chestplate);
-        p.displayClientMessage(Component.literal("Elytra : ").append(Component.literal(chooseState(true,true,elytra,false,true)).withStyle(elytra ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+        p.displayClientMessage(Component.literal("Elytra : ").append(Component.literal(QOLConfigurableItem.chooseState(true,true,elytra,false,true)).withStyle(elytra ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
     }
     public static boolean hasPropeller(ItemStack chestplate){
         return chestplate.has(QOLDataComponents.BACKTANK_PROPELLERS) && Boolean.TRUE.equals(chestplate.get(QOLDataComponents.BACKTANK_PROPELLERS));

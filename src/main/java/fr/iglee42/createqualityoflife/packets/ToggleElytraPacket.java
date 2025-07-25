@@ -26,7 +26,7 @@ public class ToggleElytraPacket implements ServerboundPacketPayload {
             Item backtank = BacktankItem.getWornBy(player);
 
             if (backtank == null) return;
-            if (QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && ShadowRadianceChestplate.hasElytra(chestplate)){
+            if ((QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) ||QOLItems.REFINED_RADIANCE_CHESTPLATE.is(backtank)) && ShadowRadianceChestplate.hasElytra(chestplate)){
                 ShadowRadianceChestplate.toggleElytra(chestplate,player);
             }else if (QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && !ShadowRadianceChestplate.hasElytra(chestplate)){
                 player.sendSystemMessage(CreateQOLLang.translateDirect("chestplate.no_elytra").withStyle(ChatFormatting.RED),true);

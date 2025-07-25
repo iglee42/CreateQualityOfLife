@@ -33,6 +33,7 @@ public class QOLDataComponents {
     public static final DataComponentType<Boolean> BACKTANK_ELYTRA = register("elytra",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> BACKTANK_ELYTRA_STATE = register("elytra_state",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> BACKTANK_BOOST_ON_LAUNCH = register("boost_launch",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DataComponentType<Boolean> DASH = register("dash",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<ArmorRenderType> ARMOR_RENDER_TYPE = register("render_type",b->b.persistent(ArmorRenderType.CODEC).networkSynchronized(ArmorRenderType.STREAM_CODEC));
     public static final DataComponentType<PreferredRender> PREFERRED_RENDER = register("preferred_render", b->b.persistent(PreferredRender.CODEC).networkSynchronized(PreferredRender.STREAM_CODEC));
     public static final DataComponentType<ShadowRadianceEffects> EFFECT = register("preferred_effect", b->b.persistent(ShadowRadianceEffects.CODEC).networkSynchronized(ShadowRadianceEffects.STREAM_CODEC));
