@@ -58,8 +58,10 @@ public class ChangeItemComponentPacket implements ServerboundPacketPayload {
             player.getInventory().getItem(slot).set(QOLDataComponents.BOOTS_DIVING, value != 0);
         } else if (component.equals(QOLDataComponents.BOOTS_LAVA)){
             player.getInventory().getItem(slot).set(QOLDataComponents.BOOTS_LAVA, value != 0);
-        } else if (component.equals(QOLDataComponents.HELMET_GOGGLES)){
+        } else if (component.equals(QOLDataComponents.HELMET_GOGGLES)) {
             player.getInventory().getItem(slot).set(QOLDataComponents.HELMET_GOGGLES, value != 0);
+        } else if (component.equals(QOLDataComponents.DASH)){
+            player.getInventory().getItem(slot).set(QOLDataComponents.DASH, value != 0);
         } else if (component.equals(QOLDataComponents.ARMOR_RENDER_TYPE)){
           player.getInventory().getItem(slot).set(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.BY_ID.apply(value));
         } else if (component.equals(QOLDataComponents.PREFERRED_RENDER)){

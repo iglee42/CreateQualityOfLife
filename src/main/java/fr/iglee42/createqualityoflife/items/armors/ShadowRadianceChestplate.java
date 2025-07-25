@@ -213,6 +213,11 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.literal(chooseState(CreateQOLConfigs.server().elytraAllowed.get() ,hasElytra(stack) ,isElytraEnable(stack), true,false))
                 .withStyle(!CreateQOLConfigs.server().elytraAllowed.get()? ChatFormatting.RED : ChatFormatting.YELLOW)));
+        components.add(Component.literal("Dash : ")
+                .withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(
+                                QOLConfigurableItem.chooseState(CreateQOLConfigs.server().dashAllowed.get(), true, stack.getOrDefault(QOLDataComponents.DASH,true), false, true))
+                        .withStyle(!CreateQOLConfigs.server().dashAllowed.get() ? ChatFormatting.RED : ChatFormatting.YELLOW)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 
@@ -303,7 +308,9 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
                 QOLDataComponents.BACKTANK_ARMS,
                 Arrays.asList("Should the player's arms be replaced with the armor in first person"),
                 (e,oe)->true));
-
+        list.add(Configuration.ofBool("Enable Dash",stack.getOrDefault(QOLDataComponents.DASH,true),QOLDataComponents.DASH,
+                List.of("Should the player dash when pressing "+ KeyBindManager.DASH_KEY.getTranslatedKeyMessage().getString()),
+                (o,oe)->CreateQOLConfigs.server().dashAllowed.get()));
         if (hasPropeller(stack)){
             list.add(Configuration.ofBool("Enable Fan",
                     stack.getOrDefault(QOLDataComponents.BACKTANK_FANS,true),
