@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "createqol:item/refined_radiance_chestplate_elytra",
+      "predicate": {
+        "createqol:elytra": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "createqol:item/refined_radiance_chestplate"
+  }
+}

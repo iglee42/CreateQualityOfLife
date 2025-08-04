@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "createqol:item/shadow_steel_pickaxe"
+  }
+}

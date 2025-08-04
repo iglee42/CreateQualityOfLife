@@ -1,12 +1,17 @@
 package fr.iglee42.createqualityoflife.registries;
 
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
+import com.simibubi.create.content.kinetics.saw.SawGenerator;
+import com.simibubi.create.content.legacy.ChromaticCompoundColor;
+import com.simibubi.create.content.logistics.packager.PackagerGenerator;
 import com.simibubi.create.foundation.block.render.ReducedDestroyEffects;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
+import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.behaviours.TrashCanMovementBehaviour;
 import fr.iglee42.createqualityoflife.blocks.*;
 import fr.iglee42.createqualityoflife.config.CQOLStress;
@@ -14,22 +19,31 @@ import fr.iglee42.createqualityoflife.items.ChromaticCompoundBlockItem;
 import fr.iglee42.createqualityoflife.items.NoGravMagicalDohickyBlockItem;
 import fr.iglee42.createqualityoflife.items.RefinedRadianceBlockItem;
 import fr.iglee42.createqualityoflife.items.ShadowSteelBlockItem;
+import fr.iglee42.createqualityoflife.registries.generators.ChippedSawGenerator;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.common.Tags;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
+import static com.simibubi.create.AllTags.*;
 import static com.simibubi.create.api.behaviour.movement.MovementBehaviour.movementBehaviour;
+import static com.simibubi.create.foundation.data.BlockStateGen.simpleCubeAll;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
-import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
-import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
+import static com.simibubi.create.foundation.data.TagGen.*;
 import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
 
 public class QOLBlocks {
@@ -43,7 +57,6 @@ public class QOLBlocks {
             .properties(p -> p.mapColor(MapColor.METAL))
             .properties(BlockBehaviour.Properties::noOcclusion)
             .transform(pickaxeOnly())
-            //.onRegisterAfter(Registry.ITEM_REGISTRY,v-> ItemDescription.useKey(v,"block.createqol.inventory_linker"))
             .blockstate((c, p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p)))
             .transform(CQOLStress.setImpact(8.0))
             .addLayer(()-> RenderType::cutoutMipped)
@@ -56,6 +69,7 @@ public class QOLBlocks {
             REGISTRATE.block("shadow_radiance_chestplate", ShadowRadianceBacktankBlock::new)
                     .initialProperties(SharedProperties::netheriteMetal)
                     .transform(backtank(QOLItems.SHADOW_RADIANCE_CHESTPLATE::get))
+                    .blockstate((c,p)->p.horizontalBlock(c.get(),bs-> p.models().getExistingFile(CreateQOL.asResource("block/shadow_radiance_chestplate/block" + (bs.getValue(ShadowRadianceBacktankBlock.PROPELLER) ? "_jetpack": "")))))
                     .register();
     public static final BlockEntry<RefinedRadianceBacktankBlock> REFINED_RADIANCE_CHESTPLATE =
             REGISTRATE.block("refined_radiance_chestplate", RefinedRadianceBacktankBlock::new)
@@ -77,8 +91,9 @@ public class QOLBlocks {
                     .isRedstoneConductor((level, pos, state) -> false))
             .transform(pickaxeOnly())
             .addLayer(() -> RenderType::cutoutMipped)
-            .clientExtension(() -> () -> new ReducedDestroyEffects())
+            .clientExtension(() -> ReducedDestroyEffects::new)
             .onRegister(movementBehaviour(TrashCanMovementBehaviour.normal()))
+            .blockstate((c,p)->p.simpleBlock(c.get(),AssetLookup.partialBaseModel(c,p)))
             .item()
             .transform(customItemModel("_", "block"))
             .register();
@@ -94,6 +109,11 @@ public class QOLBlocks {
             .clientExtension(() -> () -> new ReducedDestroyEffects())
             .onRegister(movementBehaviour(TrashCanMovementBehaviour.brass()))
             .transform(pickaxeOnly())
+            .blockstate((c,p)->p.getVariantBuilder(c.get()).forAllStates(bs->{
+                boolean open = bs.getValue(BrassTrashCanBlock.OPEN);
+                boolean powered = bs.getValue(BrassTrashCanBlock.POWERED);
+                return ConfiguredModel.builder().modelFile(p.models().getExistingFile(CreateQOL.asResource("block/trash_can/block_brass" + (open ? "_open" :"") + (powered ? "_powered":"")))).build();
+            }))
             .item()
             .transform(customItemModel("trash_can", "block_brass"))
             .register();
@@ -106,7 +126,7 @@ public class QOLBlocks {
             .sound(SoundType.NETHERITE_BLOCK))
             .transform(pickaxeOnly())
             .addLayer(() -> RenderType::cutoutMipped)
-            //.blockstate(new PackagerGenerator()::generate)
+            .blockstate(new PackagerGenerator()::generate)
             .item()
 			.model(AssetLookup::customItemModel)
 			.build()
@@ -191,12 +211,13 @@ public class QOLBlocks {
                 .addLayer(() -> RenderType::cutoutMipped)
                 .properties(p -> p.mapColor(MapColor.PODZOL))
                 .transform(axeOrPickaxe())
-                //.blockstate(new SawGenerator()::generate)
+                .blockstate(new ChippedSawGenerator()::generate)
                 .transform(CQOLStress.setImpact(4.0))
                 .addLayer(() -> RenderType::cutoutMipped)
                 .item()
                 .tag(AllTags.AllItemTags.CONTRAPTION_CONTROLLED.tag)
-                .transform(customItemModel())
+                .model(AssetLookup.existingItemModel())
+                .build()
                 .register();
     }
     public static void register(){

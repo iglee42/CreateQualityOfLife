@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=east,propeller=false,waterlogged=false": {
+      "model": "createqol:block/shadow_radiance_chestplate/block",
+      "y": 90
+    },
+    "facing=east,propeller=false,waterlogged=true": {
+      "model": "createqol:block/shadow_radiance_chestplate/block",
+      "y": 90
+    },
+    "facing=east,propeller=true,waterlogged=false": {
+      "model": "createqol:block/shadow_radiance_chestplate/block_jetpack",
+      "y": 90
+    },
+    "facing=east,propeller=true,waterlogged=true": {
+      "model": "createqol:block/shadow_radiance_chestplate/block_jetpack",
+      "y": 90
+    },
+    "facing=north,propeller=false,waterlogged=false": {
+      "model": "createqol:block/shadow_radiance_chestplate/block"
+    },
+    "facing=north,propeller=false,waterlogged=true": {
+      "model": "createqol:block/shadow_radiance_chestplate/block"
+    },
+    "facing=north,propeller=true,waterlogged=false": {
+      "model": "createqol:block/shadow_radiance_chestplate/block_jetpack"
+    },
+    "facing=north,propeller=true,waterlogged=true": {
+      "model": "createqol:block/shadow_radiance_chestplate/block_jetpack"
+    },
+    "facing=south,propeller=false,waterlogged=false": {
+      "model": "createqol:block/shadow_radiance_chestplate/block",
+      "y": 180
+    },
+    "facing=south,propeller=false,waterlogged=true": {
+      "model": "createqol:block/shadow_radiance_chestplate/block",
+      "y": 180
+    },
+    "facing=south,propeller=true,waterlogged=false": {
+      "model": "createqol:block/shadow_radiance_chestplate/block_jetpack",
+      "y": 180
+    },
+    "facing=south,propeller=true,waterlogged=true": {
+      "model": "createqol:block/shadow_radiance_chestplate/block_jetpack",
+      "y": 180
+    },
+    "facing=west,propeller=false,waterlogged=false": {
+      "model": "createqol:block/shadow_radiance_chestplate/block",
+      "y": 270
+    },
+    "facing=west,propeller=false,waterlogged=true": {
+      "model": "createqol:block/shadow_radiance_chestplate/block",
+      "y": 270
+    },
+    "facing=west,propeller=true,waterlogged=false": {
+      "model": "createqol:block/shadow_radiance_chestplate/block_jetpack",
+      "y": 270
+    },
+    "facing=west,propeller=true,waterlogged=true": {
+      "model": "createqol:block/shadow_radiance_chestplate/block_jetpack",
+      "y": 270
+    }
+  }
+}
