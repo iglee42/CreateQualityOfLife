@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "createqol:shadow_radiance_helmet",
-    "createqol:shadow_radiance_chestplate",
-    "createqol:shadow_radiance_leggings",
-    "createqol:shadow_radiance_boots"
-  ]
-}

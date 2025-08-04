@@ -183,6 +183,100 @@ public class QOLItems {
             .tag(ItemTags.PICKAXES)
             .tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
             .register();
+
+    public static final ItemEntry<RefinedRadiancePickaxe> REFINED_RADIANCE_PICKAXE = REGISTRATE
+            .item("refined_radiance_pickaxe", RefinedRadiancePickaxe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(PickaxeItem
+                    .createAttributes(QOLTiers.REFINED_RADIANCE, 1, -2.8f)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.PICKAXES)
+            .tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
+            .register();
+
+    public static final ItemEntry<ShadowSteelAxe> SHADOW_STEEL_AXE = REGISTRATE
+            .item("shadow_steel_axe", ShadowSteelAxe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(AxeItem
+                    .createAttributes(QOLTiers.SHADOW_STEEL, 5.0F, -3.0F)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.AXES)
+            .tag(Tags.Items.MELEE_WEAPON_TOOLS)
+            .register();
+
+    public static final ItemEntry<RefinedRadianceAxe> REFINED_RADIANCE_AXE = REGISTRATE
+            .item("refined_radiance_axe", RefinedRadianceAxe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(AxeItem
+                    .createAttributes(QOLTiers.REFINED_RADIANCE, 5.0F, -3.0F)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.AXES)
+            .tag(Tags.Items.MELEE_WEAPON_TOOLS)
+            .register();
+
+    public static final ItemEntry<ShadowSteelShovel> SHADOW_STEEL_SHOVEL = REGISTRATE
+            .item("shadow_steel_shovel", ShadowSteelShovel::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(ShovelItem
+                    .createAttributes(QOLTiers.SHADOW_STEEL, 1.5F, -3.0F)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.SHOVELS)
+            .register();
+
+    public static final ItemEntry<RefinedRadianceShovel> REFINED_RADIANCE_SHOVEL = REGISTRATE
+            .item("refined_radiance_shovel", RefinedRadianceShovel::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(ShovelItem
+                    .createAttributes(QOLTiers.REFINED_RADIANCE, 1.5F, -3.0F)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.SHOVELS)
+            .register();
+
+    public static final ItemEntry<ShadowSteelHoe> SHADOW_STEEL_HOE = REGISTRATE
+            .item("shadow_steel_hoe", ShadowSteelHoe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(HoeItem
+                    .createAttributes(QOLTiers.SHADOW_STEEL, -4.0F, 0.0F)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.HOES)
+            .register();
+
+    public static final ItemEntry<RefinedRadianceHoe> REFINED_RADIANCE_HOE = REGISTRATE
+            .item("refined_radiance_hoe", RefinedRadianceHoe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(HoeItem
+                    .createAttributes(QOLTiers.REFINED_RADIANCE, -4.0F, 0.0F)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.HOES)
+            .register();
+
+    public static final ItemEntry<ShadowRadianceSword> SHADOW_RADIANCE_SWORD = REGISTRATE
+            .item("shadow_radiance_sword", ShadowRadianceSword::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(SwordItem
+                    .createAttributes(QOLTiers.SHADOW_RADIANCE, 3, -2.8f)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.SWORDS)
+            .tag(Tags.Items.MELEE_WEAPON_TOOLS)
+            .register();
+
+    public static final ItemEntry<ShadowRadiancePickaxe> SHADOW_RADIANCE_PICKAXE = REGISTRATE
+            .item("shadow_radiance_pickaxe",ShadowRadiancePickaxe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(PickaxeItem
+                    .createAttributes(QOLTiers.SHADOW_RADIANCE, 1, -2.8f)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.PICKAXES)
+            .tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
             .register();
 
     public static final PackageStyles.PackageStyle IGLEE = new PackageStyles.PackageStyle("rare_iglee", 12, 10, 21f, true);
