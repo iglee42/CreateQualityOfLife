@@ -4,6 +4,7 @@ import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import fr.iglee42.createqualityoflife.utils.PreferredRender;
+import fr.iglee42.createqualityoflife.utils.ShadowRadianceEffects;
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -40,32 +41,15 @@ public class ChangeItemComponentPacket implements ServerboundPacketPayload {
     public void handle(ServerPlayer player) {
         DataComponentType<?> component = BuiltInRegistries.DATA_COMPONENT_TYPE.get(ResourceLocation.parse(componentId));
         if (component == null)return;
-        if (component.equals(QOLDataComponents.ARMOR_EFFECT)){
-          player.getInventory().getItem(slot).set(QOLDataComponents.ARMOR_EFFECT, value != 0);
-        } else if (component.equals(QOLDataComponents.BACKTANK_ARMS)){
-            player.getInventory().getItem(slot).set(QOLDataComponents.BACKTANK_ARMS, value != 0);
-        } else if (component.equals(QOLDataComponents.BACKTANK_FANS)){
-            player.getInventory().getItem(slot).set(QOLDataComponents.BACKTANK_FANS, value != 0);
-        } else if (component.equals(QOLDataComponents.BACKTANK_HOVER)){
-            player.getInventory().getItem(slot).set(QOLDataComponents.BACKTANK_HOVER, value != 0);
-        } else if (component.equals(QOLDataComponents.BACKTANK_ELYTRA_STATE)){
-            player.getInventory().getItem(slot).set(QOLDataComponents.BACKTANK_ELYTRA_STATE, value != 0);
-        } else if (component.equals(QOLDataComponents.BACKTANK_BOOST_ON_LAUNCH)){
-            player.getInventory().getItem(slot).set(QOLDataComponents.BACKTANK_BOOST_ON_LAUNCH, value != 0);
-        } else if (component.equals(QOLDataComponents.BOOTS_BELT)){
-            player.getInventory().getItem(slot).set(QOLDataComponents.BOOTS_BELT, value != 0);
-        } else if (component.equals(QOLDataComponents.BOOTS_DIVING)){
-            player.getInventory().getItem(slot).set(QOLDataComponents.BOOTS_DIVING, value != 0);
-        } else if (component.equals(QOLDataComponents.BOOTS_LAVA)){
-            player.getInventory().getItem(slot).set(QOLDataComponents.BOOTS_LAVA, value != 0);
-        } else if (component.equals(QOLDataComponents.HELMET_GOGGLES)) {
-            player.getInventory().getItem(slot).set(QOLDataComponents.HELMET_GOGGLES, value != 0);
-        } else if (component.equals(QOLDataComponents.DASH)){
-            player.getInventory().getItem(slot).set(QOLDataComponents.DASH, value != 0);
-        } else if (component.equals(QOLDataComponents.ARMOR_RENDER_TYPE)){
+        if (component.equals(QOLDataComponents.ARMOR_RENDER_TYPE)){
           player.getInventory().getItem(slot).set(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.BY_ID.apply(value));
         } else if (component.equals(QOLDataComponents.PREFERRED_RENDER)){
           player.getInventory().getItem(slot).set(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BY_ID.apply(value));
+        } else if (component.equals(QOLDataComponents.EFFECT)){
+          player.getInventory().getItem(slot).set(QOLDataComponents.EFFECT, ShadowRadianceEffects.BY_ID.apply(value));
+        } else {
+            DataComponentType<Boolean> bComponent = (DataComponentType<Boolean>) component;
+            player.getInventory().getItem(slot).set(bComponent, value != 0);
         }
     }
 }

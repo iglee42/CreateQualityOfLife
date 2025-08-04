@@ -94,6 +94,7 @@ public class InventoryConfigScreen extends AbstractSimiScreen {
     @Override
     protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         children().stream().filter(c->c instanceof ItemConfigButton).map(ItemConfigButton.class::cast).forEach(btn->{
+            btn.showing( Minecraft.getInstance().player.getInventory().getItem(btn.getIndex()));
             btn.active = Minecraft.getInstance().player.getInventory().getItem(btn.getIndex()).getItem() instanceof QOLConfigurableItem;
             btn.updateGradientFromState();
         });
