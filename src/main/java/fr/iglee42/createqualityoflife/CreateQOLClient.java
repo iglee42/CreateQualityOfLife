@@ -2,12 +2,14 @@ package fr.iglee42.createqualityoflife;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
+import com.simibubi.create.content.legacy.ChromaticCompoundColor;
 import com.simibubi.create.foundation.particle.AirParticleData;
 
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import fr.iglee42.createqualityoflife.client.renderer.GoggleArmorLayer;
 import fr.iglee42.createqualityoflife.client.renderer.ArmorsArmsRenderer;
 import fr.iglee42.createqualityoflife.client.renderer.EnderRenderer;
+import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.items.armors.ShadowSteelArmorItem;
 import fr.iglee42.createqualityoflife.registries.*;
@@ -50,6 +52,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -121,12 +124,10 @@ public class CreateQOLClient {
 
         event.enqueueWork(() -> {
             ItemProperties.register(QOLItems.PLAYER_PAPER.get(),
-                    CreateQOL.asResource("hasplayer"), (stack, level, living, id) -> stack.has(QOLDataComponents.LINKED_PLAYER) ? 1.0f : 0.0f);
+                    CreateQOL.asResource("has_player"), (stack, level, living, id) -> stack.has(QOLDataComponents.LINKED_PLAYER) ? 1.0f : 0.0f);
         });
         event.enqueueWork(() -> {
             ItemProperties.register(QOLItems.SHADOW_RADIANCE_CHESTPLATE.get(),
-                    CreateQOL.asResource("elytra"), (stack, level, living, id) -> ShadowRadianceChestplate.hasElytra(stack) ? 1.0f : 0.0f);
-            ItemProperties.register(QOLItems.SHADOW_STEEL_CHESTPLATE.get(),
                     CreateQOL.asResource("elytra"), (stack, level, living, id) -> ShadowRadianceChestplate.hasElytra(stack) ? 1.0f : 0.0f);
             ItemProperties.register(QOLItems.REFINED_RADIANCE_CHESTPLATE.get(),
                     CreateQOL.asResource("elytra"), (stack, level, living, id) -> ShadowRadianceChestplate.hasElytra(stack) ? 1.0f : 0.0f);
@@ -172,10 +173,6 @@ public class CreateQOLClient {
                         if (minecraft.options.particles().get() != ParticleStatus.MINIMAL) {
                             showJetpackParticles(minecraft);
                         }
-                        // Play sounds:
-                        //if (SimplyJetpacksConfig.enableJetpackSounds.get() && !JetpackSound.playing(minecraft.player.getId())) {
-                        //    minecraft.getSoundManager().play(new JetpackSound(minecraft.player));
-                        //}
                     }
                 }
         }
@@ -213,8 +210,10 @@ public class CreateQOLClient {
     public static void onLivingJump(LivingEvent.LivingJumpEvent event) {
         if (!(event.getEntity() instanceof LocalPlayer player)) return;
 
-        ItemStack boots = player.getItemBySlot(EquipmentSlot.LEGS);
-        if (!(boots.getItem() instanceof ShadowSteelArmorItem)) return;
+        ItemStack legs = player.getItemBySlot(EquipmentSlot.LEGS);
+        if (!(legs.getItem() instanceof ShadowSteelArmorItem)) return;
+        if (!CreateQOLConfigs.server().equipments.armors.voidWalking.get()) return;
+        if (!legs.getOrDefault(QOLDataComponents.VOID_WALK,true))return;
 
         Level level = player.level();
         boolean isOverVoid = (level.isEmptyBlock(player.blockPosition().below()) ||
@@ -224,7 +223,6 @@ public class CreateQOLClient {
 
         boolean isSneaking = player.isCrouching();
         if (isOverVoid && !isSneaking) {
-            // Annule le saut immédiatement
             player.setDeltaMovement(player.getDeltaMovement().x, 0, player.getDeltaMovement().z);
             player.setOnGround(true);
             player.hurtMarked = true;
@@ -239,6 +237,8 @@ public class CreateQOLClient {
 
         ItemStack legs = player.getItemBySlot(EquipmentSlot.LEGS);
         if (!(legs.getItem() instanceof ShadowSteelArmorItem)) return;
+        if (!CreateQOLConfigs.server().equipments.armors.voidWalking.get()) return;
+        if (!legs.getOrDefault(QOLDataComponents.VOID_WALK,true))return;
 
         Level level = player.level();
 

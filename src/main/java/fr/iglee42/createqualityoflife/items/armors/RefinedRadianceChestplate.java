@@ -19,6 +19,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,6 +57,13 @@ public class RefinedRadianceChestplate extends BacktankItem.Layered implements Q
     }
 
     @Override
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+        if (enchantment.is(Enchantments.MENDING) || enchantment.is(Enchantments.UNBREAKING))
+            return true;
+        return super.supportsEnchantment(stack, enchantment);
+    }
+
+    @Override
     public Holder<MobEffect> providedEffect(ItemStack stack) {
         return MobEffects.REGENERATION;
     }
@@ -80,7 +89,7 @@ public class RefinedRadianceChestplate extends BacktankItem.Layered implements Q
                     (entry, oe) -> {
                         boolean flag = oe.stream()
                                 .noneMatch(e -> e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(QOLDataComponents.BACKTANK_FANS) && oEntry.getValue());
-                        return CreateQOLConfigs.server().elytraAllowed.get() && flag;
+                        return CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() && flag;
                     }));
 
         }
@@ -96,8 +105,12 @@ public class RefinedRadianceChestplate extends BacktankItem.Layered implements Q
                         .withStyle(ChatFormatting.GOLD)));
         components.add(Component.literal("Elytra : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(Component.literal(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().elytraAllowed.get() ,ShadowRadianceChestplate.hasElytra(stack) ,ShadowRadianceChestplate.isElytraEnable(stack), true,false))
-                        .withStyle(!CreateQOLConfigs.server().elytraAllowed.get()? ChatFormatting.RED : ChatFormatting.YELLOW)));
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() ,ShadowRadianceChestplate.hasElytra(stack) ,
+                        ShadowRadianceChestplate.isElytraEnable(stack), true,false)));
+        components.add(Component.literal("Arms : ")
+                .withStyle(ChatFormatting.GOLD)
+                .append(QOLConfigurableItem.chooseState(true,
+                        true, stack.getOrDefault(QOLDataComponents.BACKTANK_ARMS, true), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 
@@ -109,7 +122,7 @@ public class RefinedRadianceChestplate extends BacktankItem.Layered implements Q
     public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
         return ShadowRadianceChestplate.hasElytra(stack)
                 && ShadowRadianceChestplate.isElytraEnable(stack)
-                && CreateQOLConfigs.server().elytraAllowed.get();
+                && CreateQOLConfigs.server().equipments.armors.elytraAllowed.get();
     }
 
     public boolean elytraFlightTick(ItemStack stack, LivingEntity entity, int flightTicks) {

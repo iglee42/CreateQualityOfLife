@@ -11,6 +11,10 @@
   "block.createqol.tinkering_saw": "Tinkering Saw",
   "block.createqol.trash_can": "Trash Can",
   "block.createqol.brass_trash_can": "Brass Trash Can",
+  "block.createqol.refined_radiance_block": "Block of Refined Radiance",
+  "block.createqol.shadow_steel_block": "Block of Shadow Steel",
+  "block.createqol.chromatic_compound_block": "Block of Chromatic Compound",
+  "block.createqol.shadow_radiance_block": "Block of Shadow Radiance",
 
   "item.createqol.player_paper": "Player Paper",
   "item.createqol.shadow_radiance": "Shadow Radiance",

@@ -7,11 +7,11 @@
   ],
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "minecraft:netherite_leggings"
+    "item": "createqol:shadow_steel_leggings"
   },
   "transitional_item": {
-    "item": {
-      "id":"minecraft:netherite_leggings"
+    "item":{
+      "id":"createqol:shadow_steel_leggings"
     }
   },
   "sequence": [
@@ -19,13 +19,13 @@
       "type": "create:cutting",
       "ingredients": [
         {
-          "item": "minecraft:netherite_leggings"
+          "item": "createqol:shadow_steel_leggings"
         }
       ],
       "results": [
         {
-          "item": {
-            "id":"minecraft:netherite_leggings"
+          "item":{
+            "id":"createqol:shadow_steel_leggings"
           }
         }
       ],
@@ -35,16 +35,16 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "minecraft:netherite_leggings"
+          "item": "createqol:shadow_steel_leggings"
         },
         {
-          "item": "createqol:shadow_radiance"
+          "item": "createqol:refined_radiance_leggings"
         }
       ],
       "results": [
         {
-          "item": {
-            "id":"minecraft:netherite_leggings"
+          "item":{
+            "id":"createqol:shadow_steel_leggings"
           }
         }
       ]
@@ -53,13 +53,13 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "minecraft:netherite_leggings"
+          "item": "createqol:shadow_steel_leggings"
         }
       ],
       "results": [
         {
-          "item": {
-            "id":"minecraft:netherite_leggings"
+          "item":{
+            "id":"createqol:shadow_steel_leggings"
           }
         }
       ]
@@ -68,16 +68,16 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "minecraft:netherite_leggings"
+          "item": "createqol:shadow_steel_leggings"
         },
         {
-          "item": "create:electron_tube"
+          "item": "createqol:shadow_radiance_block"
         }
       ],
       "results": [
         {
-          "item": {
-            "id":"minecraft:netherite_leggings"
+          "item":{
+            "id":"createqol:shadow_steel_leggings"
           }
         }
       ]
@@ -90,5 +90,11 @@
       }
     }
   ],
-  "loops": 1
+  "loops": 1,
+  "copied_components": [
+    "minecraft:enchantments",
+    "create:banktank_air",
+    "minecraft:custom_name",
+    "minecraft:trim"
+  ]
 }

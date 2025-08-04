@@ -1,33 +1,37 @@
 package fr.iglee42.createqualityoflife.utils;
 
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
+import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.BooleanEntry;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.EnumEntry;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.ValueEntry;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 
 import java.io.InvalidClassException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public interface QOLConfigurableItem {
 
@@ -57,7 +61,11 @@ public interface QOLConfigurableItem {
     default void tick(ItemStack stack, Level level, Player player, int slot, boolean offHand){};
 
     static boolean hasEffectEnable(ItemStack stack){
-        return stack.getOrDefault(QOLDataComponents.ARMOR_EFFECT, true) && CreateQOLConfigs.server().armorEffects.get();
+        return stack.getOrDefault(QOLDataComponents.ARMOR_EFFECT, true) && CreateQOLConfigs.server().equipments.armors.armorEffects.get();
+    }
+
+    default String effectAdditionInfos(ItemStack stack) {
+        return "";
     }
 
     //Level 1 is 0
@@ -78,9 +86,11 @@ public interface QOLConfigurableItem {
     default List<Configuration<?>> getConfigurations(ItemStack stack) throws InvalidClassException {
         List<Configuration<?>> list = new ArrayList<>();
         if (providedEffect(stack) != null && providedEffect(stack).value() != null){
-            list.add(Configuration.ofBool("Apply Potion Effect",stack.getOrDefault(QOLDataComponents.ARMOR_EFFECT,true),QOLDataComponents.ARMOR_EFFECT,Arrays.asList(
+            List<String> comments = new ArrayList<>(Arrays.asList(
                     "Enable the potion effect granted by the item",
-                    "For this item, the effect is " + Component.translatable(providedEffect(stack).value().getDescriptionId()).getString()),(e,oE)-> CreateQOLConfigs.server().armorEffects.get()));
+                    "For this item, the effect is " + Component.translatable(providedEffect(stack).value().getDescriptionId()).getString()));
+            if (!effectAdditionInfos(stack).isEmpty()) comments.add(effectAdditionInfos(stack));
+            list.add(Configuration.ofBool("Apply Potion Effect",stack.getOrDefault(QOLDataComponents.ARMOR_EFFECT,true),QOLDataComponents.ARMOR_EFFECT,comments,(e,oE)-> CreateQOLConfigs.server().equipments.armors.armorEffects.get()));
         }
         if (type().equals(Type.ARMOR)){
             if ( renderTypes(stack) == null || renderTypes(stack).size() < 2) throw new InvalidClassException("Configurable item with the armor type must declare at least 2 types of render types");
@@ -92,6 +102,12 @@ public interface QOLConfigurableItem {
                 e = options[Math.floorMod(e.ordinal() + direction, options.length)];
                 return e;
             },(e,oE)->true));
+        }
+        if (reachType(stack) != ReachType.NONE){
+            boolean hasBlock = reachType(stack).attributes.contains(Attributes.BLOCK_INTERACTION_RANGE);
+            boolean hasEntity = reachType(stack).attributes.contains(Attributes.ENTITY_INTERACTION_RANGE);
+            list.add(Configuration.ofBool("Reach",stack.getOrDefault(QOLDataComponents.REACH, true),QOLDataComponents.REACH, Arrays.asList("Define if this item should give reach.",
+                    "This item multiplies your reach on " + (hasBlock ? "blocks" : "") + (hasBlock && hasEntity ? " and " : "") + (hasEntity ? "entities" : "") + " by " + (reachModifier(stack) + 1)),(e,oE)->CreateQOLConfigs.server().equipments.tools.reach.get()));
         }
         addConfigurations(list,stack);
         return list;
@@ -108,6 +124,54 @@ public interface QOLConfigurableItem {
     default boolean doesEffectRequiresAir() { return true; }
 
     default List<ArmorRenderType> renderTypes(ItemStack stack) { return null; }
+
+    default boolean appliesReach(ItemStack stack) { return CreateQOLConfigs.server().equipments.tools.reach.get() && stack.getOrDefault(QOLDataComponents.REACH,true) && reachType(stack) != ReachType.NONE; }
+
+    default ReachType reachType(ItemStack stack) { return ReachType.NONE; }
+
+    default double reachModifier(ItemStack stack) { return 0.5;}
+
+    default Map<Holder<Attribute>, Map.Entry<Double, AttributeModifier.Operation>> getAppliedAttributes(ItemStack stack){
+        Map<Holder<Attribute>, Map.Entry<Double, AttributeModifier.Operation>> attributes = new HashMap<>();
+        if (appliesReach(stack)) reachType(stack).getAttributes().forEach(a-> attributes.put(a,new AbstractMap.SimpleEntry<>(reachModifier(stack),AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)));
+        return attributes;
+    }
+
+    static void modifyAttributes(ItemAttributeModifierEvent event){
+        if (!(event.getItemStack().getItem() instanceof QOLConfigurableItem it)) return;
+        Type type = it.type();
+        if (type == Type.ARMOR) {
+            if (!(event.getItemStack().getItem() instanceof ArmorItem ait)) throw new IllegalArgumentException(BuiltInRegistries.ITEM.getKey(event.getItemStack().getItem()) + " is defined with Type.ARMOR even if it isn't a ArmorItem");
+            ArmorItem.Type aType = ait.getType();
+            ResourceLocation resourcelocation = CreateQOL.asResource("armors."+ait.getDescriptionId().split("\\.")[2]);
+            it.getAppliedAttributes(event.getItemStack()).forEach((a, doe) -> event.addModifier(a,
+                    new AttributeModifier(resourcelocation,doe.getKey(),doe.getValue()), EquipmentSlotGroup.bySlot(aType.getSlot())));
+        } else if (type == Type.ITEM) {
+            TieredItem item = (TieredItem) event.getItemStack().getItem();
+            ResourceLocation resourcelocation = CreateQOL.asResource("tools."+item.getDescriptionId().split("\\.")[2]);
+            it.getAppliedAttributes(event.getItemStack()).forEach((a, doe) -> event.addModifier(a,
+                    new AttributeModifier(resourcelocation,doe.getKey(),doe.getValue()), EquipmentSlotGroup.HAND));
+
+        }
+    }
+
+    enum ReachType {
+        BLOCK(Attributes.BLOCK_INTERACTION_RANGE),
+        ENTITY(Attributes.ENTITY_INTERACTION_RANGE),
+        NONE(),
+        BOTH(Attributes.BLOCK_INTERACTION_RANGE,Attributes.ENTITY_INTERACTION_RANGE);
+
+        private final List<Holder<Attribute>> attributes;
+
+        @SafeVarargs
+        ReachType(Holder<Attribute>... attributes) {
+            this.attributes = Arrays.stream(attributes).toList();
+        }
+
+        public List<Holder<Attribute>> getAttributes() {
+            return attributes;
+        }
+    }
 
     enum Type{
         ARMOR,
@@ -144,9 +208,13 @@ public interface QOLConfigurableItem {
         }
     }
 
-    static String chooseState(boolean config, boolean installed, boolean active, boolean activeReplaceInstall, boolean activeOnly){
-        if (activeOnly) return  !config ? "Disabled By Config" : (active ? "Enable" : "Disable");
-        return !config ? "Disabled By Config" : (installed ? (activeReplaceInstall ? (active ? "Enable" : "Disable") : "Installed") : "Not Installed");
+    static Component chooseState(boolean config, boolean installed, boolean active, boolean activeReplaceInstall, boolean activeOnly){
+        if (activeOnly) return  Component.literal(!config ? "Disabled By Config" : (active ? "Enable" : "Disable")).withStyle(!config ? ChatFormatting.RED : ChatFormatting.YELLOW);
+        return  Component.literal(!config ? "Disabled By Config" : (installed ? (activeReplaceInstall ? (active ? "Enable" : "Disable") : "Installed") : "Not Installed")).withStyle(!config ? ChatFormatting.RED : ChatFormatting.YELLOW);
+    }
+
+    static Component cooldownState(boolean config, boolean active, int cooldown){
+       return Component.literal(!config ? "Disabled By Config" : (active ? (cooldown > 0 ? cooldown / 20 + "s" :  "Enable") : "Disable")).withStyle(!config ? ChatFormatting.RED : ChatFormatting.YELLOW);
     }
 
 }

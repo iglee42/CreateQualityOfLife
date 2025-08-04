@@ -9,6 +9,7 @@ import fr.iglee42.createqualityoflife.registries.QOLArmorMaterials;
 import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.utils.*;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -25,6 +26,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -43,19 +46,11 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
         super(QOLArmorMaterials.SHADOW_RADIANCE, properties, CreateQOL.asResource("shadow_radiance"), placeable);
     }
 
-    @Override
-    public ItemAttributeModifiers getDefaultAttributeModifiers() {
-        ResourceLocation resourcelocation = ResourceLocation.withDefaultNamespace("armor." + type.getName());
-        return super.getDefaultAttributeModifiers()
-                .withModifierAdded(Attributes.BLOCK_INTERACTION_RANGE,new AttributeModifier(resourcelocation,1, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(type.getSlot()))
-                .withModifierAdded(Attributes.ENTITY_INTERACTION_RANGE,new AttributeModifier(resourcelocation,1, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(type.getSlot()));
-    }
-
     public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
         return hasElytra(stack)
                 && isElytraEnable(stack)
                 && (!hasPropeller(stack) || !isFansEnable(stack))
-                && CreateQOLConfigs.server().elytraAllowed.get();
+                && CreateQOLConfigs.server().equipments.armors.elytraAllowed.get();
     }
 
     public boolean elytraFlightTick(ItemStack stack, LivingEntity entity, int flightTicks) {
@@ -85,6 +80,13 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
     }
 
     @Override
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+        if (enchantment.is(Enchantments.MENDING) || enchantment.is(Enchantments.UNBREAKING))
+            return true;
+        return super.supportsEnchantment(stack, enchantment);
+    }
+
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean offHand) {
         super.inventoryTick(stack, level, entity, slot, offHand);
         invTick(stack, level, entity, slot, offHand);
@@ -93,14 +95,14 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
     @Override
     public void tick(ItemStack stack, Level level, Player player, int slot, boolean offHand) {
         boolean second = level.getGameTime() % 20 == 0;
-        if (player.isFallFlying() && isElytraEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && CreateQOLConfigs.server().elytraAllowed.get() && CreateQOLConfigs.server().elytraBoostAllowed.get() &&  CommonKeysHandler.isHoldingUp(player))
+        if (player.isFallFlying() && isElytraEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() && CreateQOLConfigs.server().equipments.armors.elytraBoostAllowed.get() &&  CommonKeysHandler.isHoldingUp(player))
         {
-            if (CreateQOLConfigs.server().useFireworksForBoost.get()) {
+            if (CreateQOLConfigs.server().equipments.armors.useFireworksForBoost.get()) {
                 if (hasPlayerStackInInventory(player,Items.FIREWORK_ROCKET)) {
                     int rocketSlot = getFirstInventoryIndex(player,Items.FIREWORK_ROCKET);
                     ItemStack firework = player.getInventory().getItem(rocketSlot);
                     if ( (stack.getOrDefault(QOLDataComponents.BACKTANK_BOOST_ON_LAUNCH, false) || player.getFallFlyingTicks() >20) &&
-                            player.getFallFlyingTicks() % CreateQOLConfigs.server().fireworkDuration.get() == 0 ||
+                            player.getFallFlyingTicks() % CreateQOLConfigs.server().equipments.armors.fireworkDuration.get() == 0 ||
                             (stack.getOrDefault(QOLDataComponents.BACKTANK_BOOST_ON_LAUNCH, false) && player.getFallFlyingTicks() == 0)) {
                         FireworkRocketEntity fireworkrocketentity = new FireworkRocketEntity(level, firework, player);
                         level.addFreshEntity(fireworkrocketentity);
@@ -119,8 +121,8 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
             }
         }
         if (player.isCreative() || player.isSpectator()) return;
-        if (isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack) && CreateQOLConfigs.server().propellerAllowed.get()) {
-            boolean hover = isHoverEnable(stack) && CreateQOLConfigs.server().hoverAllowed.get();
+        if (isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack) && CreateQOLConfigs.server().equipments.armors.propellerAllowed.get()) {
+            boolean hover = isHoverEnable(stack) && CreateQOLConfigs.server().equipments.armors.hoverAllowed.get();
             boolean jumpKeyActive = CommonKeysHandler.isHoldingUp(player);
             boolean shiftKeyActive = CommonKeysHandler.isHoldingDown(player);
             player.resetFallDistance();
@@ -134,13 +136,13 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
                             pushVertically(player, Math.min(player.getDeltaMovement().get(Direction.Axis.Y) + FANS_ACCELERATION, -0.0D));
                         else
                             pushVertically(player, Math.min(player.getDeltaMovement().get(Direction.Axis.Y) + FANS_ACCELERATION, FANS_SPEED));
-                    } else if (CreateQOLConfigs.server().hoverAllowed.get()){
+                    } else if (CreateQOLConfigs.server().equipments.armors.hoverAllowed.get()){
                         pushVertically(player, Math.min(player.getDeltaMovement().get(Direction.Axis.Y) + FANS_ACCELERATION, FANS_HOVER_SPEED));
                     }
                     if (second)BacktankUtil.consumeAir(player,stack,1);
                 } else {
                     if (hover) {
-                        if (CreateQOLConfigs.server().hoverAllowed.get()) {
+                        if (CreateQOLConfigs.server().equipments.armors.hoverAllowed.get()) {
                             if (shiftKeyActive)
                                 pushVertically(player, Math.min(player.getDeltaMovement().get(Direction.Axis.Y) + FANS_ACCELERATION, -(FANS_HOVER_SPEED * 2)));
                             else {
@@ -192,36 +194,39 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
                         .withStyle(ChatFormatting.YELLOW))
                 .append(Component.literal("/"+BacktankUtil.maxAir(stack))
                         .withStyle(ChatFormatting.GOLD)));
+        components.add(Component.literal("Effect : ")
+                .withStyle(ChatFormatting.GOLD)
+                .append(Component.translatable(providedEffect(stack).value().getDescriptionId()).withStyle(ChatFormatting.YELLOW)));
+        components.add(Component.literal("Arms : ")
+                .withStyle(ChatFormatting.GOLD)
+                .append(QOLConfigurableItem.chooseState(true,
+                        true, stack.getOrDefault(QOLDataComponents.BACKTANK_ARMS, true), false, true)));
+        components.add(Component.literal("Elytra : ")
+                .withStyle(ChatFormatting.GOLD)
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() ,hasElytra(stack) ,isElytraEnable(stack), true,false)));
+        components.add(Component.literal("Dash : ")
+                .withStyle(ChatFormatting.GOLD)
+                .append(QOLConfigurableItem.cooldownState(CreateQOLConfigs.server().equipments.armors.dashAllowed.get(),
+                        stack.getOrDefault(QOLDataComponents.DASH, true), (int) Math.ceil(Minecraft.getInstance().player.getCooldowns().getCooldownPercent(this,0) * CreateQOLConfigs.server().equipments.armors.dashCooldown.get()))));
         components.add(Component.literal("Propeller : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(Component.literal(
-                QOLConfigurableItem.chooseState(CreateQOLConfigs.server().propellerAllowed.get() ,hasPropeller(stack) ,true,false,false))
-                .withStyle(!CreateQOLConfigs.server().propellerAllowed.get()? ChatFormatting.RED : ChatFormatting.YELLOW)));
-        if (hasPropeller(stack) && CreateQOLConfigs.server().propellerAllowed.get()) {
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.propellerAllowed.get() ,
+                        hasPropeller(stack) ,true,false,false)));
+        if (hasPropeller(stack) && CreateQOLConfigs.server().equipments.armors.propellerAllowed.get()) {
             components.add(Component.empty());
             components.add(Component.literal("Fan : ")
                     .withStyle(ChatFormatting.GOLD)
-                    .append(Component.literal(QOLConfigurableItem.chooseState(true,true,isFansEnable(stack),false,true))
-                            .withStyle(ChatFormatting.YELLOW)));
+                    .append(QOLConfigurableItem.chooseState(true,true,isFansEnable(stack),false,true)));
             components.add(Component.literal("Hover : ")
                     .withStyle(ChatFormatting.GOLD)
-                    .append(Component.literal(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().hoverAllowed.get() ,true,isHoverEnable(stack),false,true))
-                            .withStyle(!CreateQOLConfigs.server().hoverAllowed.get()? ChatFormatting.RED :ChatFormatting.YELLOW)));
+                    .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.hoverAllowed.get() ,true,isHoverEnable(stack),false,true)));
         }
-        components.add(Component.literal("Elytra : ")
-                .withStyle(ChatFormatting.GOLD)
-                .append(Component.literal(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().elytraAllowed.get() ,hasElytra(stack) ,isElytraEnable(stack), true,false))
-                .withStyle(!CreateQOLConfigs.server().elytraAllowed.get()? ChatFormatting.RED : ChatFormatting.YELLOW)));
-        components.add(Component.literal("Dash : ")
-                .withStyle(ChatFormatting.GOLD)
-                .append(Component.literal(
-                                QOLConfigurableItem.chooseState(CreateQOLConfigs.server().dashAllowed.get(), true, stack.getOrDefault(QOLDataComponents.DASH,true), false, true))
-                        .withStyle(!CreateQOLConfigs.server().dashAllowed.get() ? ChatFormatting.RED : ChatFormatting.YELLOW)));
+
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 
     public static void toggleFans(ItemStack chestplate,Player p) {
-        if (!CreateQOLConfigs.server().propellerAllowed.get()){
+        if (!CreateQOLConfigs.server().equipments.armors.propellerAllowed.get()){
             p.displayClientMessage(Component.literal("Propeller is disabled by the config").withStyle(ChatFormatting.RED),true);
             return;
         }
@@ -231,24 +236,24 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
         }
         chestplate.set(QOLDataComponents.BACKTANK_FANS, !chestplate.has(QOLDataComponents.BACKTANK_FANS) || Boolean.FALSE.equals(chestplate.get(QOLDataComponents.BACKTANK_FANS)));
         boolean fans = isFansEnable(chestplate);
-        p.displayClientMessage(Component.literal("Fan : ").append(Component.literal(QOLConfigurableItem.chooseState(true,true,fans,false,true)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+        p.displayClientMessage(Component.literal("Fan : ").append(QOLConfigurableItem.chooseState(true,true,fans,false,true)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
     public static void toggleHover(ItemStack chestplate,Player p) {
-        if (!CreateQOLConfigs.server().propellerAllowed.get()){
+        if (!CreateQOLConfigs.server().equipments.armors.propellerAllowed.get()){
             p.displayClientMessage(Component.literal("Propeller is disabled by the config").withStyle(ChatFormatting.RED),true);
             return;
         }
-        if (!CreateQOLConfigs.server().hoverAllowed.get()){
+        if (!CreateQOLConfigs.server().equipments.armors.hoverAllowed.get()){
             p.displayClientMessage(Component.literal("Hover is disabled by the config").withStyle(ChatFormatting.RED),true);
             return;
         }
         chestplate.set(QOLDataComponents.BACKTANK_HOVER, chestplate.has(QOLDataComponents.BACKTANK_HOVER) && Boolean.FALSE.equals(chestplate.get(QOLDataComponents.BACKTANK_HOVER)));
         boolean hover = isHoverEnable(chestplate);
-        p.displayClientMessage(Component.literal("Hover : ").append(Component.literal(QOLConfigurableItem.chooseState(true,true,hover,false,true)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+        p.displayClientMessage(Component.literal("Hover : ").append(QOLConfigurableItem.chooseState(true,true,hover,false,true)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
 
     public static void toggleElytra(ItemStack chestplate,Player p) {
-        if (!CreateQOLConfigs.server().elytraAllowed.get()){
+        if (!CreateQOLConfigs.server().equipments.armors.elytraAllowed.get()){
             p.displayClientMessage(Component.literal("Elytra are disabled by the config").withStyle(ChatFormatting.RED),true);
             return;
         }
@@ -258,7 +263,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
         }
         chestplate.set(QOLDataComponents.BACKTANK_ELYTRA_STATE, chestplate.has(QOLDataComponents.BACKTANK_ELYTRA_STATE) && Boolean.FALSE.equals(chestplate.get(QOLDataComponents.BACKTANK_ELYTRA_STATE)));
         boolean elytra = isElytraEnable(chestplate);
-        p.displayClientMessage(Component.literal("Elytra : ").append(Component.literal(QOLConfigurableItem.chooseState(true,true,elytra,false,true)).withStyle(elytra ? ChatFormatting.GREEN : ChatFormatting.RED)),true);
+        p.displayClientMessage(Component.literal("Elytra : ").append(QOLConfigurableItem.chooseState(true,true,elytra,false,true)).withStyle(elytra ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
     public static boolean hasPropeller(ItemStack chestplate){
         return chestplate.has(QOLDataComponents.BACKTANK_PROPELLERS) && Boolean.TRUE.equals(chestplate.get(QOLDataComponents.BACKTANK_PROPELLERS));
@@ -303,7 +308,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
                 (e,oe)->true));
         list.add(Configuration.ofBool("Enable Dash",stack.getOrDefault(QOLDataComponents.DASH,true),QOLDataComponents.DASH,
                 List.of("Should the player dash when pressing "+ KeyBindManager.DASH_KEY.getTranslatedKeyMessage().getString()),
-                (o,oe)->CreateQOLConfigs.server().dashAllowed.get()));
+                (o,oe)->CreateQOLConfigs.server().equipments.armors.dashAllowed.get()));
         if (hasPropeller(stack)){
             list.add(Configuration.ofBool("Enable Fan",
                     stack.getOrDefault(QOLDataComponents.BACKTANK_FANS,true),
@@ -312,13 +317,13 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
                     (entry,oe)-> {
                         boolean flag = oe.stream()
                                 .noneMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(QOLDataComponents.BACKTANK_ELYTRA_STATE) && oEntry.getValue());
-                        return CreateQOLConfigs.server().propellerAllowed.get() && flag;
+                        return CreateQOLConfigs.server().equipments.armors.propellerAllowed.get() && flag;
                     }));
             list.add(Configuration.ofBool("Enable Hover",
                     stack.getOrDefault(QOLDataComponents.BACKTANK_HOVER,false),
                     QOLDataComponents.BACKTANK_HOVER,
                     Arrays.asList("Activate the hover mode"),
-                    (e,oe)->CreateQOLConfigs.server().propellerAllowed.get() && CreateQOLConfigs.server().hoverAllowed.get()));
+                    (e,oe)->CreateQOLConfigs.server().equipments.armors.propellerAllowed.get() && CreateQOLConfigs.server().equipments.armors.hoverAllowed.get()));
         }
 
         if (hasElytra(stack)){
@@ -329,15 +334,15 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
                     (entry,oe)-> {
                         boolean flag = oe.stream()
                                 .noneMatch(e->e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(QOLDataComponents.BACKTANK_FANS) && oEntry.getValue());
-                        return CreateQOLConfigs.server().elytraAllowed.get() && flag;
+                        return CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() && flag;
                     }));
 
-            if (CreateQOLConfigs.server().elytraBoostAllowed.get()){
+            if (CreateQOLConfigs.server().equipments.armors.elytraBoostAllowed.get()){
                 list.add(Configuration.ofBool("Boost on Launch",
                         stack.getOrDefault(QOLDataComponents.BACKTANK_BOOST_ON_LAUNCH,false),
                         QOLDataComponents.BACKTANK_BOOST_ON_LAUNCH,
                         Arrays.asList("Define if you should be boost when you start flying with elytra","Works only with fireworks","(The air boost doesn't have the same behaviour)"),
-                        (e,oe)->CreateQOLConfigs.server().elytraAllowed.get() && CreateQOLConfigs.server().elytraBoostAllowed.get() && CreateQOLConfigs.server().useFireworksForBoost.get()));
+                        (e,oe)->CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() && CreateQOLConfigs.server().equipments.armors.elytraBoostAllowed.get() && CreateQOLConfigs.server().equipments.armors.useFireworksForBoost.get()));
             }
         }
 

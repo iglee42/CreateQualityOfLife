@@ -8,6 +8,7 @@ import fr.iglee42.createqualityoflife.utils.ShadowRadianceEffects;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -34,10 +35,20 @@ public class QOLDataComponents {
     public static final DataComponentType<Boolean> BACKTANK_ELYTRA_STATE = register("elytra_state",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> BACKTANK_BOOST_ON_LAUNCH = register("boost_launch",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<Boolean> DASH = register("dash",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DataComponentType<Boolean> REACH = register("reach",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DataComponentType<Boolean> DIGGING = register("digging", b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DataComponentType<Boolean> VEIN_MINE = register("vein_mine", b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DataComponentType<Boolean> TREE_DECAPITATION = register("tree_decapitation", b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DataComponentType<Boolean> CASINGIFIER = register("casingifier", b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DataComponentType<Boolean> SMELTING = register("smelting", b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DataComponentType<Boolean> HARVESTING = register("harvesting", b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DataComponentType<Boolean> PLOUGHING = register("ploughing", b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DataComponentType<Boolean> STEP_HEIGHT = register("step_height",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DataComponentType<Boolean> VOID_WALK = register("void_walk",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DataComponentType<ArmorRenderType> ARMOR_RENDER_TYPE = register("render_type",b->b.persistent(ArmorRenderType.CODEC).networkSynchronized(ArmorRenderType.STREAM_CODEC));
     public static final DataComponentType<PreferredRender> PREFERRED_RENDER = register("preferred_render", b->b.persistent(PreferredRender.CODEC).networkSynchronized(PreferredRender.STREAM_CODEC));
     public static final DataComponentType<ShadowRadianceEffects> EFFECT = register("preferred_effect", b->b.persistent(ShadowRadianceEffects.CODEC).networkSynchronized(ShadowRadianceEffects.STREAM_CODEC));
-
+    public static final DataComponentType<CompoundTag> COPIED_DATAS = register("copied_datas",b->b.persistent(CompoundTag.CODEC).networkSynchronized(ByteBufCodecs.COMPOUND_TAG));
 
     private static <T> DataComponentType<T> register(String name, UnaryOperator<DataComponentType.Builder<T>> builder) {
         DataComponentType<T> type = builder.apply(DataComponentType.builder()).build();

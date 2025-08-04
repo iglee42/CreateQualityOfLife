@@ -74,7 +74,7 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
         if (!level.isClientSide) {
             if (level.getBlockEntity(pos) instanceof ShadowRadianceBacktankBE be){
                 if (!be.hasPropeller() && AllItems.PROPELLER.is(player.getMainHandItem().getItem())) {
-                    if (!CreateQOLConfigs.server().propellerAllowed.get()) {
+                    if (!CreateQOLConfigs.server().equipments.armors.propellerAllowed.get()) {
                         player.displayClientMessage(Component.literal("Propellers are disabled by the config").withStyle(ChatFormatting.RED), true);
                         level.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
                         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
@@ -85,7 +85,7 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
                     return ItemInteractionResult.CONSUME;
                 }
                 if (!be.hasElytra() && player.getMainHandItem().is(Items.ELYTRA)) {
-                    if (!CreateQOLConfigs.server().elytraAllowed.get()) {
+                    if (!CreateQOLConfigs.server().equipments.armors.elytraAllowed.get()) {
                         player.displayClientMessage(Component.literal("Elytra are disabled by the config").withStyle(ChatFormatting.RED), true);
                         level.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
                         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;

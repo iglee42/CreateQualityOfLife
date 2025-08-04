@@ -1,0 +1,43 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "createqol:feature_loaded",
+      "feature": "shadow_radiance"
+    }
+  ],
+  "type": "create:mechanical_crafting",
+  "pattern": [
+    "  T  ",
+    " TNT ",
+    " TOT ",
+    "  B  ",
+    "  S  "
+  ],
+  "key": {
+    "T": {
+      "item": "create:refined_radiance"
+    },
+    "B": {
+      "tag": "c:ingots/brass"
+    },
+    "S": {
+      "tag": "c:plates/obsidian"
+    },
+    "O": {
+      "item": "minecraft:netherite_shovel"
+    },
+    "N": {
+      "item": "minecraft:lava_bucket"
+    }
+  },
+  "result": {
+    "id": "createqol:refined_radiance_shovel",
+    "count": 1
+  },
+  "accept_mirrored": false,
+  "copied_components": [
+    "minecraft:enchantments",
+    "minecraft:custom_name"
+  ],
+  "copied_components_slot": 7
+}

@@ -7,11 +7,11 @@
   ],
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "create:netherite_backtank"
+    "item": "createqol:shadow_steel_chestplate"
   },
   "transitional_item": {
     "item":{
-      "id":"create:netherite_backtank"
+      "id":"createqol:shadow_steel_chestplate"
     }
   },
   "sequence": [
@@ -19,13 +19,13 @@
       "type": "create:cutting",
       "ingredients": [
         {
-          "item": "create:netherite_backtank"
+          "item": "createqol:shadow_steel_chestplate"
         }
       ],
       "results": [
         {
           "item":{
-            "id":"create:netherite_backtank"
+            "id":"createqol:shadow_steel_chestplate"
           }
         }
       ],
@@ -35,16 +35,16 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "create:netherite_backtank"
+          "item": "createqol:shadow_steel_chestplate"
         },
         {
-          "item": "createqol:shadow_radiance"
+          "item": "createqol:refined_radiance_chestplate"
         }
       ],
       "results": [
         {
           "item":{
-            "id":"create:netherite_backtank"
+            "id":"createqol:shadow_steel_chestplate"
           }
         }
       ]
@@ -53,13 +53,13 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "create:netherite_backtank"
+          "item": "createqol:shadow_steel_chestplate"
         }
       ],
       "results": [
         {
           "item":{
-            "id":"create:netherite_backtank"
+            "id":"createqol:shadow_steel_chestplate"
           }
         }
       ]
@@ -68,16 +68,16 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "create:netherite_backtank"
+          "item": "createqol:shadow_steel_chestplate"
         },
         {
-          "item": "create:blaze_burner"
+          "item": "createqol:shadow_radiance_block"
         }
       ],
       "results": [
         {
           "item":{
-            "id":"create:netherite_backtank"
+            "id":"createqol:shadow_steel_chestplate"
           }
         }
       ]
@@ -90,5 +90,12 @@
       }
     }
   ],
-  "loops": 1
+  "loops": 1,
+  "copied_components": [
+    "minecraft:enchantments",
+    "create:banktank_air",
+    "minecraft:custom_name",
+    "minecraft:trim",
+    "createqol:elytra"
+  ]
 }

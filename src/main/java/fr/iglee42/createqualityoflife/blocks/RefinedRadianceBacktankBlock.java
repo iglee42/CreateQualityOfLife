@@ -64,7 +64,7 @@ public class RefinedRadianceBacktankBlock extends BacktankBlock {
         if (!level.isClientSide) {
             if (level.getBlockEntity(pos) instanceof RefinedRadianceBacktankBE be){
                 if (!be.hasElytra() && player.getMainHandItem().is(Items.ELYTRA)) {
-                    if (!CreateQOLConfigs.server().elytraAllowed.get()) {
+                    if (!CreateQOLConfigs.server().equipments.armors.elytraAllowed.get()) {
                         player.displayClientMessage(Component.literal("Elytra are disabled by the config").withStyle(ChatFormatting.RED), true);
                         level.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
                         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;

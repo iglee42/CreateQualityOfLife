@@ -15,7 +15,9 @@ import net.neoforged.neoforge.common.Tags;
 import javax.annotation.Nullable;
 
 public enum QOLTiers implements Tier {
-    SHADOW_STEEL(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 4063, 10.0F, 6.0F, 20, () -> Ingredient.of(AllItems.SHADOW_STEEL));
+    SHADOW_STEEL(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 4063, 10.0F, 6.0F, 20, () -> Ingredient.of(AllItems.SHADOW_STEEL)),
+    REFINED_RADIANCE(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 4063, 10.0F, 6.0F, 20, () -> Ingredient.of(AllItems.REFINED_RADIANCE)),
+    SHADOW_RADIANCE(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 5119, 11.0F, 7.0F, 25, () -> Ingredient.of(QOLItems.SHADOW_RADIANCE));
 
     private final TagKey<Block> incorrectBlocksForDrops;
     private final int uses;

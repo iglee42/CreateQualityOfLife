@@ -13,7 +13,9 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.items.*;
 import fr.iglee42.createqualityoflife.items.armors.*;
-import fr.iglee42.createqualityoflife.items.tools.shadowsteel.ShadowSteelPickaxe;
+import fr.iglee42.createqualityoflife.items.tools.refinedradiance.*;
+import fr.iglee42.createqualityoflife.items.tools.shadowradiance.*;
+import fr.iglee42.createqualityoflife.items.tools.shadowsteel.*;
 import fr.iglee42.createqualityoflife.statue.StatueItem;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import fr.iglee42.createqualityoflife.utils.PreferredRender;
@@ -173,6 +175,28 @@ public class QOLItems {
 
     //TOOLS
 
+    public static final ItemEntry<ShadowSteelSword> SHADOW_STEEL_SWORD = REGISTRATE
+            .item("shadow_steel_sword", ShadowSteelSword::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(SwordItem
+                    .createAttributes(QOLTiers.SHADOW_STEEL, 3, -2.8f)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.SWORDS)
+            .tag(Tags.Items.MELEE_WEAPON_TOOLS)
+            .register();
+
+    public static final ItemEntry<RefinedRadianceSword> REFINED_RADIANCE_SWORD = REGISTRATE
+            .item("refined_radiance_sword", RefinedRadianceSword::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(SwordItem
+                    .createAttributes(QOLTiers.REFINED_RADIANCE, 3, -2.8f)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.SWORDS)
+            .tag(Tags.Items.MELEE_WEAPON_TOOLS)
+            .register();
+
     public static final ItemEntry<ShadowSteelPickaxe> SHADOW_STEEL_PICKAXE = REGISTRATE
             .item("shadow_steel_pickaxe",ShadowSteelPickaxe::new)
             .properties(p -> p.stacksTo(1))
@@ -278,6 +302,37 @@ public class QOLItems {
             .tag(ItemTags.PICKAXES)
             .tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
             .register();
+
+    public static final ItemEntry<ShadowRadianceAxe> SHADOW_RADIANCE_AXE = REGISTRATE
+            .item("shadow_radiance_axe", ShadowRadianceAxe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(AxeItem
+                    .createAttributes(QOLTiers.SHADOW_RADIANCE, 5.0F, -3.0F)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.AXES)
+            .tag(Tags.Items.MELEE_WEAPON_TOOLS)
+            .register();
+    public static final ItemEntry<ShadowRadianceShovel> SHADOW_RADIANCE_SHOVEL = REGISTRATE
+            .item("shadow_radiance_shovel", ShadowRadianceShovel::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(ShovelItem
+                    .createAttributes(QOLTiers.SHADOW_RADIANCE, 1.5F, -3.0F)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.SHOVELS)
+            .register();
+
+    public static final ItemEntry<ShadowRadianceHoe> SHADOW_RADIANCE_HOE = REGISTRATE
+            .item("shadow_radiance_hoe", ShadowRadianceHoe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .properties(p -> p.attributes(HoeItem
+                    .createAttributes(QOLTiers.SHADOW_RADIANCE, -4.0F, 0.0F)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.HOES)
+            .register();
+
 
     public static final PackageStyles.PackageStyle IGLEE = new PackageStyles.PackageStyle("rare_iglee", 12, 10, 21f, true);
     public static final ItemEntry<PackageItem> IGLEE_PACKAGE = createRarePackage(IGLEE);

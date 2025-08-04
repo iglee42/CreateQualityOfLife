@@ -7,11 +7,11 @@
   ],
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "create:netherite_diving_boots"
+    "item": "createqol:shadow_steel_hoe"
   },
   "transitional_item": {
     "item":{
-      "id":"create:netherite_diving_boots"
+      "id":"createqol:shadow_steel_hoe"
     }
   },
   "sequence": [
@@ -19,13 +19,13 @@
       "type": "create:cutting",
       "ingredients": [
         {
-          "item": "create:netherite_diving_boots"
+          "item": "createqol:shadow_steel_hoe"
         }
       ],
       "results": [
         {
           "item": {
-            "id":"create:netherite_diving_boots"
+            "id":"createqol:shadow_steel_hoe"
           }
         }
       ],
@@ -35,16 +35,16 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "create:netherite_diving_boots"
+          "item": "createqol:shadow_steel_hoe"
         },
         {
-          "item": "createqol:shadow_radiance"
+          "item": "createqol:refined_radiance_hoe"
         }
       ],
       "results": [
         {
           "item": {
-            "id": "create:netherite_diving_boots"
+            "id": "createqol:shadow_steel_hoe"
           }
         }
       ]
@@ -53,13 +53,13 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "create:netherite_diving_boots"
+          "item": "createqol:shadow_steel_hoe"
         }
       ],
       "results": [
         {
           "item": {
-            "id": "create:netherite_diving_boots"
+            "id": "createqol:shadow_steel_hoe"
           }
         }
       ]
@@ -68,16 +68,16 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "create:netherite_diving_boots"
+          "item": "createqol:shadow_steel_hoe"
         },
         {
-          "item": "create:sturdy_sheet"
+          "item": "createqol:shadow_radiance_block"
         }
       ],
       "results": [
         {
           "item": {
-            "id": "create:netherite_diving_boots"
+            "id": "createqol:shadow_steel_hoe"
           }
         }
       ]
@@ -86,9 +86,14 @@
   "results": [
     {
       "item": {
-        "id": "createqol:shadow_radiance_boots"
+        "id": "createqol:shadow_radiance_hoe"
       }
     }
   ],
-  "loops": 1
+  "loops": 1,
+  "copied_components": [
+    "minecraft:enchantments",
+    "minecraft:custom_name",
+    "createqol:reach"
+  ]
 }

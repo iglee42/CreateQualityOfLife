@@ -7,11 +7,11 @@
   ],
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "create:netherite_diving_helmet"
+    "item": "createqol:refined_radiance_helmet"
   },
   "transitional_item": {
     "item":{
-      "id":"create:netherite_diving_helmet"
+      "id":"createqol:refined_radiance_helmet"
     }
   },
   "sequence": [
@@ -19,13 +19,13 @@
       "type": "create:cutting",
       "ingredients": [
         {
-          "item": "create:netherite_diving_helmet"
+          "item": "createqol:refined_radiance_helmet"
         }
       ],
       "results": [
         {
           "item":{
-            "id":"create:netherite_diving_helmet"
+            "id":"createqol:refined_radiance_helmet"
           }
         }
       ],
@@ -35,16 +35,16 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "create:netherite_diving_helmet"
+          "item": "createqol:refined_radiance_helmet"
         },
         {
-          "item": "createqol:shadow_radiance"
+          "item": "createqol:shadow_steel_helmet"
         }
       ],
       "results": [
         {
           "item":{
-            "id":"create:netherite_diving_helmet"
+            "id":"createqol:refined_radiance_helmet"
           }
         }
       ]
@@ -53,13 +53,13 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "create:netherite_diving_helmet"
+          "item": "createqol:refined_radiance_helmet"
         }
       ],
       "results": [
         {
           "item":{
-            "id":"create:netherite_diving_helmet"
+            "id":"createqol:refined_radiance_helmet"
           }
         }
       ]
@@ -68,16 +68,16 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "create:netherite_diving_helmet"
+          "item": "createqol:refined_radiance_helmet"
         },
         {
-          "item": "create:goggles"
+          "item": "createqol:shadow_radiance_block"
         }
       ],
       "results": [
         {
           "item":{
-            "id":"create:netherite_diving_helmet"
+            "id":"createqol:refined_radiance_helmet"
           }
         }
       ]
@@ -90,5 +90,11 @@
       }
     }
   ],
-  "loops": 1
+  "loops": 1,
+  "copied_components": [
+    "minecraft:enchantments",
+    "create:banktank_air",
+    "minecraft:custom_name",
+    "minecraft:trim"
+  ]
 }
