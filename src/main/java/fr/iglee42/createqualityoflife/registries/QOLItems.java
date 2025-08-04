@@ -18,8 +18,8 @@ import fr.iglee42.createqualityoflife.statue.StatueItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.*;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.common.Tags;
+import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.common.Tags;
 
 import static com.simibubi.create.AllTags.forgeItemTag;
 import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
@@ -48,7 +48,6 @@ public class QOLItems {
                     ShadowRadianceHelmet::new)
             .properties(p -> p.fireResistant().rarity(Rarity.EPIC))
             .tag(forgeItemTag("armors/helmets"))
-            .tag(ItemTags.HEAD_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
 
@@ -64,10 +63,9 @@ public class QOLItems {
             .model((c,p)->p.generated(c).override().predicate(CreateQOL.asResource("elytra"),1)
                     .model(p.getBuilder(p.name(c)+"_elytra").parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0",CreateQOL.asResource("item/"+c.getName()+"_elytra")))
                     .end())
-            .properties(p -> p.fireResistant().rarity(Rarity.EPIC))
+            .properties(p -> p.fireResistant().rarity(Rarity.EPIC).durability(1184))
             .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
             .tag(forgeItemTag("armors/chestplates"))
-            .tag(ItemTags.CHEST_ARMOR)
             .register();
 
     public static final ItemEntry<? extends BaseArmorItem> SHADOW_RADIANCE_LEGGINGS = REGISTRATE
@@ -75,7 +73,6 @@ public class QOLItems {
                     p -> new ShadowRadianceArmorItem(ArmorItem.Type.LEGGINGS, p))
             .properties(p -> p.fireResistant().rarity(Rarity.EPIC))
             .tag(forgeItemTag("armors/leggings"))
-            .tag(ItemTags.LEG_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
 
@@ -84,7 +81,6 @@ public class QOLItems {
                     p -> new ShadowRadianceArmorItem(ArmorItem.Type.BOOTS, p))
             .properties(p -> p.fireResistant().rarity(Rarity.EPIC))
             .tag(forgeItemTag("armors/boots"))
-            .tag(ItemTags.FOOT_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
 
@@ -98,7 +94,6 @@ public class QOLItems {
                     RefinedRadianceHelmet::new)
             .properties(p -> p.fireResistant().rarity(Rarity.RARE))
             .tag(forgeItemTag("armors/helmets"))
-            .tag(ItemTags.HEAD_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
     public static final ItemEntry<BacktankItem.BacktankBlockItem> REFINED_RADIANCE_CHESTPLATE_PLACEABLE = REGISTRATE
@@ -116,24 +111,21 @@ public class QOLItems {
             .properties(p -> p.fireResistant().rarity(Rarity.RARE))
             .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
             .tag(forgeItemTag("armors/chestplates"))
-            .tag(ItemTags.CHEST_ARMOR)
             .register();
 
     public static final ItemEntry<? extends BaseArmorItem> REFINED_RADIANCE_LEGGINGS = REGISTRATE
             .item("refined_radiance_leggings",
                     p -> new RefinedRadianceArmorItem(ArmorItem.Type.LEGGINGS, p))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1110).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1110))
             .tag(forgeItemTag("armors/leggings"))
-            .tag(ItemTags.LEG_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
 
     public static final ItemEntry<? extends BaseArmorItem> REFINED_RADIANCE_BOOTS = REGISTRATE
             .item("refined_radiance_boots",
                     p -> new RefinedRadianceArmorItem(ArmorItem.Type.BOOTS, p))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(962).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(962))
             .tag(forgeItemTag("armors/boots"))
-            .tag(ItemTags.FOOT_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
 
@@ -144,7 +136,6 @@ public class QOLItems {
                     ShadowSteelHelmet::new)
             .properties(p -> p.fireResistant().rarity(Rarity.RARE))
             .tag(forgeItemTag("armors/helmets"))
-            .tag(ItemTags.HEAD_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
     public static final ItemEntry<BacktankItem.BacktankBlockItem> SHADOW_STEEL_CHESTPLATE_PLACEABLE = REGISTRATE
@@ -159,24 +150,21 @@ public class QOLItems {
             .properties(p -> p.fireResistant().rarity(Rarity.RARE))
             .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
             .tag(forgeItemTag("armors/chestplates"))
-            .tag(ItemTags.CHEST_ARMOR)
             .register();
 
     public static final ItemEntry<? extends BaseArmorItem> SHADOW_STEEL_LEGGINGS = REGISTRATE
             .item("shadow_steel_leggings",
                     p -> new ShadowSteelArmorItem(ArmorItem.Type.LEGGINGS, p))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1110).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE))
             .tag(forgeItemTag("armors/leggings"))
-            .tag(ItemTags.LEG_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
 
     public static final ItemEntry<? extends BaseArmorItem> SHADOW_STEEL_BOOTS = REGISTRATE
             .item("shadow_steel_boots",
                     p -> new ShadowSteelArmorItem(ArmorItem.Type.BOOTS, p))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(962).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(962))
             .tag(forgeItemTag("armors/boots"))
-            .tag(ItemTags.FOOT_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
 
@@ -186,8 +174,81 @@ public class QOLItems {
             .item("shadow_steel_pickaxe",ShadowSteelPickaxe::new)
             .properties(p -> p.stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .properties(p -> p.attributes(PickaxeItem
-                    .createAttributes(QOLTiers.SHADOW_STEEL, 1, -2.8f)))
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.PICKAXES)
+            .tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
+            .register();
+
+    public static final ItemEntry<RefinedRadiancePickaxe> REFINED_RADIANCE_PICKAXE = REGISTRATE
+            .item("refined_radiance_pickaxe", RefinedRadiancePickaxe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.PICKAXES)
+            .tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
+            .register();
+
+    public static final ItemEntry<ShadowSteelAxe> SHADOW_STEEL_AXE = REGISTRATE
+            .item("shadow_steel_axe", ShadowSteelAxe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.AXES)
+            .tag(Tags.Items.MELEE_WEAPON_TOOLS)
+            .register();
+
+    public static final ItemEntry<RefinedRadianceAxe> REFINED_RADIANCE_AXE = REGISTRATE
+            .item("refined_radiance_axe", RefinedRadianceAxe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.AXES)
+            .register();
+
+    public static final ItemEntry<ShadowSteelShovel> SHADOW_STEEL_SHOVEL = REGISTRATE
+            .item("shadow_steel_shovel", ShadowSteelShovel::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.SHOVELS)
+            .register();
+
+    public static final ItemEntry<RefinedRadianceShovel> REFINED_RADIANCE_SHOVEL = REGISTRATE
+            .item("refined_radiance_shovel", RefinedRadianceShovel::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.SHOVELS)
+            .register();
+
+    public static final ItemEntry<ShadowSteelHoe> SHADOW_STEEL_HOE = REGISTRATE
+            .item("shadow_steel_hoe", ShadowSteelHoe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.HOES)
+            .register();
+
+    public static final ItemEntry<RefinedRadianceHoe> REFINED_RADIANCE_HOE = REGISTRATE
+            .item("refined_radiance_hoe", RefinedRadianceHoe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.HOES)
+            .register();
+
+    public static final ItemEntry<ShadowRadianceSword> SHADOW_RADIANCE_SWORD = REGISTRATE
+            .item("shadow_radiance_sword", ShadowRadianceSword::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
+            .model((c,p)->p.handheld(c))
+            .tag(ItemTags.SWORDS)
+            .register();
+
+    public static final ItemEntry<ShadowRadiancePickaxe> SHADOW_RADIANCE_PICKAXE = REGISTRATE
+            .item("shadow_radiance_pickaxe",ShadowRadiancePickaxe::new)
+            .properties(p -> p.stacksTo(1))
+            .properties(Item.Properties::fireResistant)
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.PICKAXES)
             .tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
