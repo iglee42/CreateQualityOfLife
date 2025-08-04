@@ -100,6 +100,12 @@
   "keybind.createqol.shadow_radiance_chestplate_hover": "Toggle Hover",
   "keybind.createqol.shadow_radiance_chestplate_elytra": "Toggle Elytra",
   "keybind.createqol.open_armor_config": "Open Armor Config",
+  "keybind.createqol.dash": "Dash",
+
+  "keybind.createqol.helmet_effect": "Toggle Helmet Effect",
+  "keybind.createqol.chestplate_effect": "Toggle Chestplate Effect",
+  "keybind.createqol.leggings_effect": "Toggle Leggings Effect",
+  "keybind.createqol.boots_effect": "Toggle Boots Effect",
 
   "createqol.recipe.blaze_burner_liquids": "Blaze Burner Liquid Fuels",
 

@@ -32,6 +32,7 @@ public enum QOLPackets {
     SAVE_STATUE_CONFIG(SaveStatueConfigPacket.class, SaveStatueConfigPacket::new, NetworkDirection.PLAY_TO_SERVER),
     PUBLISH_ANIMATION(PublishAnimationPacket.class, PublishAnimationPacket::new,NetworkDirection.PLAY_TO_SERVER),
     DELETE_ANIMATION(DeleteAnimationPacket.class, DeleteAnimationPacket::new,NetworkDirection.PLAY_TO_SERVER),
+    TOGGLE_ARMOR_EFFECT(ToggleArmorEffectPacket.class, ToggleArmorEffectPacket::new,NetworkDirection.PLAY_TO_SERVER),
     SYNC_ANIMATIONS(SyncAnimationsConfigPacket.class, SyncAnimationsConfigPacket::new, NetworkDirection.PLAY_TO_CLIENT),
 
     ;

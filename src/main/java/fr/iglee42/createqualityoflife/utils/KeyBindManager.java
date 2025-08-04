@@ -8,6 +8,7 @@ import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import net.createmod.catnip.gui.ScreenOpener;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,6 +35,11 @@ public class KeyBindManager {
     public static KeyMapping ELYTRA_KEY = new KeyMapping("keybind.createqol.shadow_radiance_chestplate_elytra", GLFW.GLFW_KEY_I, "keybind.createqol.category");
     public static KeyMapping OPEN_ARMOR_CONFIG = new KeyMapping("keybind.createqol.open_armor_config", GLFW.GLFW_KEY_C, "keybind.createqol.category");
     public static KeyMapping DASH_KEY = new KeyMapping("keybind.createqol.dash", GLFW.GLFW_KEY_W, "keybind.createqol.category");
+
+    public static KeyMapping HELMET_EFFECT_KEY = new KeyMapping("keybind.createqol.helmet_effect", -1, "keybind.createqol.category");
+    public static KeyMapping CHESTPLATE_EFFECT_KEY = new KeyMapping("keybind.createqol.chestplate_effect", -1, "keybind.createqol.category");
+    public static KeyMapping LEGGINGS_EFFECT_KEY = new KeyMapping("keybind.createqol.leggings_effect", -1, "keybind.createqol.category");
+    public static KeyMapping BOOTS_EFFECT_KEY = new KeyMapping("keybind.createqol.boots_effect", -1, "keybind.createqol.category");
 
 
     private static void tickEnd() {
@@ -66,18 +72,23 @@ public class KeyBindManager {
                 return;
             }
 
-            if (OPEN_ARMOR_CONFIG.consumeClick()) {
-                /*AtomicBoolean hasArmor = new AtomicBoolean(false);
-                player.getArmorSlots().forEach(it->{
-                    if (!(it.getItem() instanceof ArmorItem))return;
-                    if (((ArmorItem)it.getItem()).getMaterial().equals(QOLArmorMaterials.SHADOW_RADIANCE)) hasArmor.set(true);
-                });
-                if (hasArmor.get()) {
-                    ScreenOpener.open(new ItemConfigScreen(0));
-                }*/
+        if (OPEN_ARMOR_CONFIG.consumeClick()) {
+            ScreenOpener.open(new InventoryConfigScreen());
+        }
 
-                ScreenOpener.open(new InventoryConfigScreen());
+            if (HELMET_EFFECT_KEY.consumeClick()){
+                QOLPackets.getChannel().sendToServer(new ToggleArmorEffectPacket(EquipmentSlot.HEAD));
             }
+            if (CHESTPLATE_EFFECT_KEY.consumeClick()){
+                QOLPackets.getChannel().sendToServer(new ToggleArmorEffectPacket(EquipmentSlot.CHEST));
+            }
+            if (LEGGINGS_EFFECT_KEY.consumeClick()){
+                QOLPackets.getChannel().sendToServer(new ToggleArmorEffectPacket(EquipmentSlot.LEGS));
+            }
+            if (BOOTS_EFFECT_KEY.consumeClick()){
+                QOLPackets.getChannel().sendToServer(new ToggleArmorEffectPacket(EquipmentSlot.FEET));
+            }
+
 
             Item backtank = BacktankItem.getWornBy(player);
 
