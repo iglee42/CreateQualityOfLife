@@ -12,15 +12,27 @@ import fr.iglee42.createqualityoflife.blocks.BrassTrashCanBlock;
 import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
 import fr.iglee42.createqualityoflife.utils.BrassTrashCanFilterSlotPositioning;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.Hopper;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class BrassTrashCanBlockEntity extends TrashCanBlockEntity{
     FilteringBehaviour filtering;
@@ -70,7 +82,37 @@ public class BrassTrashCanBlockEntity extends TrashCanBlockEntity{
     public void tick() {
         super.tick();
         boolean clientSide = level != null && level.isClientSide && !isVirtual();
-        if (!clientSide && getBlockState().getValue(BrassTrashCanBlock.OPEN) && !getBlockState().getValue(BrassTrashCanBlock.POWERED)) handleInputFromAbove();
+        if (!clientSide && getBlockState().getValue(BrassTrashCanBlock.OPEN) && !getBlockState().getValue(BrassTrashCanBlock.POWERED)){
+            //HANDLERS
+            if (selectionMode.get().equals(Mode.KEEP_64)){
+                IItemHandler handler = grabCapability(Direction.UP);
+                if (handler != null) {
+                    List<Item> savedItems = new ArrayList<>();
+                    for (int i = 0; i < handler.getSlots(); i++) {
+                        ItemStack stack = handler.getStackInSlot(i);
+                        if (!canAcceptItem(stack)) continue;
+                        if (!savedItems.contains(stack.getItem())) savedItems.add(stack.getItem());
+                        else {
+                            handler.extractItem(i,filtering.count,false);
+                        }
+                    }
+                }
+            }else handleInputFromAbove();
+
+            //SUCK ITEMS
+            boolean flag = level.getBlockState(getBlockPos().above()).isCollisionShapeFullBlock(level, getBlockPos().above())
+                    && ! level.getBlockState(getBlockPos().above()).is(BlockTags.DOES_NOT_BLOCK_HOPPERS);
+            if (!flag) {
+                getItemsAtAndAbove(level, getBlockPos()).forEach(ie -> {
+                    if (canAcceptItem(ie.getItem())) ie.discard();
+                });
+            }
+        }
+    }
+
+    private static List<ItemEntity> getItemsAtAndAbove(Level p_155590_, BlockPos p_155591_) {
+        AABB aabb = Block.box(0,14,0,16,18,16).toAabbs().get(0).move(p_155591_.getX(), p_155591_.getY(), p_155591_.getZ() );
+        return p_155590_.getEntitiesOfClass(ItemEntity.class, aabb, EntitySelector.ENTITY_STILL_ALIVE);
     }
 
     public enum Mode implements INamedIconOptions {
