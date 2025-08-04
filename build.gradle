@@ -19,6 +19,11 @@ plugins {
 group = mod_group_id
 version = minecraft_version + "-" +mod_version
 
+var cleanResources = tasks.register('cleanOldGeneratedResources', Delete) {
+    println("Deleting $projectDir/src/generated/resources...")
+    delete "$projectDir/src/generated/resources"
+}
+
 base {
     archivesName = mod_name
 }
@@ -59,7 +64,7 @@ neoForge {
 
             // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
             // gameDirectory = project.file('run-data')
-
+            taskBefore(cleanResources)
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
