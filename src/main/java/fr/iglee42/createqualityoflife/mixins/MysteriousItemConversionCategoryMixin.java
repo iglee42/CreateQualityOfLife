@@ -4,6 +4,7 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.compat.jei.ConversionRecipe;
 import com.simibubi.create.compat.jei.category.MysteriousItemConversionCategory;
 import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.registries.QOLBlocks;
 import fr.iglee42.createqualityoflife.utils.Features;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,6 +25,8 @@ public class MysteriousItemConversionCategoryMixin {
         if (CreateQOL.isActivate(Features.SHADOW_RADIANCE)) {
             MysteriousItemConversionCategory.RECIPES.add(ConversionRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.SHADOW_STEEL.asStack()));
             MysteriousItemConversionCategory.RECIPES.add(ConversionRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.REFINED_RADIANCE.asStack()));
+            MysteriousItemConversionCategory.RECIPES.add(ConversionRecipe.create(QOLBlocks.CHROMATIC_COMPOUND_BLOCK.asStack(), QOLBlocks.SHADOW_STEEL_BLOCK.asStack()));
+            MysteriousItemConversionCategory.RECIPES.add(ConversionRecipe.create(QOLBlocks.CHROMATIC_COMPOUND_BLOCK.asStack(), QOLBlocks.REFINED_RADIANCE_BLOCK.asStack()));
         }
 	}
 
