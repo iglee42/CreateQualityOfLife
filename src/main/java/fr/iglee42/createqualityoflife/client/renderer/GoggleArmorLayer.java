@@ -7,6 +7,8 @@ import com.simibubi.create.AllPartialModels;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLItems;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
+import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -17,6 +19,7 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -34,10 +37,13 @@ public class GoggleArmorLayer<T extends LivingEntity, M extends EntityModel<T>> 
     public void render(PoseStack ms, MultiBufferSource buffer, int light, LivingEntity entity, float yaw, float pitch, float pt, float p_117356_, float p_117357_, float p_117358_) {
         if (entity.getPose() == Pose.SLEEPING)
             return;
+        if (entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof QOLConfigurableItem it && it.providedEffect(entity.getItemBySlot(EquipmentSlot.HEAD)).equals(MobEffects.INVISIBILITY) && NBTConstants.getOrDefault(entity.getItemBySlot(EquipmentSlot.HEAD),NBTConstants.NBT_EFFECTS,true)){
+            return;
+        }
         if (!QOLItems.SHADOW_RADIANCE_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)) && !QOLItems.SHADOW_STEEL_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)) &&  !QOLItems.REFINED_RADIANCE_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)))
             return;
         if (!NBTConstants.getOrDefault(entity.getItemBySlot(EquipmentSlot.HEAD),NBTConstants.NBT_RENDER_TYPE).shouldRenderAddition()) return;
-        if (!CreateQOLConfigs.server().helmetHaveGoggles.get()) return;
+        if (!CreateQOLConfigs.server().equipments.armors.helmetHaveGoggles.get()) return;
         if (!NBTConstants.getOrDefault(entity.getItemBySlot(EquipmentSlot.HEAD), NBTConstants.NBT_GOGGLES,true))return;
 
         M entityModel = getParentModel();

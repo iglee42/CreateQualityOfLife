@@ -9,6 +9,9 @@ import fr.iglee42.createqualityoflife.blocks.ShadowRadianceBacktankBlock;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.QOLItems;
+import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import fr.iglee42.createqualityoflife.utils.PreferredRender;
+import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.math.AngleHelper;
@@ -19,6 +22,7 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.core.Direction;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -34,6 +38,10 @@ public class BacktankArmorLayerMixin {
 
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V",ordinal = 0,shift = At.Shift.BEFORE),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
     private void inject(PoseStack ms, MultiBufferSource buffer, int light, LivingEntity entity, float yaw, float pitch, float pt, float p_225628_8_, float p_225628_9_, float p_225628_10_, CallbackInfo ci, BacktankItem item, EntityModel entityModel, HumanoidModel model, VertexConsumer vc, BlockState renderedState, SuperByteBuffer backtank, SuperByteBuffer cogs, SuperByteBuffer nob){
+        if (entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof QOLConfigurableItem it && it.providedEffect(entity.getItemBySlot(EquipmentSlot.HEAD)).equals(MobEffects.INVISIBILITY) && NBTConstants.getOrDefault(entity.getItemBySlot(EquipmentSlot.HEAD),NBTConstants.NBT_EFFECTS,true)){
+            ci.cancel();
+            return;
+        }
         if (QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(item) || QOLItems.REFINED_RADIANCE_CHESTPLATE.is(item) || QOLItems.SHADOW_STEEL_CHESTPLATE.is(item)){
             ItemStack stack = entity.getItemBySlot(EquipmentSlot.CHEST);
             if (!NBTConstants.getOrDefault(stack,NBTConstants.NBT_RENDER_TYPE).shouldRenderAddition()){
@@ -44,7 +52,9 @@ public class BacktankArmorLayerMixin {
                 ci.cancel();
                 return;
             }
-            if (QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(item))renderedState = renderedState.setValue(ShadowRadianceBacktankBlock.PROPELLER,ShadowRadianceChestplate.hasPropeller(stack) && CreateQOLConfigs.server().propellerAllowed.get());
+
+
+            if (QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(item))renderedState = renderedState.setValue(ShadowRadianceBacktankBlock.PROPELLER,ShadowRadianceChestplate.hasPropeller(stack) && CreateQOLConfigs.server().equipments.armors.propellerAllowed.get());
             backtank = CachedBuffers.block(renderedState);
 
             ms.pushPose();

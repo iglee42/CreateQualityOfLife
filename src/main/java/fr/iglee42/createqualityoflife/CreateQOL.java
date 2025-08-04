@@ -9,13 +9,20 @@ import com.simibubi.create.foundation.item.TooltipModifier;
 import fr.iglee42.createqualityoflife.conditions.FeatureLoadedCondition;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.config.CreateQOLFeaturesConfig;
-import fr.iglee42.createqualityoflife.items.armors.ShadowSteelArmorItem;
+import fr.iglee42.createqualityoflife.items.armors.RefinedRadianceArmorItem;
+import fr.iglee42.createqualityoflife.items.tools.refinedradiance.*;
+import fr.iglee42.createqualityoflife.items.tools.shadowsteel.ShadowSteelAxe;
+import fr.iglee42.createqualityoflife.items.tools.shadowsteel.ShadowSteelPickaxe;
+import fr.iglee42.createqualityoflife.items.tools.shadowsteel.ShadowSteelShovel;
+import fr.iglee42.createqualityoflife.items.tools.shadowsteel.ShadowSteelSword;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.statue.animation.PublishedAnimationsManager;
-import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;
 import fr.iglee42.createqualityoflife.utils.EnderPackagersNetworkHandler;
 import fr.iglee42.createqualityoflife.utils.Features;
+import fr.iglee42.createqualityoflife.utils.IHaveTankMixin;
+import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
 import fr.iglee42.createqualityoflife.utils.liquidblazeburners.LiquidBlazeBurnerReloadListener;
+import net.createmod.catnip.config.ui.BaseConfigScreen;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -38,6 +45,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -48,9 +56,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 import static fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate.hasPropeller;
 import static fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate.isFansEnable;
@@ -102,11 +107,25 @@ public class CreateQOL {
         forgeEventBus.addListener(this::onWorldTick);
         forgeEventBus.addListener(this::itemTooltips);
 
+        registerToolsEvents(modEventBus,forgeEventBus);
+
+
         //if (isActivate(Features.SHADOW_RADIANCE)){
         //    MysteriousItemConversionCategory.RECIPES.add(BlazeBurnerLiquidRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.SHADOW_STEEL.asStack()));
         //    MysteriousItemConversionCategory.RECIPES.add(BlazeBurnerLiquidRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.REFINED_RADIANCE.asStack()));
         //}
     }
+
+    private void registerToolsEvents(IEventBus modEventBus, IEventBus forgeEventBus) {
+        forgeEventBus.addListener(QOLConfigurableItem::modifyAttributes);
+        forgeEventBus.addListener(BlockEvent.BreakEvent.class, RefinedRadiancePickaxe::mineBlock);
+        forgeEventBus.addListener(BlockEvent.BreakEvent.class, ShadowSteelPickaxe::mineBlock);
+        forgeEventBus.addListener(BlockEvent.BreakEvent.class, RefinedRadianceAxe::mineBlock);
+        forgeEventBus.addListener(BlockEvent.BreakEvent.class, RefinedRadianceHoe::mineBlock);
+        forgeEventBus.addListener(BlockEvent.BreakEvent.class, ShadowSteelShovel::mineBlock);
+        forgeEventBus.addListener(RefinedRadianceShovel::blockDrops);
+    }
+
     private void registerReloadListener(AddReloadListenerEvent event){
         if (!isActivate(Features.LIQUID_BLAZE_BURNER)) return;
         event.addListener(LiquidBlazeBurnerReloadListener.INSTANCE);
@@ -135,13 +154,13 @@ public class CreateQOL {
         if (player.getItemBySlot(EquipmentSlot.CHEST).is(QOLItems.SHADOW_RADIANCE_CHESTPLATE.asItem())) {
             ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
-            if ((isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack)) || CreateQOLConfigs.server().dashAllowed.get()) {
+            if ((isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack)) || CreateQOLConfigs.server().equipments.armors.dashAllowed.get()) {
                 event.setCanceled(true);
             }
         }
         if (player.getItemBySlot(EquipmentSlot.CHEST).is(QOLItems.SHADOW_STEEL_CHESTPLATE.asItem())) {
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
-            if (!CreateQOLConfigs.server().dashAllowed.get()) {
+            if (!CreateQOLConfigs.server().equipments.armors.dashAllowed.get()) {
                 event.setCanceled(true);
             }
         }
@@ -173,8 +192,8 @@ public class CreateQOL {
 
     public void itemTooltips(ItemTooltipEvent event){
         if (!event.getItemStack().is(Items.FIREWORK_ROCKET)) return;
-        if (isActivate(Features.SHADOW_RADIANCE) && CreateQOLConfigs.server().elytraBoostAllowed.get() && CreateQOLConfigs.server().useFireworksForBoost.get()){
-            event.getToolTip().add(CreateQOLLang.translateDirect("chestplate.use_fireworks").withStyle(ChatFormatting.YELLOW));
+        if (isActivate(Features.SHADOW_RADIANCE) && CreateQOLConfigs.server().equipments.armors.elytraBoostAllowed.get() && CreateQOLConfigs.server().equipments.armors.useFireworksForBoost.get()){
+            event.getToolTip().add(2,CreateQOLLang.translateDirect("chestplate.use_fireworks").withStyle(ChatFormatting.YELLOW));
         }
     }
 }

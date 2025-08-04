@@ -11,6 +11,7 @@ import fr.iglee42.createqualityoflife.utils.KeyBindManager;
 import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,6 +19,8 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -28,21 +31,25 @@ import java.util.function.Supplier;
 
 public class ShadowSteelChestplate extends BacktankItem.Layered implements QOLConfigurableItem {
 
-
     public ShadowSteelChestplate(Properties properties, Supplier<BacktankBlockItem> placeable) {
         super(QOLArmorMaterials.SHADOW_STEEL, properties, CreateQOL.asResource("shadow_steel"), placeable);
     }
 
     public static void dash(ItemStack chestplate, ServerPlayer player) {
         if (!chestplate.getOrDefault(QOLDataComponents.DASH,true)) return;
-        if (!CreateQOLConfigs.server().dashAllowed.get()){
+        if (!CreateQOLConfigs.server().equipments.armors.dashAllowed.get()){
             player.displayClientMessage(Component.literal("Dashing is disabled on this server !").withStyle(ChatFormatting.RED),true);
+            return;
+        }
+        if (player.getCooldowns().isOnCooldown(chestplate.getItem())){
+            player.displayClientMessage(Component.literal("Dashing is reloading, please wait!").withStyle(ChatFormatting.RED),true);
             return;
         }
         Vec3 look = player.getLookAngle().normalize().scale(2.5D);
         look = new Vec3(look.x,Math.clamp(look.y,-0.5D,0.5D),look.z);
         player.setDeltaMovement(player.getDeltaMovement().add(look));
         player.hurtMarked = true;
+        player.getCooldowns().addCooldown(chestplate.getItem(),CreateQOLConfigs.server().equipments.armors.dashCooldown.get());
     }
 
     @Override
@@ -61,10 +68,20 @@ public class ShadowSteelChestplate extends BacktankItem.Layered implements QOLCo
                         .withStyle(ChatFormatting.GOLD)));
         components.add(Component.literal("Dash : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(Component.literal(
-                                QOLConfigurableItem.chooseState(CreateQOLConfigs.server().dashAllowed.get(), true, stack.getOrDefault(QOLDataComponents.DASH,true), false, true))
-                        .withStyle(!CreateQOLConfigs.server().dashAllowed.get() ? ChatFormatting.RED : ChatFormatting.YELLOW)));
+                .append(QOLConfigurableItem.cooldownState(CreateQOLConfigs.server().equipments.armors.dashAllowed.get(),
+                        stack.getOrDefault(QOLDataComponents.DASH, true), (int) Math.ceil(Minecraft.getInstance().player.getCooldowns().getCooldownPercent(this,0) * CreateQOLConfigs.server().equipments.armors.dashCooldown.get()))));
+        components.add(Component.literal("Arms : ")
+                .withStyle(ChatFormatting.GOLD)
+                .append(QOLConfigurableItem.chooseState(true,
+                        true, stack.getOrDefault(QOLDataComponents.BACKTANK_ARMS, true), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
+    }
+
+    @Override
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+        if (enchantment.is(Enchantments.MENDING) || enchantment.is(Enchantments.UNBREAKING))
+            return true;
+        return super.supportsEnchantment(stack, enchantment);
     }
 
     @Override
@@ -91,7 +108,7 @@ public class ShadowSteelChestplate extends BacktankItem.Layered implements QOLCo
                 (e,oe)->true));
         list.add(Configuration.ofBool("Enable Dash",stack.getOrDefault(QOLDataComponents.DASH,true),QOLDataComponents.DASH,
                 List.of("Should the player dash when pressing "+ KeyBindManager.DASH_KEY.getTranslatedKeyMessage().getString()),
-                (o,oe)->CreateQOLConfigs.server().dashAllowed.get()));
+                (o,oe)->CreateQOLConfigs.server().equipments.armors.dashAllowed.get()));
 
 
     }

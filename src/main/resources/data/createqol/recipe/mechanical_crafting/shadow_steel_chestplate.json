@@ -1,0 +1,45 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "createqol:feature_loaded",
+      "feature": "shadow_radiance"
+    }
+  ],
+  "type": "create:mechanical_crafting",
+  "pattern": [
+    "TTTTT",
+    "TSBST",
+    "TNONT",
+    " TST ",
+    " TTT "
+  ],
+  "key": {
+    "T": {
+      "item": "create:shadow_steel"
+    },
+    "S": {
+      "tag": "c:plates/obsidian"
+    },
+    "O": {
+      "item": "create:netherite_backtank"
+    },
+    "N": {
+      "item": "create:encased_fan"
+    },
+    "B": {
+      "item": "create:blaze_burner"
+    }
+  },
+  "result": {
+    "id": "createqol:shadow_steel_chestplate",
+    "count": 1
+  },
+  "accept_mirrored": false,
+  "copied_components": [
+    "minecraft:enchantments",
+    "minecraft:custom_name",
+    "create:banktank_air",
+    "minecraft:trim"
+  ],
+  "copied_components_slot": 12
+}
