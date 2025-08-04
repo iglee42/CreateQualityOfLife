@@ -27,6 +27,7 @@
     "SequencedAssemblyRecipeMixin",
     "SequencedAssemblyRecipeSerializerMixin",
     "ShapedRecipeMixin",
+    "StationBlockMixin",
     "StockTickerInteractionHandlerMixin",
     "liquidblazeburners.BlazeBurnerBlockEntityMixin",
     "liquidblazeburners.SmartBlockEntityMixin"
