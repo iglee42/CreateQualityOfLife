@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "createqol:block/chromatic_compound_block"
+    }
+  }
+}

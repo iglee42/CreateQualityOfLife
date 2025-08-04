@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "open=false,powered=false,waterlogged=false": {
+      "model": "createqol:block/trash_can/block_brass"
+    },
+    "open=false,powered=false,waterlogged=true": {
+      "model": "createqol:block/trash_can/block_brass"
+    },
+    "open=false,powered=true,waterlogged=false": {
+      "model": "createqol:block/trash_can/block_brass_powered"
+    },
+    "open=false,powered=true,waterlogged=true": {
+      "model": "createqol:block/trash_can/block_brass_powered"
+    },
+    "open=true,powered=false,waterlogged=false": {
+      "model": "createqol:block/trash_can/block_brass_open"
+    },
+    "open=true,powered=false,waterlogged=true": {
+      "model": "createqol:block/trash_can/block_brass_open"
+    },
+    "open=true,powered=true,waterlogged=false": {
+      "model": "createqol:block/trash_can/block_brass_open_powered"
+    },
+    "open=true,powered=true,waterlogged=true": {
+      "model": "createqol:block/trash_can/block_brass_open_powered"
+    }
+  }
+}

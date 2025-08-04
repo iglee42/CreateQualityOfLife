@@ -1,0 +1,22 @@
+{
+  "values": [
+    "createqol:inventory_linker",
+    "createqol:shadow_radiance_chestplate",
+    "createqol:refined_radiance_chestplate",
+    "createqol:shadow_steel_chestplate",
+    "createqol:trash_can",
+    "createqol:brass_trash_can",
+    "createqol:ender_packager",
+    "createqol:alchemy_saw",
+    "createqol:botanist_saw",
+    "createqol:carpenters_saw",
+    "createqol:glassblower_saw",
+    "createqol:loom_saw",
+    "createqol:mason_saw",
+    "createqol:tinkering_saw",
+    "createqol:refined_radiance_block",
+    "createqol:shadow_steel_block",
+    "createqol:chromatic_compound_block",
+    "createqol:shadow_radiance_block"
+  ]
+}
