@@ -117,6 +117,11 @@ public class CreateQOLClient {
         event.register(KeyBindManager.ELYTRA_KEY);
         event.register(KeyBindManager.OPEN_ARMOR_CONFIG);
         event.register(KeyBindManager.DASH_KEY);
+
+        event.register(KeyBindManager.HELMET_EFFECT_KEY);
+        event.register(KeyBindManager.CHESTPLATE_EFFECT_KEY);
+        event.register(KeyBindManager.LEGGINGS_EFFECT_KEY);
+        event.register(KeyBindManager.BOOTS_EFFECT_KEY);
     }
 
     public static void clientInit(final FMLClientSetupEvent event) {

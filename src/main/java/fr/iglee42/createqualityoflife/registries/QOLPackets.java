@@ -24,6 +24,7 @@ public enum QOLPackets implements BasePacketPayload.PacketTypeProvider {
     SAVE_STATUE_CONFIG(SaveStatueConfigPacket.class, SaveStatueConfigPacket.STREAM_CODEC),
     PUBLISH_ANIMATION(PublishAnimationPacket.class, PublishAnimationPacket.STREAM_CODEC),
     DELETE_ANIMATION(DeleteAnimationPacket.class, DeleteAnimationPacket.STREAM_CODEC),
+    TOGGLE_ARMOR_EFFECT(ToggleArmorEffectPacket.class, ToggleArmorEffectPacket.STREAM_CODEC),
     //Server To Client
 
     SYNC_ANIMATIONS(SyncAnimationsConfigPacket.class, SyncAnimationsConfigPacket.STREAM_CODEC),
