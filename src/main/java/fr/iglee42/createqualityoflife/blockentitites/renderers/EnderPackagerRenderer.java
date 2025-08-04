@@ -81,8 +81,7 @@ public class EnderPackagerRenderer extends SmartBlockEntityRenderer<EnderPackage
 	}
 
 	public static PartialModel getTrayModel(BlockState blockState) {
-		return AllBlocks.PACKAGER.has(blockState) ? AllPartialModels.PACKAGER_TRAY_REGULAR
-			: AllPartialModels.PACKAGER_TRAY_DEFRAG;
+		return AllPartialModels.PACKAGER_TRAY_REGULAR;
 	}
 
 	public static PartialModel getHatchModel(EnderPackagerBlockEntity be) {
