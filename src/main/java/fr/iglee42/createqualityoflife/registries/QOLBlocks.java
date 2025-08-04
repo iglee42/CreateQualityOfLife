@@ -10,8 +10,14 @@ import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import fr.iglee42.createqualityoflife.behaviours.TrashCanMovementBehaviour;
 import fr.iglee42.createqualityoflife.blocks.*;
 import fr.iglee42.createqualityoflife.config.CQOLStress;
+import fr.iglee42.createqualityoflife.items.ChromaticCompoundBlockItem;
+import fr.iglee42.createqualityoflife.items.NoGravMagicalDohickyBlockItem;
+import fr.iglee42.createqualityoflife.items.RefinedRadianceBlockItem;
+import fr.iglee42.createqualityoflife.items.ShadowSteelBlockItem;
+import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -115,6 +121,68 @@ public class QOLBlocks {
             LOOM_SAW = createChippedSaw("loom"),
             MASON_SAW = createChippedSaw("mason"),
             TINKERING_SAW = createChippedSaw("tinkering");
+
+
+    public static final BlockEntry<Block> REFINED_RADIANCE_BLOCK = REGISTRATE.block("refined_radiance_block", Block::new)
+            .initialProperties(()->Blocks.ANDESITE)
+            .properties(p -> p.mapColor(MapColor.STONE)
+                    .requiresCorrectToolForDrops())
+            .transform(pickaxeOnly())
+            .blockstate(simpleCubeAll("refined_radiance_block"))
+            .tag(Tags.Blocks.STORAGE_BLOCKS)
+            .tag(commonBlockTag("storage_blocks/refined_radiance"))
+            .item(RefinedRadianceBlockItem::new)
+            .tag(commonItemTag("storage_blocks/refined_radiance"))
+            .tag(Tags.Items.STORAGE_BLOCKS)
+            .properties(p->p.rarity(Rarity.UNCOMMON))
+            .build()
+            .register();
+
+    public static final BlockEntry<Block> SHADOW_STEEL_BLOCK = REGISTRATE.block("shadow_steel_block", Block::new)
+            .initialProperties(()->Blocks.ANDESITE)
+            .properties(p -> p.mapColor(MapColor.STONE)
+                    .requiresCorrectToolForDrops())
+            .transform(pickaxeOnly())
+            .tag(Tags.Blocks.STORAGE_BLOCKS)
+            .tag(commonBlockTag("storage_blocks/shadow_steel"))
+            .item(ShadowSteelBlockItem::new)
+            .tag(commonItemTag("storage_blocks/shadow_steel"))
+            .tag(Tags.Items.STORAGE_BLOCKS)
+            .properties(p->p.rarity(Rarity.UNCOMMON))
+            .build()
+            .register();
+    public static final BlockEntry<Block> CHROMATIC_COMPOUND_BLOCK = REGISTRATE.block("chromatic_compound_block", Block::new)
+            .initialProperties(()->Blocks.ANDESITE)
+            .properties(p -> p.mapColor(MapColor.STONE)
+                    .requiresCorrectToolForDrops())
+            .blockstate((c,p)->p.simpleBlock(c.get(),p.models().getExistingFile(p.modLoc("block/chromatic_compound_block"))))
+            .transform(pickaxeOnly())
+            .color(()->()-> (BlockColor) (blockState, blockAndTintGetter, blockPos, i) -> new ChromaticCompoundColor().getColor(new ItemStack(blockState.getBlock().asItem()),i))
+            .tag(Tags.Blocks.STORAGE_BLOCKS)
+            .tag(commonBlockTag("storage_blocks/chromatic_compound"))
+            .item(ChromaticCompoundBlockItem::new)
+            .tag(commonItemTag("storage_blocks/chromatic_compound"))
+            .tag(Tags.Items.STORAGE_BLOCKS)
+            .properties(p->p.rarity(Rarity.UNCOMMON))
+            .color(()->ChromaticCompoundColor::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<Block> SHADOW_RADIANCE_BLOCK = REGISTRATE.block("shadow_radiance_block", Block::new)
+            .initialProperties(()->Blocks.ANDESITE)
+            .properties(p -> p.mapColor(MapColor.STONE)
+                    .requiresCorrectToolForDrops())
+            .blockstate((c,p)->p.simpleBlock(c.get(),p.models().getExistingFile(p.modLoc("block/shadow_radiance_block"))))
+            .transform(pickaxeOnly())
+            .tag(Tags.Blocks.STORAGE_BLOCKS)
+            .tag(commonBlockTag("storage_blocks/shadow_radiance"))
+            .item(NoGravMagicalDohickyBlockItem::new)
+            .tag(commonItemTag("storage_blocks/shadow_radiance"))
+            .tag(Tags.Items.STORAGE_BLOCKS)
+            .properties(p->p.rarity(Rarity.RARE))
+            .build()
+            .register();
+
 
 
     private static BlockEntry<ChippedSawBlock> createChippedSaw(String name){
