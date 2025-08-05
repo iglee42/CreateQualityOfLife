@@ -13,9 +13,11 @@ import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.utils.Features;
 import it.unimi.dsi.fastutil.objects.*;
 import net.createmod.catnip.platform.CatnipServices;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
@@ -59,6 +61,7 @@ public class QOLCreativeModeTabs {
 
 	private static class RegistrateDisplayItemsGenerator implements CreativeModeTab.DisplayItemsGenerator {
 		private static final Predicate<Item> IS_ITEM_3D_PREDICATE;
+		private static final Predicate<Item> SHADOW_RADIANCE = item-> !CreateQOL.isActivate(Features.SHADOW_RADIANCE) && (BuiltInRegistries.ITEM.getKey(item).getPath().startsWith("shadow_") || BuiltInRegistries.ITEM.getKey(item).getPath().startsWith("refined_"));
 
 		static {
 			MutableObject<Predicate<Item>> isItem3d = new MutableObject<>(item -> false);
@@ -110,16 +113,13 @@ public class QOLCreativeModeTabs {
 				exclusions.add(QOLBlocks.GLASSBLOWER_SAW.asItem());
 				exclusions.add(QOLBlocks.TINKERING_SAW.asItem());
 			}
-			if (!CreateQOL.isActivate(Features.SHADOW_RADIANCE)) {
-				exclusions.add(QOLItems.SHADOW_RADIANCE.asItem());
-				exclusions.add(QOLItems.SHADOW_RADIANCE_HELMET.asItem());
-				exclusions.add(QOLItems.SHADOW_RADIANCE_CHESTPLATE.asItem());
-				exclusions.add(QOLItems.SHADOW_RADIANCE_LEGGINGS.asItem());
-				exclusions.add(QOLItems.SHADOW_RADIANCE_BOOTS.asItem());
-			}
 
 			if (!CreateQOL.isActivate(Features.STATUE)){
 				exclusions.add(QOLItems.STATUE.asItem());
+			}
+
+			if (!CreateQOL.isActivate(Features.SHADOW_RADIANCE)){
+				exclusions.add(QOLBlocks.CHROMATIC_COMPOUND_BLOCK.asItem());
 			}
 
 			if (!CreateQOL.isActivate(Features.TRASH_CAN)){
@@ -227,11 +227,11 @@ public class QOLCreativeModeTabs {
 
 			List<Item> items = new LinkedList<>();
 			if (addItems) {
-				items.addAll(collectItems(exclusionPredicate.or(IS_ITEM_3D_PREDICATE.negate())));
+				items.addAll(collectItems(exclusionPredicate.or(IS_ITEM_3D_PREDICATE.negate()).or(SHADOW_RADIANCE)));
 			}
-			items.addAll(collectBlocks(exclusionPredicate));
+			items.addAll(collectBlocks(exclusionPredicate.or(SHADOW_RADIANCE)));
 			if (addItems) {
-				items.addAll(collectItems(exclusionPredicate.or(IS_ITEM_3D_PREDICATE)));
+				items.addAll(collectItems(exclusionPredicate.or(IS_ITEM_3D_PREDICATE).or(SHADOW_RADIANCE)));
 			}
 
 			applyOrderings(items, orderings);
