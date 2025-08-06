@@ -22,6 +22,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -29,9 +30,9 @@ import net.minecraft.network.chat.MutableComponent;
 public class ArmorConfigScreenList extends ObjectSelectionList<ArmorConfigScreenList.Entry> implements TickableGuiEventListener {
 
 
-	protected final ItemConfigScreen parent;
+	protected final Screen parent;
 
-	public ArmorConfigScreenList(Minecraft client, int width, int height, int top, int elementHeight, ItemConfigScreen parent) {
+	public ArmorConfigScreenList(Minecraft client, int width, int height, int top, int elementHeight, Screen parent) {
 		super(client, width, height, top, elementHeight);
 		headerHeight = 3;
 		this.parent = parent;

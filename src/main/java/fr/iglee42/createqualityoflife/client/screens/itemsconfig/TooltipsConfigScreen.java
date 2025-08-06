@@ -1,5 +1,7 @@
 package fr.iglee42.createqualityoflife.client.screens.itemsconfig;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
 import com.simibubi.create.foundation.gui.AllIcons;
@@ -7,41 +9,42 @@ import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ArmorConfigScreenList;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.BooleanEntry;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.ValueEntry;
+import fr.iglee42.createqualityoflife.packets.ChangeItemComponentPacket;
+import fr.iglee42.createqualityoflife.packets.ChangeItemTooltipsPacket;
 import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.utils.ItemTooltips;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
+import net.createmod.catnip.animation.Force;
+import net.createmod.catnip.animation.PhysicalFloat;
+import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.createmod.catnip.gui.ScreenOpener;
-import net.createmod.catnip.gui.element.BoxElement;
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.gui.element.DelegatedStencilElement;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.createmod.catnip.gui.element.RenderElement;
 import net.createmod.catnip.gui.widget.AbstractSimiWidget;
 import net.createmod.catnip.gui.widget.BoxWidget;
 import net.createmod.catnip.lang.FontHelper;
 import net.createmod.ponder.enums.PonderGuiTextures;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-import org.lwjgl.opengl.GL30;
-
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-
-import net.createmod.catnip.gui.AbstractSimiScreen;
-import net.createmod.catnip.gui.UIRenderHelper;
-import net.createmod.catnip.gui.element.DelegatedStencilElement;
-import net.createmod.catnip.gui.element.GuiGameElement;
-import net.createmod.catnip.animation.Force;
-import net.createmod.catnip.animation.PhysicalFloat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
+import org.lwjgl.opengl.GL30;
 
 import javax.annotation.Nonnull;
 import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 
-public class ItemConfigScreen extends AbstractSimiScreen {
+public class TooltipsConfigScreen extends AbstractSimiScreen {
 
 	public static final PhysicalFloat cogSpin = PhysicalFloat.create().withLimit(10f).withDrag(0.3).addForce(new Force.Static(.2f));
 
@@ -55,11 +58,9 @@ public class ItemConfigScreen extends AbstractSimiScreen {
 	protected ArmorConfigScreenList list;
 	protected int listWidth;
 
-	private List<Integer> armors;
 
 
-
-	public ItemConfigScreen(int slot) {
+	public TooltipsConfigScreen(int slot) {
 		this.itemSlot = slot;
 		this.item = Minecraft.getInstance().player.getInventory().getItem(slot);
 	}
@@ -80,24 +81,41 @@ public class ItemConfigScreen extends AbstractSimiScreen {
 
 		list.children().clear();
 		BoxWidget goBack = new BoxWidget(width / 2 - listWidth / 2 - 30, height / 2 - 30, 20, 20).withPadding(2, 2)
-				.withCallback(() -> ScreenOpener.open(new InventoryConfigScreen()));
+				.withCallback(() -> ScreenOpener.open(new ItemConfigScreen(itemSlot)));
 		goBack.showingElement(PonderGuiTextures.ICON_CONFIG_BACK.asStencil()
 				.withElementRenderer(BoxWidget.gradientFactory.apply(goBack)));
 		goBack.getToolTip()
 				.add(Component.literal("Go Back"));
 		addRenderableWidget(goBack);
 
-		if (item.has(QOLDataComponents.ITEM_TOOLTIPS)) list.children().add(new TooltipButtonEntry("Tooltips","Open the config menu to choose which tooltips are displayed"));
+		ItemTooltips tooltips = item.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS,ItemTooltips.DEFAULT);
 
-		if (item.getItem() instanceof QOLConfigurableItem configurableItem){
-			try {
-				List<QOLConfigurableItem.Configuration<?>> configurations = configurableItem.getConfigurations(item);
-				list.children().addAll(configurations.stream().map(c->c.type().getWidget(c)).toList());
-			} catch (InvalidClassException e) {
-				throw new RuntimeException(e);
-			}
-
+		for (ItemTooltips.Tooltip t : ItemTooltips.Tooltip.values()) {
+			list.children().add(new TooltipEntry(t.getDisplayName(),tooltips.isEnable(t),t,"Disable " + t.getDisplayName() + " in the item's tooltips"));
 		}
+
+		BoxWidget enableAll = new BoxWidget(width / 2 + listWidth / 2 + 8, height / 2 - 45, 20, 20).withPadding(2, 2)
+				.withCallback(() -> {
+					list.children().stream().map(TooltipEntry.class::cast).forEach(e->e.setValue(true));
+				});
+		enableAll.showingElement(AllIcons.I_CONFIRM.asStencil()
+				.withElementRenderer(BoxWidget.gradientFactory.apply(enableAll)));
+		enableAll.getToolTip()
+				.add(Component.literal("Enable All"));
+		addRenderableWidget(enableAll);
+
+
+		BoxWidget disableAll = new BoxWidget(width / 2 + listWidth / 2 + 8, height / 2 - 15, 20, 20).withPadding(2, 2)
+				.withCallback(() -> {
+					list.children().stream().map(TooltipEntry.class::cast).forEach(e->e.setValue(false));
+				});
+		disableAll.showingElement(AllIcons.I_DISABLE.asStencil()
+				.withElementRenderer(BoxWidget.gradientFactory.apply(disableAll)));
+		disableAll.getToolTip()
+				.add(Component.literal("Disable All"));
+		addRenderableWidget(disableAll);
+
+
 
 	}
 
@@ -105,20 +123,6 @@ public class ItemConfigScreen extends AbstractSimiScreen {
 	public void tick() {
 		super.tick();
 		cogSpin.tick();
-
-		list.children().stream()
-				.filter(e -> e instanceof ValueEntry<?>)
-				.map(e -> (ValueEntry<?>) e)
-				.forEach(entry -> {
-					List<ValueEntry<?>> entries = (List<ValueEntry<?>>) (List<?>) list.children().stream()
-							.filter(e -> e instanceof ValueEntry)
-							.map(e -> (ValueEntry<?>) e)
-							.toList();
-					if (entry.isEditable() && !entry.getEnableFunction().apply(entry, entries)) {
-						if (entry instanceof BooleanEntry be) be.setValue(false);
-					}
-					entry.setEditable(entry.getEnableFunction().apply(entry, entries));
-				});
 	}
 
 	@Override
@@ -151,7 +155,7 @@ public class ItemConfigScreen extends AbstractSimiScreen {
 	protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		int x = width / 2;
 
-		graphics.drawCenteredString(minecraft.font, Component.literal("Configure " ).append(item.getHoverName()) , x, 15, UIRenderHelper.COLOR_TEXT.getFirst().getRGB());
+		graphics.drawCenteredString(minecraft.font, Component.literal("Configure " ).append(item.getHoverName()).append(" Tooltips") , x, 15, UIRenderHelper.COLOR_TEXT.getFirst().getRGB());
 
 	}
 
@@ -195,13 +199,20 @@ public class ItemConfigScreen extends AbstractSimiScreen {
 		super.resize(p_96575_, p_96576_, p_96577_);
 	}
 
-	public class TooltipButtonEntry extends ArmorConfigScreenList.LabeledEntry {
+	public class TooltipEntry extends ArmorConfigScreenList.LabeledEntry {
 
+		protected boolean value;
 		protected List<String> commentLines = new ArrayList<>(List.of("."));
+		protected ItemTooltips.Tooltip tooltip;
+
+		RenderElement enabled;
+		RenderElement disabled;
 		BoxWidget button;
 
-		public TooltipButtonEntry(String label, String... comments) {
+		public TooltipEntry(String label, boolean value, ItemTooltips.Tooltip tooltip, String... comments) {
 			super(label);
+			this.value = value;
+			this.tooltip = tooltip;
 
 			labelTooltip.add(Component.literal(label).withStyle(ChatFormatting.WHITE));
 
@@ -214,11 +225,19 @@ public class ItemConfigScreen extends AbstractSimiScreen {
 					.toList()
 			);
 
-			button = new BoxWidget()
-					.withCallback(() -> ScreenOpener.open(new TooltipsConfigScreen(itemSlot)));
-			button.showingElement(PonderGuiTextures.ICON_CONFIG_OPEN.asStencil().withElementRenderer(BoxWidget.gradientFactory.apply(button)).at(10,0));
+			enabled = PonderGuiTextures.ICON_CONFIRM.asStencil()
+					.withElementRenderer((ms, width, height, alpha) -> UIRenderHelper.angledGradient(ms, 0, 0, height / 2, height, width, AbstractSimiWidget.COLOR_SUCCESS))
+					.at(10, 0);
+
+			disabled = PonderGuiTextures.ICON_DISABLE.asStencil()
+					.withElementRenderer((ms, width, height, alpha) -> UIRenderHelper.angledGradient(ms, 0, 0, height / 2, height, width, AbstractSimiWidget.COLOR_FAIL))
+					.at(10, 0);
+
+			button = new BoxWidget().showingElement(enabled)
+					.withCallback(() -> setValue(!getValue()));
 
 			listeners.add(button);
+			onReset();
 		}
 
 
@@ -237,5 +256,40 @@ public class ItemConfigScreen extends AbstractSimiScreen {
 		protected int getLabelWidth(int totalWidth) {
 			return (int) (totalWidth * labelWidthMult) + 30;
 		}
+
+		public void setValue(@Nonnull boolean value) {
+			this.value = value;
+			onValueChange(value);
+		}
+
+		@Nonnull
+		public boolean getValue() {
+			return value;
+		}
+
+
+		public void onReset() {
+			onValueChange(getValue());
+		}
+
+		public void onValueChange() {
+			onValueChange(getValue());
+		}
+		public void onValueChange(boolean newValue) {
+			button.showingElement(newValue ? enabled : disabled);
+			bumpCog(newValue ? 15f : -16f);
+			if (Minecraft.getInstance().screen == null) {
+				CreateQOL.LOGGER.error("Cannot change component on a ValueEntry because the screen is null");
+				return;
+			}
+			int slot = getItemSlot();
+			PacketDistributor.sendToServer(new ChangeItemTooltipsPacket(slot, value, tooltip));
+		}
+
+		protected void bumpCog() {bumpCog(10f);}
+		protected void bumpCog(float force) {
+			ItemConfigScreen.cogSpin.bump(3, force);
+		}
 	}
+
 }

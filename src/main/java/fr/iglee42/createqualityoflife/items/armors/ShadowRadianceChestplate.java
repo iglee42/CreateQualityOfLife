@@ -188,6 +188,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
+        if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         components.add(Component.literal("Air : ")
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.literal(String.valueOf(BacktankUtil.getAir(stack)))

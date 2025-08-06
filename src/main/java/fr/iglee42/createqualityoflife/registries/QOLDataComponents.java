@@ -3,6 +3,7 @@ package fr.iglee42.createqualityoflife.registries;
 import com.mojang.serialization.Codec;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import fr.iglee42.createqualityoflife.utils.ItemTooltips;
 import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import fr.iglee42.createqualityoflife.utils.ShadowRadianceEffects;
 import net.minecraft.core.UUIDUtil;
@@ -49,6 +50,7 @@ public class QOLDataComponents {
     public static final DataComponentType<PreferredRender> PREFERRED_RENDER = register("preferred_render", b->b.persistent(PreferredRender.CODEC).networkSynchronized(PreferredRender.STREAM_CODEC));
     public static final DataComponentType<ShadowRadianceEffects> EFFECT = register("preferred_effect", b->b.persistent(ShadowRadianceEffects.CODEC).networkSynchronized(ShadowRadianceEffects.STREAM_CODEC));
     public static final DataComponentType<CompoundTag> COPIED_DATAS = register("copied_datas",b->b.persistent(CompoundTag.CODEC).networkSynchronized(ByteBufCodecs.COMPOUND_TAG));
+    public static final DataComponentType<ItemTooltips> ITEM_TOOLTIPS = register("item_tooltips", b->b.persistent(ItemTooltips.CODEC).networkSynchronized(ItemTooltips.STREAM_CODEC));
 
     private static <T> DataComponentType<T> register(String name, UnaryOperator<DataComponentType.Builder<T>> builder) {
         DataComponentType<T> type = builder.apply(DataComponentType.builder()).build();

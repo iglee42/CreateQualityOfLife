@@ -18,6 +18,7 @@ import fr.iglee42.createqualityoflife.items.tools.shadowradiance.*;
 import fr.iglee42.createqualityoflife.items.tools.shadowsteel.*;
 import fr.iglee42.createqualityoflife.statue.StatueItem;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import fr.iglee42.createqualityoflife.utils.ItemTooltips;
 import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
@@ -51,6 +52,7 @@ public class QOLItems {
                     ShadowRadianceHelmet::new)
             .properties(p -> p.fireResistant().rarity(Rarity.EPIC).durability(814).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
             .tag(ItemTags.HEAD_ARMOR)
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
 
@@ -67,6 +69,7 @@ public class QOLItems {
                     .model(p.getBuilder(p.name(c)+"_elytra").parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0",CreateQOL.asResource("item/"+c.getName()+"_elytra")))
                     .end())
             .properties(p -> p.fireResistant().rarity(Rarity.EPIC).durability(1184).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).component(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
             .tag(ItemTags.CHEST_ARMOR)
             .register();
@@ -77,6 +80,7 @@ public class QOLItems {
             .item("shadow_radiance_leggings",
                     p -> new ShadowRadianceArmorItem(ArmorItem.Type.LEGGINGS, p))
             .properties(p -> p.fireResistant().rarity(Rarity.EPIC).durability(1110).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .tag(ItemTags.LEG_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
@@ -85,6 +89,7 @@ public class QOLItems {
             .item("shadow_radiance_boots",
                     p -> new ShadowRadianceArmorItem(ArmorItem.Type.BOOTS, p))
             .properties(p -> p.fireResistant().rarity(Rarity.EPIC).durability(962).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .tag(ItemTags.FOOT_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
@@ -98,6 +103,7 @@ public class QOLItems {
             .item("refined_radiance_helmet",
                     RefinedRadianceHelmet::new)
             .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(814).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .tag(ItemTags.HEAD_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
@@ -114,6 +120,7 @@ public class QOLItems {
                     .model(p.getBuilder(p.name(c)+"_elytra").parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0",CreateQOL.asResource("item/"+c.getName()+"_elytra")))
                     .end())
             .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1184).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).component(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
             .tag(ItemTags.CHEST_ARMOR)
             .register();
@@ -122,6 +129,7 @@ public class QOLItems {
             .item("refined_radiance_leggings",
                     p -> new RefinedRadianceArmorItem(ArmorItem.Type.LEGGINGS, p))
             .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1110).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .tag(ItemTags.LEG_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
@@ -130,6 +138,7 @@ public class QOLItems {
             .item("refined_radiance_boots",
                     p -> new RefinedRadianceArmorItem(ArmorItem.Type.BOOTS, p))
             .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(962).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .tag(ItemTags.FOOT_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
@@ -140,6 +149,7 @@ public class QOLItems {
             .item("shadow_steel_helmet",
                     ShadowSteelHelmet::new)
             .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(814).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .tag(ItemTags.HEAD_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
@@ -153,6 +163,7 @@ public class QOLItems {
                     p -> new ShadowSteelChestplate(p,
                             SHADOW_STEEL_CHESTPLATE_PLACEABLE))
             .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1184).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).component(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
             .tag(ItemTags.CHEST_ARMOR)
             .register();
@@ -161,6 +172,7 @@ public class QOLItems {
             .item("shadow_steel_leggings",
                     p -> new ShadowSteelArmorItem(ArmorItem.Type.LEGGINGS, p))
             .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1110).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .tag(ItemTags.LEG_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
@@ -169,6 +181,7 @@ public class QOLItems {
             .item("shadow_steel_boots",
                     p -> new ShadowSteelArmorItem(ArmorItem.Type.BOOTS, p))
             .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(962).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .tag(ItemTags.FOOT_ARMOR)
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
@@ -181,6 +194,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(SwordItem
                     .createAttributes(QOLTiers.SHADOW_STEEL, 3, -2.8f)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.SWORDS)
             .tag(Tags.Items.MELEE_WEAPON_TOOLS)
@@ -192,6 +206,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(SwordItem
                     .createAttributes(QOLTiers.REFINED_RADIANCE, 3, -2.8f)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.SWORDS)
             .tag(Tags.Items.MELEE_WEAPON_TOOLS)
@@ -203,6 +218,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(PickaxeItem
                     .createAttributes(QOLTiers.SHADOW_STEEL, 1, -2.8f)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.PICKAXES)
             .tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
@@ -214,6 +230,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(PickaxeItem
                     .createAttributes(QOLTiers.REFINED_RADIANCE, 1, -2.8f)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.PICKAXES)
             .tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
@@ -225,6 +242,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(AxeItem
                     .createAttributes(QOLTiers.SHADOW_STEEL, 5.0F, -3.0F)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.AXES)
             .tag(Tags.Items.MELEE_WEAPON_TOOLS)
@@ -236,6 +254,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(AxeItem
                     .createAttributes(QOLTiers.REFINED_RADIANCE, 5.0F, -3.0F)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.AXES)
             .tag(Tags.Items.MELEE_WEAPON_TOOLS)
@@ -247,6 +266,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(ShovelItem
                     .createAttributes(QOLTiers.SHADOW_STEEL, 1.5F, -3.0F)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.SHOVELS)
             .register();
@@ -257,6 +277,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(ShovelItem
                     .createAttributes(QOLTiers.REFINED_RADIANCE, 1.5F, -3.0F)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.SHOVELS)
             .register();
@@ -267,6 +288,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(HoeItem
                     .createAttributes(QOLTiers.SHADOW_STEEL, -4.0F, 0.0F)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.HOES)
             .register();
@@ -277,6 +299,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(HoeItem
                     .createAttributes(QOLTiers.REFINED_RADIANCE, -4.0F, 0.0F)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.HOES)
             .register();
@@ -287,6 +310,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(SwordItem
                     .createAttributes(QOLTiers.SHADOW_RADIANCE, 3, -2.8f)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.SWORDS)
             .tag(Tags.Items.MELEE_WEAPON_TOOLS)
@@ -298,6 +322,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(PickaxeItem
                     .createAttributes(QOLTiers.SHADOW_RADIANCE, 1, -2.8f)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.PICKAXES)
             .tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
@@ -309,6 +334,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(AxeItem
                     .createAttributes(QOLTiers.SHADOW_RADIANCE, 5.0F, -3.0F)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.AXES)
             .tag(Tags.Items.MELEE_WEAPON_TOOLS)
@@ -319,6 +345,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(ShovelItem
                     .createAttributes(QOLTiers.SHADOW_RADIANCE, 1.5F, -3.0F)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.SHOVELS)
             .register();
@@ -329,6 +356,7 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(HoeItem
                     .createAttributes(QOLTiers.SHADOW_RADIANCE, -4.0F, 0.0F)))
+            .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.HOES)
             .register();

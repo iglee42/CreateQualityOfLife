@@ -8,6 +8,7 @@ import fr.iglee42.createqualityoflife.registries.QOLArmorMaterials;
 import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.registries.QOLItems;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import fr.iglee42.createqualityoflife.utils.ItemTooltips;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -48,6 +49,7 @@ public class RefinedRadianceArmorItem extends BaseArmorItem implements QOLConfig
     }
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext p_41422_, @NotNull List<Component> components, @NotNull TooltipFlag p_41424_) {
+        if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         if (getType().equals(ArmorItem.Type.BOOTS)) {
             components.add(Component.literal("Diving : ")
                     .withStyle(ChatFormatting.GOLD)
