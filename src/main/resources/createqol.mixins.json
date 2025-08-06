@@ -6,6 +6,7 @@
   "refmap": "createqol.refmap.json",
   "mixins": [
     "AllCreativeModeTabsMixin",
+    "AttributeUtilMixin",
     "BacktankRendererMixin",
     "BeltBlockMixin",
     "BeltDeployerCallbacksMixin",
@@ -15,6 +16,7 @@
     "EntityDataSerializersMixin",
     "FlapDisplayBlockMixin",
     "FrogportBlockEntityMixin",
+    "ItemStackMixin",
     "LavaSwimmingMixin",
     "MechanicalCraftingRecipeMixin",
     "MechanicalCraftingRecipeSerializerMixin",

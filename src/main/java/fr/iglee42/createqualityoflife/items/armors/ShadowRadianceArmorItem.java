@@ -7,6 +7,7 @@ import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLArmorMaterials;
 import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import fr.iglee42.createqualityoflife.utils.ItemTooltips;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
 import fr.iglee42.createqualityoflife.utils.ShadowRadianceEffects;
 import net.minecraft.ChatFormatting;
@@ -43,6 +44,7 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext p_339594_, List<Component> components, TooltipFlag p_41424_) {
+        if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         components.add(Component.literal("Effect : ")
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.translatable(providedEffect(stack).value().getDescriptionId()).withStyle(ChatFormatting.YELLOW)));

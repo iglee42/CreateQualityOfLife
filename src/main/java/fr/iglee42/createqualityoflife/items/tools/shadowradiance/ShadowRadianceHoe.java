@@ -10,6 +10,7 @@ import fr.iglee42.createqualityoflife.items.tools.shadowsteel.ShadowSteelHoe;
 import fr.iglee42.createqualityoflife.items.tools.shadowsteel.ShadowSteelPickaxe;
 import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.registries.QOLTiers;
+import fr.iglee42.createqualityoflife.utils.ItemTooltips;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -55,6 +56,7 @@ public class ShadowRadianceHoe extends HoeItem implements QOLConfigurableItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
+        if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         components.add(Component.literal("Reach : ")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, stack.getOrDefault(QOLDataComponents.REACH,true), false, true)));
