@@ -13,6 +13,8 @@ public class QOLSprites {
         public static final SpriteShiftEntry SHADOW_CHEST =
                 get("block/shadow_radiance_chestplate", "block/shadow_radiance_chestplate");
 
+        public static final CTSpriteShiftEntry SHADOW_RADIANCE_CASING = omni("shadow_radiance_casing");
+
 
         static {
             populateMaps();
