@@ -1,5 +1,13 @@
 {
   "parent": "minecraft:item/handheld",
+  "overrides": [
+    {
+      "model": "createqol:item/refined_radiance_hoe_special",
+      "predicate": {
+        "createqol:harvesting": 1.0
+      }
+    }
+  ],
   "textures": {
     "layer0": "createqol:item/refined_radiance_hoe"
   }

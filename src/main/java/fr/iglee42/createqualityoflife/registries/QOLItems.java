@@ -8,21 +8,46 @@ import com.simibubi.create.content.logistics.box.PackageItem;
 import com.simibubi.create.content.logistics.box.PackageStyles;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.item.ItemDescription;
+import com.tterrag.registrate.builders.BlockBuilder;
+import com.tterrag.registrate.builders.ItemBuilder;
+import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.ProviderType;
+import com.tterrag.registrate.providers.RegistrateItemModelProvider;
+import com.tterrag.registrate.util.OneTimeEventReceiver;
+import com.tterrag.registrate.util.RegistrateDistExecutor;
 import com.tterrag.registrate.util.entry.ItemEntry;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
+import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.config.CQOLStress;
 import fr.iglee42.createqualityoflife.items.*;
 import fr.iglee42.createqualityoflife.items.armors.*;
 import fr.iglee42.createqualityoflife.items.tools.refinedradiance.*;
 import fr.iglee42.createqualityoflife.items.tools.shadowradiance.*;
 import fr.iglee42.createqualityoflife.items.tools.shadowsteel.*;
 import fr.iglee42.createqualityoflife.statue.StatueItem;
+import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import fr.iglee42.createqualityoflife.utils.ItemTooltips;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
+import fr.iglee42.createqualityoflife.utils.PreferredRender;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.Tags;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import java.util.function.Supplier;
 
+import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 import static com.simibubi.create.AllTags.forgeItemTag;
 import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
 
@@ -174,7 +199,7 @@ public class QOLItems {
 
     public static final ItemEntry<ShadowSteelSword> SHADOW_STEEL_SWORD = REGISTRATE
             .item("shadow_steel_sword", ShadowSteelSword::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.RARE).stacksTo(1))
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(SwordItem
                     .createAttributes(QOLTiers.SHADOW_STEEL, 3, -2.8f)))
@@ -185,7 +210,7 @@ public class QOLItems {
 
     public static final ItemEntry<RefinedRadianceSword> REFINED_RADIANCE_SWORD = REGISTRATE
             .item("refined_radiance_sword", RefinedRadianceSword::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.RARE).stacksTo(1))
             .properties(Item.Properties::fireResistant)
             .properties(p -> p.attributes(SwordItem
                     .createAttributes(QOLTiers.REFINED_RADIANCE, 3, -2.8f)))
@@ -196,74 +221,74 @@ public class QOLItems {
 
     public static final ItemEntry<ShadowSteelPickaxe> SHADOW_STEEL_PICKAXE = REGISTRATE
             .item("shadow_steel_pickaxe",ShadowSteelPickaxe::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.RARE).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .model((c,p)->p.handheld(c))
+            .transform(tool(NBTConstants.NBT_DIGGING,null))
             .tag(ItemTags.PICKAXES)
             .tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
             .register();
 
     public static final ItemEntry<RefinedRadiancePickaxe> REFINED_RADIANCE_PICKAXE = REGISTRATE
             .item("refined_radiance_pickaxe", RefinedRadiancePickaxe::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.RARE).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .model((c,p)->p.handheld(c))
+            .transform(tool(NBTConstants.NBT_VEIN_MINE,null))
             .tag(ItemTags.PICKAXES)
             .tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
             .register();
 
     public static final ItemEntry<ShadowSteelAxe> SHADOW_STEEL_AXE = REGISTRATE
             .item("shadow_steel_axe", ShadowSteelAxe::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.RARE).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .model((c,p)->p.handheld(c))
+            .transform(tool(NBTConstants.NBT_CASINGIFIER,null))
             .tag(ItemTags.AXES)
             .tag(Tags.Items.MELEE_WEAPON_TOOLS)
             .register();
 
     public static final ItemEntry<RefinedRadianceAxe> REFINED_RADIANCE_AXE = REGISTRATE
             .item("refined_radiance_axe", RefinedRadianceAxe::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.RARE).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .model((c,p)->p.handheld(c))
+            .transform(tool(NBTConstants.NBT_TREE_DECAPITATION,null))
             .tag(ItemTags.AXES)
             .register();
 
     public static final ItemEntry<ShadowSteelShovel> SHADOW_STEEL_SHOVEL = REGISTRATE
             .item("shadow_steel_shovel", ShadowSteelShovel::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.RARE).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .model((c,p)->p.handheld(c))
+            .transform(tool(NBTConstants.NBT_DIGGING,null))
             .tag(ItemTags.SHOVELS)
             .register();
 
     public static final ItemEntry<RefinedRadianceShovel> REFINED_RADIANCE_SHOVEL = REGISTRATE
             .item("refined_radiance_shovel", RefinedRadianceShovel::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.RARE).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .model((c,p)->p.handheld(c))
+            .transform(tool(NBTConstants.NBT_SMELTING,null))
             .tag(ItemTags.SHOVELS)
             .register();
 
     public static final ItemEntry<ShadowSteelHoe> SHADOW_STEEL_HOE = REGISTRATE
             .item("shadow_steel_hoe", ShadowSteelHoe::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.RARE).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .model((c,p)->p.handheld(c))
+            .transform(tool(NBTConstants.NBT_PLOUGHING,null))
             .tag(ItemTags.HOES)
             .register();
 
     public static final ItemEntry<RefinedRadianceHoe> REFINED_RADIANCE_HOE = REGISTRATE
             .item("refined_radiance_hoe", RefinedRadianceHoe::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.RARE).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .model((c,p)->p.handheld(c))
+            .transform(tool(NBTConstants.NBT_HARVESTING,null))
             .tag(ItemTags.HOES)
             .register();
 
     public static final ItemEntry<ShadowRadianceSword> SHADOW_RADIANCE_SWORD = REGISTRATE
             .item("shadow_radiance_sword", ShadowRadianceSword::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.EPIC).stacksTo(1))
             .properties(Item.Properties::fireResistant)
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.SWORDS)
@@ -271,40 +296,34 @@ public class QOLItems {
 
     public static final ItemEntry<ShadowRadiancePickaxe> SHADOW_RADIANCE_PICKAXE = REGISTRATE
             .item("shadow_radiance_pickaxe",ShadowRadiancePickaxe::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.EPIC).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .model((c,p)->p.handheld(c))
+            .transform(tool(NBTConstants.NBT_DIGGING,NBTConstants.NBT_VEIN_MINE))
             .tag(ItemTags.PICKAXES)
             .tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
             .register();
 
     public static final ItemEntry<ShadowRadianceAxe> SHADOW_RADIANCE_AXE = REGISTRATE
             .item("shadow_radiance_axe", ShadowRadianceAxe::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.EPIC).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .properties(p -> p.attributes(AxeItem
-                    .createAttributes(QOLTiers.SHADOW_RADIANCE, 5.0F, -3.0F)))
-            .model((c,p)->p.handheld(c))
+            .transform(tool(NBTConstants.NBT_CASINGIFIER,NBTConstants.NBT_TREE_DECAPITATION))
             .tag(ItemTags.AXES)
             .tag(Tags.Items.MELEE_WEAPON_TOOLS)
             .register();
     public static final ItemEntry<ShadowRadianceShovel> SHADOW_RADIANCE_SHOVEL = REGISTRATE
             .item("shadow_radiance_shovel", ShadowRadianceShovel::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.EPIC).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .properties(p -> p.attributes(ShovelItem
-                    .createAttributes(QOLTiers.SHADOW_RADIANCE, 1.5F, -3.0F)))
-            .model((c,p)->p.handheld(c))
+            .transform(tool(NBTConstants.NBT_DIGGING,NBTConstants.NBT_SMELTING))
             .tag(ItemTags.SHOVELS)
             .register();
 
     public static final ItemEntry<ShadowRadianceHoe> SHADOW_RADIANCE_HOE = REGISTRATE
             .item("shadow_radiance_hoe", ShadowRadianceHoe::new)
-            .properties(p -> p.stacksTo(1))
+            .properties(p -> p.rarity(Rarity.EPIC).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .properties(p -> p.attributes(HoeItem
-                    .createAttributes(QOLTiers.SHADOW_RADIANCE, -4.0F, 0.0F)))
-            .model((c,p)->p.handheld(c))
+            .transform(tool(NBTConstants.NBT_PLOUGHING,NBTConstants.NBT_HARVESTING))
             .tag(ItemTags.HOES)
             .register();
 
@@ -328,4 +347,26 @@ public class QOLItems {
                 .setData(ProviderType.LANG,(c,p)->{})
                 .register();
     }
+
+    public static <B extends Item, P> NonNullUnaryOperator<ItemBuilder<B, P>> tool(@NotNull String component1, @Nullable String component2) {
+        return i -> {
+                    i = i.model((c, p) -> {
+                        ItemModelBuilder builder = p.handheld(c)
+                                .override()
+                                .predicate(CreateQOL.asResource(component1),1.0f)
+                                .model(p.getBuilder(c.getName() + "_special").parent(new ModelFile.UncheckedModelFile("item/handheld")).texture("layer0",c.getName() + "_special")).end();
+                        if (component2 != null) {
+                            builder.override()
+                                    .predicate(CreateQOL.asResource(component2),1.0f)
+                                    .model(p.getBuilder(c.getName() + "_special_2").parent(new ModelFile.UncheckedModelFile("item/handheld")).texture("layer0",c.getName() + "_special_2")).end();
+                        }
+                    })
+                    .onRegister(it-> RegistrateDistExecutor.unsafeRunWhenOn(Dist.CLIENT,()->()->ItemProperties.register(it,CreateQOL.asResource(component1),(stack,lvl,entity,index)->NBTConstants.getOrDefault(stack,component1,false) ? 1.0f : 0.0f )));
+                    if (component2 != null) {
+                        i = i.onRegister(it -> RegistrateDistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ItemProperties.register(it, CreateQOL.asResource(component2), (stack, lvl, entity, index) -> NBTConstants.getOrDefault(stack,component2,false) ? 1.0f : 0.0f)));
+                    }
+                    return i;
+        };
+    }
+
 }

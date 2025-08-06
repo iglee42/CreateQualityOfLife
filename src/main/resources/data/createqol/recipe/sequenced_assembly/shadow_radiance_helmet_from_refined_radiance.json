@@ -10,8 +10,8 @@
     "item": "createqol:refined_radiance_helmet"
   },
   "transitional_item": {
-    "item":{
-      "id":"createqol:refined_radiance_helmet"
+    "item": {
+      "id": "createqol:refined_radiance_helmet"
     }
   },
   "sequence": [
@@ -24,8 +24,8 @@
       ],
       "results": [
         {
-          "item":{
-            "id":"createqol:refined_radiance_helmet"
+          "item": {
+            "id": "createqol:refined_radiance_helmet"
           }
         }
       ],
@@ -43,8 +43,8 @@
       ],
       "results": [
         {
-          "item":{
-            "id":"createqol:refined_radiance_helmet"
+          "item": {
+            "id": "createqol:refined_radiance_helmet"
           }
         }
       ]
@@ -58,8 +58,8 @@
       ],
       "results": [
         {
-          "item":{
-            "id":"createqol:refined_radiance_helmet"
+          "item": {
+            "id": "createqol:refined_radiance_helmet"
           }
         }
       ]
@@ -76,8 +76,8 @@
       ],
       "results": [
         {
-          "item":{
-            "id":"createqol:refined_radiance_helmet"
+          "item": {
+            "id": "createqol:refined_radiance_helmet"
           }
         }
       ]
@@ -85,8 +85,8 @@
   ],
   "results": [
     {
-      "item":{
-        "id":"createqol:shadow_radiance_helmet"
+      "item": {
+        "id": "createqol:shadow_radiance_helmet"
       }
     }
   ],
@@ -95,6 +95,7 @@
     "minecraft:enchantments",
     "create:banktank_air",
     "minecraft:custom_name",
+    "createqol:item_tooltips",
     "minecraft:trim"
   ]
 }

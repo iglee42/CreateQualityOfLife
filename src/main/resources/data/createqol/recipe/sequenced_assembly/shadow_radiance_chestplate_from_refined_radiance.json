@@ -10,8 +10,8 @@
     "item": "createqol:refined_radiance_chestplate"
   },
   "transitional_item": {
-    "item":{
-      "id":"createqol:refined_radiance_chestplate"
+    "item": {
+      "id": "createqol:refined_radiance_chestplate"
     }
   },
   "sequence": [
@@ -24,8 +24,8 @@
       ],
       "results": [
         {
-          "item":{
-            "id":"createqol:refined_radiance_chestplate"
+          "item": {
+            "id": "createqol:refined_radiance_chestplate"
           }
         }
       ],
@@ -43,8 +43,8 @@
       ],
       "results": [
         {
-          "item":{
-            "id":"createqol:refined_radiance_chestplate"
+          "item": {
+            "id": "createqol:refined_radiance_chestplate"
           }
         }
       ]
@@ -58,8 +58,8 @@
       ],
       "results": [
         {
-          "item":{
-            "id":"createqol:refined_radiance_chestplate"
+          "item": {
+            "id": "createqol:refined_radiance_chestplate"
           }
         }
       ]
@@ -76,8 +76,8 @@
       ],
       "results": [
         {
-          "item":{
-            "id":"createqol:refined_radiance_chestplate"
+          "item": {
+            "id": "createqol:refined_radiance_chestplate"
           }
         }
       ]
@@ -85,8 +85,8 @@
   ],
   "results": [
     {
-      "item":{
-        "id":"createqol:shadow_radiance_chestplate"
+      "item": {
+        "id": "createqol:shadow_radiance_chestplate"
       }
     }
   ],
@@ -95,6 +95,7 @@
     "minecraft:enchantments",
     "create:banktank_air",
     "minecraft:custom_name",
+    "createqol:item_tooltips",
     "minecraft:trim",
     "createqol:elytra"
   ]

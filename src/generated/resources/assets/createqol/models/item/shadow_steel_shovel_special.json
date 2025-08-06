@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "createqol:shadow_steel_shovel_special"
+  }
+}
