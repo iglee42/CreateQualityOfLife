@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "createqol:refined_radiance_axe_special"
+  }
+}

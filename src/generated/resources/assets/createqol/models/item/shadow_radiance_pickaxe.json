@@ -1,5 +1,19 @@
 {
   "parent": "minecraft:item/handheld",
+  "overrides": [
+    {
+      "model": "createqol:item/shadow_radiance_pickaxe_special",
+      "predicate": {
+        "createqol:digging": 1.0
+      }
+    },
+    {
+      "model": "createqol:item/shadow_radiance_pickaxe_special_2",
+      "predicate": {
+        "createqol:vein_mine": 1.0
+      }
+    }
+  ],
   "textures": {
     "layer0": "createqol:item/shadow_radiance_pickaxe"
   }

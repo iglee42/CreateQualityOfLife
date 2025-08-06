@@ -10,8 +10,8 @@
     "item": "createqol:refined_radiance_shovel"
   },
   "transitional_item": {
-    "item":{
-      "id":"createqol:refined_radiance_shovel"
+    "item": {
+      "id": "createqol:refined_radiance_shovel"
     }
   },
   "sequence": [
@@ -25,7 +25,7 @@
       "results": [
         {
           "item": {
-            "id":"createqol:refined_radiance_shovel"
+            "id": "createqol:refined_radiance_shovel"
           }
         }
       ],
@@ -94,6 +94,7 @@
   "copied_components": [
     "minecraft:enchantments",
     "minecraft:custom_name",
+    "createqol:item_tooltips",
     "createqol:reach"
   ]
 }

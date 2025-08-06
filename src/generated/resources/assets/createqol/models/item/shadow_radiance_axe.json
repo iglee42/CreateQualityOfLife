@@ -1,5 +1,19 @@
 {
   "parent": "minecraft:item/handheld",
+  "overrides": [
+    {
+      "model": "createqol:item/shadow_radiance_axe_special",
+      "predicate": {
+        "createqol:casingifier": 1.0
+      }
+    },
+    {
+      "model": "createqol:item/shadow_radiance_axe_special_2",
+      "predicate": {
+        "createqol:tree_decapitation": 1.0
+      }
+    }
+  ],
   "textures": {
     "layer0": "createqol:item/shadow_radiance_axe"
   }

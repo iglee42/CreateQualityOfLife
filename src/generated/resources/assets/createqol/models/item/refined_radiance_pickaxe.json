@@ -1,5 +1,13 @@
 {
   "parent": "minecraft:item/handheld",
+  "overrides": [
+    {
+      "model": "createqol:item/refined_radiance_pickaxe_special",
+      "predicate": {
+        "createqol:vein_mine": 1.0
+      }
+    }
+  ],
   "textures": {
     "layer0": "createqol:item/refined_radiance_pickaxe"
   }

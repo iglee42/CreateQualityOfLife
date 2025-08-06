@@ -1,5 +1,19 @@
 {
   "parent": "minecraft:item/handheld",
+  "overrides": [
+    {
+      "model": "createqol:item/shadow_radiance_hoe_special",
+      "predicate": {
+        "createqol:ploughing": 1.0
+      }
+    },
+    {
+      "model": "createqol:item/shadow_radiance_hoe_special_2",
+      "predicate": {
+        "createqol:harvesting": 1.0
+      }
+    }
+  ],
   "textures": {
     "layer0": "createqol:item/shadow_radiance_hoe"
   }

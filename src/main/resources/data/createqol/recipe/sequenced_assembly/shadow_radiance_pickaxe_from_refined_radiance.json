@@ -10,8 +10,8 @@
     "item": "createqol:refined_radiance_pickaxe"
   },
   "transitional_item": {
-    "item":{
-      "id":"createqol:refined_radiance_pickaxe"
+    "item": {
+      "id": "createqol:refined_radiance_pickaxe"
     }
   },
   "sequence": [
@@ -25,7 +25,7 @@
       "results": [
         {
           "item": {
-            "id":"createqol:refined_radiance_pickaxe"
+            "id": "createqol:refined_radiance_pickaxe"
           }
         }
       ],
@@ -94,6 +94,7 @@
   "copied_components": [
     "minecraft:enchantments",
     "minecraft:custom_name",
+    "createqol:item_tooltips",
     "createqol:reach"
   ]
 }

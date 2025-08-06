@@ -10,8 +10,8 @@
     "item": "createqol:shadow_steel_sword"
   },
   "transitional_item": {
-    "item":{
-      "id":"createqol:shadow_steel_sword"
+    "item": {
+      "id": "createqol:shadow_steel_sword"
     }
   },
   "sequence": [
@@ -25,7 +25,7 @@
       "results": [
         {
           "item": {
-            "id":"createqol:shadow_steel_sword"
+            "id": "createqol:shadow_steel_sword"
           }
         }
       ],
@@ -94,6 +94,7 @@
   "copied_components": [
     "minecraft:enchantments",
     "minecraft:custom_name",
+    "createqol:item_tooltips",
     "createqol:reach"
   ]
 }
