@@ -17,6 +17,7 @@
     "createqol:refined_radiance_block",
     "createqol:shadow_steel_block",
     "createqol:chromatic_compound_block",
-    "createqol:shadow_radiance_block"
+    "createqol:shadow_radiance_block",
+    "createqol:shadow_radiance_casing"
   ]
 }

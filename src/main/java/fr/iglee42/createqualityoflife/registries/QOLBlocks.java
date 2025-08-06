@@ -2,11 +2,14 @@ package fr.iglee42.createqualityoflife.registries;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
+import com.simibubi.create.Create;
+import com.simibubi.create.content.decoration.encasing.CasingBlock;
 import com.simibubi.create.content.kinetics.saw.SawGenerator;
 import com.simibubi.create.content.legacy.ChromaticCompoundColor;
 import com.simibubi.create.content.logistics.packager.PackagerGenerator;
 import com.simibubi.create.foundation.block.render.ReducedDestroyEffects;
 import com.simibubi.create.foundation.data.AssetLookup;
+import com.simibubi.create.foundation.data.BuilderTransformers;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -202,7 +205,11 @@ public class QOLBlocks {
             .build()
             .register();
 
-
+    public static final BlockEntry<CasingBlock> SHADOW_RADIANCE_CASING = REGISTRATE.block("shadow_radiance_casing", CasingBlock::new)
+            .properties(p -> p.mapColor(MapColor.PODZOL))
+            .transform(BuilderTransformers.casing(() -> QOLSprites.SHADOW_RADIANCE_CASING))
+            .simpleItem()
+            .register();
 
     private static BlockEntry<ChippedSawBlock> createChippedSaw(String name){
         return REGISTRATE.block(name +"_saw", ChippedSawBlock::new)
