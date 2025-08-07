@@ -4,8 +4,12 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe;
+import com.simibubi.create.content.kinetics.saw.SawBlockEntity;
+import com.simibubi.create.content.kinetics.saw.TreeCutter;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.advancement.CreateAdvancement;
+import com.simibubi.create.foundation.utility.AbstractBlockBreakQueue;
+import com.simibubi.create.foundation.utility.BlockHelper;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
@@ -13,6 +17,7 @@ import fr.iglee42.createqualityoflife.registries.QOLItems;
 import fr.iglee42.createqualityoflife.registries.QOLTiers;
 import fr.iglee42.createqualityoflife.utils.ItemTooltips;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -30,6 +35,7 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
@@ -39,11 +45,15 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -73,17 +83,17 @@ public class ShadowSteelAxe extends AxeItem implements QOLConfigurableItem {
         components.add(Component.literal("Reach : ")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, stack.getOrDefault(QOLDataComponents.REACH,true), false, true)));
-        components.add(Component.literal("Casifier : ")
+        components.add(Component.literal("Tree Decapitation : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.casingifier.get(), true, stack.getOrDefault(QOLDataComponents.CASINGIFIER,false), false, true)));
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.treeDecapitation.get(), true, stack.getOrDefault(QOLDataComponents.TREE_DECAPITATION,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 
 
     @Override
     public void addConfigurations(List<Configuration<?>> list, ItemStack stack) {
-        list.add(Configuration.ofBool("Casingifier",stack.getOrDefault(QOLDataComponents.CASINGIFIER,false),QOLDataComponents.CASINGIFIER,
-                List.of("When stripping a log transform it into casing if a valid casing ingredient is available in the off hand","It also transform adjacent blocks"),(e,oe)->CreateQOLConfigs.server().equipments.tools.casingifier.get()));
+        list.add(Configuration.ofBool("Tree Decapitation",stack.getOrDefault(QOLDataComponents.TREE_DECAPITATION,false),QOLDataComponents.TREE_DECAPITATION,
+                List.of("Should destroy a tree when a log is broken like a mechanical saw"),(e,oe)->CreateQOLConfigs.server().equipments.tools.treeDecapitation.get()));
     }
 
     @Override
@@ -95,13 +105,13 @@ public class ShadowSteelAxe extends AxeItem implements QOLConfigurableItem {
     }
 
     public static void toggleAbility(ItemStack stack, Player p) {
-        if (!CreateQOLConfigs.server().equipments.tools.casingifier.get()){
-            p.displayClientMessage(Component.literal("Casingifier is disabled by the config").withStyle(ChatFormatting.RED),true);
+        if (!CreateQOLConfigs.server().equipments.tools.treeDecapitation.get()){
+            p.displayClientMessage(Component.literal("Tree Decapitation is disabled by the config").withStyle(ChatFormatting.RED),true);
             return;
         }
-        boolean enable = !stack.getOrDefault(QOLDataComponents.CASINGIFIER,false);
-        stack.set(QOLDataComponents.CASINGIFIER, enable);
-        p.displayClientMessage(Component.literal("Casingifier : ").append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
+        boolean enable = !stack.getOrDefault(QOLDataComponents.TREE_DECAPITATION,false);
+        stack.set(QOLDataComponents.TREE_DECAPITATION, enable);
+        p.displayClientMessage(Component.literal("Tree Decapitation : ").append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
     
     @Override
@@ -125,121 +135,48 @@ public class ShadowSteelAxe extends AxeItem implements QOLConfigurableItem {
         return BacktankUtil.getBarColor(stack, getMaxDamage(stack));
     }
 
-    @Override
-    public InteractionResult useOn(UseOnContext ctx) {
-        if (!CreateQOLConfigs.server().equipments.tools.casingifier.get()
-                || !ctx.getItemInHand().getOrDefault(QOLDataComponents.CASINGIFIER,false)) return super.useOn(ctx);
-
-        Level level = ctx.getLevel();
-        BlockPos origin = ctx.getClickedPos();
-        Player player = ctx.getPlayer();
-        if (player == null) return InteractionResult.PASS;
-
-        if (playerHasShieldUseIntent(ctx)) return InteractionResult.PASS;
-
-        ItemStack tool = ctx.getItemInHand();
-        ItemStack offHandStack = player.getOffhandItem();
-        int limit = CreateQOLConfigs.server().equipments.tools.casingifierMaxBlocks.get();
-
-        Set<BlockPos> visited = new HashSet<>();
-        Queue<BlockPos> toVisit = new ArrayDeque<>();
-        toVisit.add(origin);
-
-        int count = 0;
-
-        while (!toVisit.isEmpty() && count < limit) {
-            BlockPos pos = toVisit.poll();
-            if (!visited.add(pos)) continue;
-            boolean success = transformBlock(level, pos, player, ctx, offHandStack,(bs, recipe) -> {
-                level.setBlock(pos, bs, 3);
-                recipe.rollResults().forEach(stack -> Block.popResource(level, pos, stack));
-
-                boolean creative = player.isCreative();
-                boolean unbreakable = offHandStack.has(DataComponents.UNBREAKABLE);
-                boolean keepHeld = recipe.shouldKeepHeldItem() || creative;
-
-                if (player instanceof ServerPlayer sp) {
-                    CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(sp, pos, tool);
-                }
-
-                tool.hurtAndBreak(1, player, LivingEntity.getSlotForHand(ctx.getHand()));
-
-                if (!unbreakable && !keepHeld) {
-                    consumeItem(player, offHandStack);
-                }
-
-                awardAdvancements(player, bs);
-            });
-
-            if (success) {
-                count++;
-
-                for (Direction dir : Direction.values()) {
-                    BlockPos neighbor = pos.relative(dir);
-                    if (!visited.contains(neighbor))
-                        toVisit.add(neighbor);
-                }
-            }
-        }
-
-
-        return count > 0 ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
-    }
-
-    private void consumeItem(Player player, ItemStack reference) {
-        if (reference.isEmpty()) return;
-
-        if (reference.isDamageableItem()) {
-            reference.hurtAndBreak(1, player, EquipmentSlot.OFFHAND);
-        } else {
-            player.getOffhandItem().shrink(1);
-        }
-    }
-    private boolean transformBlock(Level level, BlockPos blockpos, Player player, UseOnContext ctx,ItemStack offHandStack,
-                                   BiConsumer<BlockState, ManualApplicationRecipe> onSuccess) {
-
-        Optional<BlockState> optional = evaluateNewBlockState(level, blockpos, player, level.getBlockState(blockpos), ctx);
-        if (optional.isEmpty()) return false;
-
-        RecipeType<Recipe<RecipeWrapper>> type = AllRecipeTypes.ITEM_APPLICATION.getType();
-
-        Optional<RecipeHolder<Recipe<RecipeWrapper>>> foundRecipe = level.getRecipeManager()
-                .getAllRecipesFor(type)
-                .stream()
-                .filter(r -> {
-                    ManualApplicationRecipe mar = (ManualApplicationRecipe) r.value();
-                    return mar.testBlock(optional.get()) && mar.getIngredients().get(1).test(offHandStack);
-                })
-                .findFirst();
-
-        if (foundRecipe.isEmpty()) return false;
-
-        ManualApplicationRecipe recipe = (ManualApplicationRecipe) foundRecipe.get().value();
-        level.destroyBlock(blockpos, false);
-
-        BlockState transformedBlock = recipe.transformBlock(optional.get());
-        onSuccess.accept(transformedBlock, recipe);
-
-        return true;
-    }
-
-
-
-    private static void awardAdvancements(Player player, BlockState placed) {
-        CreateAdvancement advancement = null;
-
-        if (AllBlocks.ANDESITE_CASING.has(placed))
-            advancement = AllAdvancements.ANDESITE_CASING;
-        else if (AllBlocks.BRASS_CASING.has(placed))
-            advancement = AllAdvancements.BRASS_CASING;
-        else if (AllBlocks.COPPER_CASING.has(placed))
-            advancement = AllAdvancements.COPPER_CASING;
-        else if (AllBlocks.RAILWAY_CASING.has(placed))
-            advancement = AllAdvancements.TRAIN_CASING;
-        else
+    public static void mineBlock(BlockEvent.@NotNull BreakEvent event){
+        if (event.getLevel().isClientSide())return;
+        if (event.isCanceled()) return;
+        if (!event.getPlayer().getMainHandItem().is(QOLItems.SHADOW_STEEL_AXE.get()) && !event.getPlayer().getMainHandItem().is(QOLItems.SHADOW_RADIANCE_AXE.get())) return;
+        if (!event.getPlayer().getMainHandItem().getOrDefault(QOLDataComponents.TREE_DECAPITATION,false)) return;
+        if (!event.getPlayer().getMainHandItem().isCorrectToolForDrops(event.getState())) return;
+        if (!SawBlockEntity.isSawable(event.getState())) return;
+        BlockState stateToBreak = event.getState();
+        BlockPos breakingPos = event.getPos();
+        Level level = event.getPlayer().level();
+        Optional<AbstractBlockBreakQueue> dynamicTree =
+                TreeCutter.findDynamicTree(stateToBreak.getBlock(), breakingPos);
+        if (dynamicTree.isPresent()) {
+            dynamicTree.get()
+                    .destroyBlocks(level, null, (pos,stack)->dropItemFromCutTree(level,pos,stack));
             return;
+        }
 
-        advancement.awardTo(player);
+        Vec3 vec = VecHelper.offsetRandomly(VecHelper.getCenterOf(breakingPos), level.random, .125f);
+        BlockHelper.destroyBlock(level, breakingPos, 1f, (stack) -> {
+            if (stack.isEmpty())
+                return;
+            if (!level.getGameRules()
+                    .getBoolean(GameRules.RULE_DOBLOCKDROPS))
+                return;
+            if (level.restoringBlockSnapshots)
+                return;
+
+            ItemEntity itementity = new ItemEntity(level, vec.x, vec.y, vec.z, stack);
+            itementity.setDefaultPickUpDelay();
+            itementity.setDeltaMovement(Vec3.ZERO);
+            level.addFreshEntity(itementity);
+        });
+        TreeCutter.findTree(level, breakingPos, stateToBreak)
+                .destroyBlocks(level, null, (pos,stack)->dropItemFromCutTree(level,pos,stack));
+    }
+
+    private static void dropItemFromCutTree(Level level, BlockPos pos, ItemStack stack) {
+        Vec3 dropPos = VecHelper.getCenterOf(pos);
+        ItemEntity entity = new ItemEntity(level, dropPos.x, dropPos.y, dropPos.z, stack);
+        entity.setDeltaMovement(Vec3.ZERO);
+        level.addFreshEntity(entity);
     }
 
     @Override
