@@ -12,6 +12,7 @@ public enum Features {
     LIQUID_BLAZE_BURNER("liquid_blaze_burner", CreateQOLFeaturesConfig.blazeBurnerUseLiquids),
     STATUE("statue", CreateQOLFeaturesConfig.statue),
     TRASH_CAN("trash_can", CreateQOLFeaturesConfig.trashCan),
+    ENDER_PACKAGER("ender_packager", CreateQOLFeaturesConfig.enderPackager),
     ;
 
 

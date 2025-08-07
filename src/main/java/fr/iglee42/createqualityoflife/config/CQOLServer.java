@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife.config;
 
 
+import com.simibubi.create.infrastructure.config.CLogistics;
 import net.createmod.catnip.config.ConfigBase;
 
 public class CQOLServer extends ConfigBase {
@@ -11,6 +12,8 @@ public class CQOLServer extends ConfigBase {
 
     public ConfigInt statueDistance = i(16,1,"statueMaxDistance",Comments.statueDistance);
     public ConfigBool experimentalWarning = b(true,"experimentalWarning",Comments.experimentalWarning);
+    public final ConfigInt enderLinkRange = i(256, 1, "enderLinkRange", Comments.linkRange);
+
 
     @Override
     public String getName() {
@@ -22,5 +25,6 @@ public class CQOLServer extends ConfigBase {
         static String equipments = "Modify Create Qol equipments comportment";
         static String statueDistance = "Define the max distance can be set to the statue";
         static String experimentalWarning = "Should the op players be warned about experimental features";
+        static String linkRange = "Maximum possible range in blocks of ender packager connections.";
     }
 }
