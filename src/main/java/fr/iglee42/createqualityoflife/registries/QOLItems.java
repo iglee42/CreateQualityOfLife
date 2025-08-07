@@ -269,7 +269,7 @@ public class QOLItems {
             .properties(p -> p.attributes(AxeItem
                     .createAttributes(QOLTiers.SHADOW_STEEL, 5.0F, -3.0F)))
             .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
-            .transform(tool(QOLDataComponents.CASINGIFIER,null))
+            .transform(tool(QOLDataComponents.TREE_DECAPITATION,null))
             .tag(ItemTags.AXES)
             .tag(Tags.Items.MELEE_WEAPON_TOOLS)
             .register();
@@ -281,7 +281,7 @@ public class QOLItems {
             .properties(p -> p.attributes(AxeItem
                     .createAttributes(QOLTiers.REFINED_RADIANCE, 5.0F, -3.0F)))
             .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
-            .transform(tool(QOLDataComponents.TREE_DECAPITATION,null))
+            .transform(tool(QOLDataComponents.CASINGIFIER,null))
             .tag(ItemTags.AXES)
             .tag(Tags.Items.MELEE_WEAPON_TOOLS)
             .register();

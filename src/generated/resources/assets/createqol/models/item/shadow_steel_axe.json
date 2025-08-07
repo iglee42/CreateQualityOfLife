@@ -4,7 +4,7 @@
     {
       "model": "createqol:item/shadow_steel_axe_special",
       "predicate": {
-        "createqol:casingifier": 1.0
+        "createqol:tree_decapitation": 1.0
       }
     }
   ],
