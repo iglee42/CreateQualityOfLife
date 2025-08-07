@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "createqol:feature_loaded",
+      "feature": "ender_packager"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": {
+      "item": "create:transmitter"
+    },
+    "P": {
+      "item": "create:packager"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "C": {
+      "item": "minecraft:ender_chest"
+    },
+    "S": {
+      "item": "createqol:shadow_radiance_casing"
+    }
+  },
+  "pattern": [
+    "TPT",
+    "ECE",
+    "SSS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createqol:ender_packager"
+  }
+}

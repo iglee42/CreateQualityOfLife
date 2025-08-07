@@ -122,6 +122,9 @@ public class QOLCreativeModeTabs {
 			if (!CreateQOL.isActivate(Features.SHADOW_RADIANCE)){
 				exclusions.add(QOLBlocks.CHROMATIC_COMPOUND_BLOCK.asItem());
 			}
+			if (!CreateQOL.isActivate(Features.ENDER_PACKAGER)){
+				exclusions.add(QOLBlocks.ENDER_PACKAGER.asItem());
+			}
 
 			if (!CreateQOL.isActivate(Features.TRASH_CAN)){
 				exclusions.add(QOLBlocks.TRASH_CAN.asItem());

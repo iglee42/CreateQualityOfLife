@@ -12,6 +12,7 @@ import fr.iglee42.createqualityoflife.client.renderer.EnderRenderer;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.items.armors.ShadowSteelArmorItem;
+import fr.iglee42.createqualityoflife.ponder.QOLPonderPlugin;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.statue.StatueModel;
 import fr.iglee42.createqualityoflife.statue.StatueRenderer;
@@ -21,6 +22,7 @@ import fr.iglee42.createqualityoflife.utils.Pos3D;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
+import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.ParticleStatus;
 import net.minecraft.client.model.ArmorStandArmorModel;
@@ -142,6 +144,8 @@ public class CreateQOLClient {
         //MinecraftForge.EVENT_BUS.register(new KeyBindManager());
         //ModPonderTags.register();
         //PonderIndex.register();
+
+        PonderIndex.addPlugin(new QOLPonderPlugin());
 
     }
 

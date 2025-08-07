@@ -12,6 +12,7 @@ import com.simibubi.create.Create;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
 import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import net.createmod.catnip.data.Couple;
 import net.createmod.catnip.levelWrappers.WorldHelper;
 import net.minecraft.core.component.DataComponents;
@@ -126,7 +127,7 @@ public class EnderPackagersNetworkHandler {
 		if (from == to)
 			return true;
 		return from.getLocation()
-			.closerThan(to.getLocation(), AllConfigs.server().logistics.linkRange.get());
+			.closerThan(to.getLocation(), CreateQOLConfigs.server().enderLinkRange.get());
 	}
 
 	public Map<Couple<Frequency>, Set<IEnderLinkable>> networksIn(LevelAccessor world) {

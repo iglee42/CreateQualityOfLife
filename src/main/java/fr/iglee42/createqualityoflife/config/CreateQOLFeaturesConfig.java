@@ -20,8 +20,9 @@ public class CreateQOLFeaturesConfig {
     public static boolean proximitySchedule = true;
     public static boolean displayBoardModification = true;
     public static boolean blazeBurnerUseLiquids = true;
-    public static boolean statue = false;
+    public static boolean statue = true;
     public static boolean trashCan = true;
+    public static boolean enderPackager = true;
 
 
 
@@ -41,14 +42,9 @@ public class CreateQOLFeaturesConfig {
             }
         } else {
             JsonObject config = new JsonObject();
-            config.addProperty("chippedSaw",chippedSaw);
-            config.addProperty("inventoryLinker",inventoryLinker);
-            config.addProperty("shadowRadiance",shadowRadiance);
-            config.addProperty("proximitySchedule",proximitySchedule);
-            config.addProperty("displayBoardModification",displayBoardModification);
-            config.addProperty("blazeBurnerUseLiquids",blazeBurnerUseLiquids);
-            config.addProperty("statue",statue);
-            config.addProperty("trashCan",trashCan);
+            for (Field f : Arrays.stream(CreateQOLFeaturesConfig.class.getDeclaredFields()).filter(f->f.getType().equals(boolean.class)).toList()) {
+                config.addProperty(f.getName(), f.getBoolean(null));
+            }
             FileWriter writer = new FileWriter(configFile);
             writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(config));
             writer.close();
