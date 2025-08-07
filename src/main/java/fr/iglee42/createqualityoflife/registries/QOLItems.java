@@ -241,7 +241,7 @@ public class QOLItems {
             .item("shadow_steel_axe", ShadowSteelAxe::new)
             .properties(p -> p.rarity(Rarity.RARE).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .transform(tool(NBTConstants.NBT_CASINGIFIER,null))
+            .transform(tool(NBTConstants.NBT_TREE_DECAPITATION,null))
             .tag(ItemTags.AXES)
             .tag(Tags.Items.MELEE_WEAPON_TOOLS)
             .register();
@@ -250,7 +250,7 @@ public class QOLItems {
             .item("refined_radiance_axe", RefinedRadianceAxe::new)
             .properties(p -> p.rarity(Rarity.RARE).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .transform(tool(NBTConstants.NBT_TREE_DECAPITATION,null))
+            .transform(tool(NBTConstants.NBT_CASINGIFIER,null))
             .tag(ItemTags.AXES)
             .register();
 

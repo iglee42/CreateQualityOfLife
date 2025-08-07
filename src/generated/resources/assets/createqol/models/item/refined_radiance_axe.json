@@ -4,7 +4,7 @@
     {
       "model": "createqol:item/refined_radiance_axe_special",
       "predicate": {
-        "createqol:tree_decapitation": 1.0
+        "createqol:casingifier": 1.0
       }
     }
   ],
