@@ -130,7 +130,7 @@ public class CreateQOL {
         forgeEventBus.addListener(QOLConfigurableItem::modifyAttributes);
         forgeEventBus.addListener(BlockEvent.BreakEvent.class, RefinedRadiancePickaxe::mineBlock);
         forgeEventBus.addListener(BlockEvent.BreakEvent.class, ShadowSteelPickaxe::mineBlock);
-        forgeEventBus.addListener(BlockEvent.BreakEvent.class, RefinedRadianceAxe::mineBlock);
+        forgeEventBus.addListener(BlockEvent.BreakEvent.class, ShadowSteelAxe::mineBlock);
         forgeEventBus.addListener(BlockEvent.BreakEvent.class, RefinedRadianceHoe::mineBlock);
         forgeEventBus.addListener(BlockEvent.BreakEvent.class, ShadowSteelShovel::mineBlock);
         forgeEventBus.addListener(RefinedRadianceShovel::blockDrops);
@@ -194,8 +194,8 @@ public class CreateQOL {
         ServerPlayer player = (ServerPlayer) p;
         if ( event.getLevel().getServer() == null) return;
         if (event.getLevel().getServer().getProfilePermissions(p.getGameProfile()) < 1) return;
-        if (isActivate(Features.STATUE) && CreateQOLConfigs.server().experimentalWarning.get())
-            player.displayClientMessage(Component.literal("Warning: Statue are still a beta feature, some bugs and crash might appear.\nPlease report them on https://issues-qol.iglee.fr").withStyle(ChatFormatting.YELLOW),false);
+        //if (isActivate(Features.STATUE) && CreateQOLConfigs.server().experimentalWarning.get())
+        //    player.displayClientMessage(Component.literal("Warning: Statue are still a beta feature, some bugs and crash might appear.\nPlease report them on https://issues-qol.iglee.fr").withStyle(ChatFormatting.YELLOW),false);
     }
 
 

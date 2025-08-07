@@ -94,14 +94,14 @@ public class ShadowRadianceAxe extends AxeItem implements QOLConfigurableItem {
             if (player.getItemInHand(hand).getOrDefault(QOLDataComponents.TREE_DECAPITATION,false)){
                 player.displayClientMessage(Component.literal("Casingifier can't be enabled if tree decapitation is enabled").withStyle(ChatFormatting.RED),true);
             }else {
-                ShadowSteelAxe.toggleAbility(player.getItemInHand(hand),player);
+                RefinedRadianceAxe.toggleAbility(player.getItemInHand(hand),player);
             }
         }
         else {
             if (player.getItemInHand(hand).getOrDefault(QOLDataComponents.CASINGIFIER,false)){
                 player.displayClientMessage(Component.literal("Tree Decapitation can't be enabled if casingifier is enabled").withStyle(ChatFormatting.RED),true);
             }else {
-                RefinedRadianceAxe.toggleAbility(player.getItemInHand(hand),player);
+                ShadowSteelAxe.toggleAbility(player.getItemInHand(hand),player);
             }
         }
         return InteractionResultHolder.success(player.getItemInHand(hand));
