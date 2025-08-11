@@ -7,6 +7,9 @@ import com.simibubi.create.content.decoration.encasing.CasingBlock;
 import com.simibubi.create.content.kinetics.saw.SawGenerator;
 import com.simibubi.create.content.legacy.ChromaticCompoundColor;
 import com.simibubi.create.content.logistics.packager.PackagerGenerator;
+import com.simibubi.create.content.logistics.packagerLink.LogisticallyLinkedBlockItem;
+import com.simibubi.create.content.logistics.stockTicker.StockTickerBlock;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.foundation.block.render.ReducedDestroyEffects;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BuilderTransformers;
@@ -18,10 +21,7 @@ import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.behaviours.TrashCanMovementBehaviour;
 import fr.iglee42.createqualityoflife.blocks.*;
 import fr.iglee42.createqualityoflife.config.CQOLStress;
-import fr.iglee42.createqualityoflife.items.ChromaticCompoundBlockItem;
-import fr.iglee42.createqualityoflife.items.NoGravMagicalDohickyBlockItem;
-import fr.iglee42.createqualityoflife.items.RefinedRadianceBlockItem;
-import fr.iglee42.createqualityoflife.items.ShadowSteelBlockItem;
+import fr.iglee42.createqualityoflife.items.*;
 import fr.iglee42.createqualityoflife.registries.generators.ChippedSawGenerator;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.renderer.RenderType;
@@ -211,6 +211,19 @@ public class QOLBlocks {
             .transform(BuilderTransformers.casing(() -> QOLSprites.SHADOW_RADIANCE_CASING))
             .simpleItem()
             .register();
+
+    public static final BlockEntry<StockManagerBlock> STOCK_MANAGER =
+            REGISTRATE.block("stock_manager", StockManagerBlock::new)
+                    .initialProperties(SharedProperties::softMetal)
+                    .properties(p -> p.sound(SoundType.GLASS).lightLevel(StockManagerBlock::getLight))
+                    .transform(axeOrPickaxe())
+                    .addLayer(() -> RenderType::cutoutMipped)
+                    .blockstate((c, p) -> p.horizontalBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
+                    .loot((lt, block) -> lt.add(block, StockManagerBlock.buildLootTable()))
+                    .item(StockManagerBlockItem::withBlaze)
+                    .model(AssetLookup::customItemModel)
+                    .build()
+                    .register();
 
     private static BlockEntry<ChippedSawBlock> createChippedSaw(String name){
         return REGISTRATE.block(name +"_saw", ChippedSawBlock::new)

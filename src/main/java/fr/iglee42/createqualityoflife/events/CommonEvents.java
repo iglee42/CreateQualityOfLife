@@ -2,12 +2,23 @@ package fr.iglee42.createqualityoflife.events;
 
 import com.simibubi.create.Create;
 import com.simibubi.create.content.kinetics.drill.CobbleGenOptimisation;
+import com.simibubi.create.content.logistics.packagerLink.LogisticallyLinkedBehaviour;
+import com.simibubi.create.content.logistics.packagerLink.LogisticallyLinkedBlockItem;
+import com.simibubi.create.content.logistics.packagerLink.LogisticsNetwork;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
+import fr.iglee42.createqualityoflife.utils.LogisticsNetworkExtension;
 import net.createmod.catnip.data.WorldAttached;
+import net.minecraft.ChatFormatting;
 import net.minecraft.world.level.LevelAccessor;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
+
+import java.util.TreeMap;
 
 @EventBusSubscriber
 public class CommonEvents {
@@ -22,5 +33,22 @@ public class CommonEvents {
     public static void onUnloadWorld(LevelEvent.Unload event) {
         LevelAccessor world = event.getLevel();
         CreateQOL.ENDER_PACKAGER_NETWORK_HANDLER.onUnloadWorld(world);
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void mineBlock(BlockEvent.BreakEvent event){
+        if (event.getPlayer().hasPermissions(2)) return;
+        if (event.getLevel().isClientSide()) return;
+        LogisticallyLinkedBehaviour behaviour = BlockEntityBehaviour.get(event.getLevel(),event.getPos(),LogisticallyLinkedBehaviour.TYPE);
+        if (behaviour != null){
+            LogisticsNetwork network = Create.LOGISTICS.logisticsNetworks.get(behaviour.freqId);
+            if (network != null){
+                LogisticsNetworkExtension extension = (LogisticsNetworkExtension) network;
+                if (!extension.createQOL$getDestructionLevel().canDestroy(network.id,event.getPlayer())){
+                    event.setCanceled(true);
+                    event.getPlayer().displayClientMessage(CreateQOLLang.translate("tooltip.network.cant_break").style(ChatFormatting.RED).component(),true);
+                }
+            }
+        }
     }
 }

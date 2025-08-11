@@ -18,6 +18,7 @@
     "createqol:shadow_steel_block",
     "createqol:chromatic_compound_block",
     "createqol:shadow_radiance_block",
-    "createqol:shadow_radiance_casing"
+    "createqol:shadow_radiance_casing",
+    "createqol:stock_manager"
   ]
 }

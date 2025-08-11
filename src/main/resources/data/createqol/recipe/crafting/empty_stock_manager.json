@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "createqol:feature_loaded",
+      "feature": "stock_manager"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "create:stock_ticker"
+    },
+    "B": {
+      "item": "createqol:shadow_radiance_casing"
+    },
+    "C": {
+      "item": "create:precision_mechanism"
+    }
+  },
+  "pattern": [
+    "C",
+    "A",
+    "B"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createqol:empty_stock_manager"
+  }
+}

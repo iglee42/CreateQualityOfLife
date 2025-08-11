@@ -1,0 +1,11 @@
+{
+	"parent": "block/block",
+	"loader": "neoforge:obj",
+	"flip_v": true,
+	"model": "createqol:models/block/stock_manager/item.obj",
+	"textures": {
+		"0": "create:block/blaze_idle",
+		"1": "createqol:block/stock_manager",
+		"particle": "createqol:block/shadow_radiance_casing"
+	}
+}

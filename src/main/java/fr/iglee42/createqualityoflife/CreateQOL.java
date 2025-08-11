@@ -51,6 +51,7 @@ import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import org.slf4j.Logger;
@@ -188,14 +189,13 @@ public class CreateQOL {
         }
     }
 
-    private void playerJoin(EntityJoinLevelEvent event){
-        if (!(event.getEntity() instanceof Player p))return;
-        if (event.getLevel().isClientSide) return;
+    private void playerJoin(PlayerEvent.PlayerLoggedInEvent event){
+        Player p = event.getEntity();
+        if (p.level().isClientSide) return;
         ServerPlayer player = (ServerPlayer) p;
-        if ( event.getLevel().getServer() == null) return;
-        if (event.getLevel().getServer().getProfilePermissions(p.getGameProfile()) < 1) return;
-        //if (isActivate(Features.STATUE) && CreateQOLConfigs.server().experimentalWarning.get())
-        //    player.displayClientMessage(Component.literal("Warning: Statue are still a beta feature, some bugs and crash might appear.\nPlease report them on https://issues-qol.iglee.fr").withStyle(ChatFormatting.YELLOW),false);
+        if (!p.hasPermissions(1)) return;
+        if (isActivate(Features.STOCK_MANAGER) && CreateQOLConfigs.server().experimentalWarning.get())
+            player.displayClientMessage(Component.literal("Warning: Stock Manager is a beta feature, some bugs and crash might appear.\nPlease report them on https://issues-qol.iglee.fr").withStyle(ChatFormatting.YELLOW),false);
     }
 
 

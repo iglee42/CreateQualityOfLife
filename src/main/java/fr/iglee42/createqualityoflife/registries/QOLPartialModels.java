@@ -19,7 +19,10 @@ public class QOLPartialModels {
             REFINED_RADIANCE_TANK_COGS = block("refined_radiance_chestplate/cogs"), REFINED_RADIANCE_TANK_SHAFT = block("refined_radiance_chestplate/block_shaft_input"),
 
             ENDER_PACKAGER_HATCH_CLOSED = block("ender_packager/hatch_closed"),
-            ENDER_PACKAGER_HATCH_OPEN = block("ender_packager/hatch_open")
+            ENDER_PACKAGER_HATCH_OPEN = block("ender_packager/hatch_open"),
+
+            STOCK_MANAGER_RODS_1 = block("stock_manager/rods_small"),
+            STOCK_MANAGER_RODS_2 = block("stock_manager/rods_large")
     ;
 
     private static PartialModel block(String path) {

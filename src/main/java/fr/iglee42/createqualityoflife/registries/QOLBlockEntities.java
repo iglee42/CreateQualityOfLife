@@ -1,16 +1,22 @@
 package fr.iglee42.createqualityoflife.registries;
 
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
 import com.simibubi.create.content.equipment.armor.BacktankRenderer;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
+import com.simibubi.create.content.logistics.stockTicker.StockTickerBlockEntity;
+import com.simibubi.create.content.processing.burner.BlazeBurnerRenderer;
+import com.simibubi.create.content.processing.burner.BlazeBurnerVisual;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import fr.iglee42.createqualityoflife.blockentitites.*;
 import fr.iglee42.createqualityoflife.blockentitites.renderers.ChippedSawRenderer;
 import fr.iglee42.createqualityoflife.blockentitites.renderers.EnderPackagerRenderer;
 import fr.iglee42.createqualityoflife.blockentitites.renderers.InventoryLinkerRenderer;
+import fr.iglee42.createqualityoflife.blockentitites.renderers.StockManagerRenderer;
 import fr.iglee42.createqualityoflife.blockentitites.visuals.ChippedSawVisual;
 import fr.iglee42.createqualityoflife.blockentitites.visuals.EnderPackagerVisual;
+import fr.iglee42.createqualityoflife.blockentitites.visuals.StockManagerVisual;
 
 import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
 
@@ -69,5 +75,13 @@ public class QOLBlockEntities {
             .validBlocks(QOLBlocks.ENDER_PACKAGER)
             .renderer(() -> EnderPackagerRenderer::new)
             .register();
+
+    public static final BlockEntityEntry<StockManagerBlockEntity> STOCK_MANAGER = REGISTRATE
+            .blockEntity("stock_manager", StockManagerBlockEntity::new)
+            .visual(() -> StockManagerVisual::new, false)
+            .validBlocks(QOLBlocks.STOCK_MANAGER)
+            .renderer(() -> StockManagerRenderer::new)
+            .register();
+
     public static void register() {}
 }

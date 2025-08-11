@@ -17,6 +17,7 @@
   "block.createqol.shadow_radiance_block": "Block of Shadow Radiance",
   "block.createqol.shadow_radiance_casing": "Shadow Radiance Casing",
   "block.createqol.ender_packager": "Ender Packager",
+  "block.createqol.stock_manager": "Stock Manager",
 
   "item.createqol.player_paper": "Player Paper",
   "item.createqol.shadow_radiance": "Shadow Radiance",
@@ -49,6 +50,7 @@
   "item.createqol.shadow_steel_shovel": "Shadow Steel Shovel",
   "item.createqol.shadow_steel_hoe": "Shadow Steel Hoe",
   "item.createqol.statue": "Statue",
+  "item.createqol.empty_stock_manager": "Empty Stock Manager",
 
   "create.options.inventory_linker.label": "Inventory Link Mode",
   "options.inventory_linker.inventory": "Inventory",
@@ -230,7 +232,37 @@
   "createqol.ponder.ender_packager_addresses.text_4": "The text will be used as a filter for packages (like filters in Frogports)",
   "createqol.ponder.ender_packager_addresses.text_5": "\u2192 Warehouse",
   "createqol.ponder.ender_packager_addresses.text_6": "If the ender packager which should receive the package is full...",
-  "createqol.ponder.ender_packager_addresses.text_7": "The sender will wait until the receiver is empty"
+  "createqol.ponder.ender_packager_addresses.text_7": "The sender will wait until the receiver is empty",
 
+  "createqol.gui.choose_network.choose_a_network": "Choose a logistic network to manage",
+  "createqol.gui.choose_network.lmb_manage": "Left click to manage this network",
+  "createqol.gui.choose_network.delete_warning": "If you unselect this network,",
+  "createqol.gui.choose_network.delete_warning_1": "it will be deleted automatically !",
+  "createqol.gui.stock_manager.network_switch": "Change the managed network",
+  "createqol.gui.stock_manager.network_switch_tip": "Click to change the manged network",
+  "createqol.gui.stock_manager.break_block": "Destroy",
+  "createqol.gui.stock_manager.too_far": "This block cannot be destroyed",
+  "createqol.gui.stock_manager.too_far_1": "because it's too far away !",
+  "createqol.gui.stock_manager.destroy_no_permission": "You don't have the permission",
+  "createqol.gui.stock_manager.destroy_no_permission_1": "to break this block !",
 
+  "createqol.tooltip.network.cant_break": "You don't have the permission to break this block !",
+
+  "createqol.gui.stock_manager.destruction_level": "Destruction Level : ",
+  "createqol.gui.stock_manager.destruction_level_tip": "Prevents other Players from",
+  "createqol.gui.stock_manager.destruction_level_tip_1": "destroying network components",
+  "createqol.gui.stock_manager.destruction_level.all": "Everyone",
+  "createqol.gui.stock_manager.destruction_level.members": "Members",
+  "createqol.gui.stock_manager.destruction_level.admins": "Network Admins",
+  "createqol.gui.stock_manager.unknow_player": "Unknow Player",
+  "createqol.gui.stock_manager.permission.none": "",
+  "createqol.gui.stock_manager.permission.member": "Member",
+  "createqol.gui.stock_manager.permission.admin": "Admin",
+  "createqol.gui.stock_manager.permission.owner": "Owner",
+  "createqol.gui.stock_manager.demote_to": "Demote to ",
+  "createqol.gui.stock_manager.promote_to": "Promote to ",
+  "createqol.gui.stock_manager.remove_user": "Remove from network",
+  "createqol.gui.stock_manager.add_user": "Add to network",
+
+  "createqol.logistically_linked.tuned_to": "Tuned to %s"
 }

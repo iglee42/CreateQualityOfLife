@@ -26,6 +26,13 @@ public enum QOLPackets implements BasePacketPayload.PacketTypeProvider {
     PUBLISH_ANIMATION(PublishAnimationPacket.class, PublishAnimationPacket.STREAM_CODEC),
     DELETE_ANIMATION(DeleteAnimationPacket.class, DeleteAnimationPacket.STREAM_CODEC),
     TOGGLE_ARMOR_EFFECT(ToggleArmorEffectPacket.class, ToggleArmorEffectPacket.STREAM_CODEC),
+    OPEN_CHOOSE_NETWORK(OpenSwitchLogisticNetworkScreenPacket.class, OpenSwitchLogisticNetworkScreenPacket.STREAM_CODEC),
+    MODIFY_STOCK_MANAGER_LOGISTICS_NETWORK(ModifyStockManagerLogisticNetworkPacket.class, ModifyStockManagerLogisticNetworkPacket.STREAM_CODEC),
+    MODIFY_LOGISTICS_NETWORK(ModifyLogisticsNetworkPacket.class, ModifyLogisticsNetworkPacket.STREAM_CODEC),
+    DESTROY_LOGISTICS_NETWORK_COMPONENT(DestroyLogisticsNetworkComponentPacket.class, DestroyLogisticsNetworkComponentPacket.STREAM_CODEC),
+    LOCK_STOCK_MANAGER(StockManagerLockPacket.class, StockManagerLockPacket.STREAM_CODEC),
+    DESTRUCTION_LEVEL_STOCK_MANAGER(StockManagerDestructionLevelPacket.class, StockManagerDestructionLevelPacket.STREAM_CODEC),
+    MODIFY_PERMISSION(ModifyPlayerNetworkPermissionPacket.class, ModifyPlayerNetworkPermissionPacket.STREAM_CODEC),
     //Server To Client
 
     SYNC_ANIMATIONS(SyncAnimationsConfigPacket.class, SyncAnimationsConfigPacket.STREAM_CODEC),
