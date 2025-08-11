@@ -36,6 +36,13 @@ public enum QOLPackets {
     TOGGLE_ARMOR_EFFECT(ToggleArmorEffectPacket.class, ToggleArmorEffectPacket::new,NetworkDirection.PLAY_TO_SERVER),
     SYNC_ANIMATIONS(SyncAnimationsConfigPacket.class, SyncAnimationsConfigPacket::new, NetworkDirection.PLAY_TO_CLIENT),
 
+    OPEN_CHOOSE_NETWORK(OpenSwitchLogisticNetworkScreenPacket.class, OpenSwitchLogisticNetworkScreenPacket::new,NetworkDirection.PLAY_TO_SERVER),
+    MODIFY_STOCK_MANAGER_LOGISTICS_NETWORK(ModifyStockManagerLogisticNetworkPacket.class, ModifyStockManagerLogisticNetworkPacket::new,NetworkDirection.PLAY_TO_SERVER),
+    MODIFY_LOGISTICS_NETWORK(ModifyLogisticsNetworkPacket.class, ModifyLogisticsNetworkPacket::new,NetworkDirection.PLAY_TO_SERVER),
+    DESTROY_LOGISTICS_NETWORK_COMPONENT(DestroyLogisticsNetworkComponentPacket.class, DestroyLogisticsNetworkComponentPacket::new,NetworkDirection.PLAY_TO_SERVER),
+    LOCK_STOCK_MANAGER(StockManagerLockPacket.class, StockManagerLockPacket::new,NetworkDirection.PLAY_TO_SERVER),
+    DESTRUCTION_LEVEL_STOCK_MANAGER(StockManagerDestructionLevelPacket.class, StockManagerDestructionLevelPacket::new, NetworkDirection.PLAY_TO_SERVER),
+    MODIFY_PERMISSION(ModifyPlayerNetworkPermissionPacket.class, ModifyPlayerNetworkPermissionPacket::new, NetworkDirection.PLAY_TO_SERVER),
     ;
     public static final ResourceLocation CHANNEL_NAME = CreateQOL.asResource("main");
     public static final int NETWORK_VERSION = 1;

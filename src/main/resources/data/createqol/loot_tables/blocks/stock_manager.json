@@ -1,0 +1,44 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            },
+            {
+              "block": "createqol:stock_manager",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "has_blaze": "true"
+              }
+            }
+          ],
+          "name": "createqol:stock_manager"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            },
+            {
+              "block": "createqol:stock_manager",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "has_blaze": "false"
+              }
+            }
+          ],
+          "name": "createqol:empty_stock_manager"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "createqol:blocks/stock_manager"
+}

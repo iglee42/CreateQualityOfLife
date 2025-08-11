@@ -24,6 +24,7 @@ public class CreateQOLFeaturesConfig {
     public static boolean statue = true;
     public static boolean trashCan = true;
     public static boolean enderPackager = true;
+    public static boolean stockManager = true;
 
 
 

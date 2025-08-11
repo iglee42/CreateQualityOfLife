@@ -130,6 +130,11 @@ public class QOLCreativeModeTabs {
 				exclusions.add(QOLBlocks.BRASS_TRASH_CAN.asItem());
 			}
 
+			if (!CreateQOL.isActivate(Features.STOCK_MANAGER)){
+				exclusions.add(QOLBlocks.STOCK_MANAGER.asItem());
+				exclusions.add(QOLItems.EMPTY_STOCK_MANAGER.asItem());
+			}
+
 			for (ItemProviderEntry<?> entry : simpleExclusions) {
 				exclusions.add(entry.asItem());
 			}
@@ -150,6 +155,7 @@ public class QOLCreativeModeTabs {
 			List<ItemOrdering> orderings = new ReferenceArrayList<>();
 
 			Map<ItemProviderEntry<?>, ItemProviderEntry<?>> simpleBeforeOrderings = Map.of(
+					QOLItems.EMPTY_STOCK_MANAGER,QOLBlocks.STOCK_MANAGER
 			);
 
 			Map<ItemProviderEntry<?>, ItemProviderEntry<?>> simpleAfterOrderings = Map.of(
@@ -263,7 +269,7 @@ public class QOLCreativeModeTabs {
 				if (!CreateRegistrate.isInCreativeTab(entry, tabFilter))
 					continue;
 				Item item = entry.get();
-				if (item instanceof BlockItem)
+				if (item instanceof BlockItem && !entry.is(QOLItems.EMPTY_STOCK_MANAGER.asItem()))
 					continue;
 				if (!exclusionPredicate.test(item))
 					items.add(item);

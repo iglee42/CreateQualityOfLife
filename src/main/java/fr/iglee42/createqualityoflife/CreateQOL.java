@@ -45,6 +45,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -166,14 +167,13 @@ public class CreateQOL {
         }
     }
 
-    private void playerJoin(EntityJoinLevelEvent event){
-        if (!(event.getEntity() instanceof Player p))return;
-        if (event.getLevel().isClientSide) return;
+    private void playerJoin(PlayerEvent.PlayerLoggedInEvent event){
+        Player p = event.getEntity();
+        if (p.level().isClientSide) return;
         ServerPlayer player = (ServerPlayer) p;
-        if ( event.getLevel().getServer() == null) return;
-        if (event.getLevel().getServer().getProfilePermissions(p.getGameProfile()) < 1) return;
-        //if (isActivate(Features.STATUE) && CreateQOLConfigs.server().experimentalWarning.get())
-        //    player.displayClientMessage(Component.literal("Warning: Statue are still a beta feature, some bugs and crash might appear.\nPlease report them on https://issues-qol.iglee.fr").withStyle(ChatFormatting.YELLOW),false);
+        if (!p.hasPermissions(1)) return;
+        if (isActivate(Features.STOCK_MANAGER) && CreateQOLConfigs.server().experimentalWarning.get())
+            player.displayClientMessage(Component.literal("Warning: Stock Manager is a beta feature, some bugs and crash might appear.\nPlease report them on https://issues-qol.iglee.fr").withStyle(ChatFormatting.YELLOW),false);
     }
 
 

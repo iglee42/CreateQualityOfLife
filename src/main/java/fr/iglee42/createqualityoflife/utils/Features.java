@@ -13,6 +13,7 @@ public enum Features {
     STATUE("statue", CreateQOLFeaturesConfig.statue),
     TRASH_CAN("trash_can", CreateQOLFeaturesConfig.trashCan),
     ENDER_PACKAGER("ender_packager", CreateQOLFeaturesConfig.enderPackager),
+    STOCK_MANAGER("stock_manager", CreateQOLFeaturesConfig.stockManager),
     ;
 
 
