@@ -213,7 +213,7 @@ public class EnderPackagerBlockEntity extends SmartBlockEntity {
 	}
 
 	public boolean doesMatchAddress(ItemStack stack){
-		return PackageItem.matchAddress(stack, addressFilter);
+		return addressFilter.isBlank() || PackageItem.matchAddress(stack, addressFilter);
 	}
 
 	public void receivedBox() {

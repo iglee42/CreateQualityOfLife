@@ -127,7 +127,7 @@ public class EnderPackagersNetworkHandler {
 		if (from == to)
 			return true;
 		return from.getLocation()
-			.closerThan(to.getLocation(), CreateQOLConfigs.server().enderLinkRange.get());
+			.closerThan(to.getLocation(), CreateQOLConfigs.server().logistics.enderLinkRange.get());
 	}
 
 	public Map<Couple<Frequency>, Set<IEnderLinkable>> networksIn(LevelAccessor world) {
