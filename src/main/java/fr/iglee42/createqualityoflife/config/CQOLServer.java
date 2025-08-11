@@ -7,12 +7,11 @@ import net.createmod.catnip.config.ConfigBase;
 public class CQOLServer extends ConfigBase {
 
     public final CQOLKinetics kinetics = nested(0, CQOLKinetics::new,Comments.kinetics);
+    public final CQOLLogistics logistics = nested(0, CQOLLogistics::new,Comments.logistics);
     public final CQOLEquipments equipments = nested(0, CQOLEquipments::new,Comments.equipments);
-
 
     public ConfigInt statueDistance = i(16,1,"statueMaxDistance",Comments.statueDistance);
     public ConfigBool experimentalWarning = b(true,"experimentalWarning",Comments.experimentalWarning);
-    public final ConfigInt enderLinkRange = i(256, 1, "enderLinkRange", Comments.linkRange);
 
 
     @Override
@@ -23,8 +22,8 @@ public class CQOLServer extends ConfigBase {
     private static class Comments {
         static String kinetics = "Modify Create Qol blocks comportment";
         static String equipments = "Modify Create Qol equipments comportment";
-        static String statueDistance = "Define the max distance can be set to the statue";
+        static String logistics = "Modify Create Qol logistics blocks comportment";
+        static String statueDistance = "Define the maximum distance can be set to the statue";
         static String experimentalWarning = "Should the op players be warned about experimental features";
-        static String linkRange = "Maximum possible range in blocks of ender packager connections.";
     }
 }
