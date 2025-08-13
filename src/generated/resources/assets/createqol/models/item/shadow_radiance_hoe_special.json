@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "createqol:shadow_radiance_hoe_special"
+    "layer0": "createqol:item/shadow_radiance_hoe_special"
   }
 }

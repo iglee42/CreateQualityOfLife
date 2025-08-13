@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "createqol:shadow_radiance_axe_special_2"
+    "layer0": "createqol:item/shadow_radiance_axe_special_2"
   }
 }

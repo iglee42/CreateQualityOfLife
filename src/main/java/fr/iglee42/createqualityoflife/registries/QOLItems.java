@@ -404,11 +404,11 @@ public class QOLItems {
                         ItemModelBuilder builder = p.handheld(c)
                                 .override()
                                 .predicate(CreateQOL.asResource(BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(component1).getPath()),1.0f)
-                                .model(p.getBuilder(c.getName() + "_special").parent(new ModelFile.UncheckedModelFile("item/handheld")).texture("layer0",c.getName() + "_special")).end();
+                                .model(p.getBuilder(c.getName() + "_special").parent(new ModelFile.UncheckedModelFile("item/handheld")).texture("layer0",c.getId().getNamespace() + ":item/"+c.getId().getPath() + "_special")).end();
                         if (component2 != null) {
                             builder.override()
                                     .predicate(CreateQOL.asResource(BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(component2).getPath()),1.0f)
-                                    .model(p.getBuilder(c.getName() + "_special_2").parent(new ModelFile.UncheckedModelFile("item/handheld")).texture("layer0",c.getName() + "_special_2")).end();
+                                    .model(p.getBuilder(c.getName() + "_special_2").parent(new ModelFile.UncheckedModelFile("item/handheld")).texture("layer0",c.getId().getNamespace() + ":item/"+c.getId().getPath() + "_special_2")).end();
                         }
                     })
                     .onRegister(it-> RegistrateDistExecutor.unsafeRunWhenOn(Dist.CLIENT,()->()->ItemProperties.register(it,CreateQOL.asResource(BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(component1).getPath()),(stack,lvl,entity,index)->stack.getOrDefault(component1,false) ? 1.0f : 0.0f )));
