@@ -32,8 +32,11 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.function.Supplier;
@@ -350,16 +353,16 @@ public class QOLItems {
                         ItemModelBuilder builder = p.handheld(c)
                                 .override()
                                 .predicate(CreateQOL.asResource(component1),1.0f)
-                                .model(p.getBuilder(c.getName() + "_special").parent(new ModelFile.UncheckedModelFile("item/handheld")).texture("layer0",c.getName() + "_special")).end();
+                                .model(p.getBuilder(c.getName() + "_special").parent(new ModelFile.UncheckedModelFile("item/handheld")).texture("layer0",c.getId().getNamespace() + ":item/"+c.getId().getPath() + "_special")).end();
                         if (component2 != null) {
                             builder.override()
                                     .predicate(CreateQOL.asResource(component2),1.0f)
-                                    .model(p.getBuilder(c.getName() + "_special_2").parent(new ModelFile.UncheckedModelFile("item/handheld")).texture("layer0",c.getName() + "_special_2")).end();
+                                    .model(p.getBuilder(c.getName() + "_special_2").parent(new ModelFile.UncheckedModelFile("item/handheld")).texture("layer0",c.getId().getNamespace() + ":item/"+c.getId().getPath() + "_special_2")).end();
                         }
                     })
-                    .onRegister(it-> RegistrateDistExecutor.unsafeRunWhenOn(Dist.CLIENT,()->()->ItemProperties.register(it,CreateQOL.asResource(component1),(stack,lvl,entity,index)->NBTConstants.getOrDefault(stack,component1,false) ? 1.0f : 0.0f )));
+                    .onRegister(it-> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,()->()->ItemProperties.register(it,CreateQOL.asResource(component1),(stack, lvl, entity, index)->NBTConstants.getOrDefault(stack,component1,false) ? 1.0f : 0.0f )));
                     if (component2 != null) {
-                        i = i.onRegister(it -> RegistrateDistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ItemProperties.register(it, CreateQOL.asResource(component2), (stack, lvl, entity, index) -> NBTConstants.getOrDefault(stack,component2,false) ? 1.0f : 0.0f)));
+                        i = i.onRegister(it -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ItemProperties.register(it, CreateQOL.asResource(component2), (stack, lvl, entity, index) -> NBTConstants.getOrDefault(stack,component2,false) ? 1.0f : 0.0f)));
                     }
                     return i;
         };
