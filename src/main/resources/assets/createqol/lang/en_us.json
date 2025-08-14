@@ -53,12 +53,12 @@
   "item.createqol.empty_stock_manager": "Empty Stock Manager",
 
   "create.options.inventory_linker.label": "Inventory Link Mode",
-  "options.inventory_linker.inventory": "Inventory",
-  "options.inventory_linker.armor": "Armor",
-  "options.inventory_linker.off_hand": "Off Hand",
+  "create.options.inventory_linker.inventory": "Inventory",
+  "create.options.inventory_linker.armor": "Armor",
+  "create.options.inventory_linker.off_hand": "Off Hand",
   "create.options.brass_trash_can.label": "Trash Can Mode",
-  "options.brass_trash_can.void": "Void All",
-  "options.brass_trash_can.keep_64": "Keep a Stack",
+  "create.options.brass_trash_can.void": "Void All",
+  "create.options.brass_trash_can.keep_64": "Keep a Stack",
 
   "tooltip.createqol.player_paper.linked_player": "Linked Player : %s",
   "tooltip.createqol.player_paper.no_linked_player": "No Player Linked",
