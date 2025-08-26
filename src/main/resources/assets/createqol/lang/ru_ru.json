@@ -185,7 +185,7 @@
   "createqol.statue.skinTab.desc": "А вы знали, что скины Minecraft кодируются в Base64?",
   "createqol.statue.transformTab.desc": "Изменение размера манекена не затрагивает его хитбокс",
   "createqol.statue.inventoryTab.desc": "Предметы снаряжения манекена являются лишь проекциями, а потому не выпадают при его уничтожении",
-  "createqol.statue.rotationPresetTab.desc": "Готовые позы были взяты из пакета данных 'Armor Statues', доступного на https://vanillatweaks.net",
+  "createqol.statue.rotationPresetTab.desc": "Готовые позы были взяты из набора данных 'Armor Statues', доступного на https://vanillatweaks.net",
   "createqol.statue.hatTab.desc": "Эти ползунки были взяты из интерфейса управления поездом",
   "createqol.statue.left_sleeveTab.desc": "",
   "createqol.statue.left_pants_legTab.desc": "",
