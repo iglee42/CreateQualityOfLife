@@ -6,7 +6,7 @@ import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.content.equipment.armor.DivingHelmetItem;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
-import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.registries.QOLItems;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -29,7 +29,7 @@ public class ShadowRadianceHelmet extends DivingHelmetItem {
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     }
     static {
-        GogglesItem.addIsWearingPredicate(player -> ModItems.SHADOW_RADIANCE_HELMET.isIn(player.getItemBySlot(EquipmentSlot.HEAD)) && NBTConstants.getOrDefault( player.getItemBySlot(EquipmentSlot.HEAD),NBTConstants.NBT_GOGGLES,true) && CreateQOLConfigs.server().helmetHaveGoggles.get());
+        GogglesItem.addIsWearingPredicate(player -> QOLItems.SHADOW_RADIANCE_HELMET.isIn(player.getItemBySlot(EquipmentSlot.HEAD)) && NBTConstants.getOrDefault( player.getItemBySlot(EquipmentSlot.HEAD),NBTConstants.NBT_GOGGLES,true) && CreateQOLConfigs.server().helmetHaveGoggles.get());
     }
 
     @Override

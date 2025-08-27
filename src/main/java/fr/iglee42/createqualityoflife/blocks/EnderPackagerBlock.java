@@ -1,6 +1,5 @@
 package fr.iglee42.createqualityoflife.blocks;
 
-import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllSoundEvents;
@@ -12,7 +11,7 @@ import com.simibubi.create.foundation.block.WrenchableDirectionalBlock;
 import com.simibubi.create.foundation.utility.CreateLang;
 
 import fr.iglee42.createqualityoflife.blockentitites.EnderPackagerBlockEntity;
-import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
+import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
 import net.neoforged.neoforge.capabilities.Capabilities.ItemHandler;
 import net.neoforged.neoforge.common.util.FakePlayer;
 
@@ -175,7 +174,7 @@ public class EnderPackagerBlock extends WrenchableDirectionalBlock implements IB
 
 	@Override
 	public BlockEntityType<? extends EnderPackagerBlockEntity> getBlockEntityType() {
-		return ModBlockEntities.ENDER_PACKAGER.get();
+		return QOLBlockEntities.ENDER_PACKAGER.get();
 	}
 
 	@Override

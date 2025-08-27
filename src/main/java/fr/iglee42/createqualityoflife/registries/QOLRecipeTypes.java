@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public enum ModRecipeTypes implements IRecipeTypeInfo {
+public enum QOLRecipeTypes implements IRecipeTypeInfo {
     BLAZE_BURNER_LIQUIDS(BlazeBurnerLiquidRecipe::new),
     ;
 
@@ -30,12 +30,12 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     private final RegistryObject<RecipeType<?>> typeObject;
     private final Supplier<RecipeType<?>> type;
 
-    ModRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier, Supplier<RecipeType<?>> typeSupplier, boolean registerType) {
+    QOLRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier, Supplier<RecipeType<?>> typeSupplier, boolean registerType) {
         String name = Lang.asId(name());
         id = Create.asResource(name);
-        serializerObject = ModRecipeTypes.Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
+        serializerObject = QOLRecipeTypes.Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
         if (registerType) {
-            typeObject = ModRecipeTypes.Registers.TYPE_REGISTER.register(name, typeSupplier);
+            typeObject = QOLRecipeTypes.Registers.TYPE_REGISTER.register(name, typeSupplier);
             type = typeObject;
         } else {
             typeObject = null;
@@ -43,22 +43,22 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
         }
     }
 
-    ModRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
+    QOLRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
         String name = Lang.asId(name());
         id = Create.asResource(name);
-        serializerObject = ModRecipeTypes.Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
-        typeObject = ModRecipeTypes.Registers.TYPE_REGISTER.register(name, () -> RecipeType.simple(id));
+        serializerObject = QOLRecipeTypes.Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
+        typeObject = QOLRecipeTypes.Registers.TYPE_REGISTER.register(name, () -> RecipeType.simple(id));
         type = typeObject;
     }
 
-    ModRecipeTypes(ProcessingRecipeBuilder.ProcessingRecipeFactory<?> processingFactory) {
+    QOLRecipeTypes(ProcessingRecipeBuilder.ProcessingRecipeFactory<?> processingFactory) {
         this(() -> new ProcessingRecipeSerializer<>(processingFactory));
     }
 
     public static void register(IEventBus modEventBus) {
         ShapedRecipe.setCraftingSize(9, 9);
-        ModRecipeTypes.Registers.SERIALIZER_REGISTER.register(modEventBus);
-        ModRecipeTypes.Registers.TYPE_REGISTER.register(modEventBus);
+        QOLRecipeTypes.Registers.SERIALIZER_REGISTER.register(modEventBus);
+        QOLRecipeTypes.Registers.TYPE_REGISTER.register(modEventBus);
     }
 
     @Override

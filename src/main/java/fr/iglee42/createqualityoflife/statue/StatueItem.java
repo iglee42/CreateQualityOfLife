@@ -2,7 +2,7 @@ package fr.iglee42.createqualityoflife.statue;
 
 import java.util.function.Consumer;
 
-import fr.iglee42.createqualityoflife.registries.ModEntityTypes;
+import fr.iglee42.createqualityoflife.registries.QOLEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -12,7 +12,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -39,11 +38,11 @@ public class StatueItem extends Item {
             BlockPos blockpos = blockplacecontext.getClickedPos();
             ItemStack itemstack = ctx.getItemInHand();
             Vec3 vec3 = Vec3.atBottomCenterOf(blockpos);
-            AABB aabb = ModEntityTypes.STATUE.get().getDimensions().makeBoundingBox(vec3.x(), vec3.y(), vec3.z());
+            AABB aabb = QOLEntityTypes.STATUE.get().getDimensions().makeBoundingBox(vec3.x(), vec3.y(), vec3.z());
             if (level.noCollision(null, aabb) && level.getEntities(null, aabb).isEmpty()) {
                 if (level instanceof ServerLevel serverlevel) {
                     Consumer<Statue> consumer = EntityType.createDefaultStackConfig(serverlevel, itemstack, ctx.getPlayer());
-                    Statue statue = ModEntityTypes.STATUE.get().create(serverlevel, itemstack.getTag(), consumer, blockpos, MobSpawnType.SPAWN_EGG, true, true);
+                    Statue statue = QOLEntityTypes.STATUE.get().create(serverlevel, itemstack.getTag(), consumer, blockpos, MobSpawnType.SPAWN_EGG, true, true);
                     if (statue == null) {
                         return InteractionResult.FAIL;
                     }

@@ -8,13 +8,12 @@ import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
 import fr.iglee42.createqualityoflife.client.screens.widgets.NotUpdatableEditBox;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ScrollableEditBox;
 import fr.iglee42.createqualityoflife.packets.PublishAnimationPacket;
-import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
-import fr.iglee42.createqualityoflife.registries.ModIcons;
-import fr.iglee42.createqualityoflife.registries.ModPackets;
+import fr.iglee42.createqualityoflife.registries.QOLGuiTextures;
+import fr.iglee42.createqualityoflife.registries.QOLIcons;
+import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import fr.iglee42.createqualityoflife.statue.animation.StatueAnimation;
 import fr.iglee42.createqualityoflife.statue.animation.StatueAnimationFrame;
 import fr.iglee42.createqualityoflife.statue.animation.StatuePartTable;
-import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -22,7 +21,6 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.core.Rotations;
-import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.PlayerModelPart;
@@ -99,16 +97,16 @@ public class AnimationTab extends StatueTab {
 
         //RENDER
         if (animation != null && getCurrentFrame() != null) {
-            ModGuiTextures.ROTATIONS.render(graphics, x + 20 + 2 * BASE_OFFSET, y + 2 * BASE_OFFSET + 20);
-            ModGuiTextures.ROTATIONS.render(graphics, x + 20 + 2 * BASE_OFFSET, y + 3 * BASE_OFFSET + 40);
-            ModGuiTextures.ROTATIONS.render(graphics, x + 20 + 2 * BASE_OFFSET, y + 4 * BASE_OFFSET + 60);
-            ModGuiTextures.ROTATIONS.render(graphics, x + 20 + 2 * BASE_OFFSET, y + 5 * BASE_OFFSET + 80);
-            ModGuiTextures.ROTATIONS.render(graphics, x + 20 + 2 * BASE_OFFSET, y + 6 * BASE_OFFSET + 100);
-            ModGuiTextures.ROTATIONS.render(graphics, x + 20 + 2 * BASE_OFFSET, y + 7 * BASE_OFFSET + 120);
+            QOLGuiTextures.ROTATIONS.render(graphics, x + 20 + 2 * BASE_OFFSET, y + 2 * BASE_OFFSET + 20);
+            QOLGuiTextures.ROTATIONS.render(graphics, x + 20 + 2 * BASE_OFFSET, y + 3 * BASE_OFFSET + 40);
+            QOLGuiTextures.ROTATIONS.render(graphics, x + 20 + 2 * BASE_OFFSET, y + 4 * BASE_OFFSET + 60);
+            QOLGuiTextures.ROTATIONS.render(graphics, x + 20 + 2 * BASE_OFFSET, y + 5 * BASE_OFFSET + 80);
+            QOLGuiTextures.ROTATIONS.render(graphics, x + 20 + 2 * BASE_OFFSET, y + 6 * BASE_OFFSET + 100);
+            QOLGuiTextures.ROTATIONS.render(graphics, x + 20 + 2 * BASE_OFFSET, y + 7 * BASE_OFFSET + 120);
         }
         if (animation != null){
-            ModGuiTextures.NAME_EDIT_BOX.render(graphics,x + BASE_OFFSET + LOOP_X + 19, y + 173 - 19);
-            ModGuiTextures.SIMPLE_EDIT_BOX.render(graphics,getParent().getGuiLeft() + getParent().imageWidth /2 - 25+ Minecraft.getInstance().font.width(CreateQOLLang.translateDirect("statue.animation.frame")),getParent().getGuiTop() + getParent().imageHeight - 24);
+            QOLGuiTextures.NAME_EDIT_BOX.render(graphics,x + BASE_OFFSET + LOOP_X + 19, y + 173 - 19);
+            QOLGuiTextures.SIMPLE_EDIT_BOX.render(graphics,getParent().getGuiLeft() + getParent().imageWidth /2 - 25+ Minecraft.getInstance().font.width(CreateQOLLang.translateDirect("statue.animation.frame")),getParent().getGuiTop() + getParent().imageHeight - 24);
             graphics.drawString(Minecraft.getInstance().font, CreateQOLLang.translateDirect("statue.animation.frame"),getParent().getGuiLeft() + getParent().imageWidth /2 - 25, getParent().getGuiTop() + getParent().imageHeight - 24+ TEXT_Y_OFFSET - 1, 0xffffff);
         }
         if (animation != null && getCurrentFrame() == null){
@@ -220,7 +218,7 @@ public class AnimationTab extends StatueTab {
 
         publishButton = new IconButton(x + BASE_OFFSET + LOOP_X, y + 173 - 19, AllIcons.I_SEND_ONLY);
         publishButton.withCallback(() -> {
-            if (!nameEdit.getValue().isEmpty()) ModPackets.getChannel().sendToServer(new PublishAnimationPacket(Minecraft.getInstance().player.getUUID(), nameEdit.getValue(),animation));
+            if (!nameEdit.getValue().isEmpty()) QOLPackets.getChannel().sendToServer(new PublishAnimationPacket(Minecraft.getInstance().player.getUUID(), nameEdit.getValue(),animation));
         });
         publishButton.setToolTip(CreateQOLLang.translateDirect("statue.animation.publish"));
 
@@ -244,7 +242,7 @@ public class AnimationTab extends StatueTab {
 
 
         setupRotationControls(
-                x, y + offsetY, ModIcons.I_STATUE,
+                x, y + offsetY, QOLIcons.I_STATUE,
                 () -> getCurrentFrame().getGlobal(),
                 () -> getExampleStatue().getEntityRotations(),
                 this::updateGlobal,
@@ -256,7 +254,7 @@ public class AnimationTab extends StatueTab {
         offsetY += 22;
 
         setupRotationControls(
-                x, y + offsetY, ModIcons.I_HAT,
+                x, y + offsetY, QOLIcons.I_HAT,
                 () -> getCurrentFrame().getHead(),
                 () -> getExampleStatue().getHeadPose(),
                 this::updateHead,
@@ -268,7 +266,7 @@ public class AnimationTab extends StatueTab {
         offsetY += 22;
 
         setupRotationControls(
-                x, y + offsetY, ModIcons.I_LEFT_SLEEVE,
+                x, y + offsetY, QOLIcons.I_LEFT_SLEEVE,
                 () -> getCurrentFrame().getLeftArm(),
                 () -> getExampleStatue().getLeftArmPose(),
                 this::updateLeftArm,
@@ -280,7 +278,7 @@ public class AnimationTab extends StatueTab {
         offsetY += 22;
 
         setupRotationControls(
-                x, y + offsetY, ModIcons.I_RIGHT_SLEEVE,
+                x, y + offsetY, QOLIcons.I_RIGHT_SLEEVE,
                 () -> getCurrentFrame().getRightArm(),
                 () -> getExampleStatue().getRightArmPose(),
                 this::updateRightArm,
@@ -292,7 +290,7 @@ public class AnimationTab extends StatueTab {
         offsetY += 22;
 
         setupRotationControls(
-                x, y + offsetY, ModIcons.I_LEFT_PANTS,
+                x, y + offsetY, QOLIcons.I_LEFT_PANTS,
                 () -> getCurrentFrame().getLeftLeg(),
                 () -> getExampleStatue().getLeftLegPose(),
                 this::updateLeftLeg,
@@ -304,7 +302,7 @@ public class AnimationTab extends StatueTab {
         offsetY += 22;
 
         setupRotationControls(
-                x, y + offsetY, ModIcons.I_RIGHT_PANTS,
+                x, y + offsetY, QOLIcons.I_RIGHT_PANTS,
                 () -> getCurrentFrame().getRightLeg(),
                 () -> getExampleStatue().getRightLegPose(),
                 this::updateRightLeg,
@@ -317,7 +315,7 @@ public class AnimationTab extends StatueTab {
 
     }
     private void setupRotationControls(
-            int x, int yOffset, ModIcons icon,
+            int x, int yOffset, QOLIcons icon,
             Supplier<StatuePartTable> currentFrameSupplier,
             Supplier<Rotations> defaultPoseSupplier,
             BiConsumer<Character, Integer> updater,

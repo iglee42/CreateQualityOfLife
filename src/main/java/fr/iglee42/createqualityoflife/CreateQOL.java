@@ -7,14 +7,12 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import fr.iglee42.createqualityoflife.conditions.FeatureLoadedCondition;
-import fr.iglee42.createqualityoflife.blockentitites.*;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.config.CreateQOLFeaturesConfig;
 import fr.iglee42.createqualityoflife.registries.*;
 import fr.iglee42.createqualityoflife.statue.animation.PublishedAnimationsManager;
 import fr.iglee42.createqualityoflife.utils.EnderPackagersNetworkHandler;
 import fr.iglee42.createqualityoflife.utils.Features;
-import fr.iglee42.createqualityoflife.utils.IHaveTankMixin;
 import fr.iglee42.createqualityoflife.utils.liquidblazeburners.LiquidBlazeBurnerReloadListener;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.ChatFormatting;
@@ -76,20 +74,20 @@ public class CreateQOL {
 
         REGISTRATE.registerEventListeners(modEventBus);
 
-        ModBlocks.register();
-        ModBlockEntities.register();
-        ModItems.register();
-        ModCreativeModeTabs.register(modEventBus);
-        ModPackets.registerPackets();
-        ModRecipeTypes.register(modEventBus);
-        ModEntityTypes.ENTITIES.register(modEventBus);
-        ModMenuTypes.register();
+        QOLBlocks.register();
+        QOLBlockEntities.register();
+        QOLItems.register();
+        QOLCreativeModeTabs.register(modEventBus);
+        QOLPackets.registerPackets();
+        QOLRecipeTypes.register(modEventBus);
+        QOLEntityTypes.ENTITIES.register(modEventBus);
+        QOLMenuTypes.register();
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> CreateQOLClient.onCtorClient(modEventBus, forgeEventBus));
         CreateQOLConfigs.register(ModLoadingContext.get());
 
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(ModEntityTypes::registerEntityAttributes);
+        modEventBus.addListener(QOLEntityTypes::registerEntityAttributes);
 
         forgeEventBus.addListener(this::removeFallDamage);
         forgeEventBus.addListener(this::registerReloadListener);
@@ -127,7 +125,7 @@ public class CreateQOL {
         if (!event.getSource().equals(event.getEntity().level().damageSources().fall())) return;
         if (!(event.getEntity() instanceof Player player)) return;
 
-        if (player.getItemBySlot(EquipmentSlot.CHEST).is(ModItems.SHADOW_RADIANCE_CHESTPLATE.asItem())) {
+        if (player.getItemBySlot(EquipmentSlot.CHEST).is(QOLItems.SHADOW_RADIANCE_CHESTPLATE.asItem())) {
             ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
             if (BacktankUtil.getAllWithAir(player).isEmpty()) return;
             if (isFansEnable(stack) && !BacktankUtil.getAllWithAir(player).isEmpty() && hasPropeller(stack)) {

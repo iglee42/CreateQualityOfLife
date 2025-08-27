@@ -6,7 +6,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import fr.iglee42.createqualityoflife.CreateQOL;
-import fr.iglee42.createqualityoflife.registries.ModRecipeTypes;
+import fr.iglee42.createqualityoflife.registries.QOLRecipeTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
@@ -31,12 +31,12 @@ public class BlazeBurnerLiquidRecipe extends ProcessingRecipe<RecipeWrapper> {
 	}
 
 	public BlazeBurnerLiquidRecipe(ProcessingRecipeParams params) {
-		super(ModRecipeTypes.BLAZE_BURNER_LIQUIDS, params);
+		super(QOLRecipeTypes.BLAZE_BURNER_LIQUIDS, params);
 		this.burnerLevel = BlazeBurnerBlock.HeatLevel.NONE;
 	}
 
 	public BlazeBurnerLiquidRecipe(ProcessingRecipeParams params, BlazeBurnerBlock.HeatLevel burnerLevel) {
-		super(ModRecipeTypes.BLAZE_BURNER_LIQUIDS, params);
+		super(QOLRecipeTypes.BLAZE_BURNER_LIQUIDS, params);
 		this.burnerLevel = burnerLevel;
 	}
 

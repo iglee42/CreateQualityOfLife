@@ -5,8 +5,8 @@ import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
 import fr.iglee42.createqualityoflife.blockentitites.TrashCanBlockEntity;
-import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
-import fr.iglee42.createqualityoflife.registries.ModShapes;
+import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
+import fr.iglee42.createqualityoflife.registries.QOLShapes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,7 +39,7 @@ public class TrashCanBlock extends Block implements ProperWaterloggedBlock, IWre
 
 	@Override
 	public VoxelShape getShape(BlockState p_60555_, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_) {
-		return ModShapes.TRASH_CAN;
+		return QOLShapes.TRASH_CAN;
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class TrashCanBlock extends Block implements ProperWaterloggedBlock, IWre
 
 	@Override
 	public BlockEntityType<? extends TrashCanBlockEntity> getBlockEntityType() {
-		return ModBlockEntities.TRASH_CAN.get();
+		return QOLBlockEntities.TRASH_CAN.get();
 	}
 
 }

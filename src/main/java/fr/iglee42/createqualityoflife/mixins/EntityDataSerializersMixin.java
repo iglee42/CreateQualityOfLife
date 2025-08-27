@@ -1,6 +1,6 @@
 package fr.iglee42.createqualityoflife.mixins;
 
-import fr.iglee42.createqualityoflife.registries.ModEntityDataSerializers;
+import fr.iglee42.createqualityoflife.registries.QOLEntityDataSerializers;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,7 +18,7 @@ public abstract class EntityDataSerializersMixin {
 
     @Inject(method = "<clinit>",at = @At("TAIL"))
     private static void createQOL$addCustomSerializers(CallbackInfo ci){
-        registerSerializer(ModEntityDataSerializers.PROFILE_ENTITY_DATA_SERIALIZER);
-        registerSerializer(ModEntityDataSerializers.ANIMATION_DATA_SERIALIZER);
+        registerSerializer(QOLEntityDataSerializers.PROFILE_ENTITY_DATA_SERIALIZER);
+        registerSerializer(QOLEntityDataSerializers.ANIMATION_DATA_SERIALIZER);
     }
 }

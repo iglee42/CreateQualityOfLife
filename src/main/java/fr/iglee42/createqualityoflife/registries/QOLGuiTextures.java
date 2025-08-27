@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public enum ModGuiTextures implements ScreenElement {
+public enum QOLGuiTextures implements ScreenElement {
     DISPLAY_BOARD("display_board", 256, 89),
     STATUE("statue_gui", 226, 220),
     TEXT_BOX("statue_gui",0,220,131, 18),
@@ -37,19 +37,19 @@ public enum ModGuiTextures implements ScreenElement {
     public int width, height;
     public int startX, startY;
 
-    private ModGuiTextures(String location, int width, int height) {
+    private QOLGuiTextures(String location, int width, int height) {
         this(location, 0, 0, width, height);
     }
 
-    private ModGuiTextures(int startX, int startY) {
+    private QOLGuiTextures(int startX, int startY) {
         this("icons", startX * 16, startY * 16, 16, 16);
     }
 
-    private ModGuiTextures(String location, int startX, int startY, int width, int height) {
+    private QOLGuiTextures(String location, int startX, int startY, int width, int height) {
         this(CreateQOL.MODID, location, startX, startY, width, height);
     }
 
-    private ModGuiTextures(String namespace, String location, int startX, int startY, int width, int height) {
+    private QOLGuiTextures(String namespace, String location, int startX, int startY, int width, int height) {
         this.location = new ResourceLocation(namespace, "textures/gui/" + location + ".png");
         this.width = width;
         this.height = height;

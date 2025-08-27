@@ -5,8 +5,7 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.packets.SyncAnimationsConfigPacket;
-import fr.iglee42.createqualityoflife.registries.ModPackets;
-import net.createmod.catnip.platform.CatnipServices;
+import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -17,8 +16,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -86,7 +83,7 @@ public class PublishedAnimationsManager extends SavedData {
     public void tick(ServerLevel level) {
         if (isDirty()) {
             level.players().forEach(sp->{
-                ModPackets.sendToPlayer(sp,new SyncAnimationsConfigPacket(animations));
+                QOLPackets.sendToPlayer(sp,new SyncAnimationsConfigPacket(animations));
             });
         }
     }

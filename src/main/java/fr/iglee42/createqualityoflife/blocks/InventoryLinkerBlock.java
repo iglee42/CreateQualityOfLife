@@ -4,19 +4,15 @@ import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.foundation.block.IBE;
-import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.blockentitites.InventoryLinkerBlockEntity;
-import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
-import fr.iglee42.createqualityoflife.registries.ModItems;
-import fr.iglee42.createqualityoflife.utils.Features;
+import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
+import fr.iglee42.createqualityoflife.registries.QOLItems;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -59,7 +55,7 @@ public class InventoryLinkerBlock extends KineticBlock implements IBE<InventoryL
 
     @Override
     public BlockEntityType<? extends InventoryLinkerBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.INVENTORY_LINKER.get();
+        return QOLBlockEntities.INVENTORY_LINKER.get();
     }
 
     @Override
@@ -73,7 +69,7 @@ public class InventoryLinkerBlock extends KineticBlock implements IBE<InventoryL
                     level.sendBlockUpdated(pos,blockState,blockState,2);
                 }
             } else {
-                if (be.getPlayerPaperItemStack().isEmpty() && player.getMainHandItem().is(ModItems.PLAYER_PAPER.get())){
+                if (be.getPlayerPaperItemStack().isEmpty() && player.getMainHandItem().is(QOLItems.PLAYER_PAPER.get())){
                     if (player.getMainHandItem().getOrCreateTag().contains(NBTConstants.NBT_LINKED_PLAYER)){
                         be.setPlayerPaperItemStack(player.getMainHandItem().copy());
                         player.setItemInHand(InteractionHand.MAIN_HAND,ItemStack.EMPTY);

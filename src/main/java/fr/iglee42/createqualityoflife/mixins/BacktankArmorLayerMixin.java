@@ -9,10 +9,8 @@ import fr.iglee42.createqualityoflife.CreateQOLClient;
 import fr.iglee42.createqualityoflife.blocks.ShadowRadianceBacktankBlock;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
-import fr.iglee42.createqualityoflife.registries.ModItems;
-import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import fr.iglee42.createqualityoflife.registries.QOLItems;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
-import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.math.AngleHelper;
 import net.createmod.catnip.render.CachedBuffers;
@@ -37,7 +35,7 @@ public class BacktankArmorLayerMixin {
 
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V",ordinal = 0,shift = At.Shift.BEFORE),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
     private void inject(PoseStack ms, MultiBufferSource buffer, int light, LivingEntity entity, float yaw, float pitch, float pt, float p_225628_8_, float p_225628_9_, float p_225628_10_, CallbackInfo ci, BacktankItem item, EntityModel entityModel, HumanoidModel model, VertexConsumer vc, BlockState renderedState, SuperByteBuffer backtank, SuperByteBuffer cogs, SuperByteBuffer nob){
-        if (ModItems.SHADOW_RADIANCE_CHESTPLATE.is(item)){
+        if (QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(item)){
             ItemStack stack = entity.getItemBySlot(EquipmentSlot.CHEST);
             if (!NBTConstants.getOrDefault(stack,NBTConstants.NBT_RENDER_TYPE).shouldRenderAddition()){
                 ci.cancel();

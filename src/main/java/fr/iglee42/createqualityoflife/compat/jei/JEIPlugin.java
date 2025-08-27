@@ -2,7 +2,6 @@ package fr.iglee42.createqualityoflife.compat.jei;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllRecipeTypes;
-import com.simibubi.create.Create;
 import com.simibubi.create.compat.jei.CreateJEI;
 import com.simibubi.create.compat.jei.DoubleItemIcon;
 import com.simibubi.create.compat.jei.EmptyBackground;
@@ -11,7 +10,6 @@ import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CRecipes;
 import earth.terrarium.chipped.common.compat.jei.ChippedRecipeCategory;
@@ -19,7 +17,7 @@ import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
 import fr.iglee42.createqualityoflife.recipes.BlazeBurnerLiquidRecipe;
-import fr.iglee42.createqualityoflife.registries.ModBlocks;
+import fr.iglee42.createqualityoflife.registries.QOLBlocks;
 import fr.iglee42.createqualityoflife.utils.Features;
 import fr.iglee42.createqualityoflife.utils.liquidblazeburners.LiquidBlazeBurnerManager;
 import mezz.jei.api.IModPlugin;
@@ -60,13 +58,13 @@ public class JEIPlugin implements IModPlugin {
 
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         if (CreateQOL.isChippedLoaded() && CreateQOL.isActivate(Features.CHIPPED_SAW)) {
-            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.BOTANIST_SAW.get()), ChippedRecipeCategory.BOTANIST_WORKBENCH_RECIPE);
-            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.GLASSBLOWER_SAW.get()), ChippedRecipeCategory.GLASSBLOWER_RECIPE);
-            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.CARPENTERS_SAW.get()), ChippedRecipeCategory.CARPENTERS_TABLE_RECIPE);
-            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.LOOM_SAW.get()), ChippedRecipeCategory.LOOM_TABLE_RECIPE);
-            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.MASON_SAW.get()), ChippedRecipeCategory.MASON_TABLE_RECIPE);
-            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.ALCHEMY_SAW.get()), ChippedRecipeCategory.ALCHEMY_BENCH_RECIPE);
-            registration.addRecipeCatalyst(new ItemStack((ItemLike)ModBlocks.TINKERING_SAW.get()), ChippedRecipeCategory.TINKERING_TABLE_RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike) QOLBlocks.BOTANIST_SAW.get()), ChippedRecipeCategory.BOTANIST_WORKBENCH_RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike) QOLBlocks.GLASSBLOWER_SAW.get()), ChippedRecipeCategory.GLASSBLOWER_RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike) QOLBlocks.CARPENTERS_SAW.get()), ChippedRecipeCategory.CARPENTERS_TABLE_RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike) QOLBlocks.LOOM_SAW.get()), ChippedRecipeCategory.LOOM_TABLE_RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike) QOLBlocks.MASON_SAW.get()), ChippedRecipeCategory.MASON_TABLE_RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike) QOLBlocks.ALCHEMY_SAW.get()), ChippedRecipeCategory.ALCHEMY_BENCH_RECIPE);
+            registration.addRecipeCatalyst(new ItemStack((ItemLike) QOLBlocks.TINKERING_SAW.get()), ChippedRecipeCategory.TINKERING_TABLE_RECIPE);
         }
         allCategories.forEach(c -> c.registerCatalysts(registration));
 

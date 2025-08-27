@@ -7,7 +7,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIc
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.utility.CreateLang;
-import fr.iglee42.createqualityoflife.registries.ModIcons;
+import fr.iglee42.createqualityoflife.registries.QOLIcons;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -57,9 +57,9 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
     }
 
     public enum Mode implements INamedIconOptions {
-        INVENTORY(0,36, ModIcons.I_INVENTORY),
-        ARMOR(1,4,ModIcons.I_ARMOR),
-        OFF_HAND(2,1,ModIcons.I_OFF_HAND);
+        INVENTORY(0,36, QOLIcons.I_INVENTORY),
+        ARMOR(1,4, QOLIcons.I_ARMOR),
+        OFF_HAND(2,1, QOLIcons.I_OFF_HAND);
 
         private int id;
         private int slotCount;

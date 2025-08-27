@@ -4,15 +4,13 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.serialization.Dynamic;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.content.equipment.wrench.WrenchItem;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueHandler;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
-import fr.iglee42.createqualityoflife.registries.ModEntityDataSerializers;
-import fr.iglee42.createqualityoflife.registries.ModEntityTypes;
-import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.registries.QOLEntityDataSerializers;
+import fr.iglee42.createqualityoflife.registries.QOLEntityTypes;
+import fr.iglee42.createqualityoflife.registries.QOLItems;
 import fr.iglee42.createqualityoflife.statue.animation.StatueAnimation;
 import fr.iglee42.createqualityoflife.statue.animation.StatueAnimationFrame;
-import fr.iglee42.createqualityoflife.statue.animation.StatuePartTable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -82,9 +80,9 @@ public class Statue extends LivingEntity {
     public static final EntityDataAccessor<Rotations> DATA_GLOBAL_ROTATIONS = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.ROTATIONS);
     public static final EntityDataAccessor<Byte> DATA_PLAYER_SKIN_CUSTOMISATION = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.BYTE);
     public static final EntityDataAccessor<Optional<UUID>> DATA_OWNER = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.OPTIONAL_UUID);
-    public static final EntityDataAccessor<Optional<GameProfile>> DATA_PROFILE = SynchedEntityData.defineId(Statue.class, ModEntityDataSerializers.PROFILE_ENTITY_DATA_SERIALIZER);
+    public static final EntityDataAccessor<Optional<GameProfile>> DATA_PROFILE = SynchedEntityData.defineId(Statue.class, QOLEntityDataSerializers.PROFILE_ENTITY_DATA_SERIALIZER);
     public static final EntityDataAccessor<Float> DATA_SCALE = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.FLOAT);
-    public static final EntityDataAccessor<Optional<StatueAnimation>> DATA_ANIMATION = SynchedEntityData.defineId(Statue.class, ModEntityDataSerializers.ANIMATION_DATA_SERIALIZER);
+    public static final EntityDataAccessor<Optional<StatueAnimation>> DATA_ANIMATION = SynchedEntityData.defineId(Statue.class, QOLEntityDataSerializers.ANIMATION_DATA_SERIALIZER);
     public static final EntityDataAccessor<Integer> DATA_ANIMATION_PROGRESS = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> DATA_ANIMATION_REVERSING = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Boolean> DATA_ANIMATION_PLAYING = SynchedEntityData.defineId(Statue.class, EntityDataSerializers.BOOLEAN);
@@ -109,7 +107,7 @@ public class Statue extends LivingEntity {
     }
 
     public Statue(Level p_31556_, double p_31557_, double p_31558_, double p_31559_) {
-        this(ModEntityTypes.STATUE.get(), p_31556_);
+        this(QOLEntityTypes.STATUE.get(), p_31556_);
         this.setPos(p_31557_, p_31558_, p_31559_);
     }
 
@@ -661,7 +659,7 @@ public class Statue extends LivingEntity {
     }
 
     private void brokenByPlayer(DamageSource p_31647_) {
-        ItemStack itemstack = new ItemStack(ModItems.STATUE.get());
+        ItemStack itemstack = new ItemStack(QOLItems.STATUE.get());
         if (this.hasCustomName()) {
             itemstack.setHoverName(this.getCustomName());
         }
@@ -1098,7 +1096,7 @@ public class Statue extends LivingEntity {
 
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(ModItems.STATUE.get());
+        return new ItemStack(QOLItems.STATUE.get());
     }
 
     @Override

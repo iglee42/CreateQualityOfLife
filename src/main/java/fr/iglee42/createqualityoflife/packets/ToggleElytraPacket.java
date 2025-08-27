@@ -4,7 +4,7 @@ import com.simibubi.create.content.equipment.armor.BacktankItem;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
-import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.registries.QOLItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,9 +34,9 @@ public class ToggleElytraPacket extends SimplePacketBase {
                 Item backtank = BacktankItem.getWornBy(player);
 
                 if (backtank == null) return;
-                if (ModItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && ShadowRadianceChestplate.hasElytra(chestplate)){
+                if (QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && ShadowRadianceChestplate.hasElytra(chestplate)){
                     ShadowRadianceChestplate.toggleElytra(chestplate,player);
-                }else if (ModItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && !ShadowRadianceChestplate.hasElytra(chestplate)){
+                }else if (QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && !ShadowRadianceChestplate.hasElytra(chestplate)){
                     player.sendSystemMessage(CreateQOLLang.translateDirect("chestplate.no_elytra").withStyle(ChatFormatting.RED),true);
                 }
             }

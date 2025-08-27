@@ -1,8 +1,6 @@
 package fr.iglee42.createqualityoflife.blocks;
 
-import com.simibubi.create.AllEnchantments;
 import com.simibubi.create.AllItems;
-import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.equipment.armor.BacktankBlock;
 import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
@@ -10,17 +8,15 @@ import com.simibubi.create.content.equipment.armor.BacktankItem;
 import fr.iglee42.createqualityoflife.blockentitites.ShadowRadianceBacktankBE;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
-import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
+import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -35,7 +31,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.Map;
 import java.util.Optional;
@@ -133,7 +128,7 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
 
     @Override
     public BlockEntityType<? extends BacktankBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.SHADOW_CHEST_BE
+        return QOLBlockEntities.SHADOW_CHEST_BE
                 .get();
     }
 }

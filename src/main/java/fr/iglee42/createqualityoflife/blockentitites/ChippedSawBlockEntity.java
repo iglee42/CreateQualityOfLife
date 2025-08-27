@@ -14,7 +14,7 @@ import com.simibubi.create.infrastructure.config.AllConfigs;
 import earth.terrarium.chipped.common.recipes.ChippedRecipe;
 import earth.terrarium.chipped.common.registry.ModRecipeTypes;
 import fr.iglee42.createqualityoflife.blocks.ChippedSawBlock;
-import fr.iglee42.createqualityoflife.registries.ModBlocks;
+import fr.iglee42.createqualityoflife.registries.QOLBlocks;
 import fr.iglee42.createqualityoflife.utils.ChippedSawFilterSlot;
 import net.createmod.catnip.math.VecHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -364,17 +364,17 @@ public class ChippedSawBlockEntity extends KineticBlockEntity {
 
 	private List<? extends Recipe<?>> getRecipes() {
 /*		Optional<CuttingRecipe> assemblyRecipe = SequencedAssemblyRecipe.getRecipe(level, inventory.getStackInSlot(0),
-			ModRecipeTypes.ALCHEMY_BENCH_TYPE.getType(), CuttingRecipe.class);
+			QOLRecipeTypes.ALCHEMY_BENCH_TYPE.getType(), CuttingRecipe.class);
 		if (assemblyRecipe.isPresent() && filtering.test(assemblyRecipe.get()
 			.getResultItem()))
 			return ImmutableList.of(assemblyRecipe.get());*/
 
-		Predicate<Recipe<?>> types = RecipeConditions.isOfType( ModBlocks.BOTANIST_SAW.has(this.getBlockState()) ? ModRecipeTypes.BOTANIST_WORKBENCH.get() :
-				ModBlocks.CARPENTERS_SAW.has(this.getBlockState()) ? ModRecipeTypes.CARPENTERS_TABLE.get() :
-						ModBlocks.GLASSBLOWER_SAW.has(this.getBlockState()) ? ModRecipeTypes.GLASSBLOWER.get()  :
-								ModBlocks.MASON_SAW.has(this.getBlockState()) ? ModRecipeTypes.MASON_TABLE.get() :
-										ModBlocks.TINKERING_SAW.has(this.getBlockState()) ? ModRecipeTypes.TINKERING_TABLE.get() :
-												ModBlocks.LOOM_SAW.has(this.getBlockState()) ? ModRecipeTypes.LOOM_TABLE.get() :
+		Predicate<Recipe<?>> types = RecipeConditions.isOfType( QOLBlocks.BOTANIST_SAW.has(this.getBlockState()) ? ModRecipeTypes.BOTANIST_WORKBENCH.get() :
+				QOLBlocks.CARPENTERS_SAW.has(this.getBlockState()) ? ModRecipeTypes.CARPENTERS_TABLE.get() :
+						QOLBlocks.GLASSBLOWER_SAW.has(this.getBlockState()) ? ModRecipeTypes.GLASSBLOWER.get()  :
+								QOLBlocks.MASON_SAW.has(this.getBlockState()) ? ModRecipeTypes.MASON_TABLE.get() :
+										QOLBlocks.TINKERING_SAW.has(this.getBlockState()) ? ModRecipeTypes.TINKERING_TABLE.get() :
+												QOLBlocks.LOOM_SAW.has(this.getBlockState()) ? ModRecipeTypes.LOOM_TABLE.get() :
 														ModRecipeTypes.ALCHEMY_BENCH.get() );
 
 		List<Recipe<?>> startedSearch = RecipeFinder.get(cuttingRecipesKey, level, types);

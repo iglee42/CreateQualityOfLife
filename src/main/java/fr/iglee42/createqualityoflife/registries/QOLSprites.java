@@ -8,7 +8,7 @@ import fr.iglee42.createqualityoflife.CreateQOL;
 import net.createmod.catnip.render.SpriteShiftEntry;
 import net.createmod.catnip.render.SpriteShifter;
 
-public class ModSprites {
+public class QOLSprites {
 
         public static final SpriteShiftEntry SHADOW_CHEST =
                 get("block/shadow_radiance_chestplate", "block/shadow_radiance_chestplate");

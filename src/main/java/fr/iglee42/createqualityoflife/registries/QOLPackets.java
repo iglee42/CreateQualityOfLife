@@ -1,7 +1,5 @@
 package fr.iglee42.createqualityoflife.registries;
 
-import com.simibubi.create.AllPackets;
-import com.simibubi.create.Create;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.packets.*;
@@ -20,7 +18,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public enum ModPackets {
+public enum QOLPackets {
 
     //Client to Server
 
@@ -41,11 +39,11 @@ public enum ModPackets {
     public static final String NETWORK_VERSION_STR = String.valueOf(NETWORK_VERSION);
     private static SimpleChannel channel;
 
-    private ModPackets.PacketType<?> packetType;
+    private QOLPackets.PacketType<?> packetType;
 
-    <T extends SimplePacketBase> ModPackets(Class<T> type, Function<FriendlyByteBuf, T> factory,
+    <T extends SimplePacketBase> QOLPackets(Class<T> type, Function<FriendlyByteBuf, T> factory,
                                             NetworkDirection direction) {
-        packetType = new ModPackets.PacketType<>(type, factory, direction);
+        packetType = new QOLPackets.PacketType<>(type, factory, direction);
     }
 
     public static void registerPackets() {
@@ -55,7 +53,7 @@ public enum ModPackets {
                 .networkProtocolVersion(() -> NETWORK_VERSION_STR)
                 .simpleChannel();
 
-        for (ModPackets packet : values())
+        for (QOLPackets packet : values())
             packet.packetType.register();
     }
 

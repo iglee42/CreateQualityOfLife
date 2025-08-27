@@ -7,8 +7,8 @@ import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ClickableScrollInput;
 import fr.iglee42.createqualityoflife.client.screens.widgets.FloatScrollInput;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
-import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
-import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.registries.QOLGuiTextures;
+import fr.iglee42.createqualityoflife.registries.QOLItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -37,7 +37,7 @@ public class StatueTransformTab extends StatueTab {
     private ClickableScrollInput rotationZ;
 
     public StatueTransformTab(int index, ConfigureStatueScreen parent) {
-        super(index, ModItems.STATUE.asItem(), parent, "statue.transformTab");
+        super(index, QOLItems.STATUE.asItem(), parent, "statue.transformTab");
     }
 
     @Override
@@ -46,7 +46,7 @@ public class StatueTransformTab extends StatueTab {
             int inputX = i.getX();
             AllGuiTextures.TRAIN_PROMPT_L.render(graphics, inputX - 3,i.getY());
             AllGuiTextures.TRAIN_PROMPT_R.render(graphics, inputX +i.getWidth(),i.getY());
-            ModGuiTextures.SLIDER.render(graphics,inputX,i.getY());
+            QOLGuiTextures.SLIDER.render(graphics,inputX,i.getY());
 
             float progress = (float) (i.getState() + 180) / 360;
             AllGuiTextures.TRAIN_PROMPT_L.render(graphics, (int) (inputX + progress * i.getWidth() - 3),i.getY());
@@ -56,13 +56,13 @@ public class StatueTransformTab extends StatueTab {
         int inputX = scale.getX();
         AllGuiTextures.TRAIN_PROMPT_L.render(graphics, inputX - 3,scale.getY());
         AllGuiTextures.TRAIN_PROMPT_R.render(graphics, inputX +scale.getWidth(),scale.getY());
-        ModGuiTextures.SLIDER.render(graphics,inputX,scale.getY());
+        QOLGuiTextures.SLIDER.render(graphics,inputX,scale.getY());
 
         float progress = scale.getState() / 10;
         AllGuiTextures.TRAIN_PROMPT_L.render(graphics, (int) (inputX + progress * scale.getWidth() - 3),scale.getY());
         AllGuiTextures.TRAIN_PROMPT_R.render(graphics, (int) (inputX + progress * scale.getWidth()),scale.getY());
 
-        ModGuiTextures.COORDINATES.render(graphics,x + BASE_OFFSET, y);
+        QOLGuiTextures.COORDINATES.render(graphics,x + BASE_OFFSET, y);
 
     }
 

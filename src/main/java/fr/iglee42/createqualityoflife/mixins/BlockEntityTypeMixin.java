@@ -1,7 +1,7 @@
 package fr.iglee42.createqualityoflife.mixins;
 
 import com.simibubi.create.AllBlockEntityTypes;
-import fr.iglee42.createqualityoflife.registries.ModBlocks;
+import fr.iglee42.createqualityoflife.registries.QOLBlocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +14,7 @@ public class BlockEntityTypeMixin {
 
     @Inject(method = "isValid",at = @At("HEAD"),cancellable = true)
     private void inject(BlockState state, CallbackInfoReturnable<Boolean> cir){
-        if (this.equals(AllBlockEntityTypes.BACKTANK.get()) && ModBlocks.SHADOW_RADIANCE_CHESTPLATE.has(state)) cir.setReturnValue(true);
+        if (this.equals(AllBlockEntityTypes.BACKTANK.get()) && QOLBlocks.SHADOW_RADIANCE_CHESTPLATE.has(state)) cir.setReturnValue(true);
     }
 
 }

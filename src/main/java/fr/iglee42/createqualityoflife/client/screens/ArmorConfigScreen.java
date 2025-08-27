@@ -3,21 +3,17 @@ package fr.iglee42.createqualityoflife.client.screens;
 import com.google.common.collect.Lists;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
-import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ArmorConfigScreenList;
-import fr.iglee42.createqualityoflife.client.screens.widgets.ItemButton;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ItemConfigButton;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.BooleanEntry;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.EnumEntry;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.ValueEntry;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
-import fr.iglee42.createqualityoflife.registries.ModArmorMaterials;
+import fr.iglee42.createqualityoflife.registries.QOLArmorMaterials;
 
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
-import net.createmod.catnip.config.ui.ConfigScreen;
-import net.createmod.catnip.config.ui.ConfigScreenList;
 import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -81,7 +77,7 @@ public class ArmorConfigScreen extends AbstractSimiScreen {
 
 		Minecraft.getInstance().player.getInventory().armor.forEach(it->{
 			if (!(it.getItem() instanceof ArmorItem))return;
-			if (((ArmorItem)it.getItem()).getMaterial().equals(ModArmorMaterials.SHADOW_RADIANCE)) armors.add(Minecraft.getInstance().player.getInventory().armor.indexOf(it));
+			if (((ArmorItem)it.getItem()).getMaterial().equals(QOLArmorMaterials.SHADOW_RADIANCE)) armors.add(Minecraft.getInstance().player.getInventory().armor.indexOf(it));
 		});
 		armors = Lists.reverse(armors);
 		for (int index = 0; index < armors.size(); index++) {

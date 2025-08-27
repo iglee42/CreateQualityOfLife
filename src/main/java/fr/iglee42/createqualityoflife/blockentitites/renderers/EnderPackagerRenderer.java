@@ -3,8 +3,6 @@ package fr.iglee42.createqualityoflife.blockentitites.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
-import com.simibubi.create.content.logistics.packager.PackagerBlockEntity;
-import com.simibubi.create.content.redstone.link.LinkRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
 
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
@@ -13,7 +11,7 @@ import dev.engine_room.flywheel.lib.transform.TransformStack;
 import fr.iglee42.createqualityoflife.blockentitites.EnderPackagerBlockEntity;
 import fr.iglee42.createqualityoflife.blocks.EnderPackagerBlock;
 import fr.iglee42.createqualityoflife.client.renderer.EnderRenderer;
-import fr.iglee42.createqualityoflife.registries.ModPartialModels;
+import fr.iglee42.createqualityoflife.registries.QOLPartialModels;
 import net.createmod.catnip.math.AngleHelper;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
@@ -88,7 +86,7 @@ public class EnderPackagerRenderer extends SmartBlockEntityRenderer<EnderPackage
 	}
 
 	public static PartialModel getHatchModel(EnderPackagerBlockEntity be) {
-		return isHatchOpen(be) ? ModPartialModels.ENDER_PACKAGER_HATCH_OPEN : ModPartialModels.ENDER_PACKAGER_HATCH_CLOSED;
+		return isHatchOpen(be) ? QOLPartialModels.ENDER_PACKAGER_HATCH_OPEN : QOLPartialModels.ENDER_PACKAGER_HATCH_CLOSED;
 	}
 
 	public static boolean isHatchOpen(EnderPackagerBlockEntity be) {

@@ -6,9 +6,9 @@ import fr.iglee42.createqualityoflife.packets.ToggleElytraPacket;
 import fr.iglee42.createqualityoflife.packets.ToggleFansPacket;
 import fr.iglee42.createqualityoflife.packets.ToggleHoverPacket;
 import fr.iglee42.createqualityoflife.packets.UpdateInputsPacket;
-import fr.iglee42.createqualityoflife.registries.ModArmorMaterials;
-import fr.iglee42.createqualityoflife.registries.ModItems;
-import fr.iglee42.createqualityoflife.registries.ModPackets;
+import fr.iglee42.createqualityoflife.registries.QOLArmorMaterials;
+import fr.iglee42.createqualityoflife.registries.QOLItems;
+import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import net.createmod.catnip.gui.ScreenOpener;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -57,7 +57,7 @@ public class KeyBindManager {
                 lastBackwardState = backwardState;
                 lastLeftState = leftState;
                 lastRightState = rightState;
-                ModPackets.getChannel().sendToServer(new UpdateInputsPacket(flyState, descendState, forwardState, backwardState, leftState, rightState));
+                QOLPackets.getChannel().sendToServer(new UpdateInputsPacket(flyState, descendState, forwardState, backwardState, leftState, rightState));
                 CommonKeysHandler.update(mc.player, flyState, descendState, forwardState, backwardState, leftState, rightState);
             }
         }
@@ -75,7 +75,7 @@ public class KeyBindManager {
                 AtomicBoolean hasArmor = new AtomicBoolean(false);
                 player.getArmorSlots().forEach(it->{
                     if (!(it.getItem() instanceof ArmorItem))return;
-                    if (((ArmorItem)it.getItem()).getMaterial().equals(ModArmorMaterials.SHADOW_RADIANCE)) hasArmor.set(true);
+                    if (((ArmorItem)it.getItem()).getMaterial().equals(QOLArmorMaterials.SHADOW_RADIANCE)) hasArmor.set(true);
                 });
                 if (hasArmor.get()) {
                     ScreenOpener.open(new ArmorConfigScreen());
@@ -85,15 +85,15 @@ public class KeyBindManager {
             Item backtank = BacktankItem.getWornBy(player);
 
             if (backtank == null) return;
-            if (!ModItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank)) return;
+            if (!QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank)) return;
             if (FANS_KEY.consumeClick()) {
-                ModPackets.getChannel().sendToServer(new ToggleFansPacket());
+                QOLPackets.getChannel().sendToServer(new ToggleFansPacket());
             }
             if (HOVER_KEY.consumeClick()) {
-                ModPackets.getChannel().sendToServer(new ToggleHoverPacket());
+                QOLPackets.getChannel().sendToServer(new ToggleHoverPacket());
             }
             if (ELYTRA_KEY.consumeClick()) {
-                ModPackets.getChannel().sendToServer(new ToggleElytraPacket());
+                QOLPackets.getChannel().sendToServer(new ToggleElytraPacket());
             }
             tickEnd();
         }

@@ -1,9 +1,8 @@
 package fr.iglee42.createqualityoflife.client.screens.widgets.entries;
 
 import fr.iglee42.createqualityoflife.client.screens.ArmorConfigScreen;
-import fr.iglee42.createqualityoflife.client.screens.widgets.entries.ValueEntry;
 import fr.iglee42.createqualityoflife.packets.ChangeArmorTagPacket;
-import fr.iglee42.createqualityoflife.registries.ModPackets;
+import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.gui.element.RenderElement;
 import net.createmod.catnip.gui.widget.AbstractSimiWidget;
@@ -77,7 +76,7 @@ public class BooleanEntry extends ValueEntry<Boolean> {
 	public void setValue(@NotNull Boolean value) {
 		List<Integer> armors = ((ArmorConfigScreen) Minecraft.getInstance().screen).getArmors();
 		int selected = ((ArmorConfigScreen)Minecraft.getInstance().screen).getSelectedItem();
-		ModPackets.getChannel().sendToServer(new ChangeArmorTagPacket(armors.get(selected), !value ? 0 : 1, nbtKey));
+		QOLPackets.getChannel().sendToServer(new ChangeArmorTagPacket(armors.get(selected), !value ? 0 : 1, nbtKey));
 		super.setValue(value);
 	}
 }

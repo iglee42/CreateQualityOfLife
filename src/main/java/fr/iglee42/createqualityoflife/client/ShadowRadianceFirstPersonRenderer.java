@@ -1,7 +1,7 @@
 package fr.iglee42.createqualityoflife.client;
 
 import fr.iglee42.createqualityoflife.CreateQOL;
-import fr.iglee42.createqualityoflife.registries.ModItems;
+import fr.iglee42.createqualityoflife.registries.QOLItems;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
@@ -33,7 +33,7 @@ public class ShadowRadianceFirstPersonRenderer {
 	public static void clientTick() {
 		Minecraft mc = Minecraft.getInstance();
 		rendererActive =
-			mc.player != null && ModItems.SHADOW_RADIANCE_CHESTPLATE.isIn(mc.player.getItemBySlot(EquipmentSlot.CHEST)) && NBTConstants.getOrDefault(mc.player.getItemBySlot(EquipmentSlot.CHEST),NBTConstants.NBT_RENDER_TYPE).shouldRenderArmor() && NBTConstants.getOrDefault(mc.player.getItemBySlot(EquipmentSlot.CHEST),NBTConstants.NBT_ARMS,true);
+			mc.player != null && QOLItems.SHADOW_RADIANCE_CHESTPLATE.isIn(mc.player.getItemBySlot(EquipmentSlot.CHEST)) && NBTConstants.getOrDefault(mc.player.getItemBySlot(EquipmentSlot.CHEST),NBTConstants.NBT_RENDER_TYPE).shouldRenderArmor() && NBTConstants.getOrDefault(mc.player.getItemBySlot(EquipmentSlot.CHEST),NBTConstants.NBT_ARMS,true);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)

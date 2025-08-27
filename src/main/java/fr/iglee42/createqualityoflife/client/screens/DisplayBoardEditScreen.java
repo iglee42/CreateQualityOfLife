@@ -8,8 +8,8 @@ import com.simibubi.create.foundation.gui.widget.Indicator;
 import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.gui.widget.SelectionScrollInput;
 import fr.iglee42.createqualityoflife.packets.ConfigureDisplayBoardPacket;
-import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
-import fr.iglee42.createqualityoflife.registries.ModPackets;
+import fr.iglee42.createqualityoflife.registries.QOLGuiTextures;
+import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -46,7 +46,7 @@ public class DisplayBoardEditScreen extends AbstractSimiScreen {
 
     @Override
     protected void init() {
-        ModGuiTextures bg = ModGuiTextures.DISPLAY_BOARD;
+        QOLGuiTextures bg = QOLGuiTextures.DISPLAY_BOARD;
         setWindowSize(bg.width,bg.height);
         setWindowOffset(0,0);
         super.init();
@@ -94,7 +94,7 @@ public class DisplayBoardEditScreen extends AbstractSimiScreen {
     @Override
     protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         graphics.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
-        ModGuiTextures.DISPLAY_BOARD.render(graphics, guiLeft - 2, guiTop);
+        QOLGuiTextures.DISPLAY_BOARD.render(graphics, guiLeft - 2, guiTop);
         colorScrollInput.render(graphics, mouseX, mouseY, partialTicks);
         colorScrollInputLabel.render(graphics, mouseX, mouseY, partialTicks);
 
@@ -108,7 +108,7 @@ public class DisplayBoardEditScreen extends AbstractSimiScreen {
 
     @Override
     public void onClose() {
-        ModPackets.getChannel().sendToServer(new ConfigureDisplayBoardPacket(be.getBlockPos(),lineIndex,text,glowingIndicator.state != Indicator.State.OFF,colorScrollInput.getState()));
+        QOLPackets.getChannel().sendToServer(new ConfigureDisplayBoardPacket(be.getBlockPos(),lineIndex,text,glowingIndicator.state != Indicator.State.OFF,colorScrollInput.getState()));
 
         super.onClose();
 

@@ -1,15 +1,9 @@
 package fr.iglee42.createqualityoflife.packets;
 
-import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
-import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
-import fr.iglee42.createqualityoflife.registries.ModItems;
 import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 
 public class UpdateInputsPacket extends SimplePacketBase {

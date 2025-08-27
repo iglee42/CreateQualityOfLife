@@ -6,10 +6,10 @@ import com.simibubi.create.foundation.gui.AllIcons;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.tabs.PublishedAnimationsTab;
 import fr.iglee42.createqualityoflife.packets.DeleteAnimationPacket;
-import fr.iglee42.createqualityoflife.registries.ModEntityTypes;
-import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
-import fr.iglee42.createqualityoflife.registries.ModIcons;
-import fr.iglee42.createqualityoflife.registries.ModPackets;
+import fr.iglee42.createqualityoflife.registries.QOLEntityTypes;
+import fr.iglee42.createqualityoflife.registries.QOLGuiTextures;
+import fr.iglee42.createqualityoflife.registries.QOLIcons;
+import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import fr.iglee42.createqualityoflife.statue.Statue;
 import fr.iglee42.createqualityoflife.statue.animation.PublishedAnimationsManager.PublishedAnimation;
 import fr.iglee42.createqualityoflife.statue.animation.StatueAnimation;
@@ -37,7 +37,7 @@ public class StatueAnimationWidget extends AbstractSimiWidget {
         super(x, y,45,60);
         this.animation = animation;
         this.parent = parent;
-        statue = new Statue(ModEntityTypes.STATUE.get(), Minecraft.getInstance().level);
+        statue = new Statue(QOLEntityTypes.STATUE.get(), Minecraft.getInstance().level);
         CompoundTag tag = new CompoundTag();
         parent.getExampleStatue().saveWithoutId(tag);
         statue.load(tag);
@@ -63,13 +63,13 @@ public class StatueAnimationWidget extends AbstractSimiWidget {
         graphics.pose().pushPose();
         graphics.pose().scale(0.8f,0.8f,0.8f);
         String player = Minecraft.getInstance().level.getPlayerByUUID(animation.publisher()) != null ? Minecraft.getInstance().level.getPlayerByUUID(animation.publisher()).getName().getString() : "Unknown";
-        originalDrawScrollingString(graphics,Minecraft.getInstance().font, Component.literal(player), (int) ((getX() + 2) *1.25), (int) ((getX() + getWidth() - 12) *1.25), (int) ((getY() + getHeight() + 3) *1.25), ModGuiTextures.FONT_COLOR);
+        originalDrawScrollingString(graphics,Minecraft.getInstance().font, Component.literal(player), (int) ((getX() + 2) *1.25), (int) ((getX() + getWidth() - 12) *1.25), (int) ((getY() + getHeight() + 3) *1.25), QOLGuiTextures.FONT_COLOR);
 
         graphics.pose().popPose();
-        ModGuiTextures button = !active ? ModGuiTextures.POSE_BUTTON_DISABLED
-                : isHovered && AllKeys.isMouseButtonDown(0) ? ModGuiTextures.POSE_BUTTON_CLICKED
-                : isHovered ? ModGuiTextures.POSE_BUTTON_HOVER
-                : ModGuiTextures.POSE_BUTTON;
+        QOLGuiTextures button = !active ? QOLGuiTextures.POSE_BUTTON_DISABLED
+                : isHovered && AllKeys.isMouseButtonDown(0) ? QOLGuiTextures.POSE_BUTTON_CLICKED
+                : isHovered ? QOLGuiTextures.POSE_BUTTON_HOVER
+                : QOLGuiTextures.POSE_BUTTON;
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         button.render(graphics,getX(),getY());
@@ -86,7 +86,7 @@ public class StatueAnimationWidget extends AbstractSimiWidget {
             graphics.pose().pushPose();
             graphics.pose().translate(getX() + getWidth() - 11, getY() + getHeight() - 1,100);
             graphics.pose().scale(11,11,11);
-            if (hovered) ModIcons.I_DISCARD_HOVER.render(graphics.pose(),graphics.bufferSource(),0xffffff);
+            if (hovered) QOLIcons.I_DISCARD_HOVER.render(graphics.pose(),graphics.bufferSource(),0xffffff);
             AllIcons.I_CONFIG_DISCARD.render(graphics.pose(),graphics.bufferSource(),0xff0000);
             graphics.pose().popPose();
             if (hovered)graphics.renderComponentTooltip(Minecraft.getInstance().font, List.of(CreateQOLLang.translateDirect("statue.animation.delete")),mouseX,mouseY);
@@ -122,7 +122,7 @@ public class StatueAnimationWidget extends AbstractSimiWidget {
 
         if (button == 0 && hovered){
             if (animation.publisher().equals(Minecraft.getInstance().player.getUUID()) || Minecraft.getInstance().player.hasPermissions(1)){
-                ModPackets.getChannel().sendToServer(new DeleteAnimationPacket(animation.id()));
+                QOLPackets.getChannel().sendToServer(new DeleteAnimationPacket(animation.id()));
                 parent.getAnimations().remove(this);
                 parent.getParent().removeWidget(this);
                 parent.updateAnimationsPos(parent.getParent().getGuiLeft() + 2*10 + 67 + (parent.getParent().isHideBackground()?110:0), parent.getParent().getGuiTop() + 30);

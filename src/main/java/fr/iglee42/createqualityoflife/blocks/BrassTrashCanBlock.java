@@ -1,17 +1,13 @@
 package fr.iglee42.createqualityoflife.blocks;
 
-import com.simibubi.create.AllBlockEntityTypes;
-
 import fr.iglee42.createqualityoflife.blockentitites.TrashCanBlockEntity;
-import fr.iglee42.createqualityoflife.registries.ModBlockEntities;
+import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -70,7 +66,7 @@ public class BrassTrashCanBlock extends TrashCanBlock {
 
 	@Override
 	public BlockEntityType<? extends TrashCanBlockEntity> getBlockEntityType() {
-		return ModBlockEntities.BRASS_TRASH_CAN.get();
+		return QOLBlockEntities.BRASS_TRASH_CAN.get();
 	}
 
 	@Override

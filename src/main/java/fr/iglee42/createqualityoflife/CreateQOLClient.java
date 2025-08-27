@@ -10,7 +10,6 @@ import fr.iglee42.createqualityoflife.client.ShadowRadianceFirstPersonRenderer;
 import fr.iglee42.createqualityoflife.client.renderer.EnderRenderer;
 import fr.iglee42.createqualityoflife.items.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.*;
-import fr.iglee42.createqualityoflife.statue.StatueArmorModel;
 import fr.iglee42.createqualityoflife.statue.StatueModel;
 import fr.iglee42.createqualityoflife.statue.StatueRenderer;
 import fr.iglee42.createqualityoflife.utils.CommonKeysHandler;
@@ -32,7 +31,6 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -53,7 +51,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
-import static fr.iglee42.createqualityoflife.CreateQOL.MODID;
 import static net.createmod.ponder.PonderClient.isGameActive;
 
 public class CreateQOLClient {
@@ -64,7 +61,7 @@ public class CreateQOLClient {
     private static final Logger log = LoggerFactory.getLogger(CreateQOLClient.class);
 
     public static void onCtorClient(IEventBus modEventBus, IEventBus forgeEventBus) {
-        ModPartialModels.init();
+        QOLPartialModels.init();
         //if (CreateCasing.isExtendedCogsLoaded())CreateExtendedCogwheelsPartials.init();
 
         modEventBus.addListener(CreateQOLClient::clientInit);
@@ -109,14 +106,14 @@ public class CreateQOLClient {
     }
 
     public static void clientInit(final FMLClientSetupEvent event) {
-        new ModSprites();
+        new QOLSprites();
 
         event.enqueueWork(() -> {
-            ItemProperties.register(ModItems.PLAYER_PAPER.get(),
+            ItemProperties.register(QOLItems.PLAYER_PAPER.get(),
                     CreateQOL.asResource("hasplayer"), (stack, level, living, id) -> stack.getOrCreateTag().contains(NBTConstants.NBT_LINKED_PLAYER) ? 1.0f : 0.0f);
         });
 
-        EntityRenderers.register(ModEntityTypes.STATUE.get(), StatueRenderer::new);
+        EntityRenderers.register(QOLEntityTypes.STATUE.get(), StatueRenderer::new);
         //MinecraftForge.EVENT_BUS.register(new KeyBindManager());
         //ModPonderTags.register();
         //PonderIndex.register();
@@ -125,7 +122,7 @@ public class CreateQOLClient {
 
 
     public static void showPropellers(BlockState renderedState, int light, PoseStack ms, MultiBufferSource buffer, RenderType renderType, LevelAccessor level) {
-        PartialModel partial = (AnimationTickHolder.getRenderTime(level)) % 10 >= 5 ? ModPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS : ModPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS_ALT;
+        PartialModel partial = (AnimationTickHolder.getRenderTime(level)) % 10 >= 5 ? QOLPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS : QOLPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS_ALT;
         SuperByteBuffer propellers = CachedBuffers.partial(partial,renderedState);
         propellers
                 .light(light)

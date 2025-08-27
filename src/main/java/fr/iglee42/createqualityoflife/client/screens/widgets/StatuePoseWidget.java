@@ -2,15 +2,13 @@ package fr.iglee42.createqualityoflife.client.screens.widgets;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.create.AllKeys;
-import com.simibubi.create.foundation.gui.AllGuiTextures;
 import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
-import fr.iglee42.createqualityoflife.registries.ModEntityTypes;
-import fr.iglee42.createqualityoflife.registries.ModGuiTextures;
+import fr.iglee42.createqualityoflife.registries.QOLEntityTypes;
+import fr.iglee42.createqualityoflife.registries.QOLGuiTextures;
 import fr.iglee42.createqualityoflife.statue.Statue;
 import fr.iglee42.createqualityoflife.statue.StatueDefaultRotations;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.gui.widget.AbstractSimiWidget;
-import net.createmod.catnip.gui.widget.BoxWidget;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -21,7 +19,6 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import java.util.Objects;
 
@@ -48,21 +45,21 @@ public class StatuePoseWidget extends AbstractSimiWidget {
         graphics.pose().pushPose();
         graphics.pose().scale(0.5f,0.5f,0.5f);
         if ( mouseX >= getX() && mouseX <= getX() + getWidth() && mouseY > getY() + getHeight() && mouseY <= getY() + getHeight() + 11 && pose.getSource().getString().equals("Vanilla Tweaks")){
-            drawScrollingString(graphics,Minecraft.getInstance().font, pose.getSource().withStyle(ChatFormatting.UNDERLINE),getX() * 2,(getX() + getWidth()) * 2,(getY()+ getHeight() + 2) * 2,ModGuiTextures.FONT_COLOR);
+            drawScrollingString(graphics,Minecraft.getInstance().font, pose.getSource().withStyle(ChatFormatting.UNDERLINE),getX() * 2,(getX() + getWidth()) * 2,(getY()+ getHeight() + 2) * 2, QOLGuiTextures.FONT_COLOR);
         } else {
-            drawScrollingString(graphics,Minecraft.getInstance().font, pose.getSource(),getX() * 2,(getX() + getWidth()) * 2,(getY()+ getHeight() + 2) * 2,ModGuiTextures.FONT_COLOR);
+            drawScrollingString(graphics,Minecraft.getInstance().font, pose.getSource(),getX() * 2,(getX() + getWidth()) * 2,(getY()+ getHeight() + 2) * 2, QOLGuiTextures.FONT_COLOR);
 
         }
         graphics.pose().popPose();
-        ModGuiTextures button = !active ? ModGuiTextures.POSE_BUTTON_DISABLED
-                : isHovered && AllKeys.isMouseButtonDown(0) ? ModGuiTextures.POSE_BUTTON_CLICKED
-                : isHovered ? ModGuiTextures.POSE_BUTTON_HOVER
-                : ModGuiTextures.POSE_BUTTON;
+        QOLGuiTextures button = !active ? QOLGuiTextures.POSE_BUTTON_DISABLED
+                : isHovered && AllKeys.isMouseButtonDown(0) ? QOLGuiTextures.POSE_BUTTON_CLICKED
+                : isHovered ? QOLGuiTextures.POSE_BUTTON_HOVER
+                : QOLGuiTextures.POSE_BUTTON;
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         button.render(graphics,getX(),getY());
         float renderTime = AnimationTickHolder.getRenderTime();
-        Statue example = new Statue(ModEntityTypes.STATUE.get(), Minecraft.getInstance().level);
+        Statue example = new Statue(QOLEntityTypes.STATUE.get(), Minecraft.getInstance().level);
         CompoundTag tag = new CompoundTag();
         parent.getExampleStatue().saveWithoutId(tag);
         example.load(tag);
