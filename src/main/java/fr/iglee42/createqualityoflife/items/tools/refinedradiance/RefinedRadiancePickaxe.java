@@ -123,7 +123,7 @@ public class RefinedRadiancePickaxe extends PickaxeItem implements QOLConfigurab
     public static void mineBlock(BlockEvent.BreakEvent event){
         if (event.getLevel().isClientSide())return;
         if (event.isCanceled()) return;
-        if (!event.getPlayer().getMainHandItem().is(QOLItems.REFINED_RADIANCE_PICKAXE.get())) return;
+        if (!event.getPlayer().getMainHandItem().is(QOLItems.REFINED_RADIANCE_PICKAXE.get()) && !event.getPlayer().getMainHandItem().is(QOLItems.SHADOW_RADIANCE_PICKAXE.get())) return;
         if (!event.getPlayer().getMainHandItem().getOrDefault(QOLDataComponents.VEIN_MINE,false)) return;
         if (!event.getPlayer().getMainHandItem().isCorrectToolForDrops(event.getState())) return;
         int max = CreateQOLConfigs.server().equipments.tools.veinMineMaxBlocks.get();

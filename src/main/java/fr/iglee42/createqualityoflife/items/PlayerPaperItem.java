@@ -42,7 +42,7 @@ public class PlayerPaperItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (stack.has(QOLDataComponents.LINKED_PLAYER)){
-            components.add(Component.translatable("tooltip.createqol.player_paper.linked_player",p_41422_.level().getPlayerByUUID(stack.get(QOLDataComponents.LINKED_PLAYER)).getName()));
+            if (p_41422_ != null && p_41422_.level() != null && p_41422_.level().getPlayerByUUID(stack.get(QOLDataComponents.LINKED_PLAYER)) != null) components.add(Component.translatable("tooltip.createqol.player_paper.linked_player",p_41422_.level().getPlayerByUUID(stack.get(QOLDataComponents.LINKED_PLAYER)).getName()));
         } else {
             components.add(Component.translatable("tooltip.createqol.player_paper.no_linked_player"));
         }

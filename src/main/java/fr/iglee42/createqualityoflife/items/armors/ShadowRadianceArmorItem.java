@@ -18,6 +18,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
@@ -28,8 +29,10 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigurableItem {
@@ -62,6 +65,15 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsLavaWalking.get(),
                             true, stack.getOrDefault(QOLDataComponents.BOOTS_LAVA, true), false, true)));
+        } else if (getType().equals(ArmorItem.Type.LEGGINGS)){
+            components.add(Component.literal("Void Walk : ")
+                    .withStyle(ChatFormatting.GOLD)
+                    .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.voidWalking.get(),
+                            true, stack.getOrDefault(QOLDataComponents.VOID_WALK, true), false, true)));
+            components.add(Component.literal("Step Height : ")
+                    .withStyle(ChatFormatting.GOLD)
+                    .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.stepHeight.get(),
+                            true, stack.getOrDefault(QOLDataComponents.STEP_HEIGHT, true), false, true)));
         }
         super.appendHoverText(stack, p_339594_, components, p_41424_);
     }
@@ -115,6 +127,19 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
                     List.of("You won't be pushed by belt if enabled"),
                     (e,oE)->true
             ));
+        }else if (getType() == ArmorItem.Type.LEGGINGS){
+            list.add(Configuration.ofBool("Void Walking",
+                    stack.getOrDefault(QOLDataComponents.VOID_WALK,true),
+                    QOLDataComponents.VOID_WALK,
+                    List.of("Enable walking on void"),
+                    (e,oE)-> CreateQOLConfigs.server().equipments.armors.voidWalking.get()
+            ));
+            list.add(Configuration.ofBool("Enable Step Height",
+                    stack.getOrDefault(QOLDataComponents.STEP_HEIGHT,true),
+                    QOLDataComponents.STEP_HEIGHT,
+                    List.of("Should the leggings add step height"),
+                    (e,oE)->CreateQOLConfigs.server().equipments.armors.stepHeight.get()
+            ));
         }
     }
 
@@ -137,5 +162,15 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
     @Override
     public int getBarColor(ItemStack stack) {
         return BacktankUtil.getBarColor(stack, getMaxDamage(stack));
+    }
+
+    @Override
+    public Map<Holder<Attribute>, Map.Entry<Double, AttributeModifier.Operation>> getAppliedAttributes(ItemStack stack) {
+        if (getType().equals(ArmorItem.Type.LEGGINGS)){
+            Map<Holder<Attribute>, Map.Entry<Double, AttributeModifier.Operation>> map = QOLConfigurableItem.super.getAppliedAttributes(stack);
+            if (CreateQOLConfigs.server().equipments.armors.stepHeight.get() && stack.getOrDefault(QOLDataComponents.STEP_HEIGHT,true)) map.put(Attributes.STEP_HEIGHT,new AbstractMap.SimpleEntry<>(0.5, AttributeModifier.Operation.ADD_VALUE));
+            return map;
+        }
+        return QOLConfigurableItem.super.getAppliedAttributes(stack);
     }
 }
