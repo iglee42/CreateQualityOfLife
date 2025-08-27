@@ -10,6 +10,7 @@ import fr.iglee42.createqualityoflife.client.renderer.GoggleArmorLayer;
 import fr.iglee42.createqualityoflife.client.renderer.ArmorsArmsRenderer;
 import fr.iglee42.createqualityoflife.client.renderer.EnderRenderer;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
+import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceArmorItem;
 import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.items.armors.ShadowSteelArmorItem;
 import fr.iglee42.createqualityoflife.ponder.QOLPonderPlugin;
@@ -223,7 +224,7 @@ public class CreateQOLClient {
         if (!(event.getEntity() instanceof LocalPlayer player)) return;
 
         ItemStack legs = player.getItemBySlot(EquipmentSlot.LEGS);
-        if (!(legs.getItem() instanceof ShadowSteelArmorItem)) return;
+        if (!(legs.getItem() instanceof ShadowSteelArmorItem) && !(legs.getItem() instanceof ShadowRadianceArmorItem)) return;
         if (!CreateQOLConfigs.server().equipments.armors.voidWalking.get()) return;
         if (!NBTConstants.getOrDefault(legs,NBTConstants.NBT_VOID_WALK,true))return;
 
@@ -249,7 +250,7 @@ public class CreateQOLClient {
         if (player.getAbilities().flying) return;
 
         ItemStack legs = player.getItemBySlot(EquipmentSlot.LEGS);
-        if (!(legs.getItem() instanceof ShadowSteelArmorItem)) return;
+        if (!(legs.getItem() instanceof ShadowSteelArmorItem) && !(legs.getItem() instanceof ShadowRadianceArmorItem)) return;
         if (!CreateQOLConfigs.server().equipments.armors.voidWalking.get()) return;
         if (!NBTConstants.getOrDefault(legs,NBTConstants.NBT_VOID_WALK,true))return;
 
