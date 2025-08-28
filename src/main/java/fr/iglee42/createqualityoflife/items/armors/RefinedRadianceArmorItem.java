@@ -45,16 +45,16 @@ public class RefinedRadianceArmorItem extends BaseArmorItem implements QOLConfig
     public void appendHoverText(@NotNull ItemStack stack, @NotNull Level p_41422_, @NotNull List<Component> components, @NotNull TooltipFlag p_41424_) {
         if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         if (getType().equals(ArmorItem.Type.BOOTS)) {
-            components.add(Component.literal("Diving : ")
+            components.add(Component.translatable("createqol.function.armor.diving")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsDiving.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_DIVING, false), false, true)));
-            components.add(Component.literal("Belt Blocking : ")
+            components.add(Component.translatable("createqol.function.armor.belt_blocking")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(true,
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_BELT, true), false, true)));
         } else if (getType().equals(ArmorItem.Type.LEGGINGS)){
-            components.add(Component.literal("Step Height : ")
+            components.add(Component.translatable("createqol.function.armor.step_height")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.stepHeight.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_STEP_HEIGHT, true), false, true)));

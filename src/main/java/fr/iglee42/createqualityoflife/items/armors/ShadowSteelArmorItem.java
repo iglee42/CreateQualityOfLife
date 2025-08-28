@@ -39,16 +39,16 @@ public class ShadowSteelArmorItem extends BaseArmorItem implements QOLConfigurab
     public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         if (getType().equals(ArmorItem.Type.BOOTS)) {
-            components.add(Component.literal("Diving : ")
+            components.add(Component.translatable("createqol.function.armor.diving")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsDiving.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_DIVING,false), false, true)));
-            components.add(Component.literal("Lava Walking : ")
+            components.add(Component.translatable("createqol.function.armor.lava_walking")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsLavaWalking.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_LAVA,true), false, true)));
         } else if (getType().equals(ArmorItem.Type.LEGGINGS)){
-            components.add(Component.literal("Void Walk : ")
+            components.add(Component.translatable("createqol.function.armor.void_walk")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.voidWalking.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_VOID_WALK,true), false, true)));

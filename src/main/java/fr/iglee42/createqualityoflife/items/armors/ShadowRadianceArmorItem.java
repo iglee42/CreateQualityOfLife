@@ -40,20 +40,20 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
     @Override
     public void appendHoverText(ItemStack stack, Level p_339594_, List<Component> components, TooltipFlag p_41424_) {
         if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.literal("Effect : ")
+        components.add(Component.translatable("createqol.function.armor.effect")
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.translatable(providedEffect(stack).getDescriptionId()).withStyle(ChatFormatting.YELLOW)));
 
         if (getType().equals(ArmorItem.Type.BOOTS)) {
-            components.add(Component.literal("Diving : ")
+            components.add(Component.translatable("createqol.function.armor.diving")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsDiving.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_DIVING,false), false, true)));
-            components.add(Component.literal("Belt Blocking : ")
+            components.add(Component.translatable("createqol.function.armor.belt_blocking")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(true,
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_BELT,true), false, true)));
-            components.add(Component.literal("Lava Walking : ")
+            components.add(Component.translatable("createqol.function.armor.lava_walking")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsLavaWalking.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_LAVA,true), false, true)));

@@ -58,10 +58,10 @@ public class RefinedRadianceHoe extends HoeItem implements QOLConfigurableItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.literal("Reach : ")
+        components.add(Component.translatable("createqol.function.tools.reach")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_REACH,true), false, true)));
-        components.add(Component.literal("Harvesting : ")
+        components.add(Component.translatable("createqol.function.tools.harvesting")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.harvesting.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_HARVESTING,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
@@ -83,12 +83,12 @@ public class RefinedRadianceHoe extends HoeItem implements QOLConfigurableItem {
 
     public static void toggleAbility(ItemStack stack, Player p) {
         if (!CreateQOLConfigs.server().equipments.tools.harvesting.get()){
-            p.displayClientMessage(Component.literal("Harvesting is disabled by the config").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(Component.translatable("createqol.tool.harvesting_disabled").withStyle(ChatFormatting.RED),true);
             return;
         }
         boolean enable = !NBTConstants.getOrDefault(stack,NBTConstants.NBT_HARVESTING,false);
         stack.getOrCreateTag().putBoolean(NBTConstants.NBT_HARVESTING, enable);
-        p.displayClientMessage(Component.literal("Harvesting : ").append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
+        p.displayClientMessage(Component.translatable("createqol.tool.harvesting_toggle").append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
 
     @Override

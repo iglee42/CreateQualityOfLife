@@ -42,10 +42,10 @@ public class RefinedRadianceShovel extends ShovelItem implements QOLConfigurable
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.literal("Reach : ")
+        components.add(Component.translatable("createqol.function.tools.reach")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_REACH,true), false, true)));
-        components.add(Component.literal("Smelting : ")
+        components.add(Component.translatable("createqol.function.tools.smelting")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.smelting.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_SMELTING,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
@@ -69,12 +69,12 @@ public class RefinedRadianceShovel extends ShovelItem implements QOLConfigurable
 
     public static void toggleAbility(ItemStack stack, Player p) {
         if (!CreateQOLConfigs.server().equipments.tools.smelting.get()){
-            p.displayClientMessage(Component.literal("Smelting is disabled by the config").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(Component.translatable("createqol.tool.smelting_disabled").withStyle(ChatFormatting.RED),true);
             return;
         }
         boolean enable = !NBTConstants.getOrDefault(stack,NBTConstants.NBT_SMELTING,false);
         stack.getOrCreateTag().putBoolean(NBTConstants.NBT_SMELTING,enable);
-        p.displayClientMessage(Component.literal("Smelting : ").append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
+        p.displayClientMessage(Component.translatable("createqol.tool.smelting_toggle").append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
 
 

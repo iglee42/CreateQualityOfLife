@@ -4,6 +4,7 @@ import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.equipment.armor.BacktankBlock;
 import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.blockentitites.RefinedRadianceBacktankBE;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate;
@@ -63,7 +64,7 @@ public class RefinedRadianceBacktankBlock extends BacktankBlock {
             if (level.getBlockEntity(pos) instanceof RefinedRadianceBacktankBE be){
                 if (!be.hasElytra() && player.getMainHandItem().is(Items.ELYTRA)) {
                     if (!CreateQOLConfigs.server().equipments.armors.elytraAllowed.get()) {
-                        player.displayClientMessage(Component.literal("Elytra are disabled by the config").withStyle(ChatFormatting.RED), true);
+                        player.displayClientMessage(CreateQOLLang.translateDirect("backtank.elytra_disabled").withStyle(ChatFormatting.RED), true);
                         level.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
                         return InteractionResult.PASS;
                     }
