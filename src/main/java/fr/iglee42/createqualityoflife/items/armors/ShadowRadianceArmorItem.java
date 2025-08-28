@@ -40,29 +40,29 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
     @Override
     public void appendHoverText(ItemStack stack, Level p_339594_, List<Component> components, TooltipFlag p_41424_) {
         if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.translatable("createqol.function.armor.effect")
+        components.add(Component.translatable("createqol.ability.armor.effect")
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.translatable(providedEffect(stack).getDescriptionId()).withStyle(ChatFormatting.YELLOW)));
 
         if (getType().equals(ArmorItem.Type.BOOTS)) {
-            components.add(Component.translatable("createqol.function.armor.diving")
+            components.add(Component.translatable("createqol.ability.armor.diving")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsDiving.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_DIVING,false), false, true)));
-            components.add(Component.translatable("createqol.function.armor.belt_blocking")
+            components.add(Component.translatable("createqol.ability.armor.belt_blocking")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(true,
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_BELT,true), false, true)));
-            components.add(Component.translatable("createqol.function.armor.lava_walking")
+            components.add(Component.translatable("createqol.ability.armor.lava_walking")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsLavaWalking.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_LAVA,true), false, true)));
         } else if (getType().equals(ArmorItem.Type.LEGGINGS)){
-            components.add(Component.translatable("createqol.function.armor.void_walk")
+            components.add(Component.translatable("createqol.ability.armor.void_walk")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.voidWalking.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_VOID_WALK,false), false, true)));
-            components.add(Component.translatable("createqol.function.armor.step_height")
+            components.add(Component.translatable("createqol.ability.armor.step_height")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.stepHeight.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_STEP_HEIGHT,false), false, true)));

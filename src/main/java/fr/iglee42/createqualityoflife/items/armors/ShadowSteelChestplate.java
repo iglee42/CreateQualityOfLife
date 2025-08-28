@@ -57,17 +57,17 @@ public class ShadowSteelChestplate extends BacktankItem.Layered implements QOLCo
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.translatable("createqol.function.armor.air")
+        components.add(Component.translatable("createqol.ability.armor.air")
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.literal(String.valueOf(BacktankUtil.getAir(stack)))
                         .withStyle(ChatFormatting.YELLOW))
                 .append(Component.literal("/" + BacktankUtil.maxAir(stack))
                         .withStyle(ChatFormatting.GOLD)));
-        components.add(Component.translatable("createqol.function.armor.dash")
+        components.add(Component.translatable("createqol.ability.armor.dash")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.cooldownState(CreateQOLConfigs.server().equipments.armors.dashAllowed.get(),
                         NBTConstants.getOrDefault(stack,NBTConstants.NBT_DASH,true), (int) Math.ceil(Minecraft.getInstance().player.getCooldowns().getCooldownPercent(this,0) * CreateQOLConfigs.server().equipments.armors.dashCooldown.get()))));
-        components.add(Component.translatable("createqol.function.armor.arms")
+        components.add(Component.translatable("createqol.ability.armor.arms")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(true,
                         true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_ARMS,true), false, true)));

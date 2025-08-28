@@ -209,8 +209,8 @@ public interface QOLConfigurableItem {
     }
 
     static Component chooseState(boolean config, boolean installed, boolean active, boolean activeReplaceInstall, boolean activeOnly){
-        if (activeOnly) return  Component.translatable(!config ? "createqol.function.state.disabled_by_config" : (active ? "createqol.function.state.enabled" : "createqol.function.state.disabled")).withStyle(!config ? ChatFormatting.RED : ChatFormatting.YELLOW);
-        return Component.translatable(!config ? "createqol.function.state.disabled_by_config" : (installed ? (activeReplaceInstall ? (active ? "createqol.function.state.enabled" : "createqol.function.state.disabled") : "createqol.function.state.installed") : "createqol.function.state.not_installed")).withStyle(!config ? ChatFormatting.RED : ChatFormatting.YELLOW);
+        if (activeOnly) return  Component.translatable(!config ? "createqol.ability.state.disabled_by_config" : (active ? "createqol.ability.state.enabled" : "createqol.ability.state.disabled")).withStyle(!config ? ChatFormatting.RED : ChatFormatting.YELLOW);
+        return Component.translatable(!config ? "createqol.ability.state.disabled_by_config" : (installed ? (activeReplaceInstall ? (active ? "createqol.ability.state.enabled" : "createqol.function.state.disabled") : "createqol.function.state.installed") : "createqol.function.state.not_installed")).withStyle(!config ? ChatFormatting.RED : ChatFormatting.YELLOW);
     }
 
     static Component cooldownState(boolean config, boolean active, int cooldown){

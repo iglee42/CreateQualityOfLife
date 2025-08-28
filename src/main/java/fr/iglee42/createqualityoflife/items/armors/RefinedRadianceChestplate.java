@@ -89,17 +89,17 @@ public class RefinedRadianceChestplate extends BacktankItem.Layered implements Q
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.translatable("createqol.function.armor.air")
+        components.add(Component.translatable("createqol.ability.armor.air")
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.literal(String.valueOf(BacktankUtil.getAir(stack)))
                         .withStyle(ChatFormatting.YELLOW))
                 .append(Component.literal("/" + BacktankUtil.maxAir(stack))
                         .withStyle(ChatFormatting.GOLD)));
-        components.add(Component.translatable("createqol.function.armor.elytra")
+        components.add(Component.translatable("createqol.ability.armor.elytra")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() ,ShadowRadianceChestplate.hasElytra(stack) ,
                         ShadowRadianceChestplate.isElytraEnable(stack), true,false)));
-        components.add(Component.translatable("createqol.function.armor.arms")
+        components.add(Component.translatable("createqol.ability.armor.arms")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(true,
                         true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_ARMS,true), false, true)));
