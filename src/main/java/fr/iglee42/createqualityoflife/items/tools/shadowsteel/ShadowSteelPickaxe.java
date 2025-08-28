@@ -55,12 +55,12 @@ public class ShadowSteelPickaxe extends PickaxeItem implements QOLConfigurableIt
 
     public static void toggleAbility(ItemStack stack, Player p) {
         if (!CreateQOLConfigs.server().equipments.tools.digging.get()){
-            p.displayClientMessage(Component.literal("Digging is disabled by the config").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(Component.translatable("createqol.tool.digging_disabled").withStyle(ChatFormatting.RED),true);
             return;
         }
         boolean enable = !stack.getOrDefault(QOLDataComponents.DIGGING,false);
         stack.set(QOLDataComponents.DIGGING, enable);
-        p.displayClientMessage(Component.literal("Digging : ").append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
+        p.displayClientMessage(Component.translatable("createqol.tool.digging_toggle").append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
 
     public static void mineBlock(BlockEvent.BreakEvent event) {
@@ -132,10 +132,10 @@ public class ShadowSteelPickaxe extends PickaxeItem implements QOLConfigurableIt
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.literal("Reach : ")
+        components.add(Component.translatable("createqol.function.tools.reach")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, stack.getOrDefault(QOLDataComponents.REACH, true), false, true)));
-        components.add(Component.literal("Digging : ")
+        components.add(Component.translatable("createqol.function.tools.digging")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.digging.get(), true, stack.getOrDefault(QOLDataComponents.DIGGING, false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);

@@ -48,7 +48,7 @@ public class RefinedRadianceHelmet extends DivingHelmetItem implements QOLConfig
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.literal("Goggles : ")
+        components.add(Component.translatable("createqol.function.armor.goggles")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.helmetHaveGoggles.get(),
                         true, stack.getOrDefault(QOLDataComponents.HELMET_GOGGLES, true), false, true)));

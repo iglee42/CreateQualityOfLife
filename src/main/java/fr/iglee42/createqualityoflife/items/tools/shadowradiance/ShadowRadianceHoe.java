@@ -57,13 +57,13 @@ public class ShadowRadianceHoe extends HoeItem implements QOLConfigurableItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.literal("Reach : ")
+        components.add(Component.translatable("createqol.function.tools.reach")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, stack.getOrDefault(QOLDataComponents.REACH,true), false, true)));
-        components.add(Component.literal("Harvesting : ")
+        components.add(Component.translatable("createqol.function.tools.harvesting")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.harvesting.get(), true, stack.getOrDefault(QOLDataComponents.HARVESTING,false), false, true)));
-        components.add(Component.literal("Ploughing : ")
+        components.add(Component.translatable("createqol.function.tools.ploughing")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.ploughing.get(), true, stack.getOrDefault(QOLDataComponents.PLOUGHING,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
@@ -91,14 +91,14 @@ public class ShadowRadianceHoe extends HoeItem implements QOLConfigurableItem {
         if (level.isClientSide) return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand),true);
         if (player.isCrouching()){
             if (player.getItemInHand(hand).getOrDefault(QOLDataComponents.HARVESTING,false)){
-                player.displayClientMessage(Component.literal("Ploughing can't be enabled if harvesting is enabled").withStyle(ChatFormatting.RED),true);
+                player.displayClientMessage(Component.translatable("createqol.tool.ploughing_unavailable").withStyle(ChatFormatting.RED),true);
             }else {
                 ShadowSteelHoe.toggleAbility(player.getItemInHand(hand),player);
             }
         }
         else {
             if (player.getItemInHand(hand).getOrDefault(QOLDataComponents.PLOUGHING,false)){
-                player.displayClientMessage(Component.literal("Harvesting can't be enabled if ploughing is enabled").withStyle(ChatFormatting.RED),true);
+                player.displayClientMessage(Component.translatable("createqol.tool.harvesting_unavailable").withStyle(ChatFormatting.RED),true);
             }else {
                 RefinedRadianceHoe.toggleAbility(player.getItemInHand(hand),player);
             }
