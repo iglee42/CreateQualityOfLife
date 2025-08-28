@@ -58,11 +58,11 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsLavaWalking.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_LAVA,true), false, true)));
         } else if (getType().equals(ArmorItem.Type.LEGGINGS)){
-            components.add(Component.literal("Void Walk : ")
+            components.add(Component.translatable("createqol.function.armor.void_walk")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.voidWalking.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_VOID_WALK,false), false, true)));
-            components.add(Component.literal("Step Height : ")
+            components.add(Component.translatable("createqol.function.armor.step_height")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.stepHeight.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_STEP_HEIGHT,false), false, true)));
