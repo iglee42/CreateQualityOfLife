@@ -142,7 +142,7 @@ public class ConfigureStatueScreen extends AbstractSimiContainerScreen<StatueMen
             getExampleStatue().setItemSlot(EquipmentSlot.values()[slot],getMenu().ghostInventory.getStackInSlot(slot));
         }
         if (!hideBackground){
-            graphics.drawString(Minecraft.getInstance().font,"Customize your Statue",getGuiLeft() + 5, getGuiTop() + 3,0xffffff);
+            graphics.drawString(Minecraft.getInstance().font,CreateQOLLang.translateDirect("statue.title"),getGuiLeft() + 5, getGuiTop() + 3,0xffffff);
         }
 
         int offsetX = 10;

@@ -184,11 +184,11 @@ public class StatueTransformTab extends StatueTab {
         scale.withStepFunction(ctx->ctx.control ? 1 : ctx.shift ? 0.5f : 0.1f);
         scale.calling(i->{
             getExampleStatue().setEntityScale(i);
-            scale.titled(Component.literal("Scale: " + String.format("%.2f",scale.getState()) ));
+            scale.titled(CreateQOLLang.translateDirect("statue.scaleScroll", String.format("%.2f", scale.getState())));
             getParent().sendUpdatePacket();
         });
         scale.setState(getExampleStatue().getEntityScale());
-        scale.titled(Component.literal("Scale: " + String.format("%.2f",scale.getState())));
+        scale.titled(CreateQOLLang.translateDirect("statue.scaleScroll", String.format("%.2f", scale.getState())));
 
         rotationLabel = new Label(x + 2* BASE_OFFSET, y+88 - LABEL_Y_OFFSET*3,CreateQOLLang.translateDirect("statue.rotation.cape"));
         rotationLabel.text = CreateQOLLang.translateDirect("statue.rotation.cape");
