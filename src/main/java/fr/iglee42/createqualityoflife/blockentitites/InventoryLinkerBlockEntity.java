@@ -107,7 +107,7 @@ public class InventoryLinkerBlockEntity extends KineticBlockEntity {
         } else {
             linkedPlayer = null;
         }
-        if (linkedPlayer != null && level.getServer().getPlayerList().getPlayer(linkedPlayer) != null){
+        if (linkedPlayer != null && level.getPlayerByUUID(linkedPlayer) != null){
             linkedInventoryContent = switch (selectionMode.get()) {
                 case INVENTORY -> new PlayerMainInvWrapper(level.getPlayerByUUID(linkedPlayer).getInventory());
                 case ARMOR ->  new PlayerArmorInvWrapper(level.getPlayerByUUID(linkedPlayer).getInventory());

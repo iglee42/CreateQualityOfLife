@@ -99,7 +99,7 @@ public class InventoryConfigScreen extends AbstractSimiScreen {
             btn.updateGradientFromState();
         });
         //graphics.fill(guiLeft + 24, guiTop - 2 , guiLeft + 106-24, guiTop + 106,0xff00ff00);
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, guiLeft + 24, guiTop - 2 , guiLeft + 106-24,guiTop + 106, 48, 0.05F, mouseX, mouseY, this.minecraft.player);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, guiLeft + 51, guiTop + 95, 48, (float)(guiLeft + 51) - mouseX, (float)(guiTop + 85 - 50) - mouseY, this.minecraft.player);
 
         graphics.drawCenteredString(font, "Choose an item to configure", width / 2, height / 2 - 125, UIRenderHelper.COLOR_TEXT_STRONG_ACCENT.getFirst().getRGB());
         AtomicReference<ItemConfigButton> button = new AtomicReference<>();
@@ -183,9 +183,6 @@ public class InventoryConfigScreen extends AbstractSimiScreen {
         guiGraphics.disableScissor();
     }
 
-
-    @Override
-    public void renderBackground(GuiGraphics p_283688_, int p_296369_, int p_296477_, float p_294317_) {}
 
     @Override
     protected void renderWindowBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {

@@ -1,0 +1,95 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": {
+          "item": "createqol:refined_radiance_sword"
+        },
+        "transitionalItem": {
+          "item": "createqol:refined_radiance_sword"
+        },
+        "sequence": [
+          {
+            "type": "create:cutting",
+            "ingredients": [
+              {
+                "item": "createqol:refined_radiance_sword"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:refined_radiance_sword"
+              }
+            ],
+            "processingTime": 50
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:refined_radiance_sword"
+              },
+              {
+                "item": "createqol:shadow_steel_sword"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:refined_radiance_sword"
+              }
+            ]
+          },
+          {
+            "type": "create:pressing",
+            "ingredients": [
+              {
+                "item": "createqol:refined_radiance_sword"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:refined_radiance_sword"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:refined_radiance_sword"
+              },
+              {
+                "item": "createqol:shadow_radiance_block"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:refined_radiance_sword"
+              }
+            ]
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:shadow_radiance_sword"
+          }
+        ],
+        "loops": 1,
+        "copied_nbts": [
+          "Enchantments",
+          "display.Name",
+          "tooltips",
+          "reach"
+        ]
+      }
+    }
+  ]
+}

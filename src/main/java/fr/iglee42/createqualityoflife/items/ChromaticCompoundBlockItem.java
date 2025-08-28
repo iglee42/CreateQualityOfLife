@@ -1,6 +1,5 @@
 package fr.iglee42.createqualityoflife.items;
 
-import com.simibubi.create.AllDataComponents;
 import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour;
 import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour.TransportedResult;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
@@ -38,7 +37,7 @@ public class ChromaticCompoundBlockItem extends BlockItem {
     }
 
     public int getLight(ItemStack stack) {
-        return stack.getOrDefault(AllDataComponents.CHROMATIC_COMPOUND_COLLECTING_LIGHT, 0);
+        return stack.getOrCreateTag().getInt("CollectingLight");
     }
 
     @Override
@@ -99,7 +98,7 @@ public class ChromaticCompoundBlockItem extends BlockItem {
             ItemEntity newEntity = new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(), newStack);
             newEntity.setDeltaMovement(entity.getDeltaMovement());
             newEntity.getPersistentData().putBoolean("JustCreated", true);
-            itemStack.remove(AllDataComponents.CHROMATIC_COMPOUND_COLLECTING_LIGHT);
+            itemStack.getOrCreateTag().remove("CollectingLight");
             world.addFreshEntity(newEntity);
 
             stack.split(1);
@@ -192,7 +191,8 @@ public class ChromaticCompoundBlockItem extends BlockItem {
         if (!randomOffset.equals(world.clip(context).getBlockPos())) return false;
 
         ItemStack newStack = stack.split(1);
-        newStack.set(AllDataComponents.CHROMATIC_COMPOUND_COLLECTING_LIGHT, getLight(itemStack) + 1);
+        newStack.getOrCreateTag()
+                .putInt("CollectingLight", getLight(stack) + 1);
         ItemEntity newEntity = new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(), newStack);
         newEntity.setDeltaMovement(entity.getDeltaMovement());
         newEntity.setDefaultPickUpDelay();

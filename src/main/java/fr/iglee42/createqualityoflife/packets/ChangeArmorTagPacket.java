@@ -34,7 +34,7 @@ public class ChangeArmorTagPacket extends SimplePacketBase {
         context.enqueueWork(()->{
             ServerPlayer player = context.getSender();
             if (player != null) {
-                if (NBTConstants.NBT_RENDER_TYPE.equals(nbtKey)){
+                if (NBTConstants.NBT_RENDER_TYPE.equals(nbtKey) || NBTConstants.NBT_CHOOSABLE_EFFECTS.equals(nbtKey)){
                     player.getInventory().getArmor(slot).getOrCreateTag().putInt(nbtKey,value);
                 } else {
                     player.getInventory().getArmor(slot).getOrCreateTag().putBoolean(nbtKey, value != 0);

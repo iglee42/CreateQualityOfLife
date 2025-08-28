@@ -119,12 +119,21 @@ public class CreateQOL {
 
     private void registerToolsEvents(IEventBus modEventBus, IEventBus forgeEventBus) {
         forgeEventBus.addListener(QOLConfigurableItem::modifyAttributes);
-        forgeEventBus.addListener(BlockEvent.BreakEvent.class, RefinedRadiancePickaxe::mineBlock);
-        forgeEventBus.addListener(BlockEvent.BreakEvent.class, ShadowSteelPickaxe::mineBlock);
-        forgeEventBus.addListener(BlockEvent.BreakEvent.class, ShadowSteelAxe::mineBlock);
-        forgeEventBus.addListener(BlockEvent.BreakEvent.class, RefinedRadianceHoe::mineBlock);
-        forgeEventBus.addListener(BlockEvent.BreakEvent.class, ShadowSteelShovel::mineBlock);
-        forgeEventBus.addListener(RefinedRadianceShovel::blockDrops);
+        forgeEventBus.addListener(e->{
+            if (e instanceof BlockEvent.BreakEvent)RefinedRadiancePickaxe.mineBlock((BlockEvent.BreakEvent) e);
+        });
+        forgeEventBus.addListener(e->{
+            if (e instanceof BlockEvent.BreakEvent)ShadowSteelPickaxe.mineBlock((BlockEvent.BreakEvent) e);
+        });
+        forgeEventBus.addListener(e->{
+            if (e instanceof BlockEvent.BreakEvent)ShadowSteelAxe.mineBlock((BlockEvent.BreakEvent) e);
+        });
+        forgeEventBus.addListener(e->{
+            if (e instanceof BlockEvent.BreakEvent)RefinedRadianceHoe.mineBlock((BlockEvent.BreakEvent) e);
+        });
+        forgeEventBus.addListener(e->{
+            if (e instanceof BlockEvent.BreakEvent)ShadowSteelShovel.mineBlock((BlockEvent.BreakEvent) e);
+        });
     }
 
     private void registerReloadListener(AddReloadListenerEvent event){

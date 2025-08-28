@@ -1,0 +1,26 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "createqol:shadow_radiance_block"
+          }
+        ],
+        "result": {
+          "count": 9,
+          "item": "createqol:shadow_radiance"
+        }
+      }
+    }
+  ]
+}

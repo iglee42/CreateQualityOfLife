@@ -1,41 +1,31 @@
 package fr.iglee42.createqualityoflife.client.screens.itemsconfig;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
-import com.simibubi.create.foundation.gui.AllIcons;
-import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.client.screens.widgets.ArmorConfigScreenList;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.BooleanEntry;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.ValueEntry;
-import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
-import fr.iglee42.createqualityoflife.utils.ItemTooltips;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
+import net.createmod.catnip.animation.Force;
+import net.createmod.catnip.animation.PhysicalFloat;
+import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.createmod.catnip.gui.ScreenOpener;
-import net.createmod.catnip.gui.element.BoxElement;
-import net.createmod.catnip.gui.element.RenderElement;
-import net.createmod.catnip.gui.widget.AbstractSimiWidget;
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.gui.element.DelegatedStencilElement;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.createmod.catnip.gui.widget.BoxWidget;
 import net.createmod.catnip.lang.FontHelper;
 import net.createmod.ponder.enums.PonderGuiTextures;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.lwjgl.opengl.GL30;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-
-import net.createmod.catnip.gui.AbstractSimiScreen;
-import net.createmod.catnip.gui.UIRenderHelper;
-import net.createmod.catnip.gui.element.DelegatedStencilElement;
-import net.createmod.catnip.gui.element.GuiGameElement;
-import net.createmod.catnip.animation.Force;
-import net.createmod.catnip.animation.PhysicalFloat;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-
-import javax.annotation.Nonnull;
 import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,8 +63,8 @@ public class ItemConfigScreen extends AbstractSimiScreen {
 		int listL = this.width / 2 - listWidth / 2;
 		int listR = this.width / 2 + listWidth / 2;
 
-		list = new ArmorConfigScreenList(minecraft, listWidth, height - 80, 35, 40,this);
-		list.setX(listL);
+		list = new ArmorConfigScreenList(minecraft, listWidth, height - 80, 35,height-45 ,40,this);
+		list.setLeftPos(listL);
 
 		addRenderableWidget(list);
 
@@ -87,7 +77,7 @@ public class ItemConfigScreen extends AbstractSimiScreen {
 				.add(Component.literal("Go Back"));
 		addRenderableWidget(goBack);
 
-		if (item.has(QOLDataComponents.ITEM_TOOLTIPS)) list.children().add(new TooltipButtonEntry("Tooltips","Open the config menu to choose which tooltips are displayed"));
+		if (item.getItem() instanceof QOLConfigurableItem) list.children().add(new TooltipButtonEntry("Tooltips","Open the config menu to choose which tooltips are displayed"));
 
 		if (item.getItem() instanceof QOLConfigurableItem configurableItem){
 			try {
@@ -122,9 +112,6 @@ public class ItemConfigScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {}
-
-	@Override
 	protected void renderWindowBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		graphics.fill(0, 0, this.width, this.height, 0xb0_282c34);
 
@@ -156,10 +143,10 @@ public class ItemConfigScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-		cogSpin.bump(3, -scrollY * 5);
+	public boolean mouseScrolled(double mouseX, double mouseY, double scroll) {
+		cogSpin.bump(3, -scroll * 5);
 
-		return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+		return super.mouseScrolled(mouseX,mouseY, scroll);
 	}
 
 	@Override
@@ -168,7 +155,7 @@ public class ItemConfigScreen extends AbstractSimiScreen {
 	}
 
 	protected static void renderCog(GuiGraphics graphics) {
-		float partialTicks = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
+		float partialTicks = Minecraft.getInstance().getPartialTick();
 		PoseStack poseStack = graphics.pose();
 		poseStack.pushPose();
 

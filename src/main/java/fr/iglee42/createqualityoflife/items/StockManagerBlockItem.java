@@ -1,22 +1,12 @@
 package fr.iglee42.createqualityoflife.items;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags.AllEntityTags;
-
 import com.simibubi.create.content.logistics.packagerLink.LogisticallyLinkedBlockItem;
 import fr.iglee42.createqualityoflife.registries.QOLBlocks;
 import net.createmod.catnip.math.VecHelper;
-import net.createmod.catnip.registry.RegisteredObjectsHelper;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -26,7 +16,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -38,6 +27,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
@@ -67,7 +62,7 @@ public class StockManagerBlockItem extends LogisticallyLinkedBlockItem {
 
 	@Override
 	public String getDescriptionId() {
-		return hasCapturedBlaze() ? super.getDescriptionId() : "item.createqol." + RegisteredObjectsHelper.getKeyOrThrow(this).getPath();
+		return hasCapturedBlaze() ? super.getDescriptionId() : "item.createqol." + CatnipServices.REGISTRIES.getKeyOrThrow(this).getPath();
 	}
 
 	@Override
@@ -82,8 +77,8 @@ public class StockManagerBlockItem extends LogisticallyLinkedBlockItem {
 
 		if (!(be instanceof SpawnerBlockEntity)){
 			InteractionResult interactionresult = this.place(new BlockPlaceContext(context));
-			if (!interactionresult.consumesAction() && context.getItemInHand().has(DataComponents.FOOD)) {
-				InteractionResult interactionresult1 = super.use(context.getLevel(), context.getPlayer(), context.getHand()).getResult();
+			if (!interactionresult.consumesAction() && this.isEdible()) {
+				InteractionResult interactionresult1 = this.use(context.getLevel(), context.getPlayer(), context.getHand()).getResult();
 				return interactionresult1 == InteractionResult.CONSUME ? InteractionResult.CONSUME_PARTIAL : interactionresult1;
 			} else {
 				return interactionresult;
@@ -94,7 +89,7 @@ public class StockManagerBlockItem extends LogisticallyLinkedBlockItem {
 
 		List<SpawnData> possibleSpawns = spawner.spawnPotentials.unwrap()
 			.stream()
-			.map(Wrapper::data)
+			.map(Wrapper::getData)
 			.toList();
 
 		if (possibleSpawns.isEmpty()) {
@@ -115,8 +110,8 @@ public class StockManagerBlockItem extends LogisticallyLinkedBlockItem {
 			return InteractionResult.SUCCESS;
 		}
 		InteractionResult interactionresult = this.place(new BlockPlaceContext(context));
-		if (!interactionresult.consumesAction() && context.getItemInHand().has(DataComponents.FOOD)) {
-			InteractionResult interactionresult1 = super.use(context.getLevel(), context.getPlayer(), context.getHand()).getResult();
+		if (!interactionresult.consumesAction() && this.isEdible()) {
+			InteractionResult interactionresult1 = this.use(context.getLevel(), context.getPlayer(), context.getHand()).getResult();
 			return interactionresult1 == InteractionResult.CONSUME ? InteractionResult.CONSUME_PARTIAL : interactionresult1;
 		} else {
 			return interactionresult;

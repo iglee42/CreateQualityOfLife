@@ -1,52 +1,49 @@
 package fr.iglee42.createqualityoflife.client.screens;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.ImmutableList;
-import com.mojang.authlib.yggdrasil.ProfileResult;
+import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.logistics.packagerLink.LogisticallyLinkedBehaviour;
 import com.simibubi.create.content.trains.station.NoShadowFontWrapper;
+import com.simibubi.create.foundation.gui.AllGuiTextures;
+import com.simibubi.create.foundation.gui.ScreenWithStencils;
+import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
+import com.simibubi.create.foundation.utility.CreateLang;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.blockentitites.StockManagerBlockEntity;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.menus.StockManagerMenu;
 import fr.iglee42.createqualityoflife.packets.*;
 import fr.iglee42.createqualityoflife.registries.QOLGuiTextures;
+import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import fr.iglee42.createqualityoflife.utils.NetworkDestructionLevel;
 import fr.iglee42.createqualityoflife.utils.NetworkPermission;
-import net.createmod.catnip.gui.UIRenderHelper;
-import net.createmod.catnip.platform.CatnipServices;
-import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.PlayerFaceRenderer;
-import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.world.item.ItemStack;
-import org.lwjgl.glfw.GLFW;
-
-import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.gui.ScreenWithStencils;
-import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
-import com.simibubi.create.foundation.utility.CreateLang;
-
 import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.animation.LerpedFloat.Chaser;
+import net.createmod.catnip.gui.UIRenderHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.PlayerFaceRenderer;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class StockManagerScreen extends AbstractSimiContainerScreen<StockManagerMenu>
 	implements ScreenWithStencils {
@@ -185,11 +182,11 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 	}
 
 	@Override
-	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+	public void renderBackground(GuiGraphics guiGraphics) {
 		PoseStack ms = guiGraphics.pose();
 		ms.pushPose();
 		ms.translate(0, 0, -300);
-		super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+		super.renderBackground(guiGraphics);
 		ms.popPose();
 	}
 
@@ -340,11 +337,11 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 		QOLGuiTextures.CHOOSE_NETWORK_ENTRY.render(graphics, 0, 0);
 
 		if (Minecraft.getInstance().level != null){
+			GameProfile result = Minecraft.getInstance().getMinecraftSessionService().fillProfileProperties(new GameProfile(entry.getKey(),""),false);
 			Component playerName =  Minecraft.getInstance().player != null && Minecraft.getInstance().player.connection.getPlayerInfo(entry.getKey()) != null ? Component.literal(Minecraft.getInstance().player.connection.getPlayerInfo(entry.getKey()).getProfile().getName()) :Component.empty();
 			if (playerName.equals(Component.empty())){
-				ProfileResult result = Minecraft.getInstance().getMinecraftSessionService().fetchProfile(entry.getKey(),false);
-				if (result != null && result.profile() != null){
-					playerName = Component.literal(result.profile().getName());
+				if (result.isComplete()){
+					playerName = Component.literal(result.getName());
 				} else {
 					playerName = CreateQOLLang.translateDirect("gui.stock_manager.unknow_player");
 				}
@@ -353,19 +350,18 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 			PlayerInfo info = Minecraft.getInstance().player.connection.getPlayerInfo(entry.getKey());
 			boolean hasDrawn = false;
 			if (info != null){
-				PlayerFaceRenderer.draw(graphics,info.getSkin(),12,3,11);
+				PlayerFaceRenderer.draw(graphics,info.getSkinLocation(),12,3,11);
 				hasDrawn = true;
 			}
 			if (!hasDrawn) {
-				ProfileResult result = Minecraft.getInstance().getMinecraftSessionService().fetchProfile(entry.getKey(),false);
-				if (result != null && result.profile() != null){
-					PlayerFaceRenderer.draw(graphics, Minecraft.getInstance().getSkinManager().getInsecureSkin(result.profile()),12,3,11);
+				if (result.isComplete()){
+					PlayerFaceRenderer.draw(graphics, Minecraft.getInstance().getSkinManager().getInsecureSkinLocation(result),12,3,11);
 					hasDrawn = true;
 				}
 			}
 
 			if (!hasDrawn) {
-				PlayerFaceRenderer.draw(graphics, DefaultPlayerSkin.get(entry.getKey()),12,3,11);
+				PlayerFaceRenderer.draw(graphics, DefaultPlayerSkin.getDefaultSkin(entry.getKey()),12,3,11);
 			}
 			graphics.drawString(this.font, playerName.getString(23).stripTrailing() + (playerName.getString().length() > 23 ? "..." : "") , 24, 5, 6645093, false);
 			graphics.drawString(this.font, CreateQOLLang.translateDirect("gui.stock_manager.permission."+entry.getValue().getSerializedName()) , 124, 5, 6645093, false);
@@ -502,7 +498,7 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 							renderActionTooltip(graphics, ImmutableList.of(CreateQOLLang.translate("gui.stock_manager.break_block")
 									.component()), mx, my);
 							if (click == 0) {
-								CatnipServices.NETWORK.sendToServer(new DestroyLogisticsNetworkComponentPacket(menu.contentHolder.getBlockPos(), entry.getPos()));
+								QOLPackets.getChannel().sendToServer(new DestroyLogisticsNetworkComponentPacket(menu.contentHolder.getBlockPos(), entry.getPos()));
 								behaviours.remove(entry);
 							}
 							return true;
@@ -572,7 +568,7 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 					renderActionTooltip(graphics, ImmutableList.of(CreateQOLLang.translate("gui.stock_manager.add_user").component()), mx, my);
 					if (click == 0){
 						permissions.put(entry.getKey(),next);
-						CatnipServices.NETWORK.sendToServer(new ModifyPlayerNetworkPermissionPacket(blockEntity.getBlockPos(),entry.getKey(),next));
+						QOLPackets.getChannel().sendToServer(new ModifyPlayerNetworkPermissionPacket(blockEntity.getBlockPos(),entry.getKey(),next));
 					}
 					return true;
 				}
@@ -580,7 +576,7 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 					renderActionTooltip(graphics, ImmutableList.of(CreateQOLLang.translate("gui.stock_manager.promote_to").component().append(CreateQOLLang.translateDirect("gui.stock_manager.permission."+next.getSerializedName()))), mx, my);
 					if (click == 0){
 						permissions.put(entry.getKey(),next);
-						CatnipServices.NETWORK.sendToServer(new ModifyPlayerNetworkPermissionPacket(blockEntity.getBlockPos(),entry.getKey(),next));
+						QOLPackets.getChannel().sendToServer(new ModifyPlayerNetworkPermissionPacket(blockEntity.getBlockPos(),entry.getKey(),next));
 					}
 					return true;
 				}
@@ -592,14 +588,14 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 					renderActionTooltip(graphics, ImmutableList.of(CreateQOLLang.translate("gui.stock_manager.remove_user").component()), mx, my);
 					if (click == 0){
 						permissions.put(entry.getKey(),previous);
-						CatnipServices.NETWORK.sendToServer(new ModifyPlayerNetworkPermissionPacket(blockEntity.getBlockPos(),entry.getKey(),previous));
+						QOLPackets.getChannel().sendToServer(new ModifyPlayerNetworkPermissionPacket(blockEntity.getBlockPos(),entry.getKey(),previous));
 					}
 					return true;
 				} else if (previous == NetworkPermission.MEMBER && isOwner){
 					renderActionTooltip(graphics, ImmutableList.of(CreateQOLLang.translate("gui.stock_manager.demote_to").component().append(CreateQOLLang.translateDirect("gui.stock_manager.permission."+previous.getSerializedName()))), mx, my);
 					if (click == 0){
 						permissions.put(entry.getKey(),previous);
-						CatnipServices.NETWORK.sendToServer(new ModifyPlayerNetworkPermissionPacket(blockEntity.getBlockPos(),entry.getKey(),previous));
+						QOLPackets.getChannel().sendToServer(new ModifyPlayerNetworkPermissionPacket(blockEntity.getBlockPos(),entry.getKey(),previous));
 					}
 					return true;
 				}
@@ -644,7 +640,7 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 		if (isAdmin && itemScroll.getChaseTarget() == 0 && lmb && pMouseX > lockX && pMouseX <= lockX + 15
 			&& pMouseY > lockY && pMouseY <= lockY + 15) {
 			isLocked = !isLocked;
-			CatnipServices.NETWORK.sendToServer(new StockManagerLockPacket(blockEntity.getBlockPos(), isLocked));
+			QOLPackets.getChannel().sendToServer(new StockManagerLockPacket(blockEntity.getBlockPos(), isLocked));
 			playUiSound(SoundEvents.UI_BUTTON_CLICK.value(), 1, 1);
 			return true;
 		}
@@ -653,7 +649,7 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 		if (isAdmin && itemScroll.getChaseTarget() == 0 && lmb && pMouseX > destroyX && pMouseX <= destroyX + 15
 				&& pMouseY > destroyY && pMouseY <= destroyY + 15) {
 			destructionLevel = destructionLevel.next();
-			CatnipServices.NETWORK.sendToServer(new StockManagerDestructionLevelPacket(blockEntity.getBlockPos(), destructionLevel));
+			QOLPackets.getChannel().sendToServer(new StockManagerDestructionLevelPacket(blockEntity.getBlockPos(), destructionLevel));
 			playUiSound(SoundEvents.UI_BUTTON_CLICK.value(), 1, 1);
 			return true;
 		}
@@ -661,7 +657,7 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 		// Switch
 		if (itemScroll.getChaseTarget() == 0 && lmb && pMouseX > switchX && pMouseX <= switchX + 15
 				&& pMouseY > switchY && pMouseY <= switchY + 15) {
-			CatnipServices.NETWORK.sendToServer(new OpenSwitchLogisticNetworkScreenPacket(blockEntity.getBlockPos()));
+			QOLPackets.getChannel().sendToServer(new OpenSwitchLogisticNetworkScreenPacket(blockEntity.getBlockPos()));
 			playUiSound(SoundEvents.UI_BUTTON_CLICK.value(), 1, 1);
 			return true;
 		}
@@ -694,7 +690,7 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 	}
 
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
 		if (mouseY < lowerBodyStartY) {
 			float chaseTarget = this.blocksScroll.getChaseTarget();
 			float max = (float) (40 - (3 + AllGuiTextures.STOCK_KEEPER_CATEGORY.getHeight() * 4));
@@ -780,7 +776,7 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 			nameBox.setFocused(false);
 			if (!nameBox.getValue()
 					.equals(networkName)) {
-				CatnipServices.NETWORK.sendToServer(
+				QOLPackets.getChannel().sendToServer(
 						new ModifyLogisticsNetworkPacket(blockEntity.getBlockPos(), nameBox.getValue()));
 				networkName = nameBox.getValue();
 				return true;

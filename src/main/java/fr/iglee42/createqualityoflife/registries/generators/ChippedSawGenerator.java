@@ -9,7 +9,7 @@ import fr.iglee42.createqualityoflife.blocks.ChippedSawBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.ModelFile;
 
 public class ChippedSawGenerator extends SpecialBlockStateGen {
 
@@ -25,7 +25,7 @@ public class ChippedSawGenerator extends SpecialBlockStateGen {
 
 	@Override
 	public <T extends Block> ModelFile getModel(DataGenContext<Block, T> ctx, RegistrateBlockstateProvider prov,
-		BlockState state) {
+												BlockState state) {
 		String path = "block/chipped_workbench/" + ctx.getName().replace("_saw","");
 
 		return prov.models()

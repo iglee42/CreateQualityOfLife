@@ -6,11 +6,7 @@ import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.BooleanEntry;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLArmorMaterials;
-import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
-import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
-import fr.iglee42.createqualityoflife.utils.ItemTooltips;
-import fr.iglee42.createqualityoflife.utils.PreferredRender;
-import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
+import fr.iglee42.createqualityoflife.utils.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -57,21 +53,15 @@ public class RefinedRadianceChestplate extends BacktankItem.Layered implements Q
         return Arrays.asList(ArmorRenderType.ALL,ArmorRenderType.NONE);
     }
 
-    @Override
-    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
-        if (enchantment.is(Enchantments.MENDING) || enchantment.is(Enchantments.UNBREAKING))
-            return true;
-        return super.supportsEnchantment(stack, enchantment);
-    }
 
     @Override
-    public Holder<MobEffect> providedEffect(ItemStack stack) {
+    public MobEffect providedEffect(ItemStack stack) {
         return MobEffects.REGENERATION;
     }
 
     @Override
     public void addConfigurations(List<Configuration<?>> list, ItemStack stack) {
-        list.add(new Configuration<>("Preferred Render", stack.getOrDefault(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH), QOLDataComponents.PREFERRED_RENDER,
+        list.add(new Configuration<>("Preferred Render", NBTConstants.getOrDefault(NBTConstants.NBT_PREFERRED_RENDER,stack), NBTConstants.NBT_PREFERRED_RENDER,
                 Configuration.ConfigType.ENUM, Arrays.asList("Define how the additions should be rendered.",
                 "\"Elytra\" renders only the elytra",
                 "\"Backtank\" renders only the backtank"), (direction, entry) -> {
@@ -84,12 +74,12 @@ public class RefinedRadianceChestplate extends BacktankItem.Layered implements Q
 
         if (ShadowRadianceChestplate.hasElytra(stack)) {
             list.add(Configuration.ofBool("Enable Elytra",
-                    stack.getOrDefault(QOLDataComponents.BACKTANK_ELYTRA_STATE, false),
-                    QOLDataComponents.BACKTANK_ELYTRA_STATE,
+                    NBTConstants.getOrDefault(stack,NBTConstants.NBT_ELYTRA_STATE,true),
+                    NBTConstants.NBT_ELYTRA_STATE,
                     Arrays.asList("Activate the elytra on the backtank", "_Can't be enabled if the fan is enabled_"),
                     (entry, oe) -> {
                         boolean flag = oe.stream()
-                                .noneMatch(e -> e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(QOLDataComponents.BACKTANK_FANS) && oEntry.getValue());
+                                .noneMatch(e -> e instanceof BooleanEntry oEntry && oEntry.getNbtKey().equals(NBTConstants.NBT_FANS) && oEntry.getValue());
                         return CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() && flag;
                     }));
 
@@ -97,8 +87,8 @@ public class RefinedRadianceChestplate extends BacktankItem.Layered implements Q
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
-        if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
+    public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
+        if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         components.add(Component.literal("Air : ")
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.literal(String.valueOf(BacktankUtil.getAir(stack)))
@@ -112,7 +102,7 @@ public class RefinedRadianceChestplate extends BacktankItem.Layered implements Q
         components.add(Component.literal("Arms : ")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(true,
-                        true, stack.getOrDefault(QOLDataComponents.BACKTANK_ARMS, true), false, true)));
+                        true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_ARMS,true), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 

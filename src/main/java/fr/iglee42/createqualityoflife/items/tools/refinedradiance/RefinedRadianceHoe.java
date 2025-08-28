@@ -1,61 +1,47 @@
 package fr.iglee42.createqualityoflife.items.tools.refinedradiance;
 
 import com.simibubi.create.AllTags;
-import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.mixin.accessor.CropBlockAccessor;
 import com.simibubi.create.foundation.utility.BlockHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
-import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
-import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.registries.QOLItems;
 import fr.iglee42.createqualityoflife.registries.QOLTiers;
 import fr.iglee42.createqualityoflife.utils.ItemTooltips;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.neoforged.neoforge.common.SpecialPlantable;
-import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
-import net.neoforged.neoforge.event.level.BlockDropsEvent;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.event.level.BlockEvent;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class RefinedRadianceHoe extends HoeItem implements QOLConfigurableItem {
     public RefinedRadianceHoe(Properties p_42964_) {
-        super(QOLTiers.REFINED_RADIANCE, p_42964_);
+        super(QOLTiers.REFINED_RADIANCE,-3, 0.0F, p_42964_);
     }
 
     @Override
@@ -70,20 +56,20 @@ public class RefinedRadianceHoe extends HoeItem implements QOLConfigurableItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
-        if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
+    public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
+        if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         components.add(Component.literal("Reach : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, stack.getOrDefault(QOLDataComponents.REACH,true), false, true)));
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_REACH,true), false, true)));
         components.add(Component.literal("Harvesting : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.harvesting.get(), true, stack.getOrDefault(QOLDataComponents.HARVESTING,false), false, true)));
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.harvesting.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_HARVESTING,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 
     @Override
     public void addConfigurations(List<Configuration<?>> list, ItemStack stack) {
-        list.add(Configuration.ofBool("Harvesting",stack.getOrDefault(QOLDataComponents.HARVESTING,false),QOLDataComponents.HARVESTING,
+        list.add(Configuration.ofBool("Harvesting",NBTConstants.getOrDefault(stack,NBTConstants.NBT_HARVESTING,false),NBTConstants.NBT_HARVESTING,
                 List.of("Should replant destroyed crops"),(e,oe)->CreateQOLConfigs.server().equipments.tools.harvesting.get()));
     }
 
@@ -100,13 +86,13 @@ public class RefinedRadianceHoe extends HoeItem implements QOLConfigurableItem {
             p.displayClientMessage(Component.literal("Harvesting is disabled by the config").withStyle(ChatFormatting.RED),true);
             return;
         }
-        boolean enable = !stack.getOrDefault(QOLDataComponents.HARVESTING,false);
-        stack.set(QOLDataComponents.HARVESTING, enable);
+        boolean enable = !NBTConstants.getOrDefault(stack,NBTConstants.NBT_HARVESTING,false);
+        stack.getOrCreateTag().putBoolean(NBTConstants.NBT_HARVESTING, enable);
         p.displayClientMessage(Component.literal("Harvesting : ").append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<T> onBroken) {
         if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
         return super.damageItem(stack, amount, entity, onBroken);
     }
@@ -131,7 +117,7 @@ public class RefinedRadianceHoe extends HoeItem implements QOLConfigurableItem {
         if (event.isCanceled()) return;
         if (!event.getPlayer().getMainHandItem().is(QOLItems.REFINED_RADIANCE_HOE.get()) && !event.getPlayer().getMainHandItem().is(QOLItems.SHADOW_RADIANCE_HOE.get())) return;
         if (!CreateQOLConfigs.server().equipments.tools.harvesting.get()) return;
-        if (!event.getPlayer().getMainHandItem().getOrDefault(QOLDataComponents.HARVESTING,false)) return;
+        if (!NBTConstants.getOrDefault(event.getPlayer().getMainHandItem(),NBTConstants.NBT_HARVESTING,false)) return;
         if (tryHarvestCrop(event.getPlayer().level(),event.getPos())) event.setCanceled(true);
     }
 
@@ -232,7 +218,7 @@ public class RefinedRadianceHoe extends HoeItem implements QOLConfigurableItem {
                 return false;
             }
 
-            if (state.getBlock() instanceof SpecialPlantable)
+            if (state.getBlock() instanceof IPlantable)
                 return true;
         }
 

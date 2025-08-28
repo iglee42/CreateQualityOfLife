@@ -2,28 +2,13 @@ package fr.iglee42.createqualityoflife.utils;
 
 import com.mojang.serialization.Codec;
 import com.simibubi.create.content.logistics.packagerLink.LogisticsNetwork;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.UUIDUtil;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.Block;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
 
 public interface LogisticsNetworkExtension {
-
-    Codec<Map<UUID, NetworkPermission>> PERMISSIONS_CODEC =
-            Codec.unboundedMap(UUIDUtil.STRING_CODEC, NetworkPermission.CODEC);
-
-    StreamCodec<ByteBuf,Map<UUID, NetworkPermission>> PERMISSIONS_STREAM_CODEC = ByteBufCodecs.map(
-            HashMap::new,
-            UUIDUtil.STREAM_CODEC,
-            NetworkPermission.STREAM_CODEC
-    );
 
     private LogisticsNetwork self() {
         return (LogisticsNetwork)this;

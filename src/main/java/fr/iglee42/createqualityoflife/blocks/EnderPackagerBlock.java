@@ -5,6 +5,7 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.logistics.box.PackageItem;
+import com.simibubi.create.content.logistics.packagerLink.LogisticallyLinkedBlockItem;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.WrenchableDirectionalBlock;
@@ -12,13 +13,18 @@ import com.simibubi.create.foundation.utility.CreateLang;
 
 import fr.iglee42.createqualityoflife.blockentitites.EnderPackagerBlockEntity;
 import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
-import net.neoforged.neoforge.capabilities.Capabilities.ItemHandler;
-import net.neoforged.neoforge.common.util.FakePlayer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.network.NetworkHooks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -55,24 +61,10 @@ public class EnderPackagerBlock extends WrenchableDirectionalBlock implements IB
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		Direction preferredFacing = null;
-		for (Direction face : context.getNearestLookingDirections()) {
-			BlockEntity be = context.getLevel()
-				.getBlockEntity(context.getClickedPos()
-					.relative(face));
-			if (be instanceof EnderPackagerBlockEntity)
-				continue;
-			if (be != null && be.hasLevel() &&be.getLevel().getCapability(ItemHandler.BLOCK, be.getBlockPos(), null) != null) {
-				preferredFacing = face.getOpposite();
-				break;
-			}
-		}
 
 		Player player = context.getPlayer();
-		if (preferredFacing == null) {
-			Direction facing = context.getNearestLookingDirection();
-			preferredFacing = player != null && player
-				.isShiftKeyDown() ? facing : facing.getOpposite();
-		}
+		Direction facing = context.getNearestLookingDirection();
+		preferredFacing = player != null && player.isShiftKeyDown() ? facing : facing.getOpposite();
 
 		if (player != null && !(player instanceof FakePlayer)) {
 			if (AllBlocks.PORTABLE_STORAGE_INTERFACE.has(context.getLevel()
@@ -90,48 +82,52 @@ public class EnderPackagerBlock extends WrenchableDirectionalBlock implements IB
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-		if (AllItems.WRENCH.isIn(stack))
-			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-		if (AllBlocks.FACTORY_GAUGE.isIn(stack))
-			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-		if (AllBlocks.PACKAGE_FROGPORT.isIn(stack))
-			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
+								 BlockHitResult hit) {
+		if (player == null)
+			return InteractionResult.PASS;
 
-		if (onBlockEntityUseItemOn(level, pos, be -> {
+		ItemStack itemInHand = player.getItemInHand(handIn);
+		if (AllItems.WRENCH.isIn(itemInHand))
+			return InteractionResult.PASS;
+		if (AllBlocks.FACTORY_GAUGE.isIn(itemInHand))
+			return InteractionResult.PASS;
+		if (AllBlocks.PACKAGE_FROGPORT.isIn(itemInHand))
+			return InteractionResult.PASS;
+
+		if (onBlockEntityUse(worldIn, pos, be -> {
 			if (be.heldBox.isEmpty()) {
 				if (be.animationTicks > 0)
-					return ItemInteractionResult.SUCCESS;
-				if (PackageItem.isPackage(stack)) {
-					if (level.isClientSide())
-						return ItemInteractionResult.SUCCESS;
-					if (!be.isTransmitter()) return ItemInteractionResult.SUCCESS;
-					be.heldBox = stack.copyWithCount(1);
+					return InteractionResult.SUCCESS;
+				if (PackageItem.isPackage(itemInHand)) {
+					if (worldIn.isClientSide())
+						return InteractionResult.SUCCESS;
+					if (!be.isTransmitter()) return InteractionResult.SUCCESS;
+					be.heldBox = itemInHand.copyWithCount(1);
 					be.notifyUpdate();
-					stack.shrink(1);
-					AllSoundEvents.DEPOT_PLOP.playOnServer(level, pos);
-					if (stack.isEmpty())
-						player.setItemInHand(hand, ItemStack.EMPTY);
-					return ItemInteractionResult.SUCCESS;
+					itemInHand.shrink(1);
+					AllSoundEvents.DEPOT_PLOP.playOnServer(worldIn, pos);
+					if (itemInHand.isEmpty())
+						player.setItemInHand(handIn, ItemStack.EMPTY);
+					return InteractionResult.SUCCESS;
 				}
-				return ItemInteractionResult.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 			if (be.animationTicks > 0)
-				return ItemInteractionResult.SUCCESS;
-			if (!level.isClientSide()) {
+				return InteractionResult.SUCCESS;
+			if (!worldIn.isClientSide()) {
 				player.getInventory()
-					.placeItemBackInInventory(be.heldBox.copy());
+						.placeItemBackInInventory(be.heldBox.copy());
 				AllSoundEvents.playItemPickup(player);
 				be.heldBox = ItemStack.EMPTY;
 				be.notifyUpdate();
 			}
-			return ItemInteractionResult.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}).consumesAction())
-			return ItemInteractionResult.SUCCESS;
+			return InteractionResult.SUCCESS;
 
-		return ItemInteractionResult.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
-
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder.add(POWERED));
@@ -177,8 +173,9 @@ public class EnderPackagerBlock extends WrenchableDirectionalBlock implements IB
 		return QOLBlockEntities.ENDER_PACKAGER.get();
 	}
 
+
 	@Override
-	protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
+	public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
 		return false;
 	}
 

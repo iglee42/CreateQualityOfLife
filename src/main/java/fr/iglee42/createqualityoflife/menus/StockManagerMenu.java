@@ -1,24 +1,21 @@
 package fr.iglee42.createqualityoflife.menus;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import com.simibubi.create.AllMenuTypes;
 import com.simibubi.create.foundation.gui.menu.MenuBase;
-
 import fr.iglee42.createqualityoflife.blockentitites.StockManagerBlockEntity;
 import fr.iglee42.createqualityoflife.registries.QOLMenuTypes;
-import fr.iglee42.createqualityoflife.utils.LogisticsNetworkExtension;
 import fr.iglee42.createqualityoflife.utils.NetworkDestructionLevel;
 import fr.iglee42.createqualityoflife.utils.NetworkPermission;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class StockManagerMenu extends MenuBase<StockManagerBlockEntity> {
 
@@ -33,7 +30,7 @@ public class StockManagerMenu extends MenuBase<StockManagerBlockEntity> {
 
 	public Object screenReference;
 
-	public StockManagerMenu(MenuType<?> type, int id, Inventory inv, RegistryFriendlyByteBuf extraData) {
+	public StockManagerMenu(MenuType<?> type, int id, Inventory inv, FriendlyByteBuf extraData) {
 		super(type, id, inv, extraData);
 	}
 
@@ -48,15 +45,15 @@ public class StockManagerMenu extends MenuBase<StockManagerBlockEntity> {
 	}
 
 	@Override
-	protected StockManagerBlockEntity createOnClient(RegistryFriendlyByteBuf extraData) {
+	protected StockManagerBlockEntity createOnClient(FriendlyByteBuf extraData) {
 		isAdmin = extraData.readBoolean();
 		isOwner = extraData.readBoolean();
 		isLocked = extraData.readBoolean();
 		name = extraData.readUtf();
 		links = extraData.readInt();
-		destructionLevel = NetworkDestructionLevel.STREAM_CODEC.decode(extraData);
+		destructionLevel = NetworkDestructionLevel.values()[extraData.readByte()];
 		mayDestroy = extraData.readBoolean();
-		permissions = LogisticsNetworkExtension.PERMISSIONS_STREAM_CODEC.decode(extraData);
+		permissions = extraData.readMap(FriendlyByteBuf::readUUID,buf-> NetworkPermission.values()[buf.readByte()]);
 		if (Minecraft.getInstance().level
 			.getBlockEntity(extraData.readBlockPos()) instanceof StockManagerBlockEntity stbe)
 			return stbe;

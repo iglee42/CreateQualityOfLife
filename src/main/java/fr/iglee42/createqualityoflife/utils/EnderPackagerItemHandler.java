@@ -4,7 +4,7 @@ import com.simibubi.create.content.logistics.box.PackageItem;
 
 import fr.iglee42.createqualityoflife.blockentitites.EnderPackagerBlockEntity;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 public class EnderPackagerItemHandler implements IItemHandlerModifiable {
 

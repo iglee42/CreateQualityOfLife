@@ -10,24 +10,22 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.Tags;
+import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
 
 public enum QOLTiers implements Tier {
-    SHADOW_STEEL(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 4063, 10.0F, 6.0F, 20, () -> Ingredient.of(AllItems.SHADOW_STEEL)),
-    REFINED_RADIANCE(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 4063, 10.0F, 6.0F, 20, () -> Ingredient.of(AllItems.REFINED_RADIANCE)),
-    SHADOW_RADIANCE(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 5119, 11.0F, 7.0F, 25, () -> Ingredient.of(QOLItems.SHADOW_RADIANCE));
+    SHADOW_STEEL(4063, 10.0F, 6.0F, 20, () -> Ingredient.of(AllItems.SHADOW_STEEL)),
+    REFINED_RADIANCE( 4063, 10.0F, 6.0F, 20, () -> Ingredient.of(AllItems.REFINED_RADIANCE)),
+    SHADOW_RADIANCE(5119, 11.0F, 7.0F, 25, () -> Ingredient.of(QOLItems.SHADOW_RADIANCE));
 
-    private final TagKey<Block> incorrectBlocksForDrops;
     private final int uses;
     private final float speed;
     private final float damage;
     private final int enchantmentValue;
     private final Supplier<Ingredient> repairIngredient;
 
-    private QOLTiers(TagKey<Block> incorrectBlocks, int uses, float speed, float damage, int enchantmentValue, Supplier<Ingredient> repairIngredient) {
-        this.incorrectBlocksForDrops = incorrectBlocks;
+    private QOLTiers( int uses, float speed, float damage, int enchantmentValue, Supplier<Ingredient> repairIngredient) {
         this.uses = uses;
         this.speed = speed;
         this.damage = damage;
@@ -51,8 +49,8 @@ public enum QOLTiers implements Tier {
     }
 
     @Override
-    public TagKey<Block> getIncorrectBlocksForDrops() {
-        return this.incorrectBlocksForDrops;
+    public int getLevel() {
+        return 4;
     }
 
     @Override

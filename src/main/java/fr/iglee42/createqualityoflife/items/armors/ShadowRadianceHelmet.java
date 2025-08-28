@@ -6,29 +6,18 @@ import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLArmorMaterials;
-import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.registries.QOLItems;
-import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
-import fr.iglee42.createqualityoflife.utils.ItemTooltips;
-import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
-import fr.iglee42.createqualityoflife.utils.ShadowRadianceEffects;
+import fr.iglee42.createqualityoflife.utils.*;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +32,7 @@ public class ShadowRadianceHelmet extends DivingHelmetItem implements QOLConfigu
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     }
     static {
-        GogglesItem.addIsWearingPredicate(player -> QOLItems.SHADOW_RADIANCE_HELMET.isIn(player.getItemBySlot(EquipmentSlot.HEAD)) && player.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.HELMET_GOGGLES,true) && CreateQOLConfigs.server().equipments.armors.helmetHaveGoggles.get());
+        GogglesItem.addIsWearingPredicate(player -> QOLItems.SHADOW_RADIANCE_HELMET.isIn(player.getItemBySlot(EquipmentSlot.HEAD)) && NBTConstants.getOrDefault(player.getItemBySlot(EquipmentSlot.HEAD),NBTConstants.NBT_GOGGLES,true) && CreateQOLConfigs.server().equipments.armors.helmetHaveGoggles.get());
     }
 
     @Override
@@ -52,15 +41,15 @@ public class ShadowRadianceHelmet extends DivingHelmetItem implements QOLConfigu
         invTick(stack, level, entity, slot, offHand);
     }
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
-        if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
+    public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
+        if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         components.add(Component.literal("Effect : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(Component.translatable(providedEffect(stack).value().getDescriptionId()).withStyle(ChatFormatting.YELLOW)));
+                .append(Component.translatable(providedEffect(stack).getDescriptionId()).withStyle(ChatFormatting.YELLOW)));
         components.add(Component.literal("Goggles : ")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.helmetHaveGoggles.get(),
-                        true, stack.getOrDefault(QOLDataComponents.HELMET_GOGGLES, true), false, true)));
+                        true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_GOGGLES, true), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 
@@ -75,17 +64,17 @@ public class ShadowRadianceHelmet extends DivingHelmetItem implements QOLConfigu
     }
 
     @Override
-    public Holder<MobEffect> providedEffect(ItemStack stack) {
-        return stack.getOrDefault(QOLDataComponents.EFFECT, ShadowRadianceEffects.NIGHT_VISION).getEffectHolder();
+    public MobEffect providedEffect(ItemStack stack) {
+        return NBTConstants.getEffectsOrDefault(stack, ShadowRadianceEffects.NIGHT_VISION).getEffectHolder();
     }
 
     @Override
     public void addConfigurations(List<Configuration<?>> list, ItemStack stack) {
-        list.add(Configuration.ofBool("Enable Googles",stack.getOrDefault(QOLDataComponents.HELMET_GOGGLES,true),QOLDataComponents.HELMET_GOGGLES,Arrays.asList("Should engineer's goggle's information be displayed"),(e,oe)->CreateQOLConfigs.server().equipments.armors.helmetHaveGoggles.get()));
+        list.add(Configuration.ofBool("Enable Googles",NBTConstants.getOrDefault(stack,NBTConstants.NBT_GOGGLES,true),NBTConstants.NBT_GOGGLES,Arrays.asList("Should engineer's goggle's information be displayed"),(e,oe)->CreateQOLConfigs.server().equipments.armors.helmetHaveGoggles.get()));
         ShadowRadianceEffects[] valids = Arrays.stream(ShadowRadianceEffects.values()).filter(ef->ef.isValidForItem(stack)).toArray(ShadowRadianceEffects[]::new);
-        list.add(new Configuration<>("Effect", stack.getOrDefault(QOLDataComponents.EFFECT, ShadowRadianceEffects.NIGHT_VISION),QOLDataComponents.EFFECT,
+        list.add(new Configuration<>("Effect", NBTConstants.getEffectsOrDefault(stack, ShadowRadianceEffects.NIGHT_VISION),NBTConstants.NBT_CHOOSABLE_EFFECTS,
                 Configuration.ConfigType.ENUM,Arrays.asList("Define which mob effect should be provided.",
-                "For this item, there is " + Component.translatable(valids[0].getEffectHolder().value().getDescriptionId()).getString() + " and " + Component.translatable(valids[1].getEffectHolder().value().getDescriptionId()).getString()),(direction, entry)->{
+                "For this item, there is " + Component.translatable(valids[0].getEffectHolder().getDescriptionId()).getString() + " and " + Component.translatable(valids[1].getEffectHolder().getDescriptionId()).getString()),(direction, entry)->{
 
             ShadowRadianceEffects e = (ShadowRadianceEffects) entry.getValue();
             ShadowRadianceEffects[] options = Arrays.stream(ShadowRadianceEffects.values()).filter(ef->ef.isValidForItem(stack)).toArray(ShadowRadianceEffects[]::new);
@@ -100,7 +89,7 @@ public class ShadowRadianceHelmet extends DivingHelmetItem implements QOLConfigu
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<T> onBroken) {
         if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
         return super.damageItem(stack, amount, entity, onBroken);
     }
@@ -122,7 +111,7 @@ public class ShadowRadianceHelmet extends DivingHelmetItem implements QOLConfigu
 
     @Override
     public String effectAdditionInfos(ItemStack stack) {
-        if (stack.getOrDefault(QOLDataComponents.EFFECT, ShadowRadianceEffects.NIGHT_VISION).getEffectHolder().equals(MobEffects.NIGHT_VISION)) return "";
+        if (NBTConstants.getEffectsOrDefault(stack, ShadowRadianceEffects.NIGHT_VISION).getEffectHolder().equals(MobEffects.NIGHT_VISION)) return "";
         return "The invisibility also hide the armor.";
     }
 }

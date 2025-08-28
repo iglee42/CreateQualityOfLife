@@ -5,28 +5,20 @@ import com.simibubi.create.content.equipment.armor.BaseArmorItem;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLArmorMaterials;
-import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
-import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
-import fr.iglee42.createqualityoflife.utils.ItemTooltips;
-import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
-import fr.iglee42.createqualityoflife.utils.ShadowRadianceEffects;
+import fr.iglee42.createqualityoflife.utils.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.AbstractMap;
@@ -46,34 +38,34 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext p_339594_, List<Component> components, TooltipFlag p_41424_) {
-        if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
+    public void appendHoverText(ItemStack stack, Level p_339594_, List<Component> components, TooltipFlag p_41424_) {
+        if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         components.add(Component.literal("Effect : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(Component.translatable(providedEffect(stack).value().getDescriptionId()).withStyle(ChatFormatting.YELLOW)));
+                .append(Component.translatable(providedEffect(stack).getDescriptionId()).withStyle(ChatFormatting.YELLOW)));
 
         if (getType().equals(ArmorItem.Type.BOOTS)) {
             components.add(Component.literal("Diving : ")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsDiving.get(),
-                            true, stack.getOrDefault(QOLDataComponents.BOOTS_DIVING, false), false, true)));
+                            true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_DIVING,false), false, true)));
             components.add(Component.literal("Belt Blocking : ")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(true,
-                            true, stack.getOrDefault(QOLDataComponents.BOOTS_BELT, true), false, true)));
+                            true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_BELT,true), false, true)));
             components.add(Component.literal("Lava Walking : ")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsLavaWalking.get(),
-                            true, stack.getOrDefault(QOLDataComponents.BOOTS_LAVA, true), false, true)));
+                            true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_LAVA,true), false, true)));
         } else if (getType().equals(ArmorItem.Type.LEGGINGS)){
             components.add(Component.literal("Void Walk : ")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.voidWalking.get(),
-                            true, stack.getOrDefault(QOLDataComponents.VOID_WALK, true), false, true)));
+                            true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_VOID_WALK,false), false, true)));
             components.add(Component.literal("Step Height : ")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.stepHeight.get(),
-                            true, stack.getOrDefault(QOLDataComponents.STEP_HEIGHT, true), false, true)));
+                            true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_STEP_HEIGHT,false), false, true)));
         }
         super.appendHoverText(stack, p_339594_, components, p_41424_);
     }
@@ -84,9 +76,9 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
     }
 
     @Override
-    public Holder<MobEffect> providedEffect(ItemStack stack) {
+    public MobEffect providedEffect(ItemStack stack) {
         if (!(stack.getItem() instanceof ArmorItem it)) return QOLConfigurableItem.super.providedEffect(stack);
-        return getType().equals(ArmorItem.Type.BOOTS) || getType().equals(ArmorItem.Type.LEGGINGS) ? stack.getOrDefault(QOLDataComponents.EFFECT, getType().equals(ArmorItem.Type.BOOTS) ? ShadowRadianceEffects.JUMP_BOOST : ShadowRadianceEffects.SPEED).getEffectHolder() : QOLConfigurableItem.super.providedEffect(stack);
+        return getType().equals(ArmorItem.Type.BOOTS) || getType().equals(ArmorItem.Type.LEGGINGS) ? NBTConstants.getEffectsOrDefault(stack, getType().equals(ArmorItem.Type.BOOTS) ? ShadowRadianceEffects.JUMP_BOOST : ShadowRadianceEffects.SPEED).getEffectHolder() : QOLConfigurableItem.super.providedEffect(stack);
     }
 
     @Override
@@ -97,9 +89,9 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
     @Override
     public void addConfigurations(List<Configuration<?>> list, ItemStack stack) {
         ShadowRadianceEffects[] valids = Arrays.stream(ShadowRadianceEffects.values()).filter(ef->ef.isValidForItem(stack)).toArray(ShadowRadianceEffects[]::new);
-        list.add(new Configuration<>("Effect", stack.getOrDefault(QOLDataComponents.EFFECT, getType().equals(ArmorItem.Type.BOOTS) ? ShadowRadianceEffects.JUMP_BOOST : ShadowRadianceEffects.SPEED),QOLDataComponents.EFFECT,
+        list.add(new Configuration<>("Effect", NBTConstants.getEffectsOrDefault(stack, getType().equals(ArmorItem.Type.BOOTS) ? ShadowRadianceEffects.JUMP_BOOST : ShadowRadianceEffects.SPEED),NBTConstants.NBT_CHOOSABLE_EFFECTS,
                 Configuration.ConfigType.ENUM,Arrays.asList("Define which mob effect should be provided.",
-                "For this item, there is " + Component.translatable(valids[0].getEffectHolder().value().getDescriptionId()).getString() + " and " + Component.translatable(valids[1].getEffectHolder().value().getDescriptionId()).getString()),(direction, entry)->{
+                "For this item, there is " + Component.translatable(valids[0].getEffectHolder().getDescriptionId()).getString() + " and " + Component.translatable(valids[1].getEffectHolder().getDescriptionId()).getString()),(direction, entry)->{
 
             ShadowRadianceEffects e = (ShadowRadianceEffects) entry.getValue();
             ShadowRadianceEffects[] options = Arrays.stream(ShadowRadianceEffects.values()).filter(ef->ef.isValidForItem(stack)).toArray(ShadowRadianceEffects[]::new);
@@ -108,35 +100,35 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
         },(e,oe)->true));
         if (getType().equals(ArmorItem.Type.BOOTS)){
             list.add(Configuration.ofBool("Enable Diving",
-                    stack.getOrDefault(QOLDataComponents.BOOTS_DIVING,false),
-                    QOLDataComponents.BOOTS_DIVING,
+                    NBTConstants.getOrDefault(stack,NBTConstants.NBT_DIVING,false),
+                    NBTConstants.NBT_DIVING,
                     List.of("Enable diving, which makes the player descends quicker in liquids"),
                     (e,oE)-> CreateQOLConfigs.server().equipments.armors.bootsDiving.get()
             ));
 
             list.add(Configuration.ofBool("Enable Lava Walking",
-                    stack.getOrDefault(QOLDataComponents.BOOTS_LAVA,true),
-                    QOLDataComponents.BOOTS_LAVA,
+                    NBTConstants.getOrDefault(stack,NBTConstants.NBT_LAVA,true),
+                    NBTConstants.NBT_LAVA,
                     List.of("Enable walking under lava, which makes the player walks normally under lava"),
                     (e,oE)-> CreateQOLConfigs.server().equipments.armors.bootsLavaWalking.get()
             ));
 
             list.add(Configuration.ofBool("Enable Belt Blocking",
-                    stack.getOrDefault(QOLDataComponents.BOOTS_BELT,true),
-                    QOLDataComponents.BOOTS_BELT,
+                    NBTConstants.getOrDefault(stack,NBTConstants.NBT_BELT,true),
+                    NBTConstants.NBT_BELT,
                     List.of("You won't be pushed by belt if enabled"),
                     (e,oE)->true
             ));
         }else if (getType() == ArmorItem.Type.LEGGINGS){
             list.add(Configuration.ofBool("Void Walking",
-                    stack.getOrDefault(QOLDataComponents.VOID_WALK,true),
-                    QOLDataComponents.VOID_WALK,
+                    NBTConstants.getOrDefault(stack,NBTConstants.NBT_VOID_WALK,true),
+                    NBTConstants.NBT_VOID_WALK,
                     List.of("Enable walking on void"),
                     (e,oE)-> CreateQOLConfigs.server().equipments.armors.voidWalking.get()
             ));
             list.add(Configuration.ofBool("Enable Step Height",
-                    stack.getOrDefault(QOLDataComponents.STEP_HEIGHT,true),
-                    QOLDataComponents.STEP_HEIGHT,
+                    NBTConstants.getOrDefault(stack,NBTConstants.NBT_STEP_HEIGHT,true),
+                    NBTConstants.NBT_STEP_HEIGHT,
                     List.of("Should the leggings add step height"),
                     (e,oE)->CreateQOLConfigs.server().equipments.armors.stepHeight.get()
             ));
@@ -144,7 +136,7 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<T> onBroken) {
         if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
         return super.damageItem(stack, amount, entity, onBroken);
     }
@@ -168,7 +160,7 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
     public Map<Holder<Attribute>, Map.Entry<Double, AttributeModifier.Operation>> getAppliedAttributes(ItemStack stack) {
         if (getType().equals(ArmorItem.Type.LEGGINGS)){
             Map<Holder<Attribute>, Map.Entry<Double, AttributeModifier.Operation>> map = QOLConfigurableItem.super.getAppliedAttributes(stack);
-            if (CreateQOLConfigs.server().equipments.armors.stepHeight.get() && stack.getOrDefault(QOLDataComponents.STEP_HEIGHT,true)) map.put(Attributes.STEP_HEIGHT,new AbstractMap.SimpleEntry<>(0.5, AttributeModifier.Operation.ADD_VALUE));
+            if (CreateQOLConfigs.server().equipments.armors.stepHeight.get() && NBTConstants.getOrDefault(stack,NBTConstants.NBT_STEP_HEIGHT,true)) map.put(ForgeMod.STEP_HEIGHT_ADDITION.getHolder().get(), new AbstractMap.SimpleEntry<>(0.5, AttributeModifier.Operation.ADDITION));
             return map;
         }
         return QOLConfigurableItem.super.getAppliedAttributes(stack);

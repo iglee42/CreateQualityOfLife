@@ -1,6 +1,6 @@
 {
 	"parent": "block/block",
-	"loader": "neoforge:obj",
+	"loader": "forge:obj",
 	"flip_v": true,
 	"model": "createqol:models/block/stock_manager/rods_large.obj",
 	"textures": {

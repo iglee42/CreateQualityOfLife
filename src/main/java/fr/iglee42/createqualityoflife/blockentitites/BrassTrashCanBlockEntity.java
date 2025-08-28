@@ -74,18 +74,20 @@ public class BrassTrashCanBlockEntity extends TrashCanBlockEntity{
         if (!clientSide && getBlockState().getValue(BrassTrashCanBlock.OPEN) && !getBlockState().getValue(BrassTrashCanBlock.POWERED)){
             //HANDLERS
             if (selectionMode.get().equals(Mode.KEEP_64)){
-                IItemHandler handler = grabCapability(Direction.UP);
-                if (handler != null) {
-                    List<Item> savedItems = new ArrayList<>();
-                    for (int i = 0; i < handler.getSlots(); i++) {
-                        ItemStack stack = handler.getStackInSlot(i);
-                        if (!canAcceptItem(stack)) continue;
-                        if (!savedItems.contains(stack.getItem())) savedItems.add(stack.getItem());
-                        else {
-                            handler.extractItem(i,filtering.count,false);
+                grabCapability(Direction.UP).ifPresent(handler->{
+                    if (handler != null) {
+                        List<Item> savedItems = new ArrayList<>();
+                        for (int i = 0; i < handler.getSlots(); i++) {
+                            ItemStack stack = handler.getStackInSlot(i);
+                            if (!canAcceptItem(stack)) continue;
+                            if (!savedItems.contains(stack.getItem())) savedItems.add(stack.getItem());
+                            else {
+                                handler.extractItem(i,filtering.count,false);
+                            }
                         }
                     }
-                }
+                });
+
             }else handleInputFromAbove();
 
             //SUCK ITEMS

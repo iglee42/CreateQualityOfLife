@@ -1,40 +1,43 @@
 package fr.iglee42.createqualityoflife.packets;
 
 import com.simibubi.create.Create;
-import com.simibubi.create.content.logistics.packagerLink.LogisticallyLinkedBehaviour;
 import com.simibubi.create.content.logistics.packagerLink.LogisticsNetwork;
 import com.simibubi.create.foundation.networking.BlockEntityConfigurationPacket;
 import fr.iglee42.createqualityoflife.blockentitites.StockManagerBlockEntity;
-import fr.iglee42.createqualityoflife.menus.ChooseLogisticNetworkMenu;
-import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import fr.iglee42.createqualityoflife.utils.LogisticsNetworkExtension;
 import fr.iglee42.createqualityoflife.utils.NetworkDestructionLevel;
 import fr.iglee42.createqualityoflife.utils.NetworkPermission;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.UUIDUtil;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public class ModifyStockManagerLogisticNetworkPacket extends BlockEntityConfigurationPacket<StockManagerBlockEntity> {
-    public static final StreamCodec<ByteBuf, ModifyStockManagerLogisticNetworkPacket> STREAM_CODEC = StreamCodec.composite(
-            BlockPos.STREAM_CODEC, packet->packet.pos,
-            UUIDUtil.STREAM_CODEC, packet->packet.networkId,
-            ModifyStockManagerLogisticNetworkPacket::new
-    );
 
-    private final UUID networkId;
+    private UUID networkId;
 
     public ModifyStockManagerLogisticNetworkPacket(BlockPos pos,UUID networkId) {
         super(pos);
         this.networkId = networkId;
+    }
+
+    public ModifyStockManagerLogisticNetworkPacket(FriendlyByteBuf buffer) {
+        super(buffer);
+    }
+
+    @Override
+    protected void readSettings(FriendlyByteBuf buffer) {
+        networkId = buffer.readUUID();
+    }
+
+    @Override
+    protected void writeSettings(FriendlyByteBuf buffer) {
+        buffer.writeUUID(networkId);
     }
 
     @Override
@@ -62,22 +65,20 @@ public class ModifyStockManagerLogisticNetworkPacket extends BlockEntityConfigur
             NetworkDestructionLevel desLevel = ((LogisticsNetworkExtension)network).createQOL$getDestructionLevel();
             boolean isOwner = player.getUUID().equals(network.owner);
 
-            player.openMenu(stbe.new StockManagerProvider(), buf -> {
+            NetworkHooks.openScreen(player,stbe.new StockManagerProvider(), buf -> {
                 buf.writeBoolean(showLockOption);
                 buf.writeBoolean(isOwner);
                 buf.writeBoolean(isCurrentlyLocked);
                 buf.writeUtf(name);
                 buf.writeInt(links);
-                NetworkDestructionLevel.STREAM_CODEC.encode(buf,desLevel);
+                buf.writeByte(desLevel.ordinal());
                 buf.writeBoolean(desLevel.canDestroy(stbe.behaviour.freqId,player));
-                LogisticsNetworkExtension.PERMISSIONS_STREAM_CODEC.encode(buf,permissions);
+                buf.writeMap(permissions, FriendlyByteBuf::writeUUID, (b, p)->b.writeByte(p.ordinal()));
                 buf.writeBlockPos(pos);
             });
         }
     }
 
     @Override
-    public PacketTypeProvider getTypeProvider() {
-        return QOLPackets.MODIFY_STOCK_MANAGER_LOGISTICS_NETWORK;
-    }
+    protected void applySettings(StockManagerBlockEntity stockManagerBlockEntity) {}
 }

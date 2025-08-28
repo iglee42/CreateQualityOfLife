@@ -1,10 +1,7 @@
 package fr.iglee42.createqualityoflife.client.screens;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.authlib.yggdrasil.ProfileResult;
-import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.content.logistics.stockTicker.StockKeeperCategoryRefundPacket;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.ScreenWithStencils;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
@@ -13,12 +10,11 @@ import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.blockentitites.StockManagerBlockEntity;
 import fr.iglee42.createqualityoflife.menus.ChooseLogisticNetworkMenu;
 import fr.iglee42.createqualityoflife.packets.ModifyStockManagerLogisticNetworkPacket;
-import fr.iglee42.createqualityoflife.packets.OpenSwitchLogisticNetworkScreenPacket;
 import fr.iglee42.createqualityoflife.registries.QOLGuiTextures;
+import fr.iglee42.createqualityoflife.registries.QOLPackets;
 import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.animation.LerpedFloat.Chaser;
 import net.createmod.catnip.gui.UIRenderHelper;
-import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -30,7 +26,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
@@ -86,9 +81,9 @@ public class ChooseLogisticNetworkScreen extends AbstractSimiContainerScreen<Cho
 		clearWidgets();
 
 		networks.sort((a, b) -> {
-			if (Minecraft.getInstance().getGameProfile().getId().equals(a.owner()) && !Minecraft.getInstance().getGameProfile().getId().equals(b.owner())) {
+			if (Minecraft.getInstance().getUser().getGameProfile().getId().equals(a.owner()) && !Minecraft.getInstance().getUser().getGameProfile().getId().equals(b.owner())) {
 				return -1;
-			} else if (!Minecraft.getInstance().getGameProfile().getId().equals(a.owner()) && Minecraft.getInstance().getGameProfile().getId().equals(b.owner())) {
+			} else if (!Minecraft.getInstance().getUser().getGameProfile().getId().equals(a.owner()) && Minecraft.getInstance().getUser().getGameProfile().getId().equals(b.owner())) {
 				return 1;
 			} else {
 				if (!a.locked() && b.locked()) {
@@ -123,11 +118,11 @@ public class ChooseLogisticNetworkScreen extends AbstractSimiContainerScreen<Cho
 	}
 
 	@Override
-	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+	public void renderBackground(GuiGraphics guiGraphics) {
 		PoseStack ms = guiGraphics.pose();
 		ms.pushPose();
 		ms.translate(0, 0, -300);
-		super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+		super.renderBackground(guiGraphics);
 		ms.popPose();
 	}
 
@@ -221,7 +216,7 @@ public class ChooseLogisticNetworkScreen extends AbstractSimiContainerScreen<Cho
 			Component playerName = Minecraft.getInstance().level.getPlayerByUUID(entry.owner()) != null ? Minecraft.getInstance().level.getPlayerByUUID(entry.owner()).getName() :CreateQOLLang.translateDirect( "statue.unknow_owner");
 			PlayerInfo info = Minecraft.getInstance().player.connection.getPlayerInfo(entry.owner());
 			if (info != null){
-				PlayerFaceRenderer.draw(graphics,info.getSkin(),166 - font.width(playerName) - 13,3,11);
+				PlayerFaceRenderer.draw(graphics,info.getSkinLocation(),166 - font.width(playerName) - 13,3,11);
 			}
 			graphics.drawString(this.font, playerName.getString(18).stripTrailing() + (playerName.getString().length() > 18 ? "..." : "") , 166 - font.width(playerName), 5, 6645093, false);
 		}
@@ -278,8 +273,8 @@ public class ChooseLogisticNetworkScreen extends AbstractSimiContainerScreen<Cho
 								.component() : Component.literal(entry.name()));
 				components.add(clickToEdit);
 				renderActionTooltip(graphics, components, mx, my);
-				if (click == 0 && (!entry.locked() || entry.owner() == null || Minecraft.getInstance().getGameProfile().getId().equals(entry.owner())))
-					CatnipServices.NETWORK.sendToServer(new ModifyStockManagerLogisticNetworkPacket(blockEntity.getBlockPos(),entry.id()));
+				if (click == 0 && (!entry.locked() || entry.owner() == null || Minecraft.getInstance().getUser().getGameProfile().getId().equals(entry.owner())))
+					QOLPackets.getChannel().sendToServer(new ModifyStockManagerLogisticNetworkPacket(blockEntity.getBlockPos(),entry.id()));
 				/*if (click == 0)
 					startEditing(i);*/
 				return true;
@@ -321,9 +316,8 @@ public class ChooseLogisticNetworkScreen extends AbstractSimiContainerScreen<Cho
 		}
 		return super.mouseReleased(pMouseX, pMouseY, pButton);
 	}
-
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
 		float chaseTarget = this.scroll.getChaseTarget();
 		float max = (float)(40 - (3 + AllGuiTextures.STOCK_KEEPER_CATEGORY.getHeight() * 4));
 		max += (float)(networks.size() * 20 + 24);
@@ -335,7 +329,7 @@ public class ChooseLogisticNetworkScreen extends AbstractSimiContainerScreen<Cho
 			this.scroll.chase((double)0.0F, (double)0.7F, Chaser.EXP);
 		}
 
-		return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+		return super.mouseScrolled(mouseX, mouseY, scrollY);
 	}
 
 	@Override

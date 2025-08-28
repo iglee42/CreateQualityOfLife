@@ -1,0 +1,95 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": {
+          "item": "createqol:shadow_steel_hoe"
+        },
+        "transitionalItem": {
+          "item": "createqol:shadow_steel_hoe"
+        },
+        "sequence": [
+          {
+            "type": "create:cutting",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_hoe"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_hoe"
+              }
+            ],
+            "processingTime": 50
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_hoe"
+              },
+              {
+                "item": "createqol:refined_radiance_hoe"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_hoe"
+              }
+            ]
+          },
+          {
+            "type": "create:pressing",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_hoe"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_hoe"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_hoe"
+              },
+              {
+                "item": "createqol:shadow_radiance_block"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_hoe"
+              }
+            ]
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:shadow_radiance_hoe"
+          }
+        ],
+        "loops": 1,
+        "copied_nbts": [
+          "Enchantments",
+          "display.Name",
+          "tooltips",
+          "reach"
+        ]
+      }
+    }
+  ]
+}

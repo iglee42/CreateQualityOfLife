@@ -16,6 +16,7 @@ import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.createmod.ponder.api.scene.Selection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
@@ -85,10 +86,10 @@ public class QOLScenes {
         scene.idle(7);
         scene.overlay().showControls(backSlot, Pointing.UP, 30).withItem(gold);
         scene.world().modifyBlockEntityNBT(packager1S, EnderPackagerBlockEntity.class,
-                nbt -> nbt.put("FrequencyFirst", iron.saveOptional(scene.world().getHolderLookupProvider())));
+                nbt -> nbt.put("FrequencyFirst", iron.save(new CompoundTag())));
         scene.idle(7);
         scene.world().modifyBlockEntityNBT(packager1S, EnderPackagerBlockEntity.class,
-                nbt -> nbt.put("FrequencyLast", gold.saveOptional(scene.world().getHolderLookupProvider())));
+                nbt -> nbt.put("FrequencyLast", gold.save(new CompoundTag())));
         scene.idle(20);
 
 
@@ -96,10 +97,10 @@ public class QOLScenes {
         scene.idle(7);
         scene.overlay().showControls(frontSlot2, Pointing.DOWN, 30).withItem(sapling);
         scene.world().modifyBlockEntityNBT(packager2S, EnderPackagerBlockEntity.class,
-                nbt -> nbt.put("FrequencyLast", gold.saveOptional(scene.world().getHolderLookupProvider())));
+                nbt -> nbt.put("FrequencyLast", gold.save(new CompoundTag())));
         scene.idle(7);
         scene.world().modifyBlockEntityNBT(packager2S, EnderPackagerBlockEntity.class,
-                nbt -> nbt.put("FrequencyFirst", sapling.saveOptional(scene.world().getHolderLookupProvider())));
+                nbt -> nbt.put("FrequencyFirst", sapling.save(new CompoundTag())));
         scene.idle(20);
         scene.overlay().showText(90)
                 .attachKeyFrame()
@@ -111,7 +112,7 @@ public class QOLScenes {
         scene.overlay().showControls(frontSlot2, Pointing.DOWN, 30).withItem(iron);
         scene.idle(7);
         scene.world().modifyBlockEntityNBT(packager2S, EnderPackagerBlockEntity.class,
-                nbt -> nbt.put("FrequencyFirst", iron.saveOptional(scene.world().getHolderLookupProvider())));
+                nbt -> nbt.put("FrequencyFirst", iron.save(new CompoundTag())));
 
         scene.idle(30);
         scene.world()
@@ -258,23 +259,23 @@ public class QOLScenes {
         scene.overlay().showControls(packager1Vec.add(0,1.25,0), Pointing.DOWN, 30).withItem(iron);
         scene.overlay().showControls(packager1Vec, Pointing.DOWN, 30).withItem(gold);
         scene.world().modifyBlockEntityNBT(packager1S, EnderPackagerBlockEntity.class,
-                nbt -> nbt.put("FrequencyFirst", iron.saveOptional(scene.world().getHolderLookupProvider())));
+                nbt -> nbt.put("FrequencyFirst", iron.save(new CompoundTag())));
         scene.world().modifyBlockEntityNBT(packager1S, EnderPackagerBlockEntity.class,
-                nbt -> nbt.put("FrequencyLast", gold.saveOptional(scene.world().getHolderLookupProvider())));
+                nbt -> nbt.put("FrequencyLast", gold.save(new CompoundTag())));
 
         scene.overlay().showControls(packager2Vec.add(0,1.25,0), Pointing.DOWN, 30).withItem(iron);
         scene.overlay().showControls(packager2Vec, Pointing.DOWN, 30).withItem(gold);
         scene.world().modifyBlockEntityNBT(packager2S, EnderPackagerBlockEntity.class,
-                nbt -> nbt.put("FrequencyFirst", iron.saveOptional(scene.world().getHolderLookupProvider())));
+                nbt -> nbt.put("FrequencyFirst", iron.save(new CompoundTag())));
         scene.world().modifyBlockEntityNBT(packager2S, EnderPackagerBlockEntity.class,
-                nbt -> nbt.put("FrequencyLast", gold.saveOptional(scene.world().getHolderLookupProvider())));
+                nbt -> nbt.put("FrequencyLast", gold.save(new CompoundTag())));
 
         scene.overlay().showControls(packager3Vec.add(0,1.25,0), Pointing.DOWN, 30).withItem(iron);
         scene.overlay().showControls(packager3Vec, Pointing.DOWN, 30).withItem(gold);
         scene.world().modifyBlockEntityNBT(packager3S, EnderPackagerBlockEntity.class,
-                nbt -> nbt.put("FrequencyFirst", iron.saveOptional(scene.world().getHolderLookupProvider())));
+                nbt -> nbt.put("FrequencyFirst", iron.save(new CompoundTag())));
         scene.world().modifyBlockEntityNBT(packager3S, EnderPackagerBlockEntity.class,
-                nbt -> nbt.put("FrequencyLast", gold.saveOptional(scene.world().getHolderLookupProvider())));
+                nbt -> nbt.put("FrequencyLast", gold.save(new CompoundTag())));
         scene.idle(40);
 
         scene.world().showIndependentSection(sign1,Direction.SOUTH);

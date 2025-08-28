@@ -1,0 +1,31 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "item": "create:shadow_steel"
+          }
+        },
+        "pattern": [
+          "CCC",
+          "CCC",
+          "CCC"
+        ],
+        "result": {
+          "count": 1,
+          "item": "createqol:shadow_steel_block"
+        }
+      }
+    }
+  ]
+}

@@ -2,6 +2,7 @@ package fr.iglee42.createqualityoflife.behaviours;
 
 import java.util.function.*;
 
+import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.blockentitites.EnderPackagerBlockEntity;
 import fr.iglee42.createqualityoflife.utils.EnderPackagerItemHandler;
@@ -128,34 +129,30 @@ public class EnderPackagerBehaviour extends BlockEntityBehaviour implements IEnd
 		return true;
 	}
 
-	@Override
-	public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
-		super.write(nbt, registries, clientPacket);
-		nbt.put("FrequencyFirst", frequencyFirst.getStack()
-			.saveOptional(registries));
-		nbt.put("FrequencyLast", frequencyLast.getStack()
-			.saveOptional(registries));
-		nbt.putLong("LastKnownPosition", blockEntity.getBlockPos()
-			.asLong());
+	public void write(CompoundTag nbt, boolean clientPacket) {
+		super.write(nbt, clientPacket);
+		nbt.put("FrequencyFirst", this.frequencyFirst.getStack().save(new CompoundTag()));
+		nbt.put("FrequencyLast", this.frequencyLast.getStack().save(new CompoundTag()));
+		nbt.putLong("LastKnownPosition", this.blockEntity.getBlockPos().asLong());
 	}
 
-	@Override
-	public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
-		long positionInTag = blockEntity.getBlockPos()
-			.asLong();
+	public void read(CompoundTag nbt, boolean clientPacket) {
+		long positionInTag = this.blockEntity.getBlockPos().asLong();
 		long positionKey = nbt.getLong("LastKnownPosition");
-		newPosition = positionInTag != positionKey;
-
-		super.read(nbt, registries, clientPacket);
-		frequencyFirst = Frequency.of(ItemStack.parseOptional(registries, nbt.getCompound("FrequencyFirst")));
-		frequencyLast = Frequency.of(ItemStack.parseOptional(registries, nbt.getCompound("FrequencyLast")));
+		this.newPosition = positionInTag != positionKey;
+		super.read(nbt, clientPacket);
+		this.frequencyFirst = Frequency.of(ItemStack.of(nbt.getCompound("FrequencyFirst")));
+		this.frequencyLast = Frequency.of(ItemStack.of(nbt.getCompound("FrequencyLast")));
 	}
 
 	public void setFrequency(boolean first, ItemStack stack) {
 		stack = stack.copy();
 		stack.setCount(1);
 		ItemStack toCompare = first ? frequencyFirst.getStack() : frequencyLast.getStack();
-		boolean changed = !ItemStack.isSameItemSameComponents(stack, toCompare);
+		boolean changed = !ItemStack.isSameItemSameTags(stack, toCompare);
+		if (changed) {
+			this.getHandler().removeFromNetwork(this.getWorld(), this);
+		}
 
 		if (changed)
 			getHandler().removeFromNetwork(getWorld(), this);
@@ -236,24 +233,24 @@ public class EnderPackagerBehaviour extends BlockEntityBehaviour implements IEnd
 		return "Frequencies";
 	}
 
-	@Override
-	public boolean writeToClipboard(@NotNull HolderLookup.Provider registries, CompoundTag tag, Direction side) {
-		tag.put("First", frequencyFirst.getStack()
-			.saveOptional(registries));
-		tag.put("Last", frequencyLast.getStack()
-			.saveOptional(registries));
+	public boolean writeToClipboard(CompoundTag tag, Direction side) {
+		tag.put("First", this.frequencyFirst.getStack().save(new CompoundTag()));
+		tag.put("Last", this.frequencyLast.getStack().save(new CompoundTag()));
 		return true;
 	}
 
-	@Override
-	public boolean readFromClipboard(@NotNull HolderLookup.Provider registries, CompoundTag tag, Player player, Direction side, boolean simulate) {
-		if (!tag.contains("First") || !tag.contains("Last"))
+	public boolean readFromClipboard(CompoundTag tag, Player player, Direction side, boolean simulate) {
+		if (tag.contains("First") && tag.contains("Last")) {
+			if (simulate) {
+				return true;
+			} else {
+				this.setFrequency(true, ItemStack.of(tag.getCompound("First")));
+				this.setFrequency(false, ItemStack.of(tag.getCompound("Last")));
+				return true;
+			}
+		} else {
 			return false;
-		if (simulate)
-			return true;
-		setFrequency(true, ItemStack.parseOptional(registries, tag.getCompound("First")));
-		setFrequency(false, ItemStack.parseOptional(registries, tag.getCompound("Last")));
-		return true;
+		}
 	}
 
 }

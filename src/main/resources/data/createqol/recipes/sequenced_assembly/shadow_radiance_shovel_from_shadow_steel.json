@@ -1,0 +1,95 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": {
+          "item": "createqol:shadow_steel_shovel"
+        },
+        "transitionalItem": {
+          "item": "createqol:shadow_steel_shovel"
+        },
+        "sequence": [
+          {
+            "type": "create:cutting",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_shovel"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_shovel"
+              }
+            ],
+            "processingTime": 50
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_shovel"
+              },
+              {
+                "item": "createqol:refined_radiance_shovel"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_shovel"
+              }
+            ]
+          },
+          {
+            "type": "create:pressing",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_shovel"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_shovel"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_shovel"
+              },
+              {
+                "item": "createqol:shadow_radiance_block"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_shovel"
+              }
+            ]
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:shadow_radiance_shovel"
+          }
+        ],
+        "loops": 1,
+        "copied_nbts": [
+          "Enchantments",
+          "display.Name",
+          "tooltips",
+          "reach"
+        ]
+      }
+    }
+  ]
+}

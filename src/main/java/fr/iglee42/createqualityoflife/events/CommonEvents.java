@@ -12,15 +12,15 @@ import fr.iglee42.createqualityoflife.utils.LogisticsNetworkExtension;
 import net.createmod.catnip.data.WorldAttached;
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.level.LevelAccessor;
-import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.event.level.LevelEvent;
+import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.level.LevelEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.TreeMap;
 
-@EventBusSubscriber
+@Mod.EventBusSubscriber
 public class CommonEvents {
 
     @SubscribeEvent

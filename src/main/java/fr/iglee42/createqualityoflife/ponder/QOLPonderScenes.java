@@ -12,7 +12,7 @@ public class QOLPonderScenes {
 
 	public static void register(PonderSceneRegistrationHelper<ResourceLocation> helper) {
 
-		PonderSceneRegistrationHelper<ItemProviderEntry<?,?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
+		PonderSceneRegistrationHelper<ItemProviderEntry<?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
 
 
 		HELPER.forComponents(QOLBlocks.ENDER_PACKAGER)

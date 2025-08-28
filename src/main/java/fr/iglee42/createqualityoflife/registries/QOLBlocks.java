@@ -36,8 +36,8 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
-import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
-import net.neoforged.neoforge.common.Tags;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
@@ -94,7 +94,6 @@ public class QOLBlocks {
                     .isRedstoneConductor((level, pos, state) -> false))
             .transform(pickaxeOnly())
             .addLayer(() -> RenderType::cutoutMipped)
-            .clientExtension(() -> ReducedDestroyEffects::new)
             .onRegister(movementBehaviour(TrashCanMovementBehaviour.normal()))
             .blockstate((c,p)->p.simpleBlock(c.get(),AssetLookup.partialBaseModel(c,p)))
             .item()
@@ -152,9 +151,9 @@ public class QOLBlocks {
             .transform(pickaxeOnly())
             .blockstate(simpleCubeAll("refined_radiance_block"))
             .tag(Tags.Blocks.STORAGE_BLOCKS)
-            .tag(commonBlockTag("storage_blocks/refined_radiance"))
+            .tag(forgeBlockTag("storage_blocks/refined_radiance"))
             .item(RefinedRadianceBlockItem::new)
-            .tag(commonItemTag("storage_blocks/refined_radiance"))
+            .tag(forgeItemTag("storage_blocks/refined_radiance"))
             .tag(Tags.Items.STORAGE_BLOCKS)
             .properties(p->p.rarity(Rarity.UNCOMMON))
             .build()
@@ -166,9 +165,9 @@ public class QOLBlocks {
                     .requiresCorrectToolForDrops())
             .transform(pickaxeOnly())
             .tag(Tags.Blocks.STORAGE_BLOCKS)
-            .tag(commonBlockTag("storage_blocks/shadow_steel"))
+            .tag(forgeBlockTag("storage_blocks/shadow_steel"))
             .item(ShadowSteelBlockItem::new)
-            .tag(commonItemTag("storage_blocks/shadow_steel"))
+            .tag(forgeItemTag("storage_blocks/shadow_steel"))
             .tag(Tags.Items.STORAGE_BLOCKS)
             .properties(p->p.rarity(Rarity.UNCOMMON))
             .build()
@@ -181,9 +180,9 @@ public class QOLBlocks {
             .transform(pickaxeOnly())
             .color(()->()-> (BlockColor) (blockState, blockAndTintGetter, blockPos, i) -> new ChromaticCompoundColor().getColor(new ItemStack(blockState.getBlock().asItem()),i))
             .tag(Tags.Blocks.STORAGE_BLOCKS)
-            .tag(commonBlockTag("storage_blocks/chromatic_compound"))
+            .tag(forgeBlockTag("storage_blocks/chromatic_compound"))
             .item(ChromaticCompoundBlockItem::new)
-            .tag(commonItemTag("storage_blocks/chromatic_compound"))
+            .tag(forgeItemTag("storage_blocks/chromatic_compound"))
             .tag(Tags.Items.STORAGE_BLOCKS)
             .properties(p->p.rarity(Rarity.UNCOMMON))
             .color(()->ChromaticCompoundColor::new)
@@ -197,9 +196,9 @@ public class QOLBlocks {
             .blockstate((c,p)->p.simpleBlock(c.get(),p.models().getExistingFile(p.modLoc("block/shadow_radiance_block"))))
             .transform(pickaxeOnly())
             .tag(Tags.Blocks.STORAGE_BLOCKS)
-            .tag(commonBlockTag("storage_blocks/shadow_radiance"))
+            .tag(forgeBlockTag("storage_blocks/shadow_radiance"))
             .item(NoGravMagicalDohickyBlockItem::new)
-            .tag(commonItemTag("storage_blocks/shadow_radiance"))
+            .tag(forgeItemTag("storage_blocks/shadow_radiance"))
             .tag(Tags.Items.STORAGE_BLOCKS)
             .properties(p->p.rarity(Rarity.RARE))
             .build()

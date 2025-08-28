@@ -6,29 +6,34 @@ import com.simibubi.create.foundation.networking.BlockEntityConfigurationPacket;
 import com.simibubi.create.foundation.utility.BlockHelper;
 import fr.iglee42.createqualityoflife.blockentitites.StockManagerBlockEntity;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
-import fr.iglee42.createqualityoflife.registries.QOLPackets;
-import fr.iglee42.createqualityoflife.utils.DestroyUtils;
 import fr.iglee42.createqualityoflife.utils.LogisticsNetworkExtension;
 import fr.iglee42.createqualityoflife.utils.NetworkDestructionLevel;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
 public class DestroyLogisticsNetworkComponentPacket extends BlockEntityConfigurationPacket<StockManagerBlockEntity> {
-    public static final StreamCodec<ByteBuf, DestroyLogisticsNetworkComponentPacket> STREAM_CODEC = StreamCodec.composite(
-            BlockPos.STREAM_CODEC, packet->packet.pos,
-            BlockPos.STREAM_CODEC, packet->packet.destroyedPos,
-            DestroyLogisticsNetworkComponentPacket::new
-    );
-
-    private final BlockPos destroyedPos;
+    private BlockPos destroyedPos;
 
     public DestroyLogisticsNetworkComponentPacket(BlockPos pos,BlockPos destroyedPos) {
         super(pos);
         this.destroyedPos = destroyedPos;
+    }
+
+    public DestroyLogisticsNetworkComponentPacket(FriendlyByteBuf buffer) {
+        super(buffer);
+    }
+
+    @Override
+    protected void writeSettings(FriendlyByteBuf buffer) {
+        buffer.writeBlockPos(destroyedPos);
+    }
+
+    @Override
+    protected void readSettings(FriendlyByteBuf buffer) {
+        destroyedPos = buffer.readBlockPos();
     }
 
     @Override
@@ -46,7 +51,6 @@ public class DestroyLogisticsNetworkComponentPacket extends BlockEntityConfigura
     }
 
     @Override
-    public PacketTypeProvider getTypeProvider() {
-        return QOLPackets.DESTROY_LOGISTICS_NETWORK_COMPONENT;
-    }
+    protected void applySettings(StockManagerBlockEntity stockManagerBlockEntity) {}
+
 }

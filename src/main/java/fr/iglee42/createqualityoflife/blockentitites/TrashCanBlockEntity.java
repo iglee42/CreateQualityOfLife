@@ -98,7 +98,7 @@ public class TrashCanBlockEntity extends SmartBlockEntity implements IHaveGoggle
 			ItemHelper.extract(inv, canAccept, mode, count, false);
 		}
 	}
-	private LazyOptional<IItemHandler> grabCapability(Direction side) {
+	protected LazyOptional<IItemHandler> grabCapability(Direction side) {
 		BlockPos pos = this.worldPosition.relative(side);
 		if (level == null)
 			return LazyOptional.empty();

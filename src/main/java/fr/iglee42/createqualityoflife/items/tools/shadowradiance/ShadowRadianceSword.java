@@ -2,9 +2,9 @@ package fr.iglee42.createqualityoflife.items.tools.shadowradiance;
 
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
-import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.registries.QOLTiers;
 import fr.iglee42.createqualityoflife.utils.ItemTooltips;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
 import net.createmod.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
@@ -17,11 +17,13 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,7 +32,7 @@ import java.util.function.Consumer;
 
 public class ShadowRadianceSword extends SwordItem implements QOLConfigurableItem {
     public ShadowRadianceSword(Properties p_42964_) {
-        super(QOLTiers.SHADOW_RADIANCE, p_42964_);
+        super(QOLTiers.SHADOW_RADIANCE,3, -2.4F, p_42964_);
     }
 
     @Override
@@ -46,7 +48,7 @@ public class ShadowRadianceSword extends SwordItem implements QOLConfigurableIte
     }
 
     @Override
-    public int getUseDuration(ItemStack p_41454_, LivingEntity p_344979_) {
+    public int getUseDuration(ItemStack p_41454_) {
         return CreateQOLConfigs.server().equipments.tools.swordsChargeTime.get();
     }
 
@@ -59,8 +61,8 @@ public class ShadowRadianceSword extends SwordItem implements QOLConfigurableIte
             if (backtank.isEmpty()) return;
             BacktankUtil.consumeAir(player,backtank,CreateQOLConfigs.server().equipments.tools.swordsAirConsumption.get());
         }
-        int usedTime = getUseDuration(stack,lvEntity) - remainingTime;
-        float timeRatio = (float) usedTime / getUseDuration(stack,lvEntity);
+        int usedTime = getUseDuration(stack) - remainingTime;
+        float timeRatio = (float) usedTime / getUseDuration(stack);
         if (!level.isClientSide) {
             Vec3 playerPos = player.position();
 
@@ -132,11 +134,11 @@ public class ShadowRadianceSword extends SwordItem implements QOLConfigurableIte
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
-        if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
+    public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
+        if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         components.add(Component.literal("Reach : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, stack.getOrDefault(QOLDataComponents.REACH, true), false, true)));
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_REACH,true), false, true)));
         components.add(Component.literal("Repulsion/Attraction : ")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.cooldownState(CreateQOLConfigs.server().equipments.tools.swordsAbilities.get(),
@@ -145,7 +147,7 @@ public class ShadowRadianceSword extends SwordItem implements QOLConfigurableIte
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<T> onBroken) {
         if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
         return super.damageItem(stack, amount, entity, onBroken);
     }

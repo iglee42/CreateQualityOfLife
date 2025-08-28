@@ -3,44 +3,36 @@ package fr.iglee42.createqualityoflife.items.tools.shadowradiance;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
+import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe;
 import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.advancement.CreateAdvancement;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.tools.refinedradiance.RefinedRadianceAxe;
-import fr.iglee42.createqualityoflife.items.tools.refinedradiance.RefinedRadianceHoe;
 import fr.iglee42.createqualityoflife.items.tools.shadowsteel.ShadowSteelAxe;
-import fr.iglee42.createqualityoflife.items.tools.shadowsteel.ShadowSteelHoe;
-import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.registries.QOLTiers;
 import fr.iglee42.createqualityoflife.utils.ItemTooltips;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -49,7 +41,7 @@ import java.util.function.Consumer;
 
 public class ShadowRadianceAxe extends AxeItem implements QOLConfigurableItem {
     public ShadowRadianceAxe(Properties p_42964_) {
-        super(QOLTiers.SHADOW_RADIANCE, p_42964_);
+        super(QOLTiers.SHADOW_RADIANCE,5.0F, -3.0F, p_42964_);
     }
 
     @Override
@@ -64,26 +56,26 @@ public class ShadowRadianceAxe extends AxeItem implements QOLConfigurableItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
-        if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
+    public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
+        if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         components.add(Component.literal("Reach : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, stack.getOrDefault(QOLDataComponents.REACH,true), false, true)));
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_REACH,true), false, true)));
         components.add(Component.literal("Casifier : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.casingifier.get(), true, stack.getOrDefault(QOLDataComponents.CASINGIFIER,false), false, true)));
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.casingifier.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_CASINGIFIER,false), false, true)));
         components.add(Component.literal("Tree Decapitation : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.treeDecapitation.get(), true, stack.getOrDefault(QOLDataComponents.TREE_DECAPITATION,false), false, true)));
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.treeDecapitation.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_TREE_DECAPITATION,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 
 
     @Override
     public void addConfigurations(List<Configuration<?>> list, ItemStack stack) {
-        list.add(Configuration.ofBool("Casingifier",stack.getOrDefault(QOLDataComponents.CASINGIFIER,false),QOLDataComponents.CASINGIFIER,
+        list.add(Configuration.ofBool("Casingifier",NBTConstants.getOrDefault(stack,NBTConstants.NBT_CASINGIFIER,false),NBTConstants.NBT_CASINGIFIER,
                 List.of("When stripping a log transform it into casing if a valid casing ingredient is available in the off hand","It also transform adjacent blocks"),(e,oe)->CreateQOLConfigs.server().equipments.tools.casingifier.get()));
-        list.add(Configuration.ofBool("Tree Decapitation",stack.getOrDefault(QOLDataComponents.TREE_DECAPITATION,false),QOLDataComponents.TREE_DECAPITATION,
+        list.add(Configuration.ofBool("Tree Decapitation",NBTConstants.getOrDefault(stack,NBTConstants.NBT_TREE_DECAPITATION,false),NBTConstants.NBT_TREE_DECAPITATION,
                 List.of("Should destroy a tree when a log is broken like a mechanical saw"),(e,oe)->CreateQOLConfigs.server().equipments.tools.treeDecapitation.get()));
     }
 
@@ -91,14 +83,14 @@ public class ShadowRadianceAxe extends AxeItem implements QOLConfigurableItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (level.isClientSide) return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand),true);
         if (player.isCrouching()){
-            if (player.getItemInHand(hand).getOrDefault(QOLDataComponents.TREE_DECAPITATION,false)){
+            if (NBTConstants.getOrDefault(player.getItemInHand(hand),NBTConstants.NBT_TREE_DECAPITATION,false)){
                 player.displayClientMessage(Component.literal("Casingifier can't be enabled if tree decapitation is enabled").withStyle(ChatFormatting.RED),true);
             }else {
                 RefinedRadianceAxe.toggleAbility(player.getItemInHand(hand),player);
             }
         }
         else {
-            if (player.getItemInHand(hand).getOrDefault(QOLDataComponents.CASINGIFIER,false)){
+            if (NBTConstants.getOrDefault(player.getItemInHand(hand),NBTConstants.NBT_CASINGIFIER,false)){
                 player.displayClientMessage(Component.literal("Tree Decapitation can't be enabled if casingifier is enabled").withStyle(ChatFormatting.RED),true);
             }else {
                 ShadowSteelAxe.toggleAbility(player.getItemInHand(hand),player);
@@ -109,7 +101,7 @@ public class ShadowRadianceAxe extends AxeItem implements QOLConfigurableItem {
 
     
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<T> onBroken) {
         if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
         return super.damageItem(stack, amount, entity, onBroken);
     }
@@ -132,14 +124,12 @@ public class ShadowRadianceAxe extends AxeItem implements QOLConfigurableItem {
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
         if (!CreateQOLConfigs.server().equipments.tools.casingifier.get()
-                || !ctx.getItemInHand().getOrDefault(QOLDataComponents.CASINGIFIER,false)) return super.useOn(ctx);
+                || !NBTConstants.getOrDefault(ctx.getItemInHand(),NBTConstants.NBT_CASINGIFIER,false)) return super.useOn(ctx);
 
         Level level = ctx.getLevel();
         BlockPos origin = ctx.getClickedPos();
         Player player = ctx.getPlayer();
         if (player == null) return InteractionResult.PASS;
-
-        if (playerHasShieldUseIntent(ctx)) return InteractionResult.PASS;
 
         ItemStack tool = ctx.getItemInHand();
         ItemStack offHandStack = player.getOffhandItem();
@@ -159,14 +149,14 @@ public class ShadowRadianceAxe extends AxeItem implements QOLConfigurableItem {
                 recipe.rollResults().forEach(stack -> Block.popResource(level, pos, stack));
 
                 boolean creative = player.isCreative();
-                boolean unbreakable = offHandStack.has(DataComponents.UNBREAKABLE);
+                boolean unbreakable = offHandStack.getOrCreateTag().getBoolean("Unbreakable");
                 boolean keepHeld = recipe.shouldKeepHeldItem() || creative;
 
                 if (player instanceof ServerPlayer sp) {
                     CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(sp, pos, tool);
                 }
 
-                tool.hurtAndBreak(1, player, LivingEntity.getSlotForHand(ctx.getHand()));
+                tool.hurtAndBreak(1, player, e->{});
 
                 if (!unbreakable && !keepHeld) {
                     consumeItem(player, offHandStack);
@@ -194,7 +184,7 @@ public class ShadowRadianceAxe extends AxeItem implements QOLConfigurableItem {
         if (reference.isEmpty()) return;
 
         if (reference.isDamageableItem()) {
-            reference.hurtAndBreak(1, player, EquipmentSlot.OFFHAND);
+            reference.hurtAndBreak(1, player, e->{});
         } else {
             player.getOffhandItem().shrink(1);
         }
@@ -202,23 +192,23 @@ public class ShadowRadianceAxe extends AxeItem implements QOLConfigurableItem {
     private boolean transformBlock(Level level, BlockPos blockpos, Player player, UseOnContext ctx,ItemStack offHandStack,
                                    BiConsumer<BlockState, ManualApplicationRecipe> onSuccess) {
 
-        Optional<BlockState> optional = evaluateNewBlockState(level, blockpos, player, level.getBlockState(blockpos), ctx);
+        Optional<BlockState> optional = Optional.ofNullable(level.getBlockState(blockpos).getToolModifiedState(ctx, net.minecraftforge.common.ToolActions.AXE_STRIP, false));
         if (optional.isEmpty()) return false;
 
-        RecipeType<Recipe<RecipeWrapper>> type = AllRecipeTypes.ITEM_APPLICATION.getType();
 
-        Optional<RecipeHolder<Recipe<RecipeWrapper>>> foundRecipe = level.getRecipeManager()
-                .getAllRecipesFor(type)
+        Optional<ItemApplicationRecipe> foundRecipe = level.getRecipeManager()
+                .getAllRecipesFor(AllRecipeTypes.ITEM_APPLICATION.getType())
                 .stream()
+                .map(ItemApplicationRecipe.class::cast)
                 .filter(r -> {
-                    ManualApplicationRecipe mar = (ManualApplicationRecipe) r.value();
+                    ManualApplicationRecipe mar = (ManualApplicationRecipe) r;
                     return mar.testBlock(optional.get()) && mar.getIngredients().get(1).test(offHandStack);
                 })
                 .findFirst();
 
         if (foundRecipe.isEmpty()) return false;
 
-        ManualApplicationRecipe recipe = (ManualApplicationRecipe) foundRecipe.get().value();
+        ManualApplicationRecipe recipe = (ManualApplicationRecipe) foundRecipe.get();
         level.destroyBlock(blockpos, false);
 
         BlockState transformedBlock = recipe.transformBlock(optional.get());

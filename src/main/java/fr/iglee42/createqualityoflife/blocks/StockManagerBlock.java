@@ -8,6 +8,7 @@ import com.simibubi.create.content.logistics.packagerLink.LogisticallyLinkedBloc
 import com.simibubi.create.content.logistics.packagerLink.LogisticsNetwork;
 import com.simibubi.create.foundation.block.IBE;
 
+import com.simibubi.create.foundation.utility.CreateLang;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import fr.iglee42.createqualityoflife.blockentitites.StockManagerBlockEntity;
 import fr.iglee42.createqualityoflife.items.StockManagerBlockItem;
@@ -22,9 +23,10 @@ import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -52,8 +54,9 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -62,7 +65,6 @@ import java.util.UUID;
 
 public class StockManagerBlock extends HorizontalDirectionalBlock implements IBE<StockManagerBlockEntity>, IWrenchable {
 
-	public static final MapCodec<StockManagerBlock> CODEC = simpleCodec(StockManagerBlock::new);
 
 	public static final BooleanProperty HAS_BLAZE = BooleanProperty.create("has_blaze");
 
@@ -91,18 +93,19 @@ public class StockManagerBlock extends HorizontalDirectionalBlock implements IBE
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-		if (stack.getItem() instanceof LogisticallyLinkedBlockItem)
-			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
+								 BlockHitResult pHit) {
+		if (pPlayer != null && pPlayer.getItemInHand(pHand)
+				.getItem() instanceof LogisticallyLinkedBlockItem)
+			return InteractionResult.PASS;
 
+		return onBlockEntityUse(pLevel, pPos, stbe -> {
+			if (!stbe.behaviour.mayInteractMessage(pPlayer))
+				return InteractionResult.SUCCESS;
 
-		return onBlockEntityUseItemOn(level, pos, stbe -> {
-			if (!stbe.behaviour.mayInteractMessage(player))
-				return ItemInteractionResult.SUCCESS;
-
-			if (player instanceof ServerPlayer sp) {
+			if (pPlayer instanceof ServerPlayer sp) {
 				boolean showLockOption =
-						stbe.behaviour.mayAdministrate(player) && Create.LOGISTICS.isLockable(stbe.behaviour.freqId);
+						stbe.behaviour.mayAdministrate(pPlayer) && Create.LOGISTICS.isLockable(stbe.behaviour.freqId);
 				boolean isCurrentlyLocked = Create.LOGISTICS.isLocked(stbe.behaviour.freqId);
 
 				LogisticsNetwork network = Create.LOGISTICS.logisticsNetworks.get(stbe.behaviour.freqId);
@@ -110,14 +113,14 @@ public class StockManagerBlock extends HorizontalDirectionalBlock implements IBE
 				if (network != null){
 					name = ((LogisticsNetworkExtension)network).createQOL$getName();
 				} else {
-                    name = "Unnamed Network";
-                }
+					name = "Unnamed Network";
+				}
 
 				int links;
 				if (network != null) links = network.totalLinks.size();
-                else {
-                    links = 1;
-                }
+				else {
+					links = 1;
+				}
 
 				NetworkDestructionLevel desLevel;
 				if (network != null) desLevel = ((LogisticsNetworkExtension)network).createQOL$getDestructionLevel();
@@ -127,58 +130,36 @@ public class StockManagerBlock extends HorizontalDirectionalBlock implements IBE
 				if (network != null){
 					permissions = new HashMap<>(((LogisticsNetworkExtension)network).createQOL$getPlayersPermission());
 					if (network.owner != null) permissions.put(network.owner,NetworkPermission.OWNER);
-					level.players().stream().filter(p->!permissions.containsKey(p.getUUID()))
+					pLevel.players().stream().filter(p->!permissions.containsKey(p.getUUID()))
 							.forEach(p->permissions.put(p.getUUID(),NetworkPermission.NONE));
 				}
 				else permissions = new HashMap<>();
 
 				boolean isOwner;
 				if (network != null){
-					isOwner = player.getUUID().equals(network.owner);
+					isOwner = pPlayer.getUUID().equals(network.owner);
 				} else {
 					isOwner = false;
 				}
 
-                sp.openMenu(stbe.new StockManagerProvider(), buf -> {
+				NetworkHooks.openScreen(sp,stbe.new StockManagerProvider(), buf -> {
 					buf.writeBoolean(showLockOption);
 					buf.writeBoolean(isOwner);
 					buf.writeBoolean(isCurrentlyLocked);
 					buf.writeUtf(name);
 					buf.writeInt(links);
-					NetworkDestructionLevel.STREAM_CODEC.encode(buf,desLevel);
-					buf.writeBoolean(desLevel.canDestroy(stbe.behaviour.freqId,player));
-					LogisticsNetworkExtension.PERMISSIONS_STREAM_CODEC.encode(buf,permissions);
-					buf.writeBlockPos(pos);
+					buf.writeByte(desLevel.ordinal());
+					buf.writeBoolean(desLevel.canDestroy(stbe.behaviour.freqId,pPlayer));
+					buf.writeMap(permissions, FriendlyByteBuf::writeUUID, (b, p)->b.writeByte(p.ordinal()));
+					buf.writeBlockPos(pPos);
 				});
 			}
 
-			//if (level.isClientSide){
-			//	stbe.playEffect();
-			//}else {
-			//	AllSoundEvents.STOCK_TICKER_REQUEST.playOnServer(level, pos);
-			//}
 
-			/*if (!level.isClientSide() && !stbe.receivedPayments.isEmpty()) {
-				for (int i = 0; i < stbe.receivedPayments.getSlots(); i++)
-					player.getInventory()
-						.placeItemBackInInventory(
-							stbe.receivedPayments.extractItem(i, stbe.receivedPayments.getStackInSlot(i)
-								.getCount(), false));
-				AllSoundEvents.playItemPickup(player);
-				return ItemInteractionResult.SUCCESS;
-			}
-
-			if (player instanceof ServerPlayer sp) {
-				if (stbe.isKeeperPresent())
-					sp.openMenu(stbe.new CategoryMenuProvider(), stbe.getBlockPos());
-				else
-					CreateLang.translate("stock_ticker.keeper_missing")
-						.sendStatus(player);
-			}*/
-
-			return ItemInteractionResult.SUCCESS;
+			return InteractionResult.SUCCESS;
 		});
 	}
+
 
 	@Override
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
@@ -206,13 +187,8 @@ public class StockManagerBlock extends HorizontalDirectionalBlock implements IBE
 	}
 
 	@Override
-	protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
+	public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
 		return false;
-	}
-
-	@Override
-	protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
-		return CODEC;
 	}
 
 	public static int getLight(BlockState state) {

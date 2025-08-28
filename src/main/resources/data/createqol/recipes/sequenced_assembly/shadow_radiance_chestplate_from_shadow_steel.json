@@ -1,0 +1,97 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": {
+          "item": "createqol:shadow_steel_chestplate"
+        },
+        "transitionalItem": {
+          "item": "createqol:shadow_steel_chestplate"
+        },
+        "sequence": [
+          {
+            "type": "create:cutting",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_chestplate"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_chestplate"
+              }
+            ],
+            "processingTime": 50
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_chestplate"
+              },
+              {
+                "item": "createqol:refined_radiance_chestplate"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_chestplate"
+              }
+            ]
+          },
+          {
+            "type": "create:pressing",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_chestplate"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_chestplate"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_chestplate"
+              },
+              {
+                "item": "createqol:shadow_radiance_block"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_chestplate"
+              }
+            ]
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:shadow_radiance_chestplate"
+          }
+        ],
+        "loops": 1,
+        "copied_nbts": [
+          "Enchantments",
+          "Air",
+          "display.Name",
+          "tooltips",
+          "Trim",
+          "elytra"
+        ]
+      }
+    }
+  ]
+}

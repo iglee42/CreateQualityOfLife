@@ -1,5 +1,6 @@
 package fr.iglee42.createqualityoflife.blocks;
 
+import com.simibubi.create.foundation.block.render.ReducedDestroyEffects;
 import fr.iglee42.createqualityoflife.blockentitites.TrashCanBlockEntity;
 import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -16,6 +17,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
+
+import java.util.function.Consumer;
 
 public class BrassTrashCanBlock extends TrashCanBlock {
 
@@ -72,6 +78,11 @@ public class BrassTrashCanBlock extends TrashCanBlock {
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> p_206840_1_) {
 		super.createBlockStateDefinition(p_206840_1_.add(OPEN,POWERED));
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public void initializeClient(Consumer<IClientBlockExtensions> consumer) {
+		consumer.accept(new ReducedDestroyEffects());
 	}
 
 

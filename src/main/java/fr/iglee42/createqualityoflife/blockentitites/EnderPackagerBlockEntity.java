@@ -1,43 +1,36 @@
 package fr.iglee42.createqualityoflife.blockentitites;
 
-import java.util.List;
-
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.logistics.box.PackageItem;
 import com.simibubi.create.content.logistics.packagePort.frogport.FrogportBlockEntity;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import fr.iglee42.createqualityoflife.behaviours.EnderPackagerBehaviour;
 import fr.iglee42.createqualityoflife.blocks.EnderPackagerBlock;
-import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
 import fr.iglee42.createqualityoflife.utils.EnderPackagerFrequencySlot;
 import fr.iglee42.createqualityoflife.utils.EnderPackagerItemHandler;
-import net.createmod.catnip.codecs.CatnipCodecUtils;
 import net.createmod.catnip.data.Iterate;
-import net.minecraft.core.HolderLookup;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.entity.SignText;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
-import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
+import java.util.List;
 
 public class EnderPackagerBlockEntity extends SmartBlockEntity {
 
@@ -49,6 +42,8 @@ public class EnderPackagerBlockEntity extends SmartBlockEntity {
 
 	public ItemStack heldBox;
 	public final EnderPackagerItemHandler inventory;
+	private final LazyOptional<IItemHandler> invProvider;
+
 
 	public static final int CYCLE = 20;
 	public int animationTicks;
@@ -60,20 +55,23 @@ public class EnderPackagerBlockEntity extends SmartBlockEntity {
 		addressFilter = "";
 		heldBox = ItemStack.EMPTY;
 		inventory = new EnderPackagerItemHandler(this);
+		invProvider = LazyOptional.of(() -> inventory);
 		animationTicks = 0;
 		animationInward = true;
 	}
-	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(
-				Capabilities.ItemHandler.BLOCK,
-				QOLBlockEntities.ENDER_PACKAGER.get(),
-				(be, context) -> be.inventory
-		);
-	}
+
 	@Override
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 
 	}
+
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+		if (cap == ForgeCapabilities.ITEM_HANDLER)
+			return invProvider.cast();
+		return super.getCapability(cap, side);
+	}
+
 
 
 	@Override
@@ -90,25 +88,31 @@ public class EnderPackagerBlockEntity extends SmartBlockEntity {
 	}
 
 	@Override
-	public void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+	public void invalidate() {
+		super.invalidate();
+		invProvider.invalidate();
+	}
+
+	@Override
+	public void write(CompoundTag compound, boolean clientPacket) {
 		compound.putBoolean("Transmitter", transmitter);
 		compound.putInt("Receive", getReceivedSignal());
 		compound.putBoolean("ReceivedChanged", receivedSignalChanged);
 		compound.putInt("Transmit", transmittedSignal);
-		super.write(compound, registries, clientPacket);
+		super.write(compound, clientPacket);
 		compound.putBoolean("AnimationInward", animationInward);
 		compound.putInt("AnimationTicks", animationTicks);
-		compound.put("HeldBox", heldBox.saveOptional(registries));
+		compound.put("HeldBox", heldBox.save(new CompoundTag()));
 	}
 
 	@Override
-	protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+	protected void read(CompoundTag compound, boolean clientPacket) {
 		transmitter = compound.getBoolean("Transmitter");
-		super.read(compound, registries, clientPacket);
+		super.read(compound,  clientPacket);
 
 		animationInward = compound.getBoolean("AnimationInward");
 		animationTicks = compound.getInt("AnimationTicks");
-		heldBox = ItemStack.parseOptional(registries, compound.getCompound("HeldBox"));
+		heldBox = ItemStack.of(compound.getCompound("HeldBox"));
 		receivedSignal = compound.getInt("Receive");
 		receivedSignalChanged = compound.getBoolean("ReceivedChanged");
 		if (level == null || level.isClientSide || !link.newPosition)

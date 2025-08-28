@@ -5,7 +5,6 @@ import com.simibubi.create.content.logistics.packagerLink.LogisticsNetwork;
 import fr.iglee42.createqualityoflife.utils.LogisticsNetworkExtension;
 import fr.iglee42.createqualityoflife.utils.NetworkDestructionLevel;
 import fr.iglee42.createqualityoflife.utils.NetworkPermission;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import org.spongepowered.asm.mixin.Mixin;
@@ -61,16 +60,21 @@ public class LogisticsNetworkMixin implements LogisticsNetworkExtension {
     }
 
     @Inject(method = "read",at = @At("RETURN"), cancellable = true)
-    private static void createQOL$addNewFieldsToRead(CompoundTag tag, HolderLookup.Provider registries, CallbackInfoReturnable<LogisticsNetwork> cir){
+    private static void createQOL$addNewFieldsToRead(CompoundTag tag, CallbackInfoReturnable<LogisticsNetwork> cir){
         LogisticsNetwork network = cir.getReturnValue();
         if (tag.contains("Name")) ((LogisticsNetworkExtension)network).createQOL$setName(tag.getString("Name"));
-        if (tag.contains("DestructionLevel")) ((LogisticsNetworkExtension)network).createQOL$setDestructionLevel(NetworkDestructionLevel.BY_ID.apply(tag.getByte("DestructionLevel")));
+        if (tag.contains("DestructionLevel")) ((LogisticsNetworkExtension)network).createQOL$setDestructionLevel(NetworkDestructionLevel.values()[tag.getByte("DestructionLevel")]);
         if (tag.contains("Permissions")) {
-            AtomicReference<Map<UUID, NetworkPermission>> permissions = new AtomicReference<>(new HashMap<>());
-            PERMISSIONS_CODEC.parse(NbtOps.INSTANCE,tag.get("Permissions")).result().ifPresent(permissions::set);
+            Map<UUID, NetworkPermission> permissions = new HashMap<>();
+            CompoundTag permissionTags = tag.getCompound("Permissions");
+            permissionTags.getAllKeys().stream().map(k->{
+                UUID uuid = UUID.fromString(k);
+                NetworkPermission permission = NetworkPermission.values()[permissionTags.getInt(k)];
+                return new AbstractMap.SimpleEntry<>(uuid,permission);
+            }).forEach(e->permissions.put(e.getKey(),e.getValue()));
             //Remove Stored Players with the owner permission because it is managed by the owner field
             List<UUID> toRemove = new ArrayList<>();
-            Map<UUID, NetworkPermission> newPerms = new HashMap<>(permissions.get());
+            Map<UUID, NetworkPermission> newPerms = new HashMap<>(permissions);
             newPerms.keySet().stream().filter(k->newPerms.get(k).equals(NetworkPermission.OWNER) || newPerms.get(k).equals(NetworkPermission.NONE)).forEach(toRemove::add);
             toRemove.forEach(newPerms::remove);
             ((LogisticsNetworkExtension)network).createQOL$setPlayersPermission(newPerms);
@@ -79,11 +83,13 @@ public class LogisticsNetworkMixin implements LogisticsNetworkExtension {
     }
 
     @Inject(method = "write",at = @At("RETURN"), cancellable = true)
-    private void createQOL$addNewFieldsToWrite(HolderLookup.Provider registries, CallbackInfoReturnable<CompoundTag> cir){
+    private void createQOL$addNewFieldsToWrite(CallbackInfoReturnable<CompoundTag> cir){
         CompoundTag tag = cir.getReturnValue();
         tag.putString("Name",createQOL$getName());
         tag.putByte("DestructionLevel", (byte) createQOL$getDestructionLevel().ordinal());
-        PERMISSIONS_CODEC.encodeStart(NbtOps.INSTANCE,createQOL$getPlayersPermission()).result().ifPresent(t->tag.put("Permissions",t));
+        CompoundTag perms = new CompoundTag();
+        createQOL$getPlayersPermission().forEach((id,perm)->perms.putInt(id.toString(),perm.ordinal()));
+        tag.put("Permissions",perms);
         cir.setReturnValue(tag);
     }
 }

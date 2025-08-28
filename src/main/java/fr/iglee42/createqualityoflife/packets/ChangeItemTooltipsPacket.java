@@ -1,32 +1,16 @@
 package fr.iglee42.createqualityoflife.packets;
 
-import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
-import fr.iglee42.createqualityoflife.registries.QOLPackets;
-import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
+import com.simibubi.create.foundation.networking.SimplePacketBase;
 import fr.iglee42.createqualityoflife.utils.ItemTooltips;
-import fr.iglee42.createqualityoflife.utils.PreferredRender;
-import fr.iglee42.createqualityoflife.utils.ShadowRadianceEffects;
-import net.createmod.catnip.net.base.ServerboundPacketPayload;
-import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 
-public class ChangeItemTooltipsPacket implements ServerboundPacketPayload {
+public class ChangeItemTooltipsPacket extends SimplePacketBase {
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, ChangeItemTooltipsPacket> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.INT, p->p.slot,
-            ByteBufCodecs.BOOL, p->p.value,
-            ItemTooltips.Tooltip.STREAM_CODEC, p->p.tooltip,
-            ChangeItemTooltipsPacket::new
-    );
-
-    private int slot;
-    private boolean value;
-    private ItemTooltips.Tooltip tooltip;
+    private final int slot;
+    private final boolean value;
+    private final ItemTooltips.Tooltip tooltip;
 
     public ChangeItemTooltipsPacket(int slot, boolean value, ItemTooltips.Tooltip tooltip) {
         this.slot = slot;
@@ -34,15 +18,22 @@ public class ChangeItemTooltipsPacket implements ServerboundPacketPayload {
         this.tooltip = tooltip;
     }
 
-    @Override
-    public PacketTypeProvider getTypeProvider() {
-        return QOLPackets.CHANGE_TOOLTIP;
+    public ChangeItemTooltipsPacket(FriendlyByteBuf buffer) {
+        this(buffer.readInt(),buffer.readBoolean(),buffer.readEnum(ItemTooltips.Tooltip.class));
     }
 
     @Override
-    public void handle(ServerPlayer player) {
-        ItemTooltips.Mutable tooltips = new ItemTooltips.Mutable(player.getInventory().getItem(slot).getOrDefault(QOLDataComponents.ITEM_TOOLTIPS,ItemTooltips.DEFAULT));
+    public void write(FriendlyByteBuf buffer) {
+        buffer.writeInt(slot);
+        buffer.writeBoolean(value);
+        buffer.writeEnum(tooltip);
+    }
+
+    @Override
+    public boolean handle(NetworkEvent.Context context) {
+        ItemTooltips.Mutable tooltips = new ItemTooltips.Mutable(NBTConstants.getTooltipOrDefault(context.getSender().getInventory().getItem(slot)));
         tooltips.set(tooltip,value);
-        player.getInventory().getItem(slot).set(QOLDataComponents.ITEM_TOOLTIPS,tooltips.toImmutable());
+        context.getSender().getInventory().getItem(slot).getOrCreateTag().put(NBTConstants.NBT_TOOLTIPS,tooltips.toImmutable().save());
+        return true;
     }
 }

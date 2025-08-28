@@ -2,10 +2,7 @@ package fr.iglee42.createqualityoflife.mixins;
 
 import fr.iglee42.createqualityoflife.items.armors.RefinedRadianceChestplate;
 import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate;
-import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
-import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
-import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
 import net.minecraft.client.renderer.entity.layers.ElytraLayer;
 import net.minecraft.world.effect.MobEffects;

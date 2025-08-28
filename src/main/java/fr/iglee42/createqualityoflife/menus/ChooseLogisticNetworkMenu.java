@@ -6,11 +6,7 @@ import fr.iglee42.createqualityoflife.blockentitites.StockManagerBlockEntity;
 import fr.iglee42.createqualityoflife.registries.QOLMenuTypes;
 import fr.iglee42.createqualityoflife.utils.LogisticsNetworkExtension;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -18,7 +14,6 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,7 +24,7 @@ public class ChooseLogisticNetworkMenu extends MenuBase<StockManagerBlockEntity>
 
 	public Object screenReference;
 
-	public ChooseLogisticNetworkMenu(MenuType<?> type, int id, Inventory inv, RegistryFriendlyByteBuf extraData) {
+	public ChooseLogisticNetworkMenu(MenuType<?> type, int id, Inventory inv, FriendlyByteBuf extraData) {
 		super(type, id, inv, extraData);
 	}
 
@@ -44,8 +39,8 @@ public class ChooseLogisticNetworkMenu extends MenuBase<StockManagerBlockEntity>
 	}
 
 	@Override
-	protected StockManagerBlockEntity createOnClient(RegistryFriendlyByteBuf extraData) {
-		networksInfos = LogisticNetworksInfos.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(extraData);
+	protected StockManagerBlockEntity createOnClient(FriendlyByteBuf extraData) {
+		networksInfos = extraData.readList(LogisticNetworksInfos::new);
 		if (Minecraft.getInstance().level
 			.getBlockEntity(extraData.readBlockPos()) instanceof StockManagerBlockEntity stbe)
 			return stbe;
@@ -71,15 +66,11 @@ public class ChooseLogisticNetworkMenu extends MenuBase<StockManagerBlockEntity>
 		return ItemStack.EMPTY;
 	}
 
-	public record LogisticNetworksInfos(UUID id, String name, @Nullable  UUID owner, boolean locked){
+	public record LogisticNetworksInfos(UUID id, String name, @Nullable UUID owner, boolean locked){
 
-		public static final StreamCodec<RegistryFriendlyByteBuf,LogisticNetworksInfos> STREAM_CODEC = StreamCodec.composite(
-				UUIDUtil.STREAM_CODEC, LogisticNetworksInfos::id,
-				ByteBufCodecs.STRING_UTF8, LogisticNetworksInfos::name,
-				UUIDUtil.STREAM_CODEC.apply(ByteBufCodecs::optional), n->Optional.ofNullable(n.owner),
-				ByteBufCodecs.BOOL, LogisticNetworksInfos::locked,
-				LogisticNetworksInfos::new
-		);
+		public LogisticNetworksInfos(FriendlyByteBuf buf){
+			this(buf.readUUID(),buf.readUtf(),buf.readOptional(FriendlyByteBuf::readUUID),buf.readBoolean());
+		}
 
 		public LogisticNetworksInfos(UUID id, String name, Optional<UUID> owner, boolean locked) {
 			this(id,name,owner.orElse(null),locked);
@@ -87,6 +78,13 @@ public class ChooseLogisticNetworkMenu extends MenuBase<StockManagerBlockEntity>
 
 		public static LogisticNetworksInfos fromLogisticNetwork(LogisticsNetwork network){
 			return new LogisticNetworksInfos(network.id,((LogisticsNetworkExtension)network).createQOL$getName(),network.owner,network.locked);
+		}
+
+		public void write(FriendlyByteBuf buf){
+			buf.writeUUID(id);
+			buf.writeUtf(name);
+			buf.writeOptional(Optional.ofNullable(owner), FriendlyByteBuf::writeUUID);
+			buf.writeBoolean(locked);
 		}
 
 	}

@@ -28,9 +28,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class StockManagerBlockEntity extends SmartBlockEntity implements IHaveHoveringInformation {
 
@@ -87,14 +86,6 @@ public class StockManagerBlockEntity extends SmartBlockEntity implements IHaveHo
 		headAnimation.tickChaser();
 	}
 
-	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-		/*event.registerBlockEntity(
-			Capabilities.ItemHandler.BLOCK,
-			AllBlockEntityTypes.STOCK_TICKER.get(),
-			(be, context) -> be.receivedPayments
-		);*/
-	}
-
 
 	@Override
 	public void tick() {
@@ -113,16 +104,16 @@ public class StockManagerBlockEntity extends SmartBlockEntity implements IHaveHo
 	}
 
 	@Override
-	protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
-		super.write(tag, registries, clientPacket);
+	protected void write(CompoundTag tag, boolean clientPacket) {
+		super.write(tag,  clientPacket);
 		if (placedBy != null)
 			tag.putUUID("PlacedBy", placedBy);
 
 	}
 
 	@Override
-	protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
-		super.read(tag, registries, clientPacket);
+	protected void read(CompoundTag tag, boolean clientPacket) {
+		super.read(tag,  clientPacket);
 		placedBy = tag.contains("PlacedBy") ? tag.getUUID("PlacedBy") : null;
 
 	}

@@ -95,7 +95,7 @@ public class KeyBindManager {
             if (backtank == null) return;
             if (QOLItems.SHADOW_STEEL_CHESTPLATE.is(backtank) || QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank)) {
                 if (DASH_KEY.consumeClick()) {
-                    QOLPackets.getChannel().sendToServer(new DashPacket());
+                    QOLPackets.getChannel().sendToServer(DashPacket.INSTANCE);
                 }
             }
 

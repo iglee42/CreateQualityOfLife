@@ -1,0 +1,95 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": {
+          "item": "createqol:shadow_steel_pickaxe"
+        },
+        "transitionalItem": {
+          "item": "createqol:shadow_steel_pickaxe"
+        },
+        "sequence": [
+          {
+            "type": "create:cutting",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_pickaxe"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_pickaxe"
+              }
+            ],
+            "processingTime": 50
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_pickaxe"
+              },
+              {
+                "item": "createqol:refined_radiance_pickaxe"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_pickaxe"
+              }
+            ]
+          },
+          {
+            "type": "create:pressing",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_pickaxe"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_pickaxe"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_pickaxe"
+              },
+              {
+                "item": "createqol:shadow_radiance_block"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_pickaxe"
+              }
+            ]
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:shadow_radiance_pickaxe"
+          }
+        ],
+        "loops": 1,
+        "copied_nbts": [
+          "Enchantments",
+          "display.Name",
+          "tooltips",
+          "reach"
+        ]
+      }
+    }
+  ]
+}

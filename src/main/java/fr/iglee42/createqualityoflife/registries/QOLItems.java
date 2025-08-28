@@ -10,38 +10,30 @@ import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.tterrag.registrate.builders.ItemBuilder;
 import com.tterrag.registrate.providers.ProviderType;
-import com.tterrag.registrate.util.RegistrateDistExecutor;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import fr.iglee42.createqualityoflife.CreateQOL;
-import fr.iglee42.createqualityoflife.items.*;
+import fr.iglee42.createqualityoflife.items.PlayerPaperItem;
+import fr.iglee42.createqualityoflife.items.StockManagerBlockItem;
 import fr.iglee42.createqualityoflife.items.armors.*;
 import fr.iglee42.createqualityoflife.items.tools.refinedradiance.*;
 import fr.iglee42.createqualityoflife.items.tools.shadowradiance.*;
 import fr.iglee42.createqualityoflife.items.tools.shadowsteel.*;
 import fr.iglee42.createqualityoflife.statue.StatueItem;
-import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
-import fr.iglee42.createqualityoflife.utils.ItemTooltips;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
-import fr.iglee42.createqualityoflife.utils.PreferredRender;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.*;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.util.function.Supplier;
 
-import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 import static com.simibubi.create.AllTags.forgeItemTag;
 import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
 
@@ -84,7 +76,7 @@ public class QOLItems {
             .model((c,p)->p.generated(c).override().predicate(CreateQOL.asResource("elytra"),1)
                     .model(p.getBuilder(p.name(c)+"_elytra").parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0",CreateQOL.asResource("item/"+c.getName()+"_elytra")))
                     .end())
-            .properties(p -> p.fireResistant().rarity(Rarity.EPIC).durability(1184))
+            .properties(p -> p.fireResistant().rarity(Rarity.EPIC))
             .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
             .tag(forgeItemTag("armors/chestplates"))
             .register();
@@ -137,7 +129,7 @@ public class QOLItems {
     public static final ItemEntry<? extends BaseArmorItem> REFINED_RADIANCE_LEGGINGS = REGISTRATE
             .item("refined_radiance_leggings",
                     p -> new RefinedRadianceArmorItem(ArmorItem.Type.LEGGINGS, p))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1110))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE))
             .tag(forgeItemTag("armors/leggings"))
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
@@ -145,7 +137,7 @@ public class QOLItems {
     public static final ItemEntry<? extends BaseArmorItem> REFINED_RADIANCE_BOOTS = REGISTRATE
             .item("refined_radiance_boots",
                     p -> new RefinedRadianceArmorItem(ArmorItem.Type.BOOTS, p))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(962))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE))
             .tag(forgeItemTag("armors/boots"))
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
@@ -184,7 +176,7 @@ public class QOLItems {
     public static final ItemEntry<? extends BaseArmorItem> SHADOW_STEEL_BOOTS = REGISTRATE
             .item("shadow_steel_boots",
                     p -> new ShadowSteelArmorItem(ArmorItem.Type.BOOTS, p))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(962))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE))
             .tag(forgeItemTag("armors/boots"))
             .onRegisterAfter(Registries.ITEM, it-> ItemDescription.useKey(it,"item.createqol.shadow_armor"))
             .register();
@@ -195,22 +187,16 @@ public class QOLItems {
             .item("shadow_steel_sword", ShadowSteelSword::new)
             .properties(p -> p.rarity(Rarity.RARE).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .properties(p -> p.attributes(SwordItem
-                    .createAttributes(QOLTiers.SHADOW_STEEL, 3, -2.8f)))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.SWORDS)
-            .tag(Tags.Items.MELEE_WEAPON_TOOLS)
             .register();
 
     public static final ItemEntry<RefinedRadianceSword> REFINED_RADIANCE_SWORD = REGISTRATE
             .item("refined_radiance_sword", RefinedRadianceSword::new)
             .properties(p -> p.rarity(Rarity.RARE).stacksTo(1))
             .properties(Item.Properties::fireResistant)
-            .properties(p -> p.attributes(SwordItem
-                    .createAttributes(QOLTiers.REFINED_RADIANCE, 3, -2.8f)))
             .model((c,p)->p.handheld(c))
             .tag(ItemTags.SWORDS)
-            .tag(Tags.Items.MELEE_WEAPON_TOOLS)
             .register();
 
     public static final ItemEntry<ShadowSteelPickaxe> SHADOW_STEEL_PICKAXE = REGISTRATE
@@ -237,7 +223,6 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .transform(tool(NBTConstants.NBT_TREE_DECAPITATION,null))
             .tag(ItemTags.AXES)
-            .tag(Tags.Items.MELEE_WEAPON_TOOLS)
             .register();
 
     public static final ItemEntry<RefinedRadianceAxe> REFINED_RADIANCE_AXE = REGISTRATE
@@ -303,7 +288,6 @@ public class QOLItems {
             .properties(Item.Properties::fireResistant)
             .transform(tool(NBTConstants.NBT_CASINGIFIER,NBTConstants.NBT_TREE_DECAPITATION))
             .tag(ItemTags.AXES)
-            .tag(Tags.Items.MELEE_WEAPON_TOOLS)
             .register();
     public static final ItemEntry<ShadowRadianceShovel> SHADOW_RADIANCE_SHOVEL = REGISTRATE
             .item("shadow_radiance_shovel", ShadowRadianceShovel::new)

@@ -4,6 +4,7 @@ import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
+import com.simibubi.create.foundation.block.render.ReducedDestroyEffects;
 import fr.iglee42.createqualityoflife.blockentitites.TrashCanBlockEntity;
 import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
 import fr.iglee42.createqualityoflife.registries.QOLShapes;
@@ -23,6 +24,11 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
+
+import java.util.function.Consumer;
 
 public class TrashCanBlock extends Block implements ProperWaterloggedBlock, IWrenchable,IBE<TrashCanBlockEntity> {
 
@@ -85,6 +91,10 @@ public class TrashCanBlock extends Block implements ProperWaterloggedBlock, IWre
 	@Override
 	public BlockEntityType<? extends TrashCanBlockEntity> getBlockEntityType() {
 		return QOLBlockEntities.TRASH_CAN.get();
+	}
+	@OnlyIn(Dist.CLIENT)
+	public void initializeClient(Consumer<IClientBlockExtensions> consumer) {
+		consumer.accept(new ReducedDestroyEffects());
 	}
 
 }

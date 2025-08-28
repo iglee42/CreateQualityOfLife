@@ -15,7 +15,8 @@ import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import net.createmod.catnip.data.Couple;
 import net.createmod.catnip.levelWrappers.WorldHelper;
-import net.minecraft.core.component.DataComponents;
+
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
@@ -37,7 +38,7 @@ public class EnderPackagersNetworkHandler {
 		public static Frequency of(ItemStack stack) {
 			if (stack.isEmpty())
 				return EMPTY;
-			if (stack.getComponents().isEmpty())
+			if (!stack.hasTag())
 				return simpleFrequencies.computeIfAbsent(stack.getItem(), $ -> new Frequency(stack));
 			return new Frequency(stack);
 		}
@@ -45,7 +46,8 @@ public class EnderPackagersNetworkHandler {
 		private Frequency(ItemStack stack) {
 			this.stack = stack;
 			item = stack.getItem();
-			color = stack.has(DataComponents.DYED_COLOR) ? stack.get(DataComponents.DYED_COLOR).rgb() : -1;
+			CompoundTag displayTag = stack.getTagElement("display");
+			color = displayTag != null && displayTag.contains("color") ? displayTag.getInt("color") : -1;
 		}
 
 		public ItemStack getStack() {

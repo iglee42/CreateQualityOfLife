@@ -70,9 +70,12 @@ public class BooleanEntry extends ValueEntry<Boolean> {
 		super.onValueChange(newValue);
 		button.showingElement(newValue ? enabled : disabled);
 		bumpCog(newValue ? 15f : -16f);
-		List<Integer> armors = ((ArmorConfigScreen)Minecraft.getInstance().screen).getArmors();
-		int selected = ((ArmorConfigScreen)Minecraft.getInstance().screen).getSelectedItem();
-		Minecraft.getInstance().player.getInventory().getArmor(armors.get(selected)).getOrCreateTag().putBoolean(nbtKey,value);
+		if (Minecraft.getInstance().screen == null) {
+			CreateQOL.LOGGER.error("Cannot change nbt on a ValueEntry because the screen is null");
+			return;
+		}
+		int slot = ((ItemConfigScreen)Minecraft.getInstance().screen).getItemSlot();
+		Minecraft.getInstance().player.getInventory().getItem(slot).getOrCreateTag().putBoolean(nbtKey,value);
 	}
 
 	@Override

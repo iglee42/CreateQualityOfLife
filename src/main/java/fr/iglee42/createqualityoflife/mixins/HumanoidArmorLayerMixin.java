@@ -1,7 +1,6 @@
 package fr.iglee42.createqualityoflife.mixins;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
 import net.minecraft.client.model.HumanoidModel;

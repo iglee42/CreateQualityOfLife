@@ -1,0 +1,95 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": {
+          "item": "createqol:refined_radiance_axe"
+        },
+        "transitionalItem": {
+          "item": "createqol:refined_radiance_axe"
+        },
+        "sequence": [
+          {
+            "type": "create:cutting",
+            "ingredients": [
+              {
+                "item": "createqol:refined_radiance_axe"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:refined_radiance_axe"
+              }
+            ],
+            "processingTime": 50
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:refined_radiance_axe"
+              },
+              {
+                "item": "createqol:shadow_steel_axe"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:refined_radiance_axe"
+              }
+            ]
+          },
+          {
+            "type": "create:pressing",
+            "ingredients": [
+              {
+                "item": "createqol:refined_radiance_axe"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:refined_radiance_axe"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:refined_radiance_axe"
+              },
+              {
+                "item": "createqol:shadow_radiance_block"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:refined_radiance_axe"
+              }
+            ]
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:shadow_radiance_axe"
+          }
+        ],
+        "loops": 1,
+        "copied_nbts": [
+          "Enchantments",
+          "display.Name",
+          "tooltips",
+          "reach"
+        ]
+      }
+    }
+  ]
+}

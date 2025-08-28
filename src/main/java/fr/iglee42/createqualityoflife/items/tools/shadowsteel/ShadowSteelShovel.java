@@ -1,56 +1,42 @@
 package fr.iglee42.createqualityoflife.items.tools.shadowsteel;
 
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
-import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
-import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.registries.QOLItems;
 import fr.iglee42.createqualityoflife.registries.QOLTiers;
 import fr.iglee42.createqualityoflife.utils.DestroyUtils;
 import fr.iglee42.createqualityoflife.utils.ItemTooltips;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
-import net.neoforged.neoforge.event.level.BlockDropsEvent;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.event.level.BlockEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class ShadowSteelShovel extends ShovelItem implements QOLConfigurableItem {
     public ShadowSteelShovel(Properties p_42964_) {
-        super(QOLTiers.SHADOW_STEEL, p_42964_);
+        super(QOLTiers.SHADOW_STEEL,1.5F, -3.0F, p_42964_);
     }
 
     @Override
@@ -65,21 +51,21 @@ public class ShadowSteelShovel extends ShovelItem implements QOLConfigurableItem
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
-        if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
+    public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
+        if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         components.add(Component.literal("Reach : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, stack.getOrDefault(QOLDataComponents.REACH,true), false, true)));
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_REACH,true), false, true)));
         components.add(Component.literal("Digging : ")
                 .withStyle(ChatFormatting.GOLD)
-                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.digging.get(), true, stack.getOrDefault(QOLDataComponents.DIGGING,false), false, true)));
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.digging.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_DIGGING,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 
 
     @Override
     public void addConfigurations(List<Configuration<?>> list, ItemStack stack) {
-        list.add(Configuration.ofBool("Digging", stack.getOrDefault(QOLDataComponents.DIGGING, false), QOLDataComponents.DIGGING,
+        list.add(Configuration.ofBool("Digging", NBTConstants.getOrDefault(stack,NBTConstants.NBT_DIGGING,false), NBTConstants.NBT_DIGGING,
                 List.of("Activate the 3x3x3 digging when mining a block"), (e, oe) -> CreateQOLConfigs.server().equipments.tools.digging.get()));
     }
 
@@ -96,14 +82,14 @@ public class ShadowSteelShovel extends ShovelItem implements QOLConfigurableItem
             p.displayClientMessage(Component.literal("Digging is disabled by the config").withStyle(ChatFormatting.RED),true);
             return;
         }
-        boolean enable = !stack.getOrDefault(QOLDataComponents.DIGGING,false);
-        stack.set(QOLDataComponents.DIGGING, enable);
+        boolean enable = !NBTConstants.getOrDefault(stack,NBTConstants.NBT_DIGGING,false);
+        stack.getOrCreateTag().putBoolean(NBTConstants.NBT_DIGGING, enable);
         p.displayClientMessage(Component.literal("Digging : ").append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
 
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<T> onBroken) {
         if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
         return super.damageItem(stack, amount, entity, onBroken);
     }
@@ -127,7 +113,7 @@ public class ShadowSteelShovel extends ShovelItem implements QOLConfigurableItem
         if (event.getLevel().isClientSide()) return;
         if (event.isCanceled()) return;
         if (!event.getPlayer().getMainHandItem().is(QOLItems.SHADOW_STEEL_SHOVEL.get()) && !event.getPlayer().getMainHandItem().is(QOLItems.SHADOW_RADIANCE_SHOVEL.get())) return;
-        if (!event.getPlayer().getMainHandItem().getOrDefault(QOLDataComponents.DIGGING, false)) return;
+        if (!NBTConstants.getOrDefault(event.getPlayer().getMainHandItem(),NBTConstants.NBT_DIGGING,false)) return;
         if (!event.getPlayer().getMainHandItem().isCorrectToolForDrops(event.getState())) return;
         BlockPos startPos = event.getPos();
 
@@ -161,7 +147,7 @@ public class ShadowSteelShovel extends ShovelItem implements QOLConfigurableItem
         Level level = player.level();
         Vec3 eyePos = player.getEyePosition(1.0F);
         Vec3 lookVec = player.getViewVector(1.0F);
-        double reach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
+        double reach = player.getAttributeValue(ForgeMod.BLOCK_REACH.get());
 
         Vec3 reachVec = eyePos.add(lookVec.scale(reach));
         ClipContext context = new ClipContext(

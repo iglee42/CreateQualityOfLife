@@ -1,0 +1,96 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "createqol:feature_loaded",
+          "feature": "shadow_radiance"
+        }
+      ],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": {
+          "item": "createqol:shadow_steel_leggings"
+        },
+        "transitionalItem": {
+          "item": "createqol:shadow_steel_leggings"
+        },
+        "sequence": [
+          {
+            "type": "create:cutting",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_leggings"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_leggings"
+              }
+            ],
+            "processingTime": 50
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_leggings"
+              },
+              {
+                "item": "createqol:refined_radiance_leggings"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_leggings"
+              }
+            ]
+          },
+          {
+            "type": "create:pressing",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_leggings"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_leggings"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "createqol:shadow_steel_leggings"
+              },
+              {
+                "item": "createqol:shadow_radiance_block"
+              }
+            ],
+            "results": [
+              {
+                "item": "createqol:shadow_steel_leggings"
+              }
+            ]
+          }
+        ],
+        "results": [
+          {
+            "item": "createqol:shadow_radiance_leggings"
+          }
+        ],
+        "loops": 1,
+        "copied_nbts": [
+          "Enchantments",
+          "Air",
+          "display.Name",
+          "tooltips",
+          "Trim"
+        ]
+      }
+    }
+  ]
+}

@@ -5,30 +5,20 @@ import com.simibubi.create.content.equipment.armor.BaseArmorItem;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLArmorMaterials;
-import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
-import fr.iglee42.createqualityoflife.registries.QOLItems;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import fr.iglee42.createqualityoflife.utils.ItemTooltips;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
 import fr.iglee42.createqualityoflife.utils.QOLConfigurableItem;
-import fr.iglee42.createqualityoflife.utils.ShadowRadianceEffects;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -46,22 +36,22 @@ public class ShadowSteelArmorItem extends BaseArmorItem implements QOLConfigurab
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
-        if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
+    public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
+        if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         if (getType().equals(ArmorItem.Type.BOOTS)) {
             components.add(Component.literal("Diving : ")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsDiving.get(),
-                            true, stack.getOrDefault(QOLDataComponents.BOOTS_DIVING, false), false, true)));
+                            true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_DIVING,false), false, true)));
             components.add(Component.literal("Lava Walking : ")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsLavaWalking.get(),
-                            true, stack.getOrDefault(QOLDataComponents.BOOTS_LAVA, true), false, true)));
+                            true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_LAVA,true), false, true)));
         } else if (getType().equals(ArmorItem.Type.LEGGINGS)){
             components.add(Component.literal("Void Walk : ")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.voidWalking.get(),
-                            true, stack.getOrDefault(QOLDataComponents.VOID_WALK, true), false, true)));
+                            true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_VOID_WALK,true), false, true)));
         }
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
@@ -73,7 +63,7 @@ public class ShadowSteelArmorItem extends BaseArmorItem implements QOLConfigurab
     }
 
     @Override
-    public Holder<MobEffect> providedEffect(ItemStack stack) {
+    public MobEffect providedEffect(ItemStack stack) {
         if (!(stack.getItem() instanceof ArmorItem it)) return QOLConfigurableItem.super.providedEffect(stack);
         return getType().equals(ArmorItem.Type.BOOTS) ? MobEffects.JUMP : (getType().equals(ArmorItem.Type.LEGGINGS)  ? MobEffects.MOVEMENT_SPEED : QOLConfigurableItem.super.providedEffect(stack));
     }
@@ -87,29 +77,29 @@ public class ShadowSteelArmorItem extends BaseArmorItem implements QOLConfigurab
     public void addConfigurations(List<Configuration<?>> list, ItemStack stack) {
         if (getType().equals(ArmorItem.Type.BOOTS)){
             list.add(Configuration.ofBool("Enable Diving",
-                    stack.getOrDefault(QOLDataComponents.BOOTS_DIVING,false),
-                    QOLDataComponents.BOOTS_DIVING,
+                    NBTConstants.getOrDefault(stack,NBTConstants.NBT_DIVING,false),
+                    NBTConstants.NBT_DIVING,
                     List.of("Enable diving, which makes the player descends quicker in liquids"),
                     (e,oE)-> CreateQOLConfigs.server().equipments.armors.bootsDiving.get()
             ));
 
             list.add(Configuration.ofBool("Enable Lava Walking",
-                    stack.getOrDefault(QOLDataComponents.BOOTS_LAVA,true),
-                    QOLDataComponents.BOOTS_LAVA,
+                    NBTConstants.getOrDefault(stack,NBTConstants.NBT_LAVA,true),
+                    NBTConstants.NBT_LAVA,
                     List.of("Enable walking under lava, which makes the player walks normally under lava"),
                     (e,oE)-> CreateQOLConfigs.server().equipments.armors.bootsLavaWalking.get()
             ));
         } else if (getType() == ArmorItem.Type.LEGGINGS){
             list.add(Configuration.ofBool("Void Walking",
-                    stack.getOrDefault(QOLDataComponents.VOID_WALK,true),
-                    QOLDataComponents.VOID_WALK,
+                    NBTConstants.getOrDefault(stack,NBTConstants.NBT_VOID_WALK,true),
+                    NBTConstants.NBT_VOID_WALK,
                     List.of("Enable walking on void"),
                     (e,oE)-> CreateQOLConfigs.server().equipments.armors.voidWalking.get()
             ));
         }
     }
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<T> onBroken) {
         if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
         return super.damageItem(stack, amount, entity, onBroken);
     }

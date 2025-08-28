@@ -1,5 +1,6 @@
 package fr.iglee42.createqualityoflife.client.screens.widgets.entries;
 
+import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.client.screens.itemsconfig.ItemConfigScreen;
 import fr.iglee42.createqualityoflife.packets.ChangeArmorTagPacket;
 import fr.iglee42.createqualityoflife.registries.QOLPackets;
@@ -111,6 +112,12 @@ public class EnumEntry extends ValueEntry<Enum<?>> {
 	public void onValueChange(Enum<?> newValue) {
 		super.onValueChange(newValue);
 		valueText.withText(ConfigScreen.toHumanReadable(newValue.name().toLowerCase(Locale.ROOT)));
+		if (Minecraft.getInstance().screen == null) {
+			CreateQOL.LOGGER.error("Cannot change nbt on a ValueEntry because the screen is null");
+			return;
+		}
+		int slot = ((ItemConfigScreen)Minecraft.getInstance().screen).getItemSlot();
+		Minecraft.getInstance().player.getInventory().getItem(slot).getOrCreateTag().putInt(nbtKey,value.ordinal());
 	}
 
 	@Override

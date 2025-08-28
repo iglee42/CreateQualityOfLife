@@ -1,30 +1,29 @@
 package fr.iglee42.createqualityoflife.mixins;
 
-import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.utils.ItemTooltips;
-import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
+import fr.iglee42.createqualityoflife.utils.NBTConstants;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipProvider;
-import net.neoforged.neoforge.common.util.AttributeTooltipContext;
-import net.neoforged.neoforge.common.util.AttributeUtil;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.function.Consumer;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ItemStack.class)
-public class ItemStackMixin {
+public abstract class ItemStackMixin {
 
-    @Inject(method = "addToTooltip", at =@At("HEAD"),cancellable = true,remap = false)
-    private <T extends TooltipProvider> void disableEnchantmentsWithQOL(DataComponentType<T> p_331344_, Item.TooltipContext p_341231_, Consumer<Component> p_331885_, TooltipFlag p_331177_, CallbackInfo ci){
-        ItemStack it = (ItemStack) (Object) this;
-        if (p_331344_.equals(DataComponents.ENCHANTMENTS) && !it.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.ENCHANTMENT)) ci.cancel();
+    @Shadow
+    protected static boolean shouldShowInTooltip(int p_41627_, ItemStack.TooltipPart p_41628_) {
+        return false;
+    }
+
+    @Shadow public abstract CompoundTag getOrCreateTag();
+
+    @Redirect(method = "getTooltipLines",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip(ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z"))
+    private boolean qol$disableSomeTooltips(int p_41627_, ItemStack.TooltipPart part){
+        if (part.equals(ItemStack.TooltipPart.MODIFIERS) && shouldShowInTooltip(p_41627_,part))
+            return  NBTConstants.getTooltipOrDefault((ItemStack) (Object)this).isEnable(ItemTooltips.Tooltip.ATTRIBUTE_MODIFIERS);
+        return shouldShowInTooltip(p_41627_,part);
     }
 
 }
