@@ -115,6 +115,8 @@
 
   "entity.createqol.statue": "Statue",
 
+  "createqol.statue.title": "Customize your Statue",
+  "createqol.statue.name": "Name",
   "createqol.statue.showName": "Display the name",
   "createqol.statue.small": "Small Statue",
   "createqol.statue.slimArms": "Slim Arms",
@@ -132,6 +134,8 @@
   "createqol.statue.noCape": "This player",
   "createqol.statue.noCape1": "has no cape",
   "createqol.statue.mainTab": "Statue Customization",
+
+  "createqol.statue.playerName": "Player Name",
 
   "createqol.statue.rotation.cape": "Statue Rotation",
   "createqol.statue.rotation.hat": "Head Rotation",
@@ -178,6 +182,7 @@
   "createqol.statue.transformTab": "Transform",
   "createqol.statue.position": "Position",
   "createqol.statue.scale": "Scale",
+  "createqol.statue.scaleScroll": "Scale: %s",
   "createqol.statue.animationTab": "Animation",
   "createqol.statue.publishedAnimationTab": "Shared Animations",
 
@@ -207,6 +212,7 @@
   "createqol.statue.animation.next_frame": "Next existing frame",
   "createqol.statue.animation.delete_frame": "Delete current frame",
   "createqol.statue.animation.publish": "Share animation to other players",
+  "createqol.statue.animation.publishName": "Animation Name",
   "createqol.statue.animation.delete": "Delete Shared Animation",
 
   "createqol.statue.owner": "Owner: %s",

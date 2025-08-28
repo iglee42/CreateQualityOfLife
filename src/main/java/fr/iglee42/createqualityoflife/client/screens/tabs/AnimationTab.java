@@ -225,7 +225,7 @@ public class AnimationTab extends StatueTab {
         nameEdit = new EditBox(Minecraft.getInstance().font, x + BASE_OFFSET + LOOP_X + 21, y + 173 - 19 + TEXT_Y_OFFSET,TEXT_BOX_WIDTH - 20,18,CommonComponents.EMPTY);
         nameEdit.setBordered(false);
         nameEdit.setFocused(false);
-        nameEdit.setHint(Component.literal("Animation Name"));
+        nameEdit.setHint(CreateQOLLang.translateDirect("statue.animation.publishName"));
         nameEdit.setTooltip(Tooltip.create(CreateQOLLang.translateDirect("statue.name_utility")));
 
         if (animation != null) {

@@ -115,6 +115,8 @@
 
   "entity.createqol.statue": "Картонный манекен",
 
+  "createqol.statue.title": "Настройка картонного манекена",
+  "createqol.statue.name": "Имя манекена",
   "createqol.statue.showName": "Отображать имя",
   "createqol.statue.small": "Маленький",
   "createqol.statue.slimArms": "Стройный",
@@ -132,6 +134,8 @@
   "createqol.statue.noCape": "У этого игрока",
   "createqol.statue.noCape1": "нет плаща",
   "createqol.statue.mainTab": "Основные настройки",
+
+  "createqol.statue.playerName": "Имя игрока",
 
   "createqol.statue.rotation.cape": "Поворот",
   "createqol.statue.rotation.hat": "Положение головы",
@@ -178,6 +182,7 @@
   "createqol.statue.transformTab": "Положение манекена",
   "createqol.statue.position": "Позиция",
   "createqol.statue.scale": "Размер",
+  "createqol.statue.scaleScroll": "Размер: %s",
   "createqol.statue.animationTab": "Анимация",
   "createqol.statue.publishedAnimationTab": "Опубликованные анимации",
 
@@ -207,6 +212,7 @@
   "createqol.statue.animation.next_frame": "Следующий ключевой кадр",
   "createqol.statue.animation.delete_frame": "Удалить ключевой кадр",
   "createqol.statue.animation.publish": "Опубликовать анимацию",
+  "createqol.statue.animation.publishName": "Название анимации",
   "createqol.statue.animation.delete": "Удалить анимацию",
 
   "createqol.statue.owner": "Владелец: %s",
