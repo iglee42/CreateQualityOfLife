@@ -195,7 +195,7 @@ public class CreateQOL {
         ServerPlayer player = (ServerPlayer) p;
         if (!p.hasPermissions(1)) return;
         if (isActivate(Features.STOCK_MANAGER) && CreateQOLConfigs.server().experimentalWarning.get())
-            player.displayClientMessage(Component.literal("Warning: Stock Manager is a beta feature, some bugs and crash might appear.\nPlease report them on https://issues-qol.iglee.fr").withStyle(ChatFormatting.YELLOW),false);
+            player.displayClientMessage(CreateQOLLang.translateDirect("client_message.header").withStyle(ChatFormatting.YELLOW).append(CreateQOLLang.translateDirect("client_message.warning").withStyle(ChatFormatting.WHITE)),false);
     }
 
 

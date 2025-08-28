@@ -351,4 +351,7 @@
   "createqol.gui.tooltips_config_screen.title": "Настройка подсказок предмета «%s»",
 
   "createqol.gui.display_board.glowing": "Светящийся",
+
+  "createqol.client_message.header": "[Create: Quality Of Life]: ",
+  "createqol.client_message.warning": "Складской распорядитель находится на ранней стадии разработки — его использование может привести к сбоям игры;\n в случае обнаружения неисправности сообщите о ней на https://issues-qol.iglee.fr"
 }
