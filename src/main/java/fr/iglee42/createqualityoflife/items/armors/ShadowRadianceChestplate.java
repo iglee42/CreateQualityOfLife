@@ -190,36 +190,36 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.translatable("createqol.function.armor.air")
+        components.add(Component.translatable("createqol.ability.armor.air")
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.literal(String.valueOf(BacktankUtil.getAir(stack)))
                         .withStyle(ChatFormatting.YELLOW))
                 .append(Component.literal("/"+BacktankUtil.maxAir(stack))
                         .withStyle(ChatFormatting.GOLD)));
-        components.add(Component.translatable("createqol.function.armor.effect")
+        components.add(Component.translatable("createqol.ability.armor.effect")
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.translatable(providedEffect(stack).value().getDescriptionId()).withStyle(ChatFormatting.YELLOW)));
-        components.add(Component.translatable("createqol.function.armor.arms")
+        components.add(Component.translatable("createqol.ability.armor.arms")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(true,
                         true, stack.getOrDefault(QOLDataComponents.BACKTANK_ARMS, true), false, true)));
-        components.add(Component.translatable("createqol.function.armor.elytra")
+        components.add(Component.translatable("createqol.ability.armor.elytra")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() ,hasElytra(stack) ,isElytraEnable(stack), true,false)));
-        components.add(Component.translatable("createqol.function.armor.dash")
+        components.add(Component.translatable("createqol.ability.armor.dash")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.cooldownState(CreateQOLConfigs.server().equipments.armors.dashAllowed.get(),
                         stack.getOrDefault(QOLDataComponents.DASH, true), (int) Math.ceil(Minecraft.getInstance().player.getCooldowns().getCooldownPercent(this,0) * CreateQOLConfigs.server().equipments.armors.dashCooldown.get()))));
-        components.add(Component.translatable("createqol.function.armor.propeller")
+        components.add(Component.translatable("createqol.ability.armor.propeller")
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.propellerAllowed.get() ,
                         hasPropeller(stack) ,true,false,false)));
         if (hasPropeller(stack) && CreateQOLConfigs.server().equipments.armors.propellerAllowed.get()) {
             components.add(Component.empty());
-            components.add(Component.translatable("createqol.function.armor.fan")
+            components.add(Component.translatable("createqol.ability.armor.fan")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(true,true,isFansEnable(stack),false,true)));
-            components.add(Component.translatable("createqol.function.armor.hover")
+            components.add(Component.translatable("createqol.ability.armor.hover")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.hoverAllowed.get() ,true,isHoverEnable(stack),false,true)));
         }

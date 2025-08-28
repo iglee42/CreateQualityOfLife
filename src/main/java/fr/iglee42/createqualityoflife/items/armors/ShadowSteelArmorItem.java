@@ -49,16 +49,16 @@ public class ShadowSteelArmorItem extends BaseArmorItem implements QOLConfigurab
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         if (getType().equals(ArmorItem.Type.BOOTS)) {
-            components.add(Component.translatable("createqol.function.armor.diving")
+            components.add(Component.translatable("createqol.ability.armor.diving")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsDiving.get(),
                             true, stack.getOrDefault(QOLDataComponents.BOOTS_DIVING, false), false, true)));
-            components.add(Component.translatable("createqol.function.armor.lava_walking")
+            components.add(Component.translatable("createqol.ability.armor.lava_walking")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsLavaWalking.get(),
                             true, stack.getOrDefault(QOLDataComponents.BOOTS_LAVA, true), false, true)));
         } else if (getType().equals(ArmorItem.Type.LEGGINGS)){
-            components.add(Component.translatable("createqol.function.armor.void_walk")
+            components.add(Component.translatable("createqol.ability.armor.void_walk")
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.voidWalking.get(),
                             true, stack.getOrDefault(QOLDataComponents.VOID_WALK, true), false, true)));
