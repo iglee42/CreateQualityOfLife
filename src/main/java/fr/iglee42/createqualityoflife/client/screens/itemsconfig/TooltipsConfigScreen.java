@@ -85,7 +85,7 @@ public class TooltipsConfigScreen extends AbstractSimiScreen {
 		goBack.showingElement(PonderGuiTextures.ICON_CONFIG_BACK.asStencil()
 				.withElementRenderer(BoxWidget.gradientFactory.apply(goBack)));
 		goBack.getToolTip()
-				.add(Component.literal("Go Back"));
+				.add(Component.translatable("createqol.gui.config_screen.go_back"));
 		addRenderableWidget(goBack);
 
 		ItemTooltips tooltips = item.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS,ItemTooltips.DEFAULT);
@@ -101,7 +101,7 @@ public class TooltipsConfigScreen extends AbstractSimiScreen {
 		enableAll.showingElement(AllIcons.I_CONFIRM.asStencil()
 				.withElementRenderer(BoxWidget.gradientFactory.apply(enableAll)));
 		enableAll.getToolTip()
-				.add(Component.literal("Enable All"));
+				.add(Component.translatable("createqol.gui.tooltips_config_screen.enable_all"));
 		addRenderableWidget(enableAll);
 
 
@@ -112,7 +112,7 @@ public class TooltipsConfigScreen extends AbstractSimiScreen {
 		disableAll.showingElement(AllIcons.I_DISABLE.asStencil()
 				.withElementRenderer(BoxWidget.gradientFactory.apply(disableAll)));
 		disableAll.getToolTip()
-				.add(Component.literal("Disable All"));
+				.add(Component.translatable("createqol.gui.tooltips_config_screen.disable_all"));
 		addRenderableWidget(disableAll);
 
 
@@ -155,7 +155,7 @@ public class TooltipsConfigScreen extends AbstractSimiScreen {
 	protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		int x = width / 2;
 
-		graphics.drawCenteredString(minecraft.font, Component.literal("Configure " ).append(item.getHoverName()).append(" Tooltips") , x, 15, UIRenderHelper.COLOR_TEXT.getFirst().getRGB());
+		graphics.drawCenteredString(minecraft.font, Component.translatable("createqol.gui.tooltips_config_screen.title", item.getHoverName()), x, 15, UIRenderHelper.COLOR_TEXT.getFirst().getRGB());
 
 	}
 

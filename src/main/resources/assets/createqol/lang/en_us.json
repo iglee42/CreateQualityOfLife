@@ -342,4 +342,12 @@
   "createqol.gui.stock_manager.add_user": "Add to network",
 
   "createqol.logistically_linked.tuned_to": "Tuned to %s"
+  "createqol.logistically_linked.tuned_to": "Tuned to %s",
+
+  "createqol.gui.config_screen.go_back": "Go Back",
+  "createqol.gui.inventory_config_screen.title": "Choose an item to configure",
+  "createqol.gui.item_config_screen.title": "Configure %s",
+  "createqol.gui.tooltips_config_screen.enable_all": "Enable All",
+  "createqol.gui.tooltips_config_screen.disable_all": "Disable All",
+  "createqol.gui.tooltips_config_screen.title": "Configure %s Tooltips",
 }
