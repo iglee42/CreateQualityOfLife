@@ -341,7 +341,6 @@
   "createqol.gui.stock_manager.remove_user": "Уволить",
   "createqol.gui.stock_manager.add_user": "Нанять",
 
-  "createqol.logistically_linked.tuned_to": "Подключено к сети %s"
   "createqol.logistically_linked.tuned_to": "Подключено к сети %s",
 
   "createqol.gui.config_screen.go_back": "Назад",
@@ -350,4 +349,6 @@
   "createqol.gui.tooltips_config_screen.enable_all": "Включить все подсказки",
   "createqol.gui.tooltips_config_screen.disable_all": "Отключить все подсказки",
   "createqol.gui.tooltips_config_screen.title": "Настройка подсказок предмета «%s»",
+
+  "createqol.gui.display_board.glowing": "Светящийся",
 }
