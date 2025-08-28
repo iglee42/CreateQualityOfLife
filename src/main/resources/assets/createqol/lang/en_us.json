@@ -351,4 +351,7 @@
   "createqol.gui.tooltips_config_screen.title": "Configure %s Tooltips",
 
   "createqol.gui.display_board.glowing": "Glowing",
+
+  "createqol.client_message.header": "[Create: Quality Of Life]: ",
+  "createqol.client_message.warning": "Warning: Stock Manager is a beta feature, some bugs and crash might appear.\nPlease report them on https://issues-qol.iglee.fr"
 }
