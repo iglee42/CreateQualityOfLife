@@ -237,7 +237,7 @@
 
   "createqol.ability.tool.disabled": "Режим «%s» запрещён настройками мира/сервера",
   "createqol.ability.tool.unavailable": "Режим «%1$s» не может быть включён, пока активен режим «%2$s»",
-  "createqol.ability.tool.toggle_message": "«%s»: ",
+  "createqol.ability.tool.toggle_message": "%s: ",
 
   "createqol.ability.armor.propeller_mode": "Режим пропеллерной тяги/парения",
   "createqol.ability.armor.fan_mode": "Режим пропеллерной тяги",
