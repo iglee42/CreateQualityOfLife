@@ -77,8 +77,10 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
                         return InteractionResult.PASS;
                     }
                     be.setPropeller(true);
-                    player.getMainHandItem().shrink(1);
-                    level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
+                    if (be.hasPropeller()) {
+                        player.getMainHandItem().shrink(1);
+                        level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
+                    }
                     return InteractionResult.CONSUME;
                 }
                 if (!be.hasElytra() && player.getMainHandItem().is(Items.ELYTRA)) {
@@ -88,15 +90,17 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
                         return InteractionResult.PASS;
                     }
                     be.setElytra(true);
-                    Map<Enchantment,Integer> enchantments = EnchantmentHelper.getEnchantments(player.getMainHandItem());
-                    if (!enchantments.isEmpty()){
-                        ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
-                        EnchantmentHelper.setEnchantments(enchantments,book);
-                        Block.popResource(level,pos,book);
-                    }
+                    if (be.hasElytra()) {
+                        Map<Enchantment,Integer> enchantments = EnchantmentHelper.getEnchantments(player.getMainHandItem());
+                        if (!enchantments.isEmpty()){
+                            ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
+                            EnchantmentHelper.setEnchantments(enchantments,book);
+                            Block.popResource(level,pos,book);
+                        }
 
-                    player.getMainHandItem().shrink(1);
-                    level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
+                        player.getMainHandItem().shrink(1);
+                        level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
+                    }
                     return InteractionResult.CONSUME;
                 }
             }
