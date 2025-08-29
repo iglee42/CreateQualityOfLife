@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.ArrayList;
 
-@Mixin(value = StationBlock.class,remap = false)
+@Mixin(value = StationBlock.class)
 public class StationBlockMixin {
 
     @Inject(method = "use",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;"),cancellable = true,locals = LocalCapture.CAPTURE_FAILSOFT)

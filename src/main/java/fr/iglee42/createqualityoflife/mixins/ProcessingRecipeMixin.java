@@ -26,7 +26,7 @@ public class ProcessingRecipeMixin<T extends Container> implements CopyNBTsExten
         createQOL$setCopiedSlot(((CopyNBTsExtension)params).createQOL$copiedSlot());
     }
 
-    @Inject(method = "assemble", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "assemble", at = @At("RETURN"), cancellable = true,remap = true)
     private void createQOL$copyComponent(T inv, RegistryAccess registryAccess, CallbackInfoReturnable<ItemStack> cir){
         ItemStack returned = cir.getReturnValue();
         if (!inv.getItem(createQOL$copiedSlot()).isEmpty()){

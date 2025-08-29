@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 import java.util.function.Predicate;
 
-@Mixin(value = ShapedRecipe.class,remap = false)
+@Mixin(value = ShapedRecipe.class)
 public abstract class ShapedRecipeMixin<I extends CraftingContainer> {
 
     @Inject(method = "assemble(Lnet/minecraft/world/inventory/CraftingContainer;Lnet/minecraft/core/RegistryAccess;)Lnet/minecraft/world/item/ItemStack;", at = @At("RETURN"), cancellable = true)

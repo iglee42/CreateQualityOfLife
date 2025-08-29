@@ -19,7 +19,7 @@ import java.util.UUID;
 @Mixin(value = LogisticallyLinkedBlockItem.class,remap = false)
 public class LogisticallyLinkedBlockItemMixin {
 
-    @Inject(method = "assignFrequency",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;displayClientMessage(Lnet/minecraft/network/chat/Component;Z)V",shift = At.Shift.AFTER))
+    @Inject(method = "assignFrequency",at = @At(value = "RETURN"))
     private static void createQOL$showNetworkName(ItemStack stack, Player player, UUID frequency, CallbackInfo ci){
         LogisticsNetwork network = Create.LOGISTICS.logisticsNetworks.get(frequency);
         if (network != null ){

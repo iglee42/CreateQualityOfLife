@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
-@Mixin(value = MechanicalCraftingRecipe.Serializer.class,remap = false)
+@Mixin(value = MechanicalCraftingRecipe.Serializer.class)
 public class MechanicalCraftingRecipeSerializerMixin{
 
     @Inject(method = "fromJson(Lnet/minecraft/resources/ResourceLocation;Lcom/google/gson/JsonObject;)Lnet/minecraft/world/item/crafting/ShapedRecipe;",at = @At("RETURN"),cancellable = true)
