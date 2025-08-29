@@ -70,14 +70,16 @@ public class RefinedRadianceBacktankBlock extends BacktankBlock {
                         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
                     }
                     be.setElytra(true);
-                    ItemEnchantments enchantments = stack.get(DataComponents.ENCHANTMENTS);
-                    if (enchantments != null && !enchantments.isEmpty()){
-                        ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
-                        book.set(DataComponents.STORED_ENCHANTMENTS, enchantments);
-                        Block.popResource(level,pos,book);
+                    if (be.hasElytra()) {
+                        ItemEnchantments enchantments = stack.get(DataComponents.ENCHANTMENTS);
+                        if (enchantments != null && !enchantments.isEmpty()) {
+                            ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
+                            book.set(DataComponents.STORED_ENCHANTMENTS, enchantments);
+                            Block.popResource(level, pos, book);
+                        }
+                        player.getMainHandItem().shrink(1);
+                        level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
                     }
-                    player.getMainHandItem().shrink(1);
-                    level.playSound(null, pos, SoundEvents.COPPER_BREAK, SoundSource.PLAYERS, 1, 1.45f);
                     return ItemInteractionResult.CONSUME;
                 }
             }
