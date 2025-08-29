@@ -101,7 +101,7 @@ public class CreateQOL {
 
         RegistrateDistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> CreateQOLClient.onCtorClient(modEventBus, forgeEventBus));
 
-        container.registerExtensionPoint(IConfigScreenFactory.class,((modContainer, screen) -> new BaseConfigScreen(screen, MODID)));
+        //container.registerExtensionPoint(IConfigScreenFactory.class,((modContainer, screen) -> new BaseConfigScreen(screen, MODID)));
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(ChippedSawBlockEntity::registerCapabilities);
