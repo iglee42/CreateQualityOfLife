@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "createqol:feature_loaded",
+      "feature": "shadow_radiance"
+    }
+  ],
+  "type": "create:item_application",
+  "ingredients": [
+    {
+      "tag": "c:stripped_wood"
+    },
+    {
+      "item": "create:shadow_steel"
+    }
+  ],
+  "results": [
+    {
+      "item": {
+        "id": "create:shadow_steel_casing"
+      }
+    }
+  ]
+}

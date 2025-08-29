@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "source": "block_entity",
+              "include": [
+                "create:banktank_air",
+                "createqol:propellers",
+                "createqol:fans",
+                "createqol:hover",
+                "createqol:elytra"
+              ]
+            }
+          ],
+          "name": "createqol:shadow_steel_chestplate"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "createqol:blocks/shadow_steel_chestplate"
+}
