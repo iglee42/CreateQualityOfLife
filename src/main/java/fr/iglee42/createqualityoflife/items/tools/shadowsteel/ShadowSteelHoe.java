@@ -7,6 +7,7 @@ import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.mixin.accessor.CropBlockAccessor;
 import com.simibubi.create.foundation.utility.BlockHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.registries.QOLItems;
@@ -63,10 +64,10 @@ public class ShadowSteelHoe extends HoeItem implements QOLConfigurableItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.literal("Reach : ")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.reach").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, stack.getOrDefault(QOLDataComponents.REACH,true), false, true)));
-        components.add(Component.literal("Ploughing : ")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.ploughing").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.ploughing.get(), true, stack.getOrDefault(QOLDataComponents.PLOUGHING,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
@@ -89,12 +90,12 @@ public class ShadowSteelHoe extends HoeItem implements QOLConfigurableItem {
 
     public static void toggleAbility(ItemStack stack, Player p) {
         if (!CreateQOLConfigs.server().equipments.tools.ploughing.get()){
-            p.displayClientMessage(Component.literal("Ploughing is disabled by the config").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.tool.disabled", CreateQOLLang.translateDirect("ability.tool.ploughing").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         boolean enable = !stack.getOrDefault(QOLDataComponents.PLOUGHING,false);
         stack.set(QOLDataComponents.PLOUGHING, enable);
-        p.displayClientMessage(Component.literal("Ploughing : ").append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
+        p.displayClientMessage(CreateQOLLang.translateDirect("ability.tool.toggle_message", CreateQOLLang.translateDirect("ability.tool.ploughing").getString()).append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
 
     @Override

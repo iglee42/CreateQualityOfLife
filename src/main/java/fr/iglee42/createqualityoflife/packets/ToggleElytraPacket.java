@@ -29,7 +29,7 @@ public class ToggleElytraPacket implements ServerboundPacketPayload {
             if ((QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) ||QOLItems.REFINED_RADIANCE_CHESTPLATE.is(backtank)) && ShadowRadianceChestplate.hasElytra(chestplate)){
                 ShadowRadianceChestplate.toggleElytra(chestplate,player);
             }else if (QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && !ShadowRadianceChestplate.hasElytra(chestplate)){
-                player.sendSystemMessage(CreateQOLLang.translateDirect("chestplate.no_elytra").withStyle(ChatFormatting.RED),true);
+                player.sendSystemMessage(CreateQOLLang.translateDirect("armor.ability.no_elytra").withStyle(ChatFormatting.RED),true);
             }
         }
     }

@@ -2,6 +2,7 @@ package fr.iglee42.createqualityoflife.items.tools.refinedradiance;
 
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.registries.QOLItems;
@@ -64,10 +65,10 @@ public class RefinedRadiancePickaxe extends PickaxeItem implements QOLConfigurab
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.literal("Reach : ")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.reach").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, stack.getOrDefault(QOLDataComponents.REACH,true), false, true)));
-        components.add(Component.literal("Vein Mine : ")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.vein_mine").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.veinMine.get(), true, stack.getOrDefault(QOLDataComponents.VEIN_MINE,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
@@ -90,12 +91,12 @@ public class RefinedRadiancePickaxe extends PickaxeItem implements QOLConfigurab
 
     public static void toggleAbility(ItemStack stack, Player p) {
         if (!CreateQOLConfigs.server().equipments.tools.veinMine.get()){
-            p.displayClientMessage(Component.literal("Vein Mine is disabled by the config").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.tool.disabled", CreateQOLLang.translateDirect("ability.tool.vein_mine").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         boolean enable = !stack.getOrDefault(QOLDataComponents.VEIN_MINE,false);
         stack.set(QOLDataComponents.VEIN_MINE, enable);
-        p.displayClientMessage(Component.literal("Vein Mine : ").append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
+        p.displayClientMessage(CreateQOLLang.translateDirect("ability.tool.toggle_message", CreateQOLLang.translateDirect("ability.tool.vein_mine").getString()).append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
 
 

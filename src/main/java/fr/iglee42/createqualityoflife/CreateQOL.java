@@ -195,7 +195,7 @@ public class CreateQOL {
         ServerPlayer player = (ServerPlayer) p;
         if (!p.hasPermissions(1)) return;
         if (isActivate(Features.STOCK_MANAGER) && CreateQOLConfigs.server().experimentalWarning.get())
-            player.displayClientMessage(Component.literal("Warning: Stock Manager is a beta feature, some bugs and crash might appear.\nPlease report them on https://issues-qol.iglee.fr").withStyle(ChatFormatting.YELLOW),false);
+            player.displayClientMessage(CreateQOLLang.translateDirect("client_message.header").withStyle(ChatFormatting.YELLOW).append(CreateQOLLang.translateDirect("client_message.warning").withStyle(ChatFormatting.WHITE)),false);
     }
 
 
@@ -213,7 +213,7 @@ public class CreateQOL {
     public void itemTooltips(ItemTooltipEvent event){
         if (!event.getItemStack().is(Items.FIREWORK_ROCKET)) return;
         if (isActivate(Features.SHADOW_RADIANCE) && CreateQOLConfigs.server().equipments.armors.elytraBoostAllowed.get() && CreateQOLConfigs.server().equipments.armors.useFireworksForBoost.get()){
-            event.getToolTip().add(2,CreateQOLLang.translateDirect("chestplate.use_fireworks").withStyle(ChatFormatting.YELLOW));
+            event.getToolTip().add(2,CreateQOLLang.translateDirect("armor.ability.use_fireworks").withStyle(ChatFormatting.YELLOW));
         }
     }
 }

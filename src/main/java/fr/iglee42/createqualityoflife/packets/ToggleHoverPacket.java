@@ -29,7 +29,7 @@ public class ToggleHoverPacket implements ServerboundPacketPayload {
             if (QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && ShadowRadianceChestplate.hasPropeller(chestplate)){
                 ShadowRadianceChestplate.toggleHover(chestplate,player);
             } else if (QOLItems.SHADOW_RADIANCE_CHESTPLATE.is(backtank) && !ShadowRadianceChestplate.hasPropeller(chestplate)){
-                player.sendSystemMessage(CreateQOLLang.translateDirect("chestplate.no_propeller").withStyle(ChatFormatting.RED),true);
+                player.sendSystemMessage(CreateQOLLang.translateDirect("armor.ability.no_propeller").withStyle(ChatFormatting.RED),true);
             }
         }
     }

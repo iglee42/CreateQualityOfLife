@@ -68,7 +68,7 @@ public class InventoryConfigScreen extends AbstractSimiScreen {
         ItemConfigButton btn = new ItemConfigButton(guiLeft + 112-28,guiTop + 84, b->Minecraft.getInstance().setScreen(new ItemConfigScreen(40)),40);
         btn = btn.showing(player.getInventory().getItem(40));
         addRenderableWidget(btn);
-        int boxWidth = font.width("Choose an item to configure") + 10;
+        int boxWidth = font.width(Component.translatable("createqol.gui.inventory_config_screen.title")) + 10;
         int boxHeight = 19;
         int boxPadding = 4;
         BoxWidget title = new BoxWidget(width / 2 - boxWidth / 2, height / 2 - 130, boxWidth, boxHeight)
@@ -101,7 +101,7 @@ public class InventoryConfigScreen extends AbstractSimiScreen {
         //graphics.fill(guiLeft + 24, guiTop - 2 , guiLeft + 106-24, guiTop + 106,0xff00ff00);
         InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, guiLeft + 24, guiTop - 2 , guiLeft + 106-24,guiTop + 106, 48, 0.05F, mouseX, mouseY, this.minecraft.player);
 
-        graphics.drawCenteredString(font, "Choose an item to configure", width / 2, height / 2 - 125, UIRenderHelper.COLOR_TEXT_STRONG_ACCENT.getFirst().getRGB());
+        graphics.drawCenteredString(font, Component.translatable("createqol.gui.inventory_config_screen.title"), width / 2, height / 2 - 125, UIRenderHelper.COLOR_TEXT_STRONG_ACCENT.getFirst().getRGB());
         AtomicReference<ItemConfigButton> button = new AtomicReference<>();
         children().stream().filter(c->c instanceof ItemConfigButton).map(ItemConfigButton.class::cast).forEach(btn->{
             if (btn.isHovered() && btn.active) button.set(btn);

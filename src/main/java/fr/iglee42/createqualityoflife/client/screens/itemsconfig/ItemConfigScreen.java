@@ -84,7 +84,7 @@ public class ItemConfigScreen extends AbstractSimiScreen {
 		goBack.showingElement(PonderGuiTextures.ICON_CONFIG_BACK.asStencil()
 				.withElementRenderer(BoxWidget.gradientFactory.apply(goBack)));
 		goBack.getToolTip()
-				.add(Component.literal("Go Back"));
+				.add(Component.translatable("createqol.gui.config_screen.go_back"));
 		addRenderableWidget(goBack);
 
 		if (item.has(QOLDataComponents.ITEM_TOOLTIPS)) list.children().add(new TooltipButtonEntry("Tooltips","Open the config menu to choose which tooltips are displayed"));
@@ -151,7 +151,7 @@ public class ItemConfigScreen extends AbstractSimiScreen {
 	protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		int x = width / 2;
 
-		graphics.drawCenteredString(minecraft.font, Component.literal("Configure " ).append(item.getHoverName()) , x, 15, UIRenderHelper.COLOR_TEXT.getFirst().getRGB());
+		graphics.drawCenteredString(minecraft.font, Component.translatable("createqol.gui.item_config_screen.title", item.getHoverName()), x, 15, UIRenderHelper.COLOR_TEXT.getFirst().getRGB());
 
 	}
 

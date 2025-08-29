@@ -115,6 +115,8 @@
 
   "entity.createqol.statue": "Statue",
 
+  "createqol.statue.title": "Customize your Statue",
+  "createqol.statue.name": "Name",
   "createqol.statue.showName": "Display the name",
   "createqol.statue.small": "Small Statue",
   "createqol.statue.slimArms": "Slim Arms",
@@ -132,6 +134,8 @@
   "createqol.statue.noCape": "This player",
   "createqol.statue.noCape1": "has no cape",
   "createqol.statue.mainTab": "Statue Customization",
+
+  "createqol.statue.playerName": "Player Name",
 
   "createqol.statue.rotation.cape": "Statue Rotation",
   "createqol.statue.rotation.hat": "Head Rotation",
@@ -178,6 +182,7 @@
   "createqol.statue.transformTab": "Transform",
   "createqol.statue.position": "Position",
   "createqol.statue.scale": "Scale",
+  "createqol.statue.scaleScroll": "Scale: %s",
   "createqol.statue.animationTab": "Animation",
   "createqol.statue.publishedAnimationTab": "Shared Animations",
 
@@ -207,6 +212,7 @@
   "createqol.statue.animation.next_frame": "Next existing frame",
   "createqol.statue.animation.delete_frame": "Delete current frame",
   "createqol.statue.animation.publish": "Share animation to other players",
+  "createqol.statue.animation.publishName": "Animation Name",
   "createqol.statue.animation.delete": "Delete Shared Animation",
 
   "createqol.statue.owner": "Owner: %s",
@@ -215,9 +221,62 @@
   "createqol.statue.locked": "This statue is locked ! Only the owner can modify it.",
   "createqol.statue.name_utility": "The name is used when you share the animation. It won't be kept if you close the gui.",
 
-  "createqol.chestplate.use_fireworks": "Can be used as a boost with the shadow radiance chestplate by keeping pressed the jump key.",
-  "createqol.chestplate.no_propeller": "You can't switch the fan/hover because the chestplate doesn't have a propeller installed.",
-  "createqol.chestplate.no_elytra": "You can't switch the elytra because the chestplate doesn't have elytra installed",
+  "createqol.backtank.propeller_disabled": "Unable to equip: Propeller modes are disabled by the config",
+  "createqol.backtank.elytra_disabled": "Unable to equip: Elytra mode are disabled by the config",
+
+  "createqol.armor.ability.use_fireworks": "Can be used as a boost with the shadow radiance chestplate by keeping pressed the jump key.",
+  "createqol.armor.ability.no_propeller": "You can't switch the fan/hover because the chestplate doesn't have a propeller installed.",
+  "createqol.armor.ability.no_elytra": "You can't switch the elytra because the chestplate doesn't have elytra installed",
+  "createqol.armor.ability.dash_disabled": "Dashing is disabled on this server !",
+  "createqol.armor.ability.dash_reloading": "Dashing is reloading, please wait!",
+
+  "createqol.ability.armor.disabled": "%s is disabled by the config",
+  "createqol.ability.armor.unavailable": "%1$s can't be enabled while the %2$s is enabled",
+  "createqol.ability.armor.reloading": "%s is reloading, please wait!",
+  "createqol.ability.armor.toggle_message": "%s : ",
+
+  "createqol.ability.tool.disabled": "%s ability is disabled by the config",
+  "createqol.ability.tool.unavailable": "%1$s ability can't be enabled while the %2$s ability is enabled",
+  "createqol.ability.tool.toggle_message": "%s : ",
+
+  "createqol.ability.armor.propeller_mode": "Propeller mode",
+  "createqol.ability.armor.fan_mode": "Fan mode",
+  "createqol.ability.armor.hover_mode": "Hover mode",
+  "createqol.ability.armor.elytra_mode": "Elytra mode",
+
+  "createqol.ability.tool.attraction": "Attraction",
+  "createqol.ability.tool.casingifier": "Casingifier",
+  "createqol.ability.tool.digging": "Digging",
+  "createqol.ability.tool.harvesting": "Harvesting",
+  "createqol.ability.tool.ploughing": "Ploughing",
+  "createqol.ability.tool.reach": "Reach",
+  "createqol.ability.tool.repulsion_attraction": "Repulsion/Attraction",
+  "createqol.ability.tool.repulsion": "Repulsion",
+  "createqol.ability.tool.smelting": "Smelting",
+  "createqol.ability.tool.tree_decapitation": "Tree Decapitation",
+  "createqol.ability.tool.vein_mine": "Vein Mine",
+
+  "createqol.ability.armor.air": "Air",
+  "createqol.ability.armor.arms": "Arms",
+  "createqol.ability.armor.belt_blocking": "Belt Blocking",
+  "createqol.ability.armor.dash": "Dash",
+  "createqol.ability.armor.diving": "Diving",
+  "createqol.ability.armor.effect": "Effect",
+  "createqol.ability.armor.elytra": "Elytra",
+  "createqol.ability.armor.fan": "Fan",
+  "createqol.ability.armor.goggles": "Goggles",
+  "createqol.ability.armor.hover": "Hover",
+  "createqol.ability.armor.lava_walking": "Lava Walking",
+  "createqol.ability.armor.propeller": "Propeller",
+  "createqol.ability.armor.step_height": "Step Height",
+  "createqol.ability.armor.void_walk": "Void Walk",
+
+  "createqol.ability.state.disabled_by_config": "Disabled By Config",
+  "createqol.ability.state.disabled": "Disabled",
+  "createqol.ability.state.enabled": "Enabled",
+  "createqol.ability.state.installed": "Installed",
+  "createqol.ability.state.not_installed": "Not Installed",
+  "createqol.ability.state.seconds": "s",
 
   "createqol.ponder.ender_packager.header": "Transfer packages remotely",
   "createqol.ponder.ender_packager.text_1": "Placing items in the two slots can specify a Frequency",
@@ -264,5 +323,17 @@
   "createqol.gui.stock_manager.remove_user": "Remove from network",
   "createqol.gui.stock_manager.add_user": "Add to network",
 
-  "createqol.logistically_linked.tuned_to": "Tuned to %s"
+  "createqol.logistically_linked.tuned_to": "Tuned to %s",
+
+  "createqol.gui.config_screen.go_back": "Go Back",
+  "createqol.gui.inventory_config_screen.title": "Choose an item to configure",
+  "createqol.gui.item_config_screen.title": "Configure %s",
+  "createqol.gui.tooltips_config_screen.enable_all": "Enable All",
+  "createqol.gui.tooltips_config_screen.disable_all": "Disable All",
+  "createqol.gui.tooltips_config_screen.title": "Configure %s Tooltips",
+
+  "createqol.gui.display_board.glowing": "Glowing",
+
+  "createqol.client_message.header": "[Create: Quality Of Life]: ",
+  "createqol.client_message.warning": "Warning: Stock Manager is a beta feature, some bugs and crash might appear.\nPlease report them on https://issues-qol.iglee.fr"
 }

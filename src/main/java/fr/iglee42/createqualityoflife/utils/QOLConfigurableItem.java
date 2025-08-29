@@ -209,12 +209,12 @@ public interface QOLConfigurableItem {
     }
 
     static Component chooseState(boolean config, boolean installed, boolean active, boolean activeReplaceInstall, boolean activeOnly){
-        if (activeOnly) return  Component.literal(!config ? "Disabled By Config" : (active ? "Enable" : "Disable")).withStyle(!config ? ChatFormatting.RED : ChatFormatting.YELLOW);
-        return  Component.literal(!config ? "Disabled By Config" : (installed ? (activeReplaceInstall ? (active ? "Enable" : "Disable") : "Installed") : "Not Installed")).withStyle(!config ? ChatFormatting.RED : ChatFormatting.YELLOW);
+        if (activeOnly) return  Component.translatable(!config ? "createqol.ability.state.disabled_by_config" : (active ? "createqol.ability.state.enabled" : "createqol.ability.state.disabled")).withStyle(!config ? ChatFormatting.RED : ChatFormatting.YELLOW);
+        return Component.translatable(!config ? "createqol.ability.state.disabled_by_config" : (installed ? (activeReplaceInstall ? (active ? "createqol.ability.state.enabled" : "createqol.ability.state.disabled") : "createqol.ability.state.installed") : "createqol.ability.state.not_installed")).withStyle(!config ? ChatFormatting.RED : ChatFormatting.YELLOW);
     }
 
     static Component cooldownState(boolean config, boolean active, int cooldown){
-       return Component.literal(!config ? "Disabled By Config" : (active ? (cooldown > 0 ? cooldown / 20 + "s" :  "Enable") : "Disable")).withStyle(!config ? ChatFormatting.RED : ChatFormatting.YELLOW);
+       return !config ? Component.translatable("createqol.ability.state.disabled_by_config").withStyle(ChatFormatting.RED) : (active ? (cooldown > 0 ? Component.literal(String.valueOf(cooldown / 20)).append(Component.translatable("createqol.ability.state.seconds")).withStyle(ChatFormatting.YELLOW) :  Component.translatable("createqol.ability.state.enabled")).withStyle(ChatFormatting.YELLOW) : Component.translatable("createqol.ability.state.disabled")).withStyle(ChatFormatting.YELLOW);
     }
 
 }

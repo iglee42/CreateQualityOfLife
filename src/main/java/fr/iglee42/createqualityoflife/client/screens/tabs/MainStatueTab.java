@@ -65,7 +65,7 @@ public class MainStatueTab extends StatueTab {
         nameTextBox.setBordered(false);
         nameTextBox.setTextColor(0xffffff);
         nameTextBox.setFocused(false);
-        nameTextBox.setHint(Component.literal("Name"));
+        nameTextBox.setHint(CreateQOLLang.translateDirect("statue.name"));
 
         List<Component> tip = new ArrayList<>();
         tip.add(CreateQOLLang.translateDirect("statue.showName"));
@@ -87,8 +87,8 @@ public class MainStatueTab extends StatueTab {
         showNameButton.green = getExampleStatue().isCustomNameVisible();
         showNameButton.getToolTip().clear();
         showNameButton.getToolTip().addAll(getExampleStatue().isCustomNameVisible() ? tipEnabled : tip);
-        showNameLabel = new Label(x + LABEL_X_OFFSET,y + SHOW_NAME_Y + LABEL_Y_OFFSET,Component.literal("Show Name"));
-        showNameLabel.text = Component.literal("Show Name");
+        showNameLabel = new Label(x + LABEL_X_OFFSET,y + SHOW_NAME_Y + LABEL_Y_OFFSET,CreateQOLLang.translateDirect("statue.showName"));
+        showNameLabel.text = CreateQOLLang.translateDirect("statue.showName");
 
         tip.clear();
         tip.add(CreateQOLLang.translateDirect("statue.small"));
@@ -110,8 +110,8 @@ public class MainStatueTab extends StatueTab {
         smallButton.green = getExampleStatue().isSmall();
         smallButton.getToolTip().clear();
         smallButton.getToolTip().addAll( getExampleStatue().isSmall() ? tipEnabled : tip);
-        smallLabel = new Label(x + LABEL_X_OFFSET,y + SMALL_Y + LABEL_Y_OFFSET,Component.literal("Small"));
-        smallLabel.text = Component.literal("Small");
+        smallLabel = new Label(x + LABEL_X_OFFSET,y + SMALL_Y + LABEL_Y_OFFSET,CreateQOLLang.translateDirect("statue.small"));
+        smallLabel.text = CreateQOLLang.translateDirect("statue.small");
 
         tip.clear();
         tip.add(CreateQOLLang.translateDirect("statue.slimArms"));
@@ -132,8 +132,8 @@ public class MainStatueTab extends StatueTab {
         slimArmsButton.green = getExampleStatue().isSlimArms();
         slimArmsButton.getToolTip().clear();
         slimArmsButton.getToolTip().addAll( getExampleStatue().isSlimArms() ? tipEnabled : tip);
-        slimArmsLabel = new Label(x + LABEL_X_OFFSET,y + SLIM_ARMS_Y + LABEL_Y_OFFSET,Component.literal("Slim Arms"));
-        slimArmsLabel.text = Component.literal("Slim Arms");
+        slimArmsLabel = new Label(x + LABEL_X_OFFSET,y + SLIM_ARMS_Y + LABEL_Y_OFFSET,CreateQOLLang.translateDirect("statue.slimArms"));
+        slimArmsLabel.text = CreateQOLLang.translateDirect("statue.slimArms");
 
         tip.clear();
         tip.add(CreateQOLLang.translateDirect("statue.noGravity"));
@@ -155,8 +155,8 @@ public class MainStatueTab extends StatueTab {
         ngButton.green = getExampleStatue().isNoGravity();
         ngButton.getToolTip().clear();
         ngButton.getToolTip().addAll( getExampleStatue().isNoGravity() ? tipEnabled : tip);
-        ngLabel = new Label(x + LABEL_X_OFFSET,y + NO_GRAVITY_Y + LABEL_Y_OFFSET,Component.literal("No Gravity"));
-        ngLabel.text = Component.literal("No Gravity");
+        ngLabel = new Label(x + LABEL_X_OFFSET,y + NO_GRAVITY_Y + LABEL_Y_OFFSET,CreateQOLLang.translateDirect("statue.noGravity"));
+        ngLabel.text = CreateQOLLang.translateDirect("statue.noGravity");
 
         tip.clear();
         tip.add(CreateQOLLang.translateDirect("statue.invulnerable"));
@@ -181,8 +181,8 @@ public class MainStatueTab extends StatueTab {
         invulnerableButton.green = getExampleStatue().isInvulnerable();
         invulnerableButton.getToolTip().clear();
         invulnerableButton.getToolTip().addAll( getExampleStatue().isInvulnerable() ? tipEnabled : tip);
-        invulnerableLabel = new Label(x + LABEL_X_OFFSET,y + INVUlNERABLE_Y + LABEL_Y_OFFSET,Component.literal("Invulnerable"));
-        invulnerableLabel.text = Component.literal("Invulnerable");
+        invulnerableLabel = new Label(x + LABEL_X_OFFSET,y + INVUlNERABLE_Y + LABEL_Y_OFFSET,CreateQOLLang.translateDirect("statue.invulnerable"));
+        invulnerableLabel.text = CreateQOLLang.translateDirect("statue.invulnerable");
 
         if (getExampleStatue().hasOwner() && !Minecraft.getInstance().player.getUUID().equals(getExampleStatue().getOwner().get())){
             invulnerableButton.active = false;
@@ -212,8 +212,8 @@ public class MainStatueTab extends StatueTab {
         invisibleButton.green = getExampleStatue().isInvisible();
         invisibleButton.getToolTip().clear();
         invisibleButton.getToolTip().addAll( getExampleStatue().isInvisible() ? tipEnabled : tip);
-        invisibleLabel = new Label(x + LABEL_X_OFFSET,y + INVISIBLE_Y + LABEL_Y_OFFSET,Component.literal("Invisible"));
-        invisibleLabel.text = Component.literal("Invisible");
+        invisibleLabel = new Label(x + LABEL_X_OFFSET,y + INVISIBLE_Y + LABEL_Y_OFFSET,CreateQOLLang.translateDirect("statue.invisible"));
+        invisibleLabel.text = CreateQOLLang.translateDirect("statue.invisible");
     }
 
     @Override

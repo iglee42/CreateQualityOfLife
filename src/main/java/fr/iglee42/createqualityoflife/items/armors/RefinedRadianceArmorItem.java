@@ -51,16 +51,16 @@ public class RefinedRadianceArmorItem extends BaseArmorItem implements QOLConfig
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext p_41422_, @NotNull List<Component> components, @NotNull TooltipFlag p_41424_) {
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         if (getType().equals(ArmorItem.Type.BOOTS)) {
-            components.add(Component.literal("Diving : ")
+            components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.diving").getString())
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsDiving.get(),
                             true, stack.getOrDefault(QOLDataComponents.BOOTS_DIVING, false), false, true)));
-            components.add(Component.literal("Belt Blocking : ")
+            components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.belt_blocking").getString())
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(true,
                             true, stack.getOrDefault(QOLDataComponents.BOOTS_BELT, true), false, true)));
         } else if (getType().equals(ArmorItem.Type.LEGGINGS)){
-            components.add(Component.literal("Step Height : ")
+            components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.step_height").getString())
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.stepHeight.get(),
                             true, stack.getOrDefault(QOLDataComponents.STEP_HEIGHT, true), false, true)));

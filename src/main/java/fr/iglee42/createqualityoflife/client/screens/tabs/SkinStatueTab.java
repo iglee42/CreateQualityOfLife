@@ -59,7 +59,7 @@ public class SkinStatueTab extends StatueTab {
         playerSkinTextBox.setBordered(false);
         playerSkinTextBox.setTextColor(0xffffff);
         playerSkinTextBox.setFocused(false);
-        playerSkinTextBox.setHint(Component.literal("Player Name"));
+        playerSkinTextBox.setHint(CreateQOLLang.translateDirect("statue.playerName"));
         playerSkinTextBox.setFilter(StringUtil::isValidPlayerName);
 
         partsButtons = new ArrayList<>();

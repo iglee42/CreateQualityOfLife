@@ -7,6 +7,7 @@ import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.Indicator;
 import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.gui.widget.SelectionScrollInput;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.packets.ConfigureDisplayBoardPacket;
 import fr.iglee42.createqualityoflife.registries.QOLGuiTextures;
 import net.createmod.catnip.gui.AbstractSimiScreen;
@@ -67,7 +68,7 @@ public class DisplayBoardEditScreen extends AbstractSimiScreen {
             glowingButton.setIcon(glowingIndicator.state == Indicator.State.OFF ? AllIcons.I_FX_SURFACE_ON : AllIcons.I_FX_SURFACE_OFF);
             glowingIndicator.state = glowingIndicator.state == Indicator.State.OFF ? Indicator.State.GREEN : Indicator.State.OFF;
         });
-        glowingButton.setToolTip(Component.literal("Glowing"));
+        glowingButton.setToolTip(CreateQOLLang.translateDirect("gui.display_board.glowing"));
 
         glowingIndicator = new Indicator(guiLeft + 53,guiTop + 64,Component.empty());
         glowingIndicator.state = be.glowingLines[lineIndex] ? Indicator.State.GREEN : Indicator.State.OFF;
@@ -77,10 +78,9 @@ public class DisplayBoardEditScreen extends AbstractSimiScreen {
 
         colorScrollInput = new SelectionScrollInput(guiLeft + 144, guiTop + 49, 55, 16);
         colorScrollInputLabel = new Label(guiLeft + 144, guiTop + 52, Component.empty()).withShadow();
-        colorScrollInput.forOptions(Arrays.stream(DyeColor.values()).map(DyeColor::getSerializedName).map(s->{
-            String firstLetter = String.valueOf(s.charAt(0)).toUpperCase();
-            return firstLetter + s.substring(1).replace("_"," ");
-        }).map(s->Component.literal(s).withStyle(Style.EMPTY.withColor(DyeColor.byName(!s.equals("Black") ?s.replace(" ","_").toLowerCase() : "gray",DyeColor.WHITE).getTextColor()))).toList()).calling(i->{
+        colorScrollInput.forOptions(Arrays.stream(DyeColor.values()).map(DyeColor::getSerializedName)
+                .map(s -> Component.translatable("color.minecraft." + s.toLowerCase())
+                        .withStyle(Style.EMPTY.withColor(DyeColor.byName(!s.equals("black") ?s.toLowerCase() : "gray",DyeColor.WHITE).getTextColor()))).toList()).calling(i->{
             DyeColor color = DyeColor.byId(i);
             colorScrollInputLabel.colored(color != DyeColor.BLACK ? color.getTextColor() : DyeColor.GRAY.getTextColor());
         }).writingTo(colorScrollInputLabel);

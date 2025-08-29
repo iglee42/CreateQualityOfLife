@@ -6,6 +6,7 @@ import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.advancement.CreateAdvancement;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.tools.refinedradiance.RefinedRadianceAxe;
 import fr.iglee42.createqualityoflife.items.tools.refinedradiance.RefinedRadianceHoe;
@@ -66,13 +67,13 @@ public class ShadowRadianceAxe extends AxeItem implements QOLConfigurableItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.literal("Reach : ")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.reach").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, stack.getOrDefault(QOLDataComponents.REACH,true), false, true)));
-        components.add(Component.literal("Casifier : ")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.casingifier").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.casingifier.get(), true, stack.getOrDefault(QOLDataComponents.CASINGIFIER,false), false, true)));
-        components.add(Component.literal("Tree Decapitation : ")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.tree_decapitation").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.treeDecapitation.get(), true, stack.getOrDefault(QOLDataComponents.TREE_DECAPITATION,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
@@ -92,14 +93,14 @@ public class ShadowRadianceAxe extends AxeItem implements QOLConfigurableItem {
         if (level.isClientSide) return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand),true);
         if (player.isCrouching()){
             if (player.getItemInHand(hand).getOrDefault(QOLDataComponents.TREE_DECAPITATION,false)){
-                player.displayClientMessage(Component.literal("Casingifier can't be enabled if tree decapitation is enabled").withStyle(ChatFormatting.RED),true);
+                player.displayClientMessage(CreateQOLLang.translateDirect("ability.tool.unavailable", CreateQOLLang.translateDirect("ability.tool.casingifier").getString(), CreateQOLLang.translateDirect("ability.tool.tree_decapitation").getString()).withStyle(ChatFormatting.RED),true);
             }else {
                 RefinedRadianceAxe.toggleAbility(player.getItemInHand(hand),player);
             }
         }
         else {
             if (player.getItemInHand(hand).getOrDefault(QOLDataComponents.CASINGIFIER,false)){
-                player.displayClientMessage(Component.literal("Tree Decapitation can't be enabled if casingifier is enabled").withStyle(ChatFormatting.RED),true);
+                player.displayClientMessage(CreateQOLLang.translateDirect("ability.tool.unavailable", CreateQOLLang.translateDirect("ability.tool.tree_decapitation").getString(), CreateQOLLang.translateDirect("ability.tool.casingifier").getString()).withStyle(ChatFormatting.RED),true);
             }else {
                 ShadowSteelAxe.toggleAbility(player.getItemInHand(hand),player);
             }

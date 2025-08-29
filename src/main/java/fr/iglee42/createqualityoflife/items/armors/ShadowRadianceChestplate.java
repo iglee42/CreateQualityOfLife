@@ -3,6 +3,7 @@ package fr.iglee42.createqualityoflife.items.armors;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.BooleanEntry;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLArmorMaterials;
@@ -189,36 +190,36 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.literal("Air : ")
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.air").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.literal(String.valueOf(BacktankUtil.getAir(stack)))
                         .withStyle(ChatFormatting.YELLOW))
                 .append(Component.literal("/"+BacktankUtil.maxAir(stack))
                         .withStyle(ChatFormatting.GOLD)));
-        components.add(Component.literal("Effect : ")
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.effect").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.translatable(providedEffect(stack).value().getDescriptionId()).withStyle(ChatFormatting.YELLOW)));
-        components.add(Component.literal("Arms : ")
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.arms").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(true,
                         true, stack.getOrDefault(QOLDataComponents.BACKTANK_ARMS, true), false, true)));
-        components.add(Component.literal("Elytra : ")
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.elytra").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() ,hasElytra(stack) ,isElytraEnable(stack), true,false)));
-        components.add(Component.literal("Dash : ")
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.dash").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.cooldownState(CreateQOLConfigs.server().equipments.armors.dashAllowed.get(),
                         stack.getOrDefault(QOLDataComponents.DASH, true), (int) Math.ceil(Minecraft.getInstance().player.getCooldowns().getCooldownPercent(this,0) * CreateQOLConfigs.server().equipments.armors.dashCooldown.get()))));
-        components.add(Component.literal("Propeller : ")
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.propeller").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.propellerAllowed.get() ,
                         hasPropeller(stack) ,true,false,false)));
         if (hasPropeller(stack) && CreateQOLConfigs.server().equipments.armors.propellerAllowed.get()) {
             components.add(Component.empty());
-            components.add(Component.literal("Fan : ")
+            components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.fan").getString())
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(true,true,isFansEnable(stack),false,true)));
-            components.add(Component.literal("Hover : ")
+            components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.hover").getString())
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.hoverAllowed.get() ,true,isHoverEnable(stack),false,true)));
         }
@@ -228,43 +229,43 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
 
     public static void toggleFans(ItemStack chestplate,Player p) {
         if (!CreateQOLConfigs.server().equipments.armors.propellerAllowed.get()){
-            p.displayClientMessage(Component.literal("Propeller is disabled by the config").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.disabled", CreateQOLLang.translateDirect("ability.armor.propeller_mode").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         if (isElytraEnable(chestplate)){
-            p.displayClientMessage(Component.literal("Fan can't be enabled if the elytra are enabled").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.unavailable", CreateQOLLang.translateDirect("ability.armor.fan_mode").getString(), CreateQOLLang.translateDirect("ability.armor.elytra_mode").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         chestplate.set(QOLDataComponents.BACKTANK_FANS, !chestplate.has(QOLDataComponents.BACKTANK_FANS) || Boolean.FALSE.equals(chestplate.get(QOLDataComponents.BACKTANK_FANS)));
         boolean fans = isFansEnable(chestplate);
-        p.displayClientMessage(Component.literal("Fan : ").append(QOLConfigurableItem.chooseState(true,true,fans,false,true)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED),true);
+        p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.toggle_message", CreateQOLLang.translateDirect("ability.armor.fan_mode").getString()).append(QOLConfigurableItem.chooseState(true,true,fans,false,true)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
     public static void toggleHover(ItemStack chestplate,Player p) {
         if (!CreateQOLConfigs.server().equipments.armors.propellerAllowed.get()){
-            p.displayClientMessage(Component.literal("Propeller is disabled by the config").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.disabled", CreateQOLLang.translateDirect("ability.armor.propeller_mode").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         if (!CreateQOLConfigs.server().equipments.armors.hoverAllowed.get()){
-            p.displayClientMessage(Component.literal("Hover is disabled by the config").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.disabled", CreateQOLLang.translateDirect("ability.armor.hover_mode").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         chestplate.set(QOLDataComponents.BACKTANK_HOVER, chestplate.has(QOLDataComponents.BACKTANK_HOVER) && Boolean.FALSE.equals(chestplate.get(QOLDataComponents.BACKTANK_HOVER)));
         boolean hover = isHoverEnable(chestplate);
-        p.displayClientMessage(Component.literal("Hover : ").append(QOLConfigurableItem.chooseState(true,true,hover,false,true)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED),true);
+        p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.toggle_message", CreateQOLLang.translateDirect("ability.armor.hover_mode").getString()).append(QOLConfigurableItem.chooseState(true,true,hover,false,true)).withStyle(hover ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
 
     public static void toggleElytra(ItemStack chestplate,Player p) {
         if (!CreateQOLConfigs.server().equipments.armors.elytraAllowed.get()){
-            p.displayClientMessage(Component.literal("Elytra are disabled by the config").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.disabled", CreateQOLLang.translateDirect("ability.armor.elytra_mode").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         if (isFansEnable(chestplate)){
-            p.displayClientMessage(Component.literal("Elytra can't be enabled if the fans is enabled").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.unavailable", CreateQOLLang.translateDirect("ability.armor.elytra_mode").getString(), CreateQOLLang.translateDirect("ability.armor.fan_mode").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         chestplate.set(QOLDataComponents.BACKTANK_ELYTRA_STATE, chestplate.has(QOLDataComponents.BACKTANK_ELYTRA_STATE) && Boolean.FALSE.equals(chestplate.get(QOLDataComponents.BACKTANK_ELYTRA_STATE)));
         boolean elytra = isElytraEnable(chestplate);
-        p.displayClientMessage(Component.literal("Elytra : ").append(QOLConfigurableItem.chooseState(true,true,elytra,false,true)).withStyle(elytra ? ChatFormatting.GREEN : ChatFormatting.RED),true);
+        p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.toggle_message", CreateQOLLang.translateDirect("ability.armor.elytra_mode").getString()).append(QOLConfigurableItem.chooseState(true,true,elytra,false,true)).withStyle(elytra ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
     public static boolean hasPropeller(ItemStack chestplate){
         return chestplate.has(QOLDataComponents.BACKTANK_PROPELLERS) && Boolean.TRUE.equals(chestplate.get(QOLDataComponents.BACKTANK_PROPELLERS));

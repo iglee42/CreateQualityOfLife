@@ -53,12 +53,12 @@
   "item.createqol.empty_stock_manager": "Рабочее место складского распорядителя",
 
   "create.options.inventory_linker.label": "Режим привязки инвентаря",
-  "create.options.inventory_linker.inventory": "Инвентарь",
-  "create.options.inventory_linker.armor": "Броня",
-  "create.options.inventory_linker.off_hand": "Вторая рука",
+  "options.inventory_linker.inventory": "Инвентарь",
+  "options.inventory_linker.armor": "Броня",
+  "options.inventory_linker.off_hand": "Вторая рука",
   "create.options.brass_trash_can.label": "Режим работы мусоропровода",
-  "create.options.brass_trash_can.void": "Уничтожать всё",
-  "create.options.brass_trash_can.keep_64": "Оставлять по стаку",
+  "options.brass_trash_can.void": "Уничтожать всё",
+  "options.brass_trash_can.keep_64": "Оставлять по стаку",
 
   "tooltip.createqol.player_paper.linked_player": "Привязанный игрок: %s",
   "tooltip.createqol.player_paper.no_linked_player": "Игрок не привязан",
@@ -115,12 +115,14 @@
 
   "entity.createqol.statue": "Картонный манекен",
 
+  "createqol.statue.title": "Настройка картонного манекена",
+  "createqol.statue.name": "Имя манекена",
   "createqol.statue.showName": "Отображать имя",
   "createqol.statue.small": "Маленький",
   "createqol.statue.slimArms": "Стройный",
   "createqol.statue.noGravity": "Без гравитации",
   "createqol.statue.invulnerable": "Заблокированный",
-  "createqol.statue.invulnerable1": "Отключить возможность",
+  "createqol.statue.invulnerable1": "Отключает возможность",
   "createqol.statue.invulnerable2": "настраивать этот манекен",
   "createqol.statue.invulnerable3": "другим игрокам",
   "createqol.statue.ownerInvulnerable": "Только владелец",
@@ -131,7 +133,9 @@
   "createqol.statue.ownStatue1": "владельцем манекена",
   "createqol.statue.noCape": "У этого игрока",
   "createqol.statue.noCape1": "нет плаща",
-  "createqol.statue.mainTab": "Настройка манекена",
+  "createqol.statue.mainTab": "Основные настройки",
+
+  "createqol.statue.playerName": "Имя игрока",
 
   "createqol.statue.rotation.cape": "Поворот",
   "createqol.statue.rotation.hat": "Положение головы",
@@ -178,6 +182,7 @@
   "createqol.statue.transformTab": "Положение манекена",
   "createqol.statue.position": "Позиция",
   "createqol.statue.scale": "Размер",
+  "createqol.statue.scaleScroll": "Размер: %s",
   "createqol.statue.animationTab": "Анимация",
   "createqol.statue.publishedAnimationTab": "Опубликованные анимации",
 
@@ -207,6 +212,7 @@
   "createqol.statue.animation.next_frame": "Следующий ключевой кадр",
   "createqol.statue.animation.delete_frame": "Удалить ключевой кадр",
   "createqol.statue.animation.publish": "Опубликовать анимацию",
+  "createqol.statue.animation.publishName": "Название анимации",
   "createqol.statue.animation.delete": "Удалить анимацию",
 
   "createqol.statue.owner": "Владелец: %s",
@@ -215,9 +221,62 @@
   "createqol.statue.locked": "Манекен заблокирован! Только владелец может его изменить.",
   "createqol.statue.name_utility": "Название отображается в разделе опубликованных анимаций. Оно не сохранится, если закрыть интерфейс до публикации.",
 
-  "createqol.chestplate.use_fireworks": "Находясь в инвентаре, может быть использован для ускорения полёта, когда надет нагрудник из пост-хроматического сплава, оснащённый элитрами — для этого зажмите [Пробел], находясь в режиме полёта.",
-  "createqol.chestplate.no_propeller": "Режимы пропеллерной тяги и парения недоступны: баллон не оснащён пропеллером",
-  "createqol.chestplate.no_elytra": "Режим полёта недоступен: баллон не оснащён элитрами",
+  "createqol.backtank.propeller_disabled": "Установка пропеллера недоступна: режимы пропеллерной тяги и парения запрещены настройками мира/сервера",
+  "createqol.backtank.elytra_disabled": "Установка элитр недоступна: режим полёта запрещён настройками мира/сервера",
+
+  "createqol.ability.armor.use_fireworks": "Находясь в инвентаре, может быть использован для ускорения полёта, когда надет нагрудник из пост-хроматического сплава, оснащённый элитрами — для этого зажмите [Пробел], находясь в режиме полёта.",
+  "createqol.ability.armor.no_propeller": "Режимы пропеллерной тяги и парения недоступны: баллон не оснащён пропеллером",
+  "createqol.ability.armor.no_elytra": "Режим полёта недоступен: баллон не оснащён элитрами",
+  "createqol.ability.armor.dash_disabled": "Функция рывка запрещена настройками мира/сервера",
+  "createqol.ability.armor.dash_reloading": "Рывок перезаряжается...",
+
+  "createqol.ability.armor.disabled": "%s запрещён настройками мира/сервера",
+  "createqol.ability.armor.unavailable": "%1$s не может быть включён, пока активен %2$s",
+  "createqol.ability.armor.reloading": "%s перезаряжается...",
+  "createqol.ability.armor.toggle_message": "%s: ",
+
+  "createqol.ability.tool.disabled": "Режим «%s» запрещён настройками мира/сервера",
+  "createqol.ability.tool.unavailable": "Режим «%1$s» не может быть включён, пока активен режим «%2$s»",
+  "createqol.ability.tool.toggle_message": "%s: ",
+
+  "createqol.ability.armor.propeller_mode": "Режим пропеллерной тяги/парения",
+  "createqol.ability.armor.fan_mode": "Режим пропеллерной тяги",
+  "createqol.ability.armor.hover_mode": "Режим парения",
+  "createqol.ability.armor.elytra_mode": "Режим полёта",
+
+  "createqol.ability.tool.attraction": "Притягивание",
+  "createqol.ability.tool.casingifier": "Корпусификатор",
+  "createqol.ability.tool.digging": "Расширенное копание",
+  "createqol.ability.tool.harvesting": "Автопосадка",
+  "createqol.ability.tool.ploughing": "Расширенная вспашка",
+  "createqol.ability.tool.reach": "Повышенная досягаемость",
+  "createqol.ability.tool.repulsion_attraction": "Притягивание/отталкивание",
+  "createqol.ability.tool.repulsion": "Отталкивание",
+  "createqol.ability.tool.smelting": "Автопереплавка",
+  "createqol.ability.tool.tree_decapitation": "Лесоруб",
+  "createqol.ability.tool.vein_mine": "Добыча залежи",
+
+  "createqol.ability.armor.air": "Воздух",
+  "createqol.ability.armor.arms": "Рукава",
+  "createqol.ability.armor.belt_blocking": "Сопротивление конвейерам",
+  "createqol.ability.armor.dash": "Рывок",
+  "createqol.ability.armor.diving": "Водолаз",
+  "createqol.ability.armor.effect": "Эффект",
+  "createqol.ability.armor.elytra": "Элитры",
+  "createqol.ability.armor.fan": "Пропеллерная тяга",
+  "createqol.ability.armor.goggles": "Инженерные очки",
+  "createqol.ability.armor.hover": "Парение",
+  "createqol.ability.armor.lava_walking": "Лаволаз",
+  "createqol.ability.armor.propeller": "Пропеллер",
+  "createqol.ability.armor.step_height": "Высокий шаг",
+  "createqol.ability.armor.void_walk": "Левитация над бездной",
+
+  "createqol.ability.state.disabled_by_config": "запрещ.",
+  "createqol.ability.state.disabled": "выкл.",
+  "createqol.ability.state.enabled": "вкл.",
+  "createqol.ability.state.installed": "уст.",
+  "createqol.ability.state.not_installed": "не уст.",
+  "createqol.ability.state.seconds": "с",
 
   "createqol.ponder.ender_packager.header": "Телепортацией коробок",
   "createqol.ponder.ender_packager.text_1": "Поместите предметы в два слота, чтобы указать частоту",
@@ -228,7 +287,7 @@
   "createqol.ponder.ender_packager_addresses.header": "Маршрутизацией перемещаемых коробок по их адресам",
   "createqol.ponder.ender_packager_addresses.text_1": "Склад",
   "createqol.ponder.ender_packager_addresses.text_2": "Фабрика",
-  "createqol.ponder.ender_packager_addresses.text_3": "При размещении на эндер-телепаковщике таблички с текстом...",
+  "createqol.ponder.ender_packager_addresses.text_3": "Если разместить табличку с текстом на эндер-телепаковщик...",
   "createqol.ponder.ender_packager_addresses.text_4": "...этот текст назначается адресом телепаковщика — как у квакопорта",
   "createqol.ponder.ender_packager_addresses.text_5": "→ Склад",
   "createqol.ponder.ender_packager_addresses.text_6": "Если принимающий телепаковщик с соответствующим адресом занят...",
@@ -264,5 +323,17 @@
   "createqol.gui.stock_manager.remove_user": "Уволить",
   "createqol.gui.stock_manager.add_user": "Нанять",
 
-  "createqol.logistically_linked.tuned_to": "Подключено к сети %s"
+  "createqol.logistically_linked.tuned_to": "Подключено к сети %s",
+
+  "createqol.gui.config_screen.go_back": "Назад",
+  "createqol.gui.inventory_config_screen.title": "Выберите настраиваемый предмет",
+  "createqol.gui.item_config_screen.title": "Настройка предмета «%s»",
+  "createqol.gui.tooltips_config_screen.enable_all": "Включить все подсказки",
+  "createqol.gui.tooltips_config_screen.disable_all": "Отключить все подсказки",
+  "createqol.gui.tooltips_config_screen.title": "Настройка подсказок предмета «%s»",
+
+  "createqol.gui.display_board.glowing": "Светящийся",
+
+  "createqol.client_message.header": "[Create: Quality Of Life]: ",
+  "createqol.client_message.warning": "Складской распорядитель находится на ранней стадии разработки — его использование может привести к сбоям игры;\n в случае обнаружения неисправности сообщите о ней на https://issues-qol.iglee.fr"
 }

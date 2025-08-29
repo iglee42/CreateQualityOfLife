@@ -5,6 +5,7 @@ import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.equipment.armor.BacktankBlock;
 import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
 import com.simibubi.create.content.equipment.armor.BacktankItem;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.blockentitites.ShadowRadianceBacktankBE;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate;
@@ -75,7 +76,7 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
             if (level.getBlockEntity(pos) instanceof ShadowRadianceBacktankBE be){
                 if (!be.hasPropeller() && AllItems.PROPELLER.is(player.getMainHandItem().getItem())) {
                     if (!CreateQOLConfigs.server().equipments.armors.propellerAllowed.get()) {
-                        player.displayClientMessage(Component.literal("Propellers are disabled by the config").withStyle(ChatFormatting.RED), true);
+                        player.displayClientMessage(CreateQOLLang.translateDirect("backtank.propeller_disabled").withStyle(ChatFormatting.RED), true);
                         level.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
                         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
                     }
@@ -88,7 +89,7 @@ public class ShadowRadianceBacktankBlock extends BacktankBlock {
                 }
                 if (!be.hasElytra() && player.getMainHandItem().is(Items.ELYTRA)) {
                     if (!CreateQOLConfigs.server().equipments.armors.elytraAllowed.get()) {
-                        player.displayClientMessage(Component.literal("Elytra are disabled by the config").withStyle(ChatFormatting.RED), true);
+                        player.displayClientMessage(CreateQOLLang.translateDirect("backtank.elytra_disabled").withStyle(ChatFormatting.RED), true);
                         level.playSound(null, pos, AllSoundEvents.DENY.getMainEvent(), SoundSource.PLAYERS, 1, 1.45f);
                         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
                     }
