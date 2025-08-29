@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife.items.tools.shadowradiance;
 
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.BooleanEntry;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.tools.refinedradiance.RefinedRadianceShovel;
@@ -45,13 +46,13 @@ public class ShadowRadianceShovel extends ShovelItem implements QOLConfigurableI
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.translatable("createqol.ability.tools.reach")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.reach").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, stack.getOrDefault(QOLDataComponents.REACH,true), false, true)));
-        components.add(Component.translatable("createqol.ability.tools.smelting")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.smelting").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.smelting.get(), true, stack.getOrDefault(QOLDataComponents.SMELTING,false), false, true)));
-        components.add(Component.translatable("createqol.ability.tools.digging")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.digging").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.digging.get(), true, stack.getOrDefault(QOLDataComponents.DIGGING,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
@@ -79,14 +80,14 @@ public class ShadowRadianceShovel extends ShovelItem implements QOLConfigurableI
         if (level.isClientSide) return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand),true);
         if (player.isCrouching()){
             if (player.getItemInHand(hand).getOrDefault(QOLDataComponents.SMELTING,false)){
-                player.displayClientMessage(Component.translatable("createqol.tool.digging_unavailable").withStyle(ChatFormatting.RED),true);
+                player.displayClientMessage(CreateQOLLang.translateDirect("ability.tool.unavailable", CreateQOLLang.translateDirect("ability.tool.digging").getString(), CreateQOLLang.translateDirect("ability.tool.smelting").getString()).withStyle(ChatFormatting.RED),true);
             }else {
                 ShadowSteelShovel.toggleAbility(player.getItemInHand(hand),player);
             }
         }
         else {
             if (player.getItemInHand(hand).getOrDefault(QOLDataComponents.DIGGING,false)){
-                player.displayClientMessage(Component.translatable("createqol.tool.smelting_unavailable").withStyle(ChatFormatting.RED),true);
+                player.displayClientMessage(CreateQOLLang.translateDirect("ability.tool.unavailable", CreateQOLLang.translateDirect("ability.tool.smelting").getString(), CreateQOLLang.translateDirect("ability.tool.digging").getString()).withStyle(ChatFormatting.RED),true);
             }else {
                 RefinedRadianceShovel.toggleAbility(player.getItemInHand(hand),player);
             }

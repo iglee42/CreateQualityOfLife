@@ -2,6 +2,7 @@ package fr.iglee42.createqualityoflife.items.tools.refinedradiance;
 
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
 import fr.iglee42.createqualityoflife.registries.QOLItems;
@@ -60,10 +61,10 @@ public class RefinedRadianceShovel extends ShovelItem implements QOLConfigurable
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.translatable("createqol.ability.tools.reach")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.reach").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, stack.getOrDefault(QOLDataComponents.REACH,true), false, true)));
-        components.add(Component.translatable("createqol.ability.tools.smelting")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.smelting").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.smelting.get(), true, stack.getOrDefault(QOLDataComponents.SMELTING,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
@@ -87,12 +88,12 @@ public class RefinedRadianceShovel extends ShovelItem implements QOLConfigurable
 
     public static void toggleAbility(ItemStack stack, Player p) {
         if (!CreateQOLConfigs.server().equipments.tools.smelting.get()){
-            p.displayClientMessage(Component.translatable("createqol.tool.smelting_disabled").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.tool.disabled", CreateQOLLang.translateDirect("ability.tool.smelting").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         boolean enable = !stack.getOrDefault(QOLDataComponents.SMELTING,false);
         stack.set(QOLDataComponents.SMELTING, enable);
-        p.displayClientMessage(Component.translatable("createqol.tool.smelting_toggle").append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
+        p.displayClientMessage(CreateQOLLang.translateDirect("ability.tool.toggle_message", CreateQOLLang.translateDirect("ability.tool.smelting").getString()).append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
 
 

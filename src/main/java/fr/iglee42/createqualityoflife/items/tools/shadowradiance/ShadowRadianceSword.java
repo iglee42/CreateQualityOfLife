@@ -134,10 +134,10 @@ public class ShadowRadianceSword extends SwordItem implements QOLConfigurableIte
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.translatable("createqol.ability.tools.reach")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.reach").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, stack.getOrDefault(QOLDataComponents.REACH, true), false, true)));
-        components.add(Component.translatable("createqol.ability.tools.repulsion_attraction")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.repulsion_attraction").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.cooldownState(CreateQOLConfigs.server().equipments.tools.swordsAbilities.get(),
                         true, (int) Math.ceil(Minecraft.getInstance().player.getCooldowns().getCooldownPercent(this,0) * CreateQOLConfigs.server().equipments.tools.swordsCooldowns.get()))));
