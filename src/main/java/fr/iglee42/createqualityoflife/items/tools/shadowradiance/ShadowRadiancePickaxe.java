@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife.items.tools.shadowradiance;
 
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.client.screens.widgets.entries.BooleanEntry;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.tools.refinedradiance.RefinedRadiancePickaxe;
@@ -35,14 +36,14 @@ public class ShadowRadiancePickaxe extends PickaxeItem implements QOLConfigurabl
         if (level.isClientSide) return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand),true);
         if (player.isCrouching()){
             if (NBTConstants.getOrDefault(player.getItemInHand(hand),NBTConstants.NBT_VEIN_MINE,false)){
-                player.displayClientMessage(Component.translatable("createqol.tool.digging_unavailable").withStyle(ChatFormatting.RED),true);
+                player.displayClientMessage(CreateQOLLang.translateDirect("ability.tool.unavailable", CreateQOLLang.translateDirect("ability.tool.digging").getString(), CreateQOLLang.translateDirect("ability.tool.vein_mine").getString()).withStyle(ChatFormatting.RED),true);
             }else {
                 ShadowSteelPickaxe.toggleAbility(player.getItemInHand(hand),player);
             }
         }
         else {
             if (NBTConstants.getOrDefault(player.getItemInHand(hand),NBTConstants.NBT_DIGGING,false)){
-                player.displayClientMessage(Component.translatable("createqol.tool.vein_mine_unavailable").withStyle(ChatFormatting.RED),true);
+                player.displayClientMessage(CreateQOLLang.translateDirect("ability.tool.unavailable", CreateQOLLang.translateDirect("ability.tool.vein_mine").getString(), CreateQOLLang.translateDirect("ability.tool.digging").getString()).withStyle(ChatFormatting.RED),true);
             }else {
                 RefinedRadiancePickaxe.toggleAbility(player.getItemInHand(hand),player);
             }
@@ -64,13 +65,13 @@ public class ShadowRadiancePickaxe extends PickaxeItem implements QOLConfigurabl
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.translatable("createqol.ability.tools.reach")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.reach").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_REACH,true), false, true)));
-        components.add(Component.translatable("createqol.ability.tools.digging")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.digging").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.digging.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_DIGGING,false), false, true)));
-        components.add(Component.translatable("createqol.ability.tools.vein_mine")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.vein_mine").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.veinMine.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_VEIN_MINE,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);

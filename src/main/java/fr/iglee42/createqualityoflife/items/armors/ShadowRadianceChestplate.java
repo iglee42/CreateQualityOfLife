@@ -176,36 +176,36 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.translatable("createqol.ability.armor.air")
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.air").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.literal(String.valueOf(BacktankUtil.getAir(stack)))
                         .withStyle(ChatFormatting.YELLOW))
                 .append(Component.literal("/"+BacktankUtil.maxAir(stack))
                         .withStyle(ChatFormatting.GOLD)));
-        components.add(Component.translatable("createqol.ability.armor.effect")
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.effect").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.translatable(providedEffect(stack).getDescriptionId()).withStyle(ChatFormatting.YELLOW)));
-        components.add(Component.translatable("createqol.ability.armor.arms")
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.arms").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(true,
                         true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_ARMS,true), false, true)));
-        components.add(Component.translatable("createqol.ability.armor.elytra")
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.elytra").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() ,hasElytra(stack) ,isElytraEnable(stack), true,false)));
-        components.add(Component.translatable("createqol.ability.armor.dash")
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.dash").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.cooldownState(CreateQOLConfigs.server().equipments.armors.dashAllowed.get(),
                         NBTConstants.getOrDefault(stack,NBTConstants.NBT_DASH, true), (int) Math.ceil(Minecraft.getInstance().player.getCooldowns().getCooldownPercent(this,0) * CreateQOLConfigs.server().equipments.armors.dashCooldown.get()))));
-        components.add(Component.translatable("createqol.ability.armor.propeller")
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.propeller").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.propellerAllowed.get() ,
                         hasPropeller(stack) ,true,false,false)));
         if (hasPropeller(stack) && CreateQOLConfigs.server().equipments.armors.propellerAllowed.get()) {
             components.add(Component.empty());
-            components.add(Component.translatable("createqol.ability.armor.fan")
+            components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.fan").getString())
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(true,true,isFansEnable(stack),false,true)));
-            components.add(Component.translatable("createqol.ability.armor.hover")
+            components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.hover").getString())
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.hoverAllowed.get() ,true,isHoverEnable(stack),false,true)));
         }
@@ -215,24 +215,24 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
 
     public static void toggleFans(ItemStack chestplate,Player p) {
         if (!CreateQOLConfigs.server().equipments.armors.propellerAllowed.get()){
-            p.displayClientMessage(CreateQOLLang.translateDirect("chestplate.propeller_disabled").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.disabled", CreateQOLLang.translateDirect("ability.armor.propeller_mode").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         if (isElytraEnable(chestplate)){
-            p.displayClientMessage(CreateQOLLang.translateDirect("chestplate.fan_unavailable").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.unavailable", CreateQOLLang.translateDirect("ability.armor.fan_mode").getString(), CreateQOLLang.translateDirect("ability.armor.elytra_mode").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         chestplate.getOrCreateTag().putBoolean(NBTConstants.NBT_FANS, chestplate.getOrCreateTag().contains(NBTConstants.NBT_FANS) && !chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_FANS));
         boolean fans = isFansEnable(chestplate);
-        p.displayClientMessage(CreateQOLLang.translateDirect("chestplate.fan_toggle").append(QOLConfigurableItem.chooseState(true,true,fans,false,true)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED),true);
+        p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.toggle_message", CreateQOLLang.translateDirect("ability.armor.fan_mode").getString()).append(QOLConfigurableItem.chooseState(true,true,fans,false,true)).withStyle(fans ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
     public static void toggleHover(ItemStack chestplate,Player p) {
         if (!CreateQOLConfigs.server().equipments.armors.propellerAllowed.get()){
-            p.displayClientMessage(CreateQOLLang.translateDirect("chestplate.propeller_disabled").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.disabled", CreateQOLLang.translateDirect("ability.armor.propeller_mode").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         if (!CreateQOLConfigs.server().equipments.armors.hoverAllowed.get()){
-            p.displayClientMessage(CreateQOLLang.translateDirect("chestplate.hover_disabled").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.disabled", CreateQOLLang.translateDirect("ability.armor.hover_mode").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         chestplate.getOrCreateTag().putBoolean(NBTConstants.NBT_HOVER, chestplate.getOrCreateTag().contains(NBTConstants.NBT_HOVER) && !chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_HOVER));
@@ -242,11 +242,11 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
 
     public static void toggleElytra(ItemStack chestplate,Player p) {
         if (!CreateQOLConfigs.server().equipments.armors.elytraAllowed.get()){
-            p.displayClientMessage(CreateQOLLang.translateDirect("chestplate.elytra_disabled").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.disabled", CreateQOLLang.translateDirect("ability.armor.elytra_mode").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         if (isFansEnable(chestplate)){
-            p.displayClientMessage(CreateQOLLang.translateDirect("chestplate.elytra_unavailable").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.unavailable", CreateQOLLang.translateDirect("ability.armor.elytra_mode").getString(), CreateQOLLang.translateDirect("ability.armor.fan_mode").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         chestplate.getOrCreateTag().putBoolean(NBTConstants.NBT_ELYTRA_STATE, chestplate.getOrCreateTag().contains(NBTConstants.NBT_ELYTRA_STATE) && !chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_ELYTRA_STATE));

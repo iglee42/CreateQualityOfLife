@@ -7,6 +7,7 @@ import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe;
 import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.advancement.CreateAdvancement;
+import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLTiers;
 import fr.iglee42.createqualityoflife.utils.ItemTooltips;
@@ -56,10 +57,10 @@ public class RefinedRadianceAxe extends AxeItem implements QOLConfigurableItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.translatable("createqol.ability.tools.reach")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.reach").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.reach.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_REACH,true), false, true)));
-        components.add(Component.translatable("createqol.ability.tools.casingifier")
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.casingifier").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.casingifier.get(), true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_CASINGIFIER,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
@@ -83,12 +84,12 @@ public class RefinedRadianceAxe extends AxeItem implements QOLConfigurableItem {
 
     public static void toggleAbility(ItemStack stack, Player p) {
         if (!CreateQOLConfigs.server().equipments.tools.casingifier.get()){
-            p.displayClientMessage(Component.translatable("createqol.tool.casingifier_disabled").withStyle(ChatFormatting.RED),true);
+            p.displayClientMessage(CreateQOLLang.translateDirect("ability.tool.disabled", CreateQOLLang.translateDirect("ability.tool.casingifier").getString()).withStyle(ChatFormatting.RED),true);
             return;
         }
         boolean enable = !NBTConstants.getOrDefault(stack,NBTConstants.NBT_CASINGIFIER,false);
         stack.getOrCreateTag().putBoolean(NBTConstants.NBT_CASINGIFIER, enable);
-        p.displayClientMessage(Component.translatable("createqol.tool.casingifier_toggle").append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
+        p.displayClientMessage(CreateQOLLang.translateDirect("ability.tool.toggle_message", CreateQOLLang.translateDirect("ability.tool.casingifier").getString()).append(QOLConfigurableItem.chooseState(true,true,enable,false,true)).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
 
     @Override

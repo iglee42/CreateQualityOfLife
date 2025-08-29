@@ -45,16 +45,16 @@ public class RefinedRadianceArmorItem extends BaseArmorItem implements QOLConfig
     public void appendHoverText(@NotNull ItemStack stack, @NotNull Level p_41422_, @NotNull List<Component> components, @NotNull TooltipFlag p_41424_) {
         if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         if (getType().equals(ArmorItem.Type.BOOTS)) {
-            components.add(Component.translatable("createqol.ability.armor.diving")
+            components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.diving").getString())
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.bootsDiving.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_DIVING, false), false, true)));
-            components.add(Component.translatable("createqol.ability.armor.belt_blocking")
+            components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.belt_blocking").getString())
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(true,
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_BELT, true), false, true)));
         } else if (getType().equals(ArmorItem.Type.LEGGINGS)){
-            components.add(Component.translatable("createqol.ability.armor.step_height")
+            components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.step_height").getString())
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.stepHeight.get(),
                             true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_STEP_HEIGHT, true), false, true)));

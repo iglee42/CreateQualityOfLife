@@ -202,7 +202,7 @@ public class CreateQOL {
     public void itemTooltips(ItemTooltipEvent event){
         if (!event.getItemStack().is(Items.FIREWORK_ROCKET)) return;
         if (isActivate(Features.SHADOW_RADIANCE) && CreateQOLConfigs.server().equipments.armors.elytraBoostAllowed.get() && CreateQOLConfigs.server().equipments.armors.useFireworksForBoost.get()){
-            event.getToolTip().add(2,CreateQOLLang.translateDirect("chestplate.use_fireworks").withStyle(ChatFormatting.YELLOW));
+            event.getToolTip().add(2,CreateQOLLang.translateDirect("armor.ability.use_fireworks").withStyle(ChatFormatting.YELLOW));
         }
     }
 }

@@ -38,7 +38,7 @@ public class ShadowSteelHelmet extends DivingHelmetItem implements QOLConfigurab
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> components, TooltipFlag p_41424_) {
         if (!NBTConstants.getTooltipOrDefault(stack).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
-        components.add(Component.translatable("createqol.ability.armor.goggles")
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.goggles").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.helmetHaveGoggles.get(),
                         true, NBTConstants.getOrDefault(stack,NBTConstants.NBT_GOGGLES,true), false, true)));
