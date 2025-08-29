@@ -31,7 +31,7 @@
             "item": "minecraft:netherite_axe"
           },
           "N": {
-            "item": "create:mechanical_saw"
+            "item": "create:deployer"
           }
         },
         "result": {
