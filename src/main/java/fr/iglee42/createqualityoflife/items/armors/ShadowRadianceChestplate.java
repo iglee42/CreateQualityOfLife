@@ -251,7 +251,7 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
         }
         chestplate.getOrCreateTag().putBoolean(NBTConstants.NBT_ELYTRA_STATE, chestplate.getOrCreateTag().contains(NBTConstants.NBT_ELYTRA_STATE) && !chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_ELYTRA_STATE));
         boolean elytra = isElytraEnable(chestplate);
-        p.displayClientMessage(CreateQOLLang.translateDirect("chestplate.elytra_toggle").append(QOLConfigurableItem.chooseState(true,true,elytra,false,true)).withStyle(elytra ? ChatFormatting.GREEN : ChatFormatting.RED),true);
+        p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.toggle_message", CreateQOLLang.translateDirect("ability.armor.fan_mode").getString()).append(QOLConfigurableItem.chooseState(true,true,elytra,false,true)).withStyle(elytra ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
     public static boolean hasPropeller(ItemStack chestplate){
         return chestplate.getOrCreateTag().contains(NBTConstants.NBT_PROPELLERS) && chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_PROPELLERS);
