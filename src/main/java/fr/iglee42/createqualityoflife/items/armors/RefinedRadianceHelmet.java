@@ -65,7 +65,7 @@ public class RefinedRadianceHelmet extends DivingHelmetItem implements QOLConfig
 
     @Override
     public int effectTime(ItemStack stack) {
-        return 200;
+        return 220;
     }
 
     @Override
