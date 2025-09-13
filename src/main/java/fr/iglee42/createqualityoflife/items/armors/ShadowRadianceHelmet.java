@@ -96,7 +96,7 @@ public class ShadowRadianceHelmet extends DivingHelmetItem implements QOLConfigu
 
     @Override
     public int effectTime(ItemStack stack) {
-        return 200;
+        return 220;
     }
 
     @Override
