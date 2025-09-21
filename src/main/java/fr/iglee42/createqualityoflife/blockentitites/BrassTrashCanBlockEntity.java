@@ -23,9 +23,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.Hopper;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,11 +53,21 @@ public class BrassTrashCanBlockEntity extends TrashCanBlockEntity{
                 QOLBlockEntities.BRASS_TRASH_CAN.get(),
                 (be, context) -> be.itemHandler
         );
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                QOLBlockEntities.BRASS_TRASH_CAN.get(),
+                (be, context) -> be.tankInventory
+        );
     }
 
     @Override
     public boolean canAcceptItem(ItemStack stack) {
         return super.canAcceptItem(stack) && canActivate() && filtering.test(stack) && !getBlockState().getValue(BrassTrashCanBlock.POWERED);
+    }
+
+    @Override
+    public boolean canAcceptFluid(FluidStack stack) {
+        return super.canAcceptFluid(stack) && canActivate() && filtering.test(stack) && !getBlockState().getValue(BrassTrashCanBlock.POWERED);
     }
 
     @Override
@@ -97,7 +111,42 @@ public class BrassTrashCanBlockEntity extends TrashCanBlockEntity{
                         }
                     }
                 }
-            }else handleInputFromAbove();
+            } else if (selectionMode.get().equals(Mode.VOID_OVERFLOW)){
+                IItemHandler handler = grabCapability(Direction.UP);
+                if (handler != null) {
+                    boolean hasAnEmptySlot = false;
+                    for (int i = 0; i < handler.getSlots(); i++) {
+                        ItemStack stack = handler.getStackInSlot(i);
+                        if (hasAnEmptySlot) break;
+                        if (stack.isEmpty()){
+                            hasAnEmptySlot = true;
+                            continue;
+                        }
+                        if (!canAcceptItem(stack)) continue;
+                        handler.extractItem(i,filtering.count,false);
+                        hasAnEmptySlot = true;
+                    }
+                }
+            } else {
+                handleInputFromAbove();
+            }
+
+            if (selectionMode.get().equals(Mode.VOID_OVERFLOW)) {
+                IFluidHandler handler = grabFluidCapability(Direction.UP);
+                if (handler != null){
+                    for (int t = 0; t < handler.getTanks(); t++){
+                        FluidStack stack = handler.getFluidInTank(t);
+                        if (stack.getAmount() > handler.getTankCapacity(t) - 1000){
+                            int toDrain = stack.getAmount() - ( handler.getTankCapacity(t) - 1000);
+                            handler.drain(stack.copyWithAmount(toDrain), IFluidHandler.FluidAction.EXECUTE);
+                        }
+                    }
+                }
+            } else {
+                handleFluidInputFromAbove();
+            }
+
+
 
             //SUCK ITEMS
             boolean flag = level.getBlockState(getBlockPos().above()).isCollisionShapeFullBlock(level, getBlockPos().above())
@@ -117,7 +166,8 @@ public class BrassTrashCanBlockEntity extends TrashCanBlockEntity{
 
     public enum Mode implements INamedIconOptions {
         VOID(0, AllIcons.I_TRASH),
-        KEEP_64(1, AllIcons.I_3x3)
+        KEEP_64(1, AllIcons.I_3x3),
+        VOID_OVERFLOW(2,AllIcons.I_SKIP_BLOCK_ENTITIES)
         ;
 
         private int id;

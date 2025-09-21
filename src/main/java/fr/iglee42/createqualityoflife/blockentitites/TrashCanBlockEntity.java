@@ -6,8 +6,13 @@ import java.util.function.Predicate;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.simibubi.create.foundation.fluid.FluidHelper;
 import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
+import fr.iglee42.createqualityoflife.utils.TrashFluidTank;
 import fr.iglee42.createqualityoflife.utils.TrashItemHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,12 +45,15 @@ import net.neoforged.neoforge.items.IItemHandler;
 public class TrashCanBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation { // , IAirCurrentSource {
 
 	TrashItemHandler itemHandler;
+	protected TrashFluidTank tankInventory;
 
 	private final EnumMap<Direction, BlockCapabilityCache<IItemHandler, @Nullable Direction>> capCaches = new EnumMap<>(Direction.class);
+	private final EnumMap<Direction, BlockCapabilityCache<IFluidHandler, @Nullable Direction>> fluidCapCaches = new EnumMap<>(Direction.class);
 
 	public TrashCanBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 		itemHandler = new TrashItemHandler(this);
+		tankInventory = new TrashFluidTank(this);
 	}
 
 	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
@@ -53,6 +61,11 @@ public class TrashCanBlockEntity extends SmartBlockEntity implements IHaveGoggle
 				Capabilities.ItemHandler.BLOCK,
 				QOLBlockEntities.TRASH_CAN.get(),
 				(be, context) -> be.itemHandler
+		);
+		event.registerBlockEntity(
+				Capabilities.FluidHandler.BLOCK,
+				QOLBlockEntities.TRASH_CAN.get(),
+				(be, context) -> be.tankInventory
 		);
 	}
 
@@ -62,6 +75,9 @@ public class TrashCanBlockEntity extends SmartBlockEntity implements IHaveGoggle
 	}
 
 	public boolean canAcceptItem(ItemStack stack) {
+		return true;
+	}
+	public boolean canAcceptFluid(FluidStack stack) {
 		return true;
 	}
 	protected int getExtractionAmount() {
@@ -121,11 +137,56 @@ public class TrashCanBlockEntity extends SmartBlockEntity implements IHaveGoggle
 		}
 	}
 
+	protected void handleFluidInputFromAbove() {
+		handleFluidInput(grabFluidCapability(Direction.UP));
+	}
+
+
+	protected void handleFluidInput(@Nullable IFluidHandler inv) {
+		if (inv == null)
+			return;
+		if (!canActivate())
+			return;
+		for (int t = 0; t < inv.getTanks();t++){
+			if (canAcceptFluid(inv.getFluidInTank(t))){
+				inv.drain(inv.getFluidInTank(t), IFluidHandler.FluidAction.EXECUTE);
+			}
+		}
+	}
+
+	protected @Nullable IFluidHandler grabFluidCapability(@NotNull Direction side) {
+		BlockPos pos = this.worldPosition.relative(side);
+		if (level == null)
+			return null;
+		BlockEntity be = level.getBlockEntity(pos);
+		if (be instanceof TrashCanBlockEntity) {
+			if (side != Direction.DOWN)
+				return null;
+		}
+		if (fluidCapCaches.get(side) == null) {
+			if (level instanceof ServerLevel serverLevel) {
+				BlockCapabilityCache<IFluidHandler, @Nullable Direction> cache = BlockCapabilityCache.create(
+						Capabilities.FluidHandler.BLOCK,
+						serverLevel,
+						pos,
+						side.getOpposite()
+				);
+				fluidCapCaches.put(side, cache);
+				return cache.getCapability();
+			} else {
+				return level.getCapability(Capabilities.FluidHandler.BLOCK, pos, side.getOpposite());
+			}
+		} else {
+			return fluidCapCaches.get(side).getCapability();
+		}
+	}
+
 	@Override
 	public void invalidate() {
-		if (itemHandler != null)
+		if (itemHandler != null || tankInventory != null)
 			invalidateCapabilities();
 		capCaches.clear();
+		fluidCapCaches.clear();
 		super.invalidate();
 	}
 
