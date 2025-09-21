@@ -12,13 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.UUID;
 
-@Mixin(value = LogisticallyLinkedBehaviour.class,remap = false)
+@Mixin(value = LogisticallyLinkedBehaviour.class)
 public abstract class LogisticallyLinkedBehaviourMixin {
     @Shadow public UUID freqId;
 
     @Shadow protected abstract GlobalPos getGlobalPos();
 
-    @Inject(method = "initialize",at = @At(value = "INVOKE", target = "Lcom/simibubi/create/foundation/blockEntity/SmartBlockEntity;setChanged()V",shift = At.Shift.BEFORE))
+    @Inject(method = "initialize",at = @At(value = "INVOKE", target = "Lcom/simibubi/create/foundation/blockEntity/SmartBlockEntity;setChanged()V",shift = At.Shift.AFTER))
     private void createQOL$stockManagerAddOwner(CallbackInfo ci){
         LogisticallyLinkedBehaviour behaviour = (LogisticallyLinkedBehaviour) (Object) this;
         if (behaviour.blockEntity instanceof StockManagerBlockEntity plbe)
