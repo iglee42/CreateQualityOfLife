@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(value = BeltDeployerCallbacks.class,remap = false)
+@Mixin(value = BeltDeployerCallbacks.class)
 public class BeltDeployerCallbacksMixin {
 
     @Redirect(method = "activate",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z"))
