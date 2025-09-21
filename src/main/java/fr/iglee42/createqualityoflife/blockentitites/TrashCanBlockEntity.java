@@ -12,6 +12,7 @@ import fr.iglee42.createqualityoflife.utils.TrashItemHandler;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,24 +41,30 @@ import net.minecraft.world.level.block.state.BlockState;
 public class TrashCanBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation { // , IAirCurrentSource {
 
 	TrashItemHandler itemHandler;
+	protected TrashFluidTank tankInventory;
 
 	LazyOptional<IItemHandler> lazyHandler;
+	LazyOptional<IFluidHandler> lazyFluidHandler;
 
 	LazyOptional<IItemHandler> capAbove;
+	LazyOptional<IFluidHandler> fluidCapAbove;
 
 	public TrashCanBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 		itemHandler = new TrashItemHandler(this);
+		tankInventory = new TrashFluidTank(this);
 		lazyHandler = LazyOptional.of(() -> itemHandler);
+        lazyFluidHandler = LazyOptional.of(() -> tankInventory);
 
 		capAbove = LazyOptional.empty();
+		fluidCapAbove = LazyOptional.empty();
 
 	}
 
 
 	@Override
 	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-		return cap == ForgeCapabilities.ITEM_HANDLER ? lazyHandler.cast() : super.getCapability(cap, side);
+		return cap == ForgeCapabilities.ITEM_HANDLER ? lazyHandler.cast() : (cap == ForgeCapabilities.FLUID_HANDLER ? lazyFluidHandler.cast() : super.getCapability(cap, side)) ;
 	}
 
 	@Override
@@ -66,6 +73,9 @@ public class TrashCanBlockEntity extends SmartBlockEntity implements IHaveGoggle
 	}
 
 	public boolean canAcceptItem(ItemStack stack) {
+		return true;
+	}
+	public boolean canAcceptFluid(FluidStack stack) {
 		return true;
 	}
 	protected int getExtractionAmount() {
@@ -112,10 +122,40 @@ public class TrashCanBlockEntity extends SmartBlockEntity implements IHaveGoggle
 		return be.getCapability(ForgeCapabilities.ITEM_HANDLER, side.getOpposite());
 	}
 
+    protected void handleFluidInputFromAbove() {
+        if (!fluidCapAbove.isPresent())
+            fluidCapAbove = grabFluidCapability(Direction.UP);
+        handleFluidInput(fluidCapAbove.orElse(null));
+    }
+
+    protected LazyOptional<IFluidHandler> grabFluidCapability(Direction side) {
+        BlockPos pos = this.worldPosition.relative(side);
+        if (level == null)
+            return LazyOptional.empty();
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be == null)
+            return LazyOptional.empty();
+        return be.getCapability(ForgeCapabilities.FLUID_HANDLER, side.getOpposite());
+    }
+
+    protected void handleFluidInput(@Nullable IFluidHandler inv) {
+        if (inv == null)
+            return;
+        if (!canActivate())
+            return;
+        for (int t = 0; t < inv.getTanks();t++){
+            if (canAcceptFluid(inv.getFluidInTank(t))){
+                inv.drain(inv.getFluidInTank(t), IFluidHandler.FluidAction.EXECUTE);
+            }
+        }
+    }
+
 	@Override
 	public void invalidate() {
 		if (lazyHandler != null)
 			lazyHandler.invalidate();
+        if (lazyFluidHandler != null)
+			lazyFluidHandler.invalidate();
 		super.invalidate();
 	}
 

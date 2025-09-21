@@ -57,6 +57,7 @@
   "create.options.brass_trash_can.label": "Trash Can Mode",
   "options.brass_trash_can.void": "Void All",
   "options.brass_trash_can.keep_64": "Keep a Stack",
+  "options.brass_trash_can.void_overflow": "Void Overflow (keep an empty slot)",
 
   "tooltip.createqol.player_paper.linked_player": "Linked Player : %s",
   "tooltip.createqol.player_paper.no_linked_player": "No Player Linked",
