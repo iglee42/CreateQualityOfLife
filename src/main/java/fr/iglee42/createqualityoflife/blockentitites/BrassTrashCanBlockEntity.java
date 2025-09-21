@@ -24,6 +24,8 @@ import net.minecraft.world.level.block.entity.Hopper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -122,7 +124,7 @@ public class BrassTrashCanBlockEntity extends TrashCanBlockEntity{
                             FluidStack stack = handler.getFluidInTank(t);
                             if (stack.getAmount() > handler.getTankCapacity(t) - 1000){
                                 int toDrain = stack.getAmount() - ( handler.getTankCapacity(t) - 1000);
-                                handler.drain(stack.copyWithAmount(toDrain), IFluidHandler.FluidAction.EXECUTE);
+                                handler.drain(new FluidStack(stack.getFluid(),toDrain), IFluidHandler.FluidAction.EXECUTE);
                             }
                         }
                     }

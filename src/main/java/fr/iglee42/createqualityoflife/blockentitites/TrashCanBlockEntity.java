@@ -8,10 +8,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.simibubi.create.content.logistics.chute.ChuteBlockEntity;
 import com.simibubi.create.content.logistics.chute.SmartChuteBlockEntity;
+import fr.iglee42.createqualityoflife.utils.TrashFluidTank;
 import fr.iglee42.createqualityoflife.utils.TrashItemHandler;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;

@@ -1,8 +1,8 @@
 package fr.iglee42.createqualityoflife.utils;
 
 import fr.iglee42.createqualityoflife.blockentitites.TrashCanBlockEntity;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 public class TrashFluidTank extends FluidTank {
 
