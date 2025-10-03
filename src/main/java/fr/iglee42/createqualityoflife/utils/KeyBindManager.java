@@ -31,6 +31,7 @@ public class KeyBindManager {
     public static KeyMapping FANS_KEY = new KeyMapping("keybind.createqol.shadow_radiance_chestplate_fans", GLFW.GLFW_KEY_Y, "keybind.createqol.category");
     public static KeyMapping HOVER_KEY = new KeyMapping("keybind.createqol.shadow_radiance_chestplate_hover", GLFW.GLFW_KEY_H, "keybind.createqol.category");
     public static KeyMapping ELYTRA_KEY = new KeyMapping("keybind.createqol.shadow_radiance_chestplate_elytra", GLFW.GLFW_KEY_I, "keybind.createqol.category");
+    public static KeyMapping TOGGLE_FANS_ELYTRA_KEY = new KeyMapping("keybind.createqol.shadow_radiance_chestplate_toggle_fans_elytra", GLFW.GLFW_KEY_J, "keybind.createqol.category");
     public static KeyMapping OPEN_ARMOR_CONFIG = new KeyMapping("keybind.createqol.open_armor_config", GLFW.GLFW_KEY_C, "keybind.createqol.category");
     public static KeyMapping DASH_KEY = new KeyMapping("keybind.createqol.dash", GLFW.GLFW_KEY_W, "keybind.createqol.category");
 
@@ -105,6 +106,9 @@ public class KeyBindManager {
             }
             if (ELYTRA_KEY.consumeClick()) {
                 PacketDistributor.sendToServer(ToggleElytraPacket.INSTANCE);
+            }
+            if (TOGGLE_FANS_ELYTRA_KEY.consumeClick()) {
+                PacketDistributor.sendToServer(ToggleFansElytraPacket.INSTANCE);
             }
         }
         tickEnd();
