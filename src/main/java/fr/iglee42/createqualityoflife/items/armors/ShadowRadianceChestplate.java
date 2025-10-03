@@ -253,6 +253,35 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
         boolean elytra = isElytraEnable(chestplate);
         p.displayClientMessage(CreateQOLLang.translateDirect("ability.armor.toggle_message", CreateQOLLang.translateDirect("ability.armor.elytra_mode").getString()).append(QOLConfigurableItem.chooseState(true,true,elytra,false,true)).withStyle(elytra ? ChatFormatting.GREEN : ChatFormatting.RED),true);
     }
+
+    public static void toggleFansElytra(ItemStack chestplate,Player p) {
+        /* This method toggle beween the fans and elytra mode
+         * If both are present on the chestplate, it will toggle between the two modes
+         * If only one is present, it will toggle that mode
+         * If none are present, it will do nothing
+         * @param chestplate The chestplate to toggle
+         * @param p The player who is toggling
+         */
+        boolean hasElytra = hasElytra(chestplate);
+        boolean hasPropeller = hasPropeller(chestplate);
+
+        if (hasElytra && hasPropeller) {
+            if (!isFansEnable(chestplate) && !isElytraEnable(chestplate)) {
+                toggleFans(chestplate, p);
+            } else if (isElytraEnable(chestplate)) {
+                toggleElytra(chestplate, p);
+                toggleFans(chestplate, p);
+            } else if (isFansEnable(chestplate)) {
+                toggleFans(chestplate, p);
+                toggleElytra(chestplate, p);
+            }
+        } else if (hasElytra) {
+            toggleElytra(chestplate, p);
+        } else if (hasPropeller) {
+            toggleFans(chestplate, p);
+        }
+    }
+
     public static boolean hasPropeller(ItemStack chestplate){
         return chestplate.getOrCreateTag().contains(NBTConstants.NBT_PROPELLERS) && chestplate.getOrCreateTag().getBoolean(NBTConstants.NBT_PROPELLERS);
     }

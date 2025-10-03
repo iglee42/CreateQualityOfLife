@@ -102,6 +102,7 @@
   "keybind.createqol.shadow_radiance_chestplate_fans": "Toggle Fans",
   "keybind.createqol.shadow_radiance_chestplate_hover": "Toggle Hover",
   "keybind.createqol.shadow_radiance_chestplate_elytra": "Toggle Elytra",
+  "keybind.createqol.shadow_radiance_chestplate_toggle_fans_elytra": "Toggle Fans/Elytra",
   "keybind.createqol.open_armor_config": "Open Armor Config",
   "keybind.createqol.dash": "Dash",
 
@@ -226,6 +227,7 @@
   "createqol.armor.ability.use_fireworks": "Can be used as a boost with the shadow radiance chestplate by keeping pressed the jump key.",
   "createqol.armor.ability.no_propeller": "You can't switch the fan/hover because the chestplate doesn't have a propeller installed.",
   "createqol.armor.ability.no_elytra": "You can't switch the elytra because the chestplate doesn't have elytra installed",
+  "createqol.armor.ability.no_elytra_or_propeller": "You can't switch the elytra/fan because the chestplate doesn't have elytra or propeller installed",
   "createqol.armor.ability.dash_disabled": "Dashing is disabled on this server !",
   "createqol.armor.ability.dash_reloading": "Dashing is reloading, please wait!",
 

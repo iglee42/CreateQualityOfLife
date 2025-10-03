@@ -101,6 +101,7 @@
   "keybind.createqol.shadow_radiance_chestplate_fans": "ファン切替",
   "keybind.createqol.shadow_radiance_chestplate_hover": "ホバー切替",
   "keybind.createqol.shadow_radiance_chestplate_elytra": "エリトラ切替",
+  "keybind.createqol.shadow_radiance_chestplate_toggle_fans_elytra": "ファン/エリトラ切替",
   "keybind.createqol.open_armor_config": "防具設定を開く",
   "keybind.createqol.dash": "ダッシュ",
 
@@ -225,6 +226,7 @@
   "createqol.armor.ability.use_fireworks": "シャドウラディアンスのチェストプレート装着時、ジャンプキー長押しでブーストとして使用可能",
   "createqol.armor.ability.no_propeller": "チェストプレートにプロペラがないためファン/ホバー切り替えができません",
   "createqol.armor.ability.no_elytra": "チェストプレートにエリトラがないためエリトラ切り替えができません",
+  "createqol.armor.ability.no_elytra_or_propeller": "チェストプレートにエリトラもプロペラもないため、エリトラ/ファンの切り替えができません",
   "createqol.armor.ability.dash_disabled": "このサーバーではダッシュが無効化されています!",
   "createqol.armor.ability.dash_reloading": "ダッシュはリロード中です。お待ちください！",
 

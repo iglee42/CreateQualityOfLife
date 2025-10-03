@@ -26,6 +26,7 @@ public enum QOLPackets {
     TOGGLE_FANS(ToggleFansPacket.class,ToggleFansPacket::new,NetworkDirection.PLAY_TO_SERVER),
     TOGGLE_HOVER(ToggleHoverPacket.class, ToggleHoverPacket::new, NetworkDirection.PLAY_TO_SERVER),
     TOGGLE_ELYTRA(ToggleElytraPacket.class, ToggleElytraPacket::new,NetworkDirection.PLAY_TO_SERVER),
+    TOGGLE_FANS_ELYTRA(ToggleFansElytraPacket.class, ToggleFansElytraPacket::new,NetworkDirection.PLAY_TO_SERVER),
     INPUTS_UPDATE(UpdateInputsPacket.class, UpdateInputsPacket::new, NetworkDirection.PLAY_TO_SERVER),
     CHANGE_ARMOR_TAG(ChangeArmorTagPacket.class, ChangeArmorTagPacket::new, NetworkDirection.PLAY_TO_SERVER),
     CHANGE_TOOLTIP(ChangeItemTooltipsPacket.class, ChangeItemTooltipsPacket::new,NetworkDirection.PLAY_TO_SERVER),
