@@ -103,6 +103,7 @@
   "keybind.createqol.shadow_radiance_chestplate_fans": "Режим пропеллерной тяги",
   "keybind.createqol.shadow_radiance_chestplate_hover": "Режим парения",
   "keybind.createqol.shadow_radiance_chestplate_elytra": "Режим полёта",
+  "keybind.createqol.shadow_radiance_chestplate_toggle_fans_elytra": "Переключить режимы полёта",
   "keybind.createqol.open_armor_config": "Открыть конфигурацию брони",
   "keybind.createqol.dash": "Рывок",
 
@@ -227,6 +228,7 @@
   "createqol.ability.armor.use_fireworks": "Находясь в инвентаре, может быть использован для ускорения полёта, когда надет нагрудник из пост-хроматического сплава, оснащённый элитрами — для этого зажмите [Пробел], находясь в режиме полёта.",
   "createqol.ability.armor.no_propeller": "Режимы пропеллерной тяги и парения недоступны: баллон не оснащён пропеллером",
   "createqol.ability.armor.no_elytra": "Режим полёта недоступен: баллон не оснащён элитрами",
+  "createqol.armor.ability.no_elytra_or_propeller": "Невозможно переключить режимы полёта, так как нагрудник не оснащён ни элитрами, ни пропеллером",
   "createqol.ability.armor.dash_disabled": "Функция рывка запрещена настройками мира/сервера",
   "createqol.ability.armor.dash_reloading": "Рывок перезаряжается...",
 
