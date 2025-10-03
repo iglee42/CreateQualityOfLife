@@ -18,6 +18,7 @@ public enum QOLPackets implements BasePacketPayload.PacketTypeProvider {
     TOGGLE_FANS(ToggleFansPacket.class,ToggleFansPacket.STREAM_CODEC),
     TOGGLE_HOVER(ToggleHoverPacket.class, ToggleHoverPacket.STREAM_CODEC),
     TOGGLE_ELYTRA(ToggleElytraPacket.class, ToggleElytraPacket.STREAM_CODEC),
+    TOGGLE_FANS_ELYTRA(ToggleFansElytraPacket.class, ToggleFansElytraPacket.STREAM_CODEC),
     INPUTS_UPDATE(UpdateInputsPacket.class, UpdateInputsPacket.STREAM_CODEC),
     DASH(DashPacket.class, DashPacket.STREAM_CODEC),
     CHANGE_ARMOR_COMPONENT(ChangeItemComponentPacket.class, ChangeItemComponentPacket.STREAM_CODEC),
