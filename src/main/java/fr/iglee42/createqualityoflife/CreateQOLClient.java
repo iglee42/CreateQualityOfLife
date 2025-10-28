@@ -118,6 +118,7 @@ public class CreateQOLClient {
         event.register(KeyBindManager.FANS_KEY);
         event.register(KeyBindManager.HOVER_KEY);
         event.register(KeyBindManager.ELYTRA_KEY);
+        event.register(KeyBindManager.TOGGLE_FANS_ELYTRA_KEY);
         event.register(KeyBindManager.OPEN_ARMOR_CONFIG);
         event.register(KeyBindManager.DASH_KEY);
 
