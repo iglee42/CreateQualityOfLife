@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Arrays;
 
 @ParametersAreNonnullByDefault
 public class BlazeBurnerLiquidCategory extends CreateRecipeCategory<BlazeBurnerLiquidRecipe> {
@@ -29,8 +30,8 @@ public class BlazeBurnerLiquidCategory extends CreateRecipeCategory<BlazeBurnerL
 	public void setRecipe(IRecipeLayoutBuilder builder, BlazeBurnerLiquidRecipe recipe, IFocusGroup focuses) {
 		builder.addSlot(RecipeIngredientRole.INPUT, 51, 5)
 				.setBackground(getRenderedSlot(), -1, -1)
-				.addFluidStack(recipe.getFluidIngredients().get(0).getMatchingFluidStacks().getFirst().getFluid(),recipe.getFluidIngredients().get(0).getRequiredAmount());
-		recipe.getFluidIngredients().get(0).getMatchingFluidStacks().forEach(fs->{
+				.addFluidStack(recipe.getFluidIngredients().get(0).getFluids()[0].getFluid(),recipe.getFluidIngredients().get(0).amount());
+        Arrays.stream(recipe.getFluidIngredients().get(0).getFluids()).forEach(fs->{
             fs.getFluid().getBucket();
             if (!fs.getFluid().getBucket().equals(Items.AIR)) builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemLike(fs.getFluid().getBucket());
 		});
@@ -43,8 +44,8 @@ public class BlazeBurnerLiquidCategory extends CreateRecipeCategory<BlazeBurnerL
 
 		burner.withHeat(recipe.getBurnerLevel()).draw(graphics,73,12);
 
-		if (recipe.getFluidIngredients().get(0).getMatchingFluidStacks().get(0) != null) {
-			LiquidBlazeBurnerManager.LiquidEntry entry = LiquidBlazeBurnerManager.BLAZE_BURNER_LIQUIDS.get(recipe.getFluidIngredients().get(0).getMatchingFluidStacks().get(0).getFluid() );
+		if (recipe.getFluidIngredients().get(0).getFluids().length > 0 && recipe.getFluidIngredients().get(0).getFluids()[0] != null) {
+			LiquidBlazeBurnerManager.LiquidEntry entry = LiquidBlazeBurnerManager.BLAZE_BURNER_LIQUIDS.get(recipe.getFluidIngredients().get(0).getFluids()[0].getFluid() );
 			int time =  (entry.burnTime() * entry.consumption() * 1000 / 20);
 
 			graphics.drawCenteredString(Minecraft.getInstance().font,Component.literal("1 ").append(Component.translatable("item.minecraft.bucket")).append(Component.literal(" = " + formatDuration(time))), 94,60,0xffffff);

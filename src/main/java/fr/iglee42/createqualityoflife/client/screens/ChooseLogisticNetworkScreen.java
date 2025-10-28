@@ -6,7 +6,6 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.logistics.stockTicker.StockKeeperCategoryRefundPacket;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.gui.ScreenWithStencils;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.utility.CreateLang;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
@@ -39,8 +38,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class ChooseLogisticNetworkScreen extends AbstractSimiContainerScreen<ChooseLogisticNetworkMenu>
-	implements ScreenWithStencils {
+public class ChooseLogisticNetworkScreen extends AbstractSimiContainerScreen<ChooseLogisticNetworkMenu> {
 
 
 	private static final AllGuiTextures NUMBERS = AllGuiTextures.NUMBERS;
@@ -162,7 +160,6 @@ public class ChooseLogisticNetworkScreen extends AbstractSimiContainerScreen<Cho
 		graphics.drawString(font, component.getString(), (float) (center - font.width(component) / 2 + 2),
 				(float) topPos + 6, 0x3D3C48,false);
 		ms.popPose();
-		endStencil();
 
 
 		//UIRenderHelper.swapAndBlitColor(UIRenderHelper.framebuffer, minecraft.getMainRenderTarget());
@@ -176,15 +173,18 @@ public class ChooseLogisticNetworkScreen extends AbstractSimiContainerScreen<Cho
 
 	protected void renderNetworks(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		PoseStack matrixStack = graphics.pose();
-		UIRenderHelper.swapAndBlitColor(this.minecraft.getMainRenderTarget(), UIRenderHelper.framebuffer);
 		int yOffset = getGuiTop() + HEADER.getHeight() - 4;
 
 		float scrollOffset = -this.scroll.getValue(partialTicks);
 
 		for(int i = 0; i < networks.size(); ++i) {
 			ChooseLogisticNetworkMenu.LogisticNetworksInfos entry = networks.get(i);
-			startStencil(graphics, leftPos + 3, topPos + HEADER.getHeight(), 210,
-					(windowHeight - HEADER.getHeight() - FOOTER.getHeight()));
+            int itemWindowX = leftPos + 3;
+            int itemWindowY = topPos + HEADER.getHeight();
+            int itemWindowX2 = itemWindowX + 210;
+            int itemWindowY2 = itemWindowY + (windowHeight - HEADER.getHeight() - FOOTER.getHeight());
+
+            graphics.enableScissor(itemWindowX - 5, itemWindowY, itemWindowX2 + 10, itemWindowY2);
 			matrixStack.pushPose();
 			matrixStack.translate(0.0F, scrollOffset, 0.0F);
 			/*if (i == entries.size()) {
@@ -197,10 +197,9 @@ public class ChooseLogisticNetworkScreen extends AbstractSimiContainerScreen<Cho
 			int cardHeight = this.renderScheduleEntry(graphics, i, entry, yOffset, mouseX, mouseY, partialTicks);
 			yOffset += cardHeight;
 			matrixStack.popPose();
-			endStencil();
+			graphics.disableScissor();
 		}
 
-		UIRenderHelper.swapAndBlitColor(UIRenderHelper.framebuffer, this.minecraft.getMainRenderTarget());
 	}
 
 

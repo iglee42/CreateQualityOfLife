@@ -13,6 +13,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
@@ -39,7 +40,7 @@ public abstract class SequencedAssemblyRecipeMixin implements CopyComponentsExte
     @Shadow protected int loops;
 
     @Inject(method = "advance",at = @At(value = "RETURN"), cancellable = true)
-    private void createQOL$copyComponents(ResourceLocation id, ItemStack input, CallbackInfoReturnable<ItemStack> cir){
+    private void createQOL$copyComponents(ResourceLocation id, ItemStack input, RandomSource random, CallbackInfoReturnable<ItemStack> cir){
         ItemStack returned = cir.getReturnValue();
         if (input.has(AllDataComponents.SEQUENCED_ASSEMBLY)){
             int step = getStep(input);

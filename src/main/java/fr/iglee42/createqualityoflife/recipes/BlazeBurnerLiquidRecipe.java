@@ -1,12 +1,8 @@
 package fr.iglee42.createqualityoflife.recipes;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
-
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.registries.QOLRecipeTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +10,9 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Helper recipe type for displaying an item relationship in JEI
@@ -27,7 +26,7 @@ public class BlazeBurnerLiquidRecipe extends StandardProcessingRecipe<RecipeInpu
 	public static RecipeHolder<BlazeBurnerLiquidRecipe> create(Fluid from, BlazeBurnerBlock.HeatLevel to) {
 		ResourceLocation recipeId = CreateQOL.asResource("blaze_burner_liquid_" + counter++);
 		BlazeBurnerLiquidRecipe recipe = new StandardProcessingRecipe.Builder<>(p->new BlazeBurnerLiquidRecipe(p,to), recipeId)
-			.withFluidIngredients(FluidIngredient.fromFluid(from,1000))
+			.withFluidIngredients(SizedFluidIngredient.of(from,1000))
 			.build();
 		return new RecipeHolder<>(recipeId, recipe);
 	}

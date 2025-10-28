@@ -8,6 +8,7 @@ import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipeS
 import fr.iglee42.createqualityoflife.utils.CopyComponentsExtension;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -36,16 +37,17 @@ public class SequencedAssemblyRecipeSerializerMixin {
         cir.setReturnValue(extendedCodec);
     }
 
-    @Inject(method = "toNetwork",at = @At("TAIL"))
-    private void createQOL$addCopiedComponentsToEncode(RegistryFriendlyByteBuf buffer, SequencedAssemblyRecipe recipe, CallbackInfo ci){
-        ResourceLocation.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer,((CopyComponentsExtension)recipe).createQOL$copiedComponents());
+    @Inject(method = "streamCodec",at = @At("RETURN"),cancellable = true)
+    private static void createQOL$addCopiedComponentsToStreamCodec(CallbackInfoReturnable<StreamCodec<RegistryFriendlyByteBuf, SequencedAssemblyRecipe>> cir){
+        StreamCodec<RegistryFriendlyByteBuf, SequencedAssemblyRecipe> originalCodec = cir.getReturnValue();
+        StreamCodec<RegistryFriendlyByteBuf, SequencedAssemblyRecipe> extendedCodec = StreamCodec.composite(
+                originalCodec,Function.identity(),
+                ResourceLocation.STREAM_CODEC.apply(ByteBufCodecs.list()),p->((CopyComponentsExtension)p).createQOL$copiedComponents(),
+                (r,comps)-> {
+                    ((CopyComponentsExtension)r).createQOL$setCopiedComponents(comps);
+                    return r;
+                }
+        );
+        cir.setReturnValue(extendedCodec);
     }
-
-    @Inject(method = "fromNetwork",at = @At("TAIL"), cancellable = true)
-    private void createQOL$retrieveCopiedComponentsFromDecode(RegistryFriendlyByteBuf buffer, CallbackInfoReturnable<SequencedAssemblyRecipe> cir){
-        SequencedAssemblyRecipe returned = cir.getReturnValue();
-        ((CopyComponentsExtension)returned).createQOL$setCopiedComponents(ResourceLocation.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer));
-        cir.setReturnValue(returned);
-    }
-
 }

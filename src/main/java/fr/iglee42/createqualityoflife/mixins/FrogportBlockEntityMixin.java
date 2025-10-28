@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(value = FrogportBlockEntity.class,remap = false)
 public class FrogportBlockEntityMixin {
 
-    @Inject(method = "lambda$tryPullingFrom$1", at =@At("RETURN"), locals = LocalCapture.CAPTURE_FAILSOFT,cancellable = true)
+    @Inject(method = "lambda$tryPullingFrom$2", at =@At("RETURN"), locals = LocalCapture.CAPTURE_FAILSOFT,cancellable = true)
     private void qol$alwaysWhenEnderPackager(IItemHandler handler, ItemStack stack, CallbackInfoReturnable<Boolean> cir){
         cir.setReturnValue(cir.getReturnValue() || (handler instanceof EnderPackagerItemHandler eh && !eh.getBlockEntity().isTransmitter()));
     }

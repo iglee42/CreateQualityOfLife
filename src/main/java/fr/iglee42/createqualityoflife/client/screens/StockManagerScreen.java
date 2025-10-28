@@ -1,15 +1,15 @@
 package fr.iglee42.createqualityoflife.client.screens;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.yggdrasil.ProfileResult;
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.logistics.packagerLink.LogisticallyLinkedBehaviour;
 import com.simibubi.create.content.trains.station.NoShadowFontWrapper;
+import com.simibubi.create.foundation.gui.AllGuiTextures;
+import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
+import com.simibubi.create.foundation.utility.CreateLang;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.blockentitites.StockManagerBlockEntity;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
@@ -18,38 +18,33 @@ import fr.iglee42.createqualityoflife.packets.*;
 import fr.iglee42.createqualityoflife.registries.QOLGuiTextures;
 import fr.iglee42.createqualityoflife.utils.NetworkDestructionLevel;
 import fr.iglee42.createqualityoflife.utils.NetworkPermission;
-import net.createmod.catnip.gui.UIRenderHelper;
-import net.createmod.catnip.platform.CatnipServices;
-import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.PlayerFaceRenderer;
-import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.world.item.ItemStack;
-import org.lwjgl.glfw.GLFW;
-
-import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.gui.ScreenWithStencils;
-import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
-import com.simibubi.create.foundation.utility.CreateLang;
-
 import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.animation.LerpedFloat.Chaser;
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.PlayerFaceRenderer;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
-public class StockManagerScreen extends AbstractSimiContainerScreen<StockManagerMenu>
-	implements ScreenWithStencils {
+public class StockManagerScreen extends AbstractSimiContainerScreen<StockManagerMenu>{
 
 	private EditBox nameBox;
 
@@ -249,7 +244,6 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 		if (!nameBox.isFocused() && isOwner)
 			QOLGuiTextures.STOCK_MANAGER_EDIT_NAME.render(graphics, nameBoxX(text, nameBox) + font.width(text) + 5, y + 1);
 		ms.popPose();
-		endStencil();
 
 
 		//UIRenderHelper.swapAndBlitColor(UIRenderHelper.framebuffer, minecraft.getMainRenderTarget());
@@ -258,25 +252,27 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 
 	protected void renderBehaviours(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		PoseStack matrixStack = graphics.pose();
-		UIRenderHelper.swapAndBlitColor(this.minecraft.getMainRenderTarget(), UIRenderHelper.framebuffer);
 		int yOffset = getGuiTop() + HEADER.getHeight() - 8;
 
 		float scrollOffset = -this.blocksScroll.getValue(partialTicks);
 
 		for(int i = 0; i < behaviours.size(); ++i) {
 			LogisticallyLinkedBehaviour entry = behaviours.get(i);
-			startStencil(graphics, leftPos + 3, topPos + HEADER.getHeight(), 210,
-					(float) ((windowHeight - HEADER.getHeight() - FOOTER.getHeight() - SEPARATION.getHeight()) / 2 / LOWER_BODY.getHeight()) * UPPER_BODY.getHeight());
+            int itemWindowX = leftPos + 3;
+            int itemWindowY = topPos + HEADER.getHeight();
+            int itemWindowX2 = itemWindowX + 210;
+            int itemWindowY2 = (int) (itemWindowY + ((windowHeight - HEADER.getHeight() - FOOTER.getHeight() - SEPARATION.getHeight()) / 2f / LOWER_BODY.getHeight()) * UPPER_BODY.getHeight());
+
+            graphics.enableScissor(itemWindowX - 5, itemWindowY, itemWindowX2 + 10, itemWindowY2);
 			matrixStack.pushPose();
-			matrixStack.translate(0.0F, scrollOffset, 0.0F);
+			matrixStack.translate(0.0F, scrollOffset, 40.0F);
 
 			int cardHeight = this.renderBehaviourEntry(graphics, i, entry, yOffset, mouseX, mouseY, partialTicks);
 			yOffset += cardHeight;
 			matrixStack.popPose();
-			endStencil();
+			graphics.disableScissor();
 		}
 
-		UIRenderHelper.swapAndBlitColor(UIRenderHelper.framebuffer, this.minecraft.getMainRenderTarget());
 	}
 
 	public int renderBehaviourEntry(GuiGraphics graphics, int i, LogisticallyLinkedBehaviour entry, int yOffset, int mouseX, int mouseY, float partialTicks) {
@@ -310,7 +306,6 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 
 	protected void renderPlayers(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, int lowerBodyStart) {
 		PoseStack matrixStack = graphics.pose();
-		UIRenderHelper.swapAndBlitColor(this.minecraft.getMainRenderTarget(), UIRenderHelper.framebuffer);
 		int yOffset = lowerBodyStart;
 
 		float scrollOffset = -this.playersScroll.getValue(partialTicks);
@@ -318,18 +313,21 @@ public class StockManagerScreen extends AbstractSimiContainerScreen<StockManager
 		List<Map.Entry<UUID,NetworkPermission>> entries = new ArrayList<>(permissions.entrySet());
 
 		for(int i = 0; i < entries.size(); ++i) {
-			startStencil(graphics, leftPos + 3, lowerBodyStart, 210,
-					(float) ((windowHeight - HEADER.getHeight() - FOOTER.getHeight() - SEPARATION.getHeight()) / 2 / LOWER_BODY.getHeight()) * UPPER_BODY.getHeight());
+            int itemWindowX = leftPos + 3;
+            int itemWindowY = lowerBodyStart;
+            int itemWindowX2 = itemWindowX + 210;
+            int itemWindowY2 = (int) (itemWindowY + ((windowHeight - HEADER.getHeight() - FOOTER.getHeight() - SEPARATION.getHeight()) / 2f / LOWER_BODY.getHeight()) * UPPER_BODY.getHeight());
+
+            graphics.enableScissor(itemWindowX - 5, itemWindowY, itemWindowX2 + 10, itemWindowY2);
 			matrixStack.pushPose();
 			matrixStack.translate(0.0F, scrollOffset, 0.0F);
 
 			int cardHeight = this.renderPlayerEntry(graphics, i, entries.get(i), yOffset, mouseX, mouseY, partialTicks);
 			yOffset += cardHeight;
 			matrixStack.popPose();
-			endStencil();
+			graphics.disableScissor();
 		}
 
-		UIRenderHelper.swapAndBlitColor(UIRenderHelper.framebuffer, this.minecraft.getMainRenderTarget());
 	}
 	public int renderPlayerEntry(GuiGraphics graphics, int i, Map.Entry<UUID,NetworkPermission> entry, int yOffset, int mouseX, int mouseY, float partialTicks) {
 		int cardWidth = 160;
