@@ -1,27 +1,33 @@
 package fr.iglee42.createqualityoflife.packets;
 
 import com.simibubi.create.content.equipment.armor.BacktankItem;
+import com.simibubi.create.foundation.networking.SimplePacketBase;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.QOLItems;
-import fr.iglee42.createqualityoflife.registries.QOLPackets;
-import net.createmod.catnip.net.base.ServerboundPacketPayload;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.network.NetworkEvent;
 
-public class ToggleFansElytraPacket implements ServerboundPacketPayload {
+public class ToggleFansElytraPacket extends SimplePacketBase {
 
-    public static final ToggleFansElytraPacket INSTANCE = new ToggleFansElytraPacket();
-    public static final StreamCodec<FriendlyByteBuf,ToggleFansElytraPacket> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+    public ToggleFansElytraPacket(){}
+
+
+    public ToggleFansElytraPacket(FriendlyByteBuf buffer) {}
 
 
     @Override
-    public void handle(ServerPlayer player) {
+    public void write(FriendlyByteBuf buffer) {}
+
+    @Override
+    public boolean handle(NetworkEvent.Context context) {
+        context.enqueueWork(()->{
+            ServerPlayer player = context.getSender();
             if (player != null) {
                 ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
                 Item backtank = BacktankItem.getWornBy(player);
@@ -33,10 +39,9 @@ public class ToggleFansElytraPacket implements ServerboundPacketPayload {
                     player.sendSystemMessage(CreateQOLLang.translateDirect("armor.ability.no_elytra_or_propeller").withStyle(ChatFormatting.RED),true);
                 }
             }
+        });
+        return true;
+
     }
 
-    @Override
-    public PacketTypeProvider getTypeProvider() {
-        return QOLPackets.TOGGLE_FANS_ELYTRA;
-    }
 }
