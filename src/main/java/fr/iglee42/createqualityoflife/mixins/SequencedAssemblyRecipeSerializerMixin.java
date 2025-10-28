@@ -47,5 +47,4 @@ public class SequencedAssemblyRecipeSerializerMixin {
         json.add("copied_nbts", new Gson().toJsonTree(((CopyNBTsExtension)recipe).createQOL$copiedNBTs()).getAsJsonArray());
         json.addProperty("copied_slot", ((CopyNBTsExtension)recipe).createQOL$copiedSlot());
     }
-
 }

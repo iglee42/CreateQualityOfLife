@@ -147,7 +147,7 @@ public class ShadowRadianceAxe extends AxeItem implements QOLConfigurableItem {
             if (!visited.add(pos)) continue;
             boolean success = transformBlock(level, pos, player, ctx, offHandStack,(bs, recipe) -> {
                 level.setBlock(pos, bs, 3);
-                recipe.rollResults().forEach(stack -> Block.popResource(level, pos, stack));
+                recipe.rollResults(ctx.getLevel().random).forEach(stack -> Block.popResource(level, pos, stack));
 
                 boolean creative = player.isCreative();
                 boolean unbreakable = offHandStack.getOrCreateTag().getBoolean("Unbreakable");
@@ -212,7 +212,7 @@ public class ShadowRadianceAxe extends AxeItem implements QOLConfigurableItem {
         ManualApplicationRecipe recipe = (ManualApplicationRecipe) foundRecipe.get();
         level.destroyBlock(blockpos, false);
 
-        BlockState transformedBlock = recipe.transformBlock(optional.get());
+        BlockState transformedBlock = recipe.transformBlock(optional.get(),ctx.getLevel().random);
         onSuccess.accept(transformedBlock, recipe);
 
         return true;
