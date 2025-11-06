@@ -78,7 +78,7 @@ public class QOLItems {
             .model((c,p)->p.generated(c).override().predicate(CreateQOL.asResource("elytra"),1)
                     .model(p.getBuilder(p.name(c)+"_elytra").parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0",CreateQOL.asResource("item/"+c.getName()+"_elytra")))
                     .end())
-            .properties(p -> p.fireResistant().rarity(Rarity.EPIC).durability(1184).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).component(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH))
+            .properties(p -> p.fireResistant().rarity(Rarity.EPIC).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).component(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH))
             .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
             .tag(ItemTags.CHEST_ARMOR)
@@ -129,7 +129,7 @@ public class QOLItems {
             .model((c,p)->p.generated(c).override().predicate(CreateQOL.asResource("elytra"),1)
                     .model(p.getBuilder(p.name(c)+"_elytra").parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0",CreateQOL.asResource("item/"+c.getName()+"_elytra")))
                     .end())
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1184).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).component(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).component(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH))
             .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
             .tag(ItemTags.CHEST_ARMOR)
@@ -172,7 +172,7 @@ public class QOLItems {
             .item("shadow_steel_chestplate",
                     p -> new ShadowSteelChestplate(p,
                             SHADOW_STEEL_CHESTPLATE_PLACEABLE))
-            .properties(p -> p.fireResistant().rarity(Rarity.RARE).durability(1184).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).component(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH))
+            .properties(p -> p.fireResistant().rarity(Rarity.RARE).component(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).component(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH))
             .properties(p->p.component(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT))
             .tag(AllTags.AllItemTags.PRESSURIZED_AIR_SOURCES.tag)
             .tag(ItemTags.CHEST_ARMOR)
