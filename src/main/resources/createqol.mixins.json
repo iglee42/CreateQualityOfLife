@@ -16,6 +16,7 @@
     "EntityDataSerializersMixin",
     "FlapDisplayBlockMixin",
     "FrogportBlockEntityMixin",
+    "FunnelBlockEntityMixin",
     "GlobalLogisticsManagerMixin",
     "ItemStackMixin",
     "LavaSwimmingMixin",
