@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class ShadowSteelChestplate extends BacktankItem.Layered implements QOLConfigurableItem {
@@ -115,5 +117,11 @@ public class ShadowSteelChestplate extends BacktankItem.Layered implements QOLCo
     @Override
     public boolean isBarVisible(ItemStack stack) {
         return super.isBarVisible(stack) && BacktankUtil.getAir(stack) < BacktankUtil.maxAir(stack);
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+        if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
+        return super.damageItem(stack, amount, entity, onBroken);
     }
 }
