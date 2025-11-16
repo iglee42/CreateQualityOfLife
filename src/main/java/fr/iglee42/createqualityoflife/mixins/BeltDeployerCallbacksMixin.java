@@ -11,9 +11,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = BeltDeployerCallbacks.class)
 public class BeltDeployerCallbacksMixin {
 
-    @Redirect(method = "activate",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z"))
-    private static boolean destroyIfFromQOL(ItemStack instance){
-        if (!BuiltInRegistries.ITEM.getKey(instance.getItem()).getNamespace().equals(CreateQOL.MODID)) return instance.isDamageableItem();
-        return false;
+    @Redirect(method = "activate",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getMaxDamage()I"))
+    private static int destroyIfFromQOL(ItemStack instance){
+        if (!BuiltInRegistries.ITEM.getKey(instance.getItem()).getNamespace().equals(CreateQOL.MODID)) return instance.getMaxDamage();
+        return 0;
     }
 }
