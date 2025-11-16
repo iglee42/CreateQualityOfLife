@@ -15,6 +15,7 @@
     "DivingBootsItemMixin",
     "FlapDisplayBlockMixin",
     "FrogportBlockEntityMixin",
+    "FunnelBlockEntityMixin",
     "GlobalLogisticsManagerMixin",
     "ItemStackMixin",
     "LavaSwimmingMixin",
