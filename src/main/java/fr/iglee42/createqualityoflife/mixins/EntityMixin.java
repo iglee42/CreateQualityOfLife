@@ -11,10 +11,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
-@Mixin(value = Entity.class,remap = false)
+@Mixin(value = Entity.class)
 public class EntityMixin {
 
-    @Shadow
+    @Shadow(remap = false)
     protected Object2DoubleMap<FluidType> forgeFluidTypeHeight;
 
     @Shadow

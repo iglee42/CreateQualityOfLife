@@ -49,7 +49,9 @@ public class NBTConstants {
     }
 
     public static ItemTooltips getTooltipOrDefault(ItemStack stack){
-        return stack.getOrCreateTag().contains(NBT_TOOLTIPS) ? ItemTooltips.of(stack.getOrCreateTag().getCompound(NBT_TOOLTIPS)) : ItemTooltips.DEFAULT;
+        if (stack == null || stack.isEmpty()) return ItemTooltips.DEFAULT;
+        if (stack.getTag() == null) return ItemTooltips.DEFAULT;
+        return stack.getTag().contains(NBT_TOOLTIPS) ? ItemTooltips.of(stack.getOrCreateTag().getCompound(NBT_TOOLTIPS)) : ItemTooltips.DEFAULT;
     }
 
     public static ShadowRadianceEffects getEffectsOrDefault(ItemStack stack,ShadowRadianceEffects defaultValue){

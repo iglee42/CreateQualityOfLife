@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
+import fr.iglee42.createqualityoflife.commands.CreateQOLCommand;
 import fr.iglee42.createqualityoflife.conditions.FeatureLoadedCondition;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.config.CreateQOLFeaturesConfig;
@@ -41,6 +42,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -108,6 +110,7 @@ public class CreateQOL {
         forgeEventBus.addListener(this::playerJoin);
         forgeEventBus.addListener(this::onWorldTick);
         forgeEventBus.addListener(this::itemTooltips);
+        forgeEventBus.addListener(this::registerCommands);
 
         registerToolsEvents(modEventBus,forgeEventBus);
 
@@ -206,5 +209,9 @@ public class CreateQOL {
         if (isActivate(Features.SHADOW_RADIANCE) && CreateQOLConfigs.server().equipments.armors.elytraBoostAllowed.get() && CreateQOLConfigs.server().equipments.armors.useFireworksForBoost.get()){
             event.getToolTip().add(2,CreateQOLLang.translateDirect("armor.ability.use_fireworks").withStyle(ChatFormatting.YELLOW));
         }
+    }
+
+    private void registerCommands(RegisterCommandsEvent event){
+        new CreateQOLCommand(event.getDispatcher());
     }
 }

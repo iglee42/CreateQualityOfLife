@@ -153,6 +153,10 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
 
+    flatDir {
+        dir 'libs'
+    }
+
     maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
     maven { url = "https://maven.ithundxr.dev/mirror" } // Registrate
     maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven" }
@@ -211,6 +215,11 @@ dependencies {
     implementation fg.deobf("earth.terrarium.chipped:chipped-forge-${minecraft_version}:${chipped_version}")
     implementation fg.deobf("com.teamresourceful.resourcefullib:resourcefullib-forge-${minecraft_version}:${rflib_version}")
     implementation fg.deobf("curse.maven:athena-841890:5176879")
+
+    implementation fg.deobf("curse.maven:thermal-foundation-222880:5443583")
+    implementation fg.deobf("curse.maven:cofh-core-69162:5374122")
+    implementation fg.deobf("curse.maven:thermal-expansion-69163:5372749")
+    compileOnly files('libs/thermal_core-1.20.1-11.0.6.24.jar')
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
