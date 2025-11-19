@@ -90,6 +90,7 @@ public class CreateQOL {
         QOLBlocks.register();
         QOLBlockEntities.register();
         QOLItems.register();
+        QOLFluids.register();
         QOLCreativeModeTabs.register(modEventBus);
         QOLPackets.registerPackets();
         QOLRecipeTypes.register(modEventBus);
@@ -155,6 +156,7 @@ public class CreateQOL {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(()-> CraftingHelper.register(FeatureLoadedCondition.Serializer.INSTANCE));
+        QOLFluids.registerFluidInteractions();
     }
 
     public void removeFallDamage(LivingDamageEvent event){

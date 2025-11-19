@@ -49,6 +49,15 @@
   "item.createqol.shadow_steel_hoe": "Shadow Steel Hoe",
   "item.createqol.statue": "Statue",
   "item.createqol.empty_stock_manager": "Empty Stock Manager",
+  "item.createqol.superheated_lava_bucket": "Superheated Lava Bucket",
+
+  "tag.item.forge.buckets.superheated_lava": "Superheated Lava Buckets",
+  "tag.fluid.forge.superheated_lava": "Superheated Lava",
+
+
+
+  "fluid.createqol.superheated_lava": "Superheated Lava",
+
 
   "create.options.inventory_linker.label": "Inventory Link Mode",
   "options.inventory_linker.inventory": "Inventory",
