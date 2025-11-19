@@ -1,0 +1,12 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "createqol:fluid/superheated_lava_flow"
+    },
+    {
+      "type": "single",
+      "resource": "createqol:fluid/superheated_lava_still"
+    }
+  ]
+}

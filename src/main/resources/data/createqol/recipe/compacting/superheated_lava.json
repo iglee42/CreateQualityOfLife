@@ -1,0 +1,22 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "type": "neoforge:single",
+      "fluid": "minecraft:lava",
+      "amount": 1000
+    },
+    {
+      "item": "create:blaze_cake"
+    },
+    {
+      "tag": "c:dusts/obsidian"
+    }
+  ],
+  "results": [
+    {
+      "amount": 500,
+      "id": "createqol:superheated_lava"
+    }
+  ]
+}

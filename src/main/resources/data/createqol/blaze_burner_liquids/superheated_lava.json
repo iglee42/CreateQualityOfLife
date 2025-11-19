@@ -1,0 +1,6 @@
+{
+  "fluid": "createqol:superheated_lava",
+  "burn_time": 10,
+  "super_heat": true,
+  "consumptionPerTick": 1
+}

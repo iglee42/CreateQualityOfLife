@@ -13,6 +13,7 @@
     "BlockEntityTypeMixin",
     "ChromaticCompoundItemMixin",
     "DivingBootsItemMixin",
+    "EntityMixin",
     "FlapDisplayBlockMixin",
     "FrogportBlockEntityMixin",
     "FunnelBlockEntityMixin",
