@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class RefinedRadianceChestplate extends BacktankItem.Layered implements QOLConfigurableItem {
@@ -37,6 +38,13 @@ public class RefinedRadianceChestplate extends BacktankItem.Layered implements Q
         super.inventoryTick(p_41404_, p_41405_, p_41406_, p_41407_, p_41408_);
         invTick(p_41404_, p_41405_, p_41406_, p_41407_, p_41408_);
     }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<T> onBroken) {
+        if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
+        return super.damageItem(stack, amount, entity, onBroken);
+    }
+
 
     @Override
     public int effectLevel(ItemStack stack) {

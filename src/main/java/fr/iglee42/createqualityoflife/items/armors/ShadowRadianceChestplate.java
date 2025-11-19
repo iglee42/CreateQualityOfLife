@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class ShadowRadianceChestplate extends BacktankItem.Layered implements QOLConfigurableItem {
@@ -45,6 +46,12 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
                 && isElytraEnable(stack)
                 && (!hasPropeller(stack) || !isFansEnable(stack))
                 && CreateQOLConfigs.server().equipments.armors.elytraAllowed.get();
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<T> onBroken) {
+        if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
+        return super.damageItem(stack, amount, entity, onBroken);
     }
 
     public boolean elytraFlightTick(ItemStack stack, LivingEntity entity, int flightTicks) {
