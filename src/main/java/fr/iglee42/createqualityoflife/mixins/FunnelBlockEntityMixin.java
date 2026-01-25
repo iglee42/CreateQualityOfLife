@@ -32,16 +32,28 @@ public class FunnelBlockEntityMixin{
     @Shadow
     private WeakReference<Entity> lastObserved;
 
-    @Inject(method = "activateExtractor",at = @At(value = "INVOKE", target = "Lcom/simibubi/create/foundation/blockEntity/behaviour/inventory/InvManipulationBehaviour;extract(Lcom/simibubi/create/foundation/item/ItemHelper$ExtractionCountMode;I)Lnet/minecraft/world/item/ItemStack;",ordinal = 1),locals = LocalCapture.CAPTURE_FAILSOFT,cancellable = true)
-    private void qol$addPickupDelayIfFromLinker(CallbackInfo ci, BlockState blockState, Direction facing, boolean trackingEntityPresent, AABB area, int amountToExtract, ItemHelper.ExtractionCountMode mode){
-        if (invManipulation.blockEntity.getLevel().getBlockEntity(invManipulation.getTarget().getConnectedPos()) instanceof InventoryLinkerBlockEntity)
-            for (Entity entity : invManipulation.blockEntity.getLevel().getEntities(null, area.inflate(1))) {
-                if (entity instanceof Player) {
-                    lastObserved = new WeakReference<>(entity);
-                    ci.cancel();
-                    return;
+    @Shadow
+    private AABB getEntityOverflowScanningArea() {
+        return null;
+    }
+
+    @Inject(method = "activateExtractor",at = @At(value = "INVOKE", target = "Lcom/simibubi/create/foundation/blockEntity/behaviour/inventory/InvManipulationBehaviour;extract(Lcom/simibubi/create/foundation/item/ItemHelper$ExtractionCountMode;I)Lnet/minecraft/world/item/ItemStack;",ordinal = 1, shift = At.Shift.BEFORE),cancellable = true,remap = false)
+    private void qol$addPickupDelayIfFromLinker(CallbackInfo ci){
+        FunnelBlockEntity self = (FunnelBlockEntity)(Object)this;
+        if (invManipulation != null && invManipulation.blockEntity != null && invManipulation.getTarget() != null) {
+            if (invManipulation.blockEntity.getLevel().getBlockEntity(invManipulation.getTarget().getConnectedPos()) instanceof InventoryLinkerBlockEntity) {
+                AABB area = getEntityOverflowScanningArea();
+                if (area != null && self.getLevel() != null) {
+                    for (Entity entity : self.getLevel().getEntities(null, area.inflate(1))) {
+                        if (entity instanceof Player) {
+                            lastObserved = new WeakReference<>(entity);
+                            ci.cancel();
+                            return;
+                        }
+                    }
                 }
             }
+        }
     }
 
 }
