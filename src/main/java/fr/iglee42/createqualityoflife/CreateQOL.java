@@ -2,7 +2,17 @@ package fr.iglee42.createqualityoflife;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.AllBlockEntityTypes;
+import com.simibubi.create.AllContraptionTypes;
+import com.simibubi.create.Create;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
+import com.simibubi.create.content.equipment.potatoCannon.AllPotatoProjectileBlockHitActions;
+import com.simibubi.create.content.equipment.potatoCannon.AllPotatoProjectileEntityHitActions;
+import com.simibubi.create.content.equipment.potatoCannon.AllPotatoProjectileRenderModes;
+import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
+import com.simibubi.create.content.kinetics.mechanicalArm.AllArmInteractionPointTypes;
+import com.simibubi.create.content.logistics.item.filter.attribute.AllItemAttributeTypes;
+import com.simibubi.create.foundation.advancement.AllAdvancements;
+import com.simibubi.create.foundation.advancement.AllTriggers;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
@@ -27,6 +37,7 @@ import fr.iglee42.createqualityoflife.utils.liquidblazeburners.LiquidBlazeBurner
 import net.createmod.catnip.config.ui.BaseConfigScreen;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -54,6 +65,7 @@ import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -112,6 +124,8 @@ public class CreateQOL {
         modEventBus.addListener(EnderPackagerBlockEntity::registerCapabilities);
         modEventBus.addListener(this::registerCapabilities);
         modEventBus.addListener(QOLEntityTypes::registerEntityAttributes);
+        modEventBus.addListener(CreateQOL::onRegister);
+
 
         forgeEventBus.addListener(this::removeFallDamage);
         forgeEventBus.addListener(this::registerReloadListener);
@@ -126,6 +140,10 @@ public class CreateQOL {
         //    MysteriousItemConversionCategory.RECIPES.add(BlazeBurnerLiquidRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.SHADOW_STEEL.asStack()));
         //    MysteriousItemConversionCategory.RECIPES.add(BlazeBurnerLiquidRecipe.create(AllItems.CHROMATIC_COMPOUND.asStack(), AllItems.REFINED_RADIANCE.asStack()));
         //}
+    }
+
+    public static void onRegister(final RegisterEvent event) {
+        QOLArmInteractionPointTypes.init();
     }
 
     private void registerToolsEvents(IEventBus modEventBus, IEventBus forgeEventBus) {
