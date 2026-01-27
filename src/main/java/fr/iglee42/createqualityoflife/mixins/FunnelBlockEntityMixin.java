@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import java.lang.ref.WeakReference;
 
 @Mixin(value = FunnelBlockEntity.class,remap = false)
-public class FunnelBlockEntityMixin{
+public abstract class FunnelBlockEntityMixin{
 
     @Shadow
     private InvManipulationBehaviour invManipulation;
@@ -32,10 +32,13 @@ public class FunnelBlockEntityMixin{
     @Shadow
     private WeakReference<Entity> lastObserved;
 
+    @Shadow
+    protected abstract AABB getEntityOverflowScanningArea();
+
     @Inject(method = "activateExtractor",at = @At(value = "INVOKE", target = "Lcom/simibubi/create/foundation/blockEntity/behaviour/inventory/InvManipulationBehaviour;extract(Lcom/simibubi/create/foundation/item/ItemHelper$ExtractionCountMode;I)Lnet/minecraft/world/item/ItemStack;",ordinal = 1),locals = LocalCapture.CAPTURE_FAILSOFT,cancellable = true)
-    private void qol$addPickupDelayIfFromLinker(CallbackInfo ci, BlockState blockState, Direction facing, boolean trackingEntityPresent, AABB area, int amountToExtract, ItemHelper.ExtractionCountMode mode){
+    private void qol$addPickupDelayIfFromLinker(CallbackInfo ci, BlockState blockState, Direction facing, Entity lastEntity, int amountToExtract, ItemHelper.ExtractionCountMode mode){
         if (invManipulation.blockEntity.getLevel().getBlockEntity(invManipulation.getTarget().getConnectedPos()) instanceof InventoryLinkerBlockEntity)
-            for (Entity entity : invManipulation.blockEntity.getLevel().getEntities(null, area.inflate(1))) {
+            for (Entity entity : invManipulation.blockEntity.getLevel().getEntities(null, getEntityOverflowScanningArea().inflate(1))) {
                 if (entity instanceof Player) {
                     lastObserved = new WeakReference<>(entity);
                     ci.cancel();
