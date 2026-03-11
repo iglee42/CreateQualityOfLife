@@ -69,11 +69,7 @@ public class ShadowSteelSword extends SwordItem implements QOLConfigurableItem {
     public void releaseUsing(ItemStack stack, Level level, LivingEntity lvEntity, int remainingTime) {
         if (!(lvEntity instanceof Player player)) return;
         if (!CreateQOLConfigs.server().equipments.tools.swordsAbilities.get()) return;
-        if (CreateQOLConfigs.server().equipments.tools.swordsAirConsumption.get() > 0 && !player.isCreative()) {
-            ItemStack backtank = BacktankUtil.getAllWithAir(player).stream().filter(i -> BacktankUtil.getAir(i) >= CreateQOLConfigs.server().equipments.tools.swordsAirConsumption.get()).findFirst().orElse(ItemStack.EMPTY);
-            if (backtank.isEmpty()) return;
-            BacktankUtil.consumeAir(player,backtank,CreateQOLConfigs.server().equipments.tools.swordsAirConsumption.get());
-        }
+
         int usedTime = getUseDuration(stack,lvEntity) - remainingTime;
         float timeRatio = (float) usedTime / getUseDuration(stack,lvEntity);
         if (!level.isClientSide) {
@@ -143,21 +139,6 @@ public class ShadowSteelSword extends SwordItem implements QOLConfigurableItem {
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
         if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
         return super.damageItem(stack, amount, entity, onBroken);
-    }
-
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return BacktankUtil.isBarVisible(stack, getMaxDamage(stack));
-    }
-
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return BacktankUtil.getBarWidth(stack, getMaxDamage(stack));
-    }
-
-    @Override
-    public int getBarColor(ItemStack stack) {
-        return BacktankUtil.getBarColor(stack, getMaxDamage(stack));
     }
 
     @Override
