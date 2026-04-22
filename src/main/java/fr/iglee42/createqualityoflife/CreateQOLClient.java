@@ -34,6 +34,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -152,12 +153,12 @@ public class CreateQOLClient {
     }
 
 
-    public static void showPropellers(BlockState renderedState, int light, PoseStack ms, MultiBufferSource buffer, RenderType renderType, LevelAccessor level) {
+    public static void showPropellers(BlockState renderedState, int light, PoseStack ms, MultiBufferSource buffer, RenderType renderType, LevelAccessor level,boolean hasGlint) {
         PartialModel partial = (AnimationTickHolder.getRenderTime(level)) % 10 >= 5 ? QOLPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS : QOLPartialModels.SHADOW_RADIANCE_CHESTPLATE_PROPELLERS_ALT;
         SuperByteBuffer propellers = CachedBuffers.partial(partial,renderedState);
         propellers
                 .light(light)
-                .renderInto(ms, buffer.getBuffer(renderType));
+                .renderInto(ms, ItemRenderer.getFoilBuffer(buffer,renderType,false,hasGlint));
     }
 
     public static void addEntityRendererLayers(EntityRenderersEvent.AddLayers event){

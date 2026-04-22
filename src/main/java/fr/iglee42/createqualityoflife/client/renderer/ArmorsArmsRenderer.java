@@ -12,6 +12,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -67,7 +68,8 @@ public class ArmorsArmsRenderer {
 		armPart.xRot = 0.0F;
 		ResourceLocation texture = QOLItems.SHADOW_RADIANCE_CHESTPLATE.isIn(mc.player.getItemBySlot(EquipmentSlot.CHEST)) ? SHADOW_RADIANCE_ARMS
 				: (QOLItems.SHADOW_STEEL_CHESTPLATE.isIn(mc.player.getItemBySlot(EquipmentSlot.CHEST)) ? SHADOW_STEEL_ARMS : REFINED_RADIANCE_ARMS);
-		armPart.render(event.getPoseStack(), buffer.getBuffer(RenderType.entitySolid(texture)),
+		boolean hasGlint = mc.player.getItemBySlot(EquipmentSlot.CHEST).hasFoil();
+		armPart.render(event.getPoseStack(), ItemRenderer.getFoilBuffer(buffer,RenderType.entitySolid(texture),false,hasGlint),
 			LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
 		event.setCanceled(true);
 	}

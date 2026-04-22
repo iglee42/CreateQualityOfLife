@@ -34,10 +34,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(value = BacktankArmorLayer.class,remap = true)
-public class BacktankArmorLayerMixin {
+public class BacktankArmorLayerMixin<T extends LivingEntity> {
 
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",remap = false, at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V",ordinal = 0,shift = At.Shift.BEFORE),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
-    private void inject(PoseStack ms, MultiBufferSource buffer, int light, LivingEntity entity, float yaw, float pitch, float pt, float p_225628_8_, float p_225628_9_, float p_225628_10_, CallbackInfo ci, BacktankItem item, EntityModel entityModel, HumanoidModel model, VertexConsumer vc, BlockState renderedState, SuperByteBuffer backtank, SuperByteBuffer cogs, SuperByteBuffer nob){
+    private void inject(PoseStack ms, MultiBufferSource buffer, int light, T entity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci, BacktankItem item, EntityModel entityModel, HumanoidModel model, boolean hasGlint, VertexConsumer vc, BlockState renderedState, SuperByteBuffer backtank, SuperByteBuffer cogs, SuperByteBuffer nob){
         if (entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof QOLConfigurableItem it && it.providedEffect(entity.getItemBySlot(EquipmentSlot.HEAD)).equals(MobEffects.INVISIBILITY) && entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.ARMOR_EFFECT,true)){
             ci.cancel();
             return;
@@ -84,7 +84,7 @@ public class BacktankArmorLayerMixin {
                     .renderInto(ms, vc);
 
             if (ShadowRadianceChestplate.hasPropeller(stack)) {
-                CreateQOLClient.showPropellers(renderedState, light, ms, buffer, Sheets.cutoutBlockSheet(), entity.level());
+                CreateQOLClient.showPropellers(renderedState, light, ms, buffer, Sheets.cutoutBlockSheet(), entity.level(),hasGlint);
             }
             ms.popPose();
             ci.cancel();
