@@ -71,6 +71,9 @@ public class RefinedRadiancePickaxe extends PickaxeItem implements QOLConfigurab
         components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.vein_mine").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.veinMine.get(), true, stack.getOrDefault(QOLDataComponents.VEIN_MINE,false), false, true)));
+        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.use_air").getString())
+                .withStyle(ChatFormatting.GOLD)
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.use_air.get(), true, stack.getOrDefault(QOLDataComponents.USE_AIR,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 
@@ -79,6 +82,9 @@ public class RefinedRadiancePickaxe extends PickaxeItem implements QOLConfigurab
     public void addConfigurations(List<Configuration<?>> list, ItemStack stack) {
         list.add(Configuration.ofBool("Vein Mine",stack.getOrDefault(QOLDataComponents.VEIN_MINE,false),QOLDataComponents.VEIN_MINE,
                 List.of("Should all the blocks of the same types be destroy when mining"),(e,oe)->CreateQOLConfigs.server().equipments.tools.veinMine.get()));
+        list.add(Configuration.ofBool("Use Air",stack.getOrDefault(QOLDataComponents.USE_AIR,false),QOLDataComponents.USE_AIR,
+                List.of("Define if air should be used (if available) from the backtank instead of the tool's durability."),(e,oe)->CreateQOLConfigs.server().equipments.tools.use_air.get()));
+
     }
 
     @Override
@@ -102,8 +108,7 @@ public class RefinedRadiancePickaxe extends PickaxeItem implements QOLConfigurab
 
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
-        if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
-        return super.damageItem(stack, amount, entity, onBroken);
+        return stack.getOrDefault(QOLDataComponents.USE_AIR, false) && BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack)) ? 0 : super.damageItem(stack, amount, entity, onBroken);
     }
 
     @Override

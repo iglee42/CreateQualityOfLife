@@ -1,7 +1,6 @@
 package fr.iglee42.createqualityoflife.config;
 
 import net.createmod.catnip.config.ConfigBase;
-import net.createmod.catnip.config.ConfigBase.ConfigBool;
 
 public class CQOLArmors extends ConfigBase {
 

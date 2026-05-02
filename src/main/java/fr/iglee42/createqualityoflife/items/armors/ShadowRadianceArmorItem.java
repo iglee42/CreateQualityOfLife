@@ -75,6 +75,9 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.stepHeight.get(),
                             true, stack.getOrDefault(QOLDataComponents.STEP_HEIGHT, true), false, true)));
         }
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.use_air").getString())
+                .withStyle(ChatFormatting.GOLD)
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.use_air.get(), true, stack.getOrDefault(QOLDataComponents.USE_AIR,false), false, true)));
         super.appendHoverText(stack, p_339594_, components, p_41424_);
     }
 
@@ -141,27 +144,29 @@ public class ShadowRadianceArmorItem extends BaseArmorItem implements QOLConfigu
                     (e,oE)->CreateQOLConfigs.server().equipments.armors.stepHeight.get()
             ));
         }
+        list.add(Configuration.ofBool("Use Air",stack.getOrDefault(QOLDataComponents.USE_AIR,false),QOLDataComponents.USE_AIR,
+                List.of("Define if air should be used (if available) from the backtank instead of the armor's durability."),(e,oe)->CreateQOLConfigs.server().equipments.armors.use_air.get()));
+
     }
 
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
-        if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
-        return super.damageItem(stack, amount, entity, onBroken);
+        return stack.getOrDefault(QOLDataComponents.USE_AIR, false) && BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack)) ? 0 : super.damageItem(stack, amount, entity, onBroken);
     }
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        return BacktankUtil.isBarVisible(stack, getMaxDamage(stack));
+        return (BacktankUtil.isBarVisible(stack, getMaxDamage(stack)) && stack.getOrDefault(QOLDataComponents.USE_AIR,false)) || super.isBarVisible(stack);
     }
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        return BacktankUtil.getBarWidth(stack, getMaxDamage(stack));
+        return (stack.getOrDefault(QOLDataComponents.USE_AIR,false)) ? BacktankUtil.getBarWidth(stack, getMaxDamage(stack)) : super.getBarWidth(stack);
     }
 
     @Override
     public int getBarColor(ItemStack stack) {
-        return BacktankUtil.getBarColor(stack, getMaxDamage(stack));
+        return (stack.getOrDefault(QOLDataComponents.USE_AIR,false)) ? BacktankUtil.getBarColor(stack, getMaxDamage(stack)) : super.getBarColor(stack);
     }
 
     @Override

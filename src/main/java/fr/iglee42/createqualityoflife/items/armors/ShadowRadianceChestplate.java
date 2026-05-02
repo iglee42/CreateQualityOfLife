@@ -224,6 +224,9 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
                     .withStyle(ChatFormatting.GOLD)
                     .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.hoverAllowed.get() ,true,isHoverEnable(stack),false,true)));
         }
+        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.use_air").getString())
+                .withStyle(ChatFormatting.GOLD)
+                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.use_air.get(), true, stack.getOrDefault(QOLDataComponents.USE_AIR,false), false, true)));
 
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
@@ -401,6 +404,9 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
             return e;
         },(e,oe)->true));
 
+        list.add(Configuration.ofBool("Use Air",stack.getOrDefault(QOLDataComponents.USE_AIR,false),QOLDataComponents.USE_AIR,
+                List.of("Define if air should be used (if available) from the backtank instead of the armor's durability."),(e,oe)->CreateQOLConfigs.server().equipments.armors.use_air.get()));
+
     }
 
     @Override
@@ -410,7 +416,6 @@ public class ShadowRadianceChestplate extends BacktankItem.Layered implements QO
 
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
-        if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
-        return super.damageItem(stack, amount, entity, onBroken);
+        return stack.getOrDefault(QOLDataComponents.USE_AIR, false) && BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack)) ? 0 : super.damageItem(stack, amount, entity, onBroken);
     }
 }

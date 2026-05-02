@@ -7,7 +7,6 @@ import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.advancement.CreateAdvancement;
 
-import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.CreateQOLLang;
 import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.tools.refinedradiance.RefinedRadianceAxe;
@@ -43,8 +42,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 import org.jetbrains.annotations.Nullable;
 
