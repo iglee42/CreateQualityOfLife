@@ -265,6 +265,7 @@
   "createqol.ability.tool.smelting": "Smelting",
   "createqol.ability.tool.tree_decapitation": "Tree Decapitation",
   "createqol.ability.tool.vein_mine": "Vein Mine",
+  "createqol.ability.tool.use_air": "Use Air",
 
   "createqol.ability.armor.air": "Air",
   "createqol.ability.armor.arms": "Arms",
@@ -280,6 +281,7 @@
   "createqol.ability.armor.propeller": "Propeller",
   "createqol.ability.armor.step_height": "Step Height",
   "createqol.ability.armor.void_walk": "Void Walk",
+  "createqol.ability.armor.use_air": "Use Air",
 
   "createqol.ability.state.disabled_by_config": "Disabled By Config",
   "createqol.ability.state.disabled": "Disabled",
