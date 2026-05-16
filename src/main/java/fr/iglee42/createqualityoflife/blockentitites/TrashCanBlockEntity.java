@@ -2,15 +2,22 @@ package fr.iglee42.createqualityoflife.blockentitites;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.simibubi.create.foundation.fluid.FluidHelper;
+import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.registries.QOLBlockEntities;
 import fr.iglee42.createqualityoflife.utils.TrashFluidTank;
 import fr.iglee42.createqualityoflife.utils.TrashItemHandler;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
@@ -75,10 +82,22 @@ public class TrashCanBlockEntity extends SmartBlockEntity implements IHaveGoggle
 	}
 
 	public boolean canAcceptItem(ItemStack stack) {
-		return true;
+		List<Item> bannedItems = CreateQOLConfigs.server().logistics.trashCanItemBlacklist.get()
+				.stream().map(String.class::cast)
+				.map(ResourceLocation::tryParse)
+				.filter(Objects::nonNull)
+				.map(BuiltInRegistries.ITEM::get)
+				.toList();
+		return !bannedItems.contains(stack.getItem());
 	}
 	public boolean canAcceptFluid(FluidStack stack) {
-		return true;
+		List<Fluid> bannedFluids = CreateQOLConfigs.server().logistics.trashCanFluidBlacklist.get()
+				.stream().map(String.class::cast)
+				.map(ResourceLocation::tryParse)
+				.filter(Objects::nonNull)
+				.map(BuiltInRegistries.FLUID::get)
+				.toList();
+		return !bannedFluids.contains(stack.getFluid());
 	}
 	protected int getExtractionAmount() {
 		return 16;
