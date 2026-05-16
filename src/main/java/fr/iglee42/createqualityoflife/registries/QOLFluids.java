@@ -1,6 +1,7 @@
 package fr.iglee42.createqualityoflife.registries;
 
 import com.simibubi.create.AllFluids;
+import com.simibubi.create.AllTags;
 import com.simibubi.create.api.event.PipeCollisionEvent;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.tterrag.registrate.builders.FluidBuilder;
@@ -65,7 +66,7 @@ public class QOLFluids {
                             .tickRate(25)
                             .slopeFindDistance(3)
                             .explosionResistance(100f))
-                    .tag(Tags.Fluids.LAVA,QOLTags.QOLFluidsTags.SUPERHEATED_LAVA.tag)
+                    .tag(Tags.Fluids.LAVA,QOLTags.QOLFluidsTags.SUPERHEATED_LAVA.tag, AllTags.AllFluidTags.BOTTOMLESS_ALLOW.tag)
                     .source(BaseFlowingFluid.Source::new)
                     .block()
                     .properties(p -> p.mapColor(MapColor.COLOR_BLUE))
