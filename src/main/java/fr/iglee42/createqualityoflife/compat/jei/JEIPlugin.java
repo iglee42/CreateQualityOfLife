@@ -7,6 +7,7 @@ import com.simibubi.create.foundation.item.ItemHelper;
 import earth.terrarium.chipped.common.compat.jei.WorkbenchCategory;
 import fr.iglee42.createqualityoflife.CreateQOL;
 import fr.iglee42.createqualityoflife.client.screens.ConfigureStatueScreen;
+import fr.iglee42.createqualityoflife.recipes.ApplyShadowRadianceAbilityRecipe;
 import fr.iglee42.createqualityoflife.recipes.BlazeBurnerLiquidRecipe;
 import fr.iglee42.createqualityoflife.registries.QOLBlocks;
 import fr.iglee42.createqualityoflife.utils.Features;
@@ -14,10 +15,7 @@ import fr.iglee42.createqualityoflife.utils.liquidblazeburners.LiquidBlazeBurner
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import mezz.jei.api.registration.IGuiHandlerRegistration;
-import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
@@ -43,6 +41,12 @@ public class JEIPlugin implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {
         return CreateQOL.asResource("jei");
+    }
+
+    @Override
+    public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
+        IModPlugin.super.registerVanillaCategoryExtensions(registration);
+        registration.getSmithingCategory().addExtension(ApplyShadowRadianceAbilityRecipe.class,new SmithingAddAbilityCategoryExtension());
     }
 
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {

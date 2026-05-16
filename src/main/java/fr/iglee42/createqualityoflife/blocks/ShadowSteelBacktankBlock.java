@@ -30,27 +30,6 @@ public class ShadowSteelBacktankBlock extends BacktankBlock {
     }
 
     @Override
-    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        super.setPlacedBy(worldIn, pos, state, placer, stack);
-        if (worldIn.isClientSide)
-            return;
-    }
-
-    @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (!level.isClientSide) {
-
-        }
-        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
-    }
-
-    @Override
-    public ItemStack getCloneItemStack(LevelReader pLevel, BlockPos pos, BlockState state) {
-        ItemStack stack = super.getCloneItemStack(pLevel, pos, state);
-        return stack;
-    }
-
-    @Override
     public Class<BacktankBlockEntity> getBlockEntityClass() {
         return super.getBlockEntityClass();
     }

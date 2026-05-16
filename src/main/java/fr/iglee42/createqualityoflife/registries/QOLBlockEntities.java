@@ -44,8 +44,8 @@ public class QOLBlockEntities {
             .renderer(() -> BacktankRenderer::new)
             .register();
 
-    public static final BlockEntityEntry<RefinedRadianceBacktankBE> REFINED_RADIANCE_CHEST_BE = REGISTRATE
-            .blockEntity("refined_radiance_backtank", RefinedRadianceBacktankBE::new)
+    public static final BlockEntityEntry<BacktankBlockEntity> REFINED_RADIANCE_CHEST_BE = REGISTRATE
+            .blockEntity("refined_radiance_backtank", BacktankBlockEntity::new)
             .visual(() -> SingleAxisRotatingVisual::backtank)
             .validBlocks(QOLBlocks.REFINED_RADIANCE_CHESTPLATE)
             .renderer(() -> BacktankRenderer::new)

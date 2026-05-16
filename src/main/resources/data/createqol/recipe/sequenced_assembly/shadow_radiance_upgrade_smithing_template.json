@@ -1,0 +1,81 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "createqol:feature_loaded",
+      "feature": "shadow_radiance"
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:netherite_upgrade_smithing_template"
+  },
+  "transitional_item": {
+    "item": {
+      "id": "minecraft:netherite_upgrade_smithing_template"
+    }
+  },
+  "sequence": [
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "minecraft:netherite_upgrade_smithing_template"
+        },
+        {
+          "type": "neoforge:single",
+          "amount": 500,
+          "fluid": "createqol:superheated_lava"
+        }
+      ],
+      "results": [
+        {
+          "id": "minecraft:netherite_upgrade_smithing_template"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "minecraft:netherite_upgrade_smithing_template"
+        },
+        {
+          "item": "create:railway_casing"
+        }
+      ],
+      "results": [
+        {
+          "item": {
+            "id": "minecraft:netherite_upgrade_smithing_template"
+          }
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "minecraft:netherite_upgrade_smithing_template"
+        },
+        {
+          "item": "createqol:shadow_radiance"
+        }
+      ],
+      "results": [
+        {
+          "item": {
+            "id": "minecraft:netherite_upgrade_smithing_template"
+          }
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "item": {
+        "id": "createqol:shadow_radiance_upgrade_smithing_template"
+      }
+    }
+  ],
+  "loops": 2
+}

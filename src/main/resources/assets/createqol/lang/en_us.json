@@ -50,6 +50,13 @@
   "item.createqol.statue": "Statue",
   "item.createqol.empty_stock_manager": "Empty Stock Manager",
   "item.createqol.superheated_lava_bucket": "Superheated Lava Bucket",
+  "item.createqol.shadow_radiance_upgrade_smithing_template": "Smithing Template",
+
+  "item.createqol.smithing_template.shadow_radiance_upgrade.additions_slot_description": "Add Elytra or Propeller",
+  "item.createqol.smithing_template.shadow_radiance_upgrade.applies_to": "Refined Radiance / Shadow Radiance Chestplate",
+  "item.createqol.smithing_template.shadow_radiance_upgrade.base_slot_description": "Add Refined Radiance/Shadow Radiance Chestplate",
+  "item.createqol.smithing_template.shadow_radiance_upgrade.ingredients": "Elytra / Propeller",
+  "upgrade.createqol.shadow_radiance_upgrade": "Shadow Radiance Upgrade",
 
   "tag.item.c.buckets.superheated_lava": "Superheated Lava Buckets",
   "tag.fluid.c.superheated_lava": "Superheated Lava",

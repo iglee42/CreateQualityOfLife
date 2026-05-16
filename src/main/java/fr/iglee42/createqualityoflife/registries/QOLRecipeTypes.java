@@ -5,6 +5,7 @@ import com.simibubi.create.Create;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import fr.iglee42.createqualityoflife.CreateQOL;
+import fr.iglee42.createqualityoflife.recipes.ApplyShadowRadianceAbilityRecipe;
 import fr.iglee42.createqualityoflife.recipes.BlazeBurnerLiquidRecipe;
 import net.createmod.catnip.lang.Lang;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -26,6 +27,8 @@ import java.util.function.Supplier;
 public enum QOLRecipeTypes implements IRecipeTypeInfo,StringRepresentable {
     BLAZE_BURNER_LIQUIDS(BlazeBurnerLiquidRecipe::new),
     ;
+
+    public static final DeferredHolder<RecipeSerializer<?>,RecipeSerializer<ApplyShadowRadianceAbilityRecipe>> APPLY_SHADOW_RADIANCE_ABILITY = Registers.SERIALIZER_REGISTER.register("apply_ability",ApplyShadowRadianceAbilityRecipe.Serializer::new);
 
     public final ResourceLocation id;
     public final Supplier<RecipeSerializer<?>> serializerSupplier;

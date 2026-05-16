@@ -23,10 +23,14 @@ import fr.iglee42.createqualityoflife.statue.StatueItem;
 import fr.iglee42.createqualityoflife.utils.ArmorRenderType;
 import fr.iglee42.createqualityoflife.utils.ItemTooltips;
 import fr.iglee42.createqualityoflife.utils.PreferredRender;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.*;
 import net.neoforged.api.distmarker.Dist;
@@ -36,9 +40,36 @@ import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 import static fr.iglee42.createqualityoflife.CreateQOL.REGISTRATE;
 
 public class QOLItems {
+
+    private static final ResourceLocation EMPTY_SLOT_HELMET = ResourceLocation.withDefaultNamespace("item/empty_armor_slot_helmet");
+    private static final ResourceLocation EMPTY_SLOT_CHESTPLATE = ResourceLocation.withDefaultNamespace("item/empty_armor_slot_chestplate");
+    private static final ResourceLocation EMPTY_SLOT_LEGGINGS = ResourceLocation.withDefaultNamespace("item/empty_armor_slot_leggings");
+    private static final ResourceLocation EMPTY_SLOT_BOOTS = ResourceLocation.withDefaultNamespace("item/empty_armor_slot_boots");
+    private static final ResourceLocation EMPTY_SLOT_HOE = ResourceLocation.withDefaultNamespace("item/empty_slot_hoe");
+    private static final ResourceLocation EMPTY_SLOT_AXE = ResourceLocation.withDefaultNamespace("item/empty_slot_axe");
+    private static final ResourceLocation EMPTY_SLOT_SWORD = ResourceLocation.withDefaultNamespace("item/empty_slot_sword");
+    private static final ResourceLocation EMPTY_SLOT_SHOVEL = ResourceLocation.withDefaultNamespace("item/empty_slot_shovel");
+    private static final ResourceLocation EMPTY_SLOT_PICKAXE = ResourceLocation.withDefaultNamespace("item/empty_slot_pickaxe");
+    private static final ResourceLocation EMPTY_SLOT_ELYTRA = CreateQOL.asResource("item/empty_armor_slot_elytra");
+    private static final ResourceLocation EMPTY_SLOT_PROPELLER = CreateQOL.asResource("item/empty_slot_propeller");
+    private static List<ResourceLocation> createUpgradeIconList() {
+        return List.of(
+                EMPTY_SLOT_HELMET,
+                EMPTY_SLOT_SWORD,
+                EMPTY_SLOT_CHESTPLATE,
+                EMPTY_SLOT_PICKAXE,
+                EMPTY_SLOT_LEGGINGS,
+                EMPTY_SLOT_AXE,
+                EMPTY_SLOT_BOOTS,
+                EMPTY_SLOT_HOE,
+                EMPTY_SLOT_SHOVEL
+        );
+    }
 
     static {
         REGISTRATE.setCreativeTab(QOLCreativeModeTabs.MAIN_TAB);
@@ -54,6 +85,18 @@ public class QOLItems {
     public static final ItemEntry<NoGravMagicalDohickyItem> SHADOW_RADIANCE = REGISTRATE.item("shadow_radiance", NoGravMagicalDohickyItem::new)
                     .properties(p->p.rarity(Rarity.RARE))
                     .register();
+
+    public static final ItemEntry<SmithingTemplateItem> SHADOW_RADIANCE_UPGRADE_SMITHING_TEMPLATE = REGISTRATE.item("shadow_radiance_upgrade_smithing_template",p->new SmithingTemplateItem(
+            Component.translatable(Util.makeDescriptionId("item", CreateQOL.asResource("smithing_template.shadow_radiance_upgrade.applies_to"))).withStyle(ChatFormatting.GRAY),
+            Component.translatable(Util.makeDescriptionId("item", CreateQOL.asResource("smithing_template.shadow_radiance_upgrade.ingredients"))).withStyle(ChatFormatting.GRAY),
+            Component.translatable(Util.makeDescriptionId("upgrade", CreateQOL.asResource("shadow_radiance_upgrade"))).withStyle(ChatFormatting.BLUE),
+            Component.translatable(Util.makeDescriptionId("item", CreateQOL.asResource("smithing_template.shadow_radiance_upgrade.base_slot_description"))),
+            Component.translatable(Util.makeDescriptionId("item", CreateQOL.asResource("smithing_template.shadow_radiance_upgrade.additions_slot_description"))),
+            createUpgradeIconList(),
+            List.of(EMPTY_SLOT_ELYTRA,EMPTY_SLOT_PROPELLER)
+    ))
+            .properties(p->p.rarity(Rarity.RARE))
+            .register();
 
 
 

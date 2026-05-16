@@ -1,0 +1,13 @@
+{
+  "type": "createqol:apply_ability",
+  "addition":{
+    "item": "create:propeller"
+  },
+  "component": "createqol:propellers",
+  "base": {
+    "item": "createqol:shadow_radiance_chestplate"
+  },
+  "template": {
+    "item": "createqol:shadow_radiance_upgrade_smithing_template"
+  }
+}
