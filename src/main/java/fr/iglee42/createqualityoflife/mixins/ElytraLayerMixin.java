@@ -1,5 +1,6 @@
 package fr.iglee42.createqualityoflife.mixins;
 
+import fr.iglee42.createqualityoflife.config.CreateQOLConfigs;
 import fr.iglee42.createqualityoflife.items.armors.RefinedRadianceChestplate;
 import fr.iglee42.createqualityoflife.items.armors.ShadowRadianceChestplate;
 import fr.iglee42.createqualityoflife.registries.QOLDataComponents;
@@ -25,7 +26,7 @@ public class ElytraLayerMixin {
             cir.setReturnValue(false);
             return;
         }
-        if ((stack.getItem() instanceof ShadowRadianceChestplate || stack.getItem() instanceof RefinedRadianceChestplate )&& ShadowRadianceChestplate.hasElytra(stack)&& stack.getOrDefault(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).shouldRenderAddition() && stack.getOrDefault(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH).shouldRenderElytra()){
+        if ((stack.getItem() instanceof ShadowRadianceChestplate || stack.getItem() instanceof RefinedRadianceChestplate ) && CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() && ShadowRadianceChestplate.hasElytra(stack)&& stack.getOrDefault(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).shouldRenderAddition() && stack.getOrDefault(QOLDataComponents.PREFERRED_RENDER, PreferredRender.BOTH).shouldRenderElytra()){
             cir.setReturnValue(true);
             return;
         }

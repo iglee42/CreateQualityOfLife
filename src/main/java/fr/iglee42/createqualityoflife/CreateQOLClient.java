@@ -138,9 +138,9 @@ public class CreateQOLClient {
         });
         event.enqueueWork(() -> {
             ItemProperties.register(QOLItems.SHADOW_RADIANCE_CHESTPLATE.get(),
-                    CreateQOL.asResource("elytra"), (stack, level, living, id) -> ShadowRadianceChestplate.hasElytra(stack) ? 1.0f : 0.0f);
+                    CreateQOL.asResource("elytra"), (stack, level, living, id) -> ShadowRadianceChestplate.hasElytra(stack) && CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() ? 1.0f : 0.0f);
             ItemProperties.register(QOLItems.REFINED_RADIANCE_CHESTPLATE.get(),
-                    CreateQOL.asResource("elytra"), (stack, level, living, id) -> ShadowRadianceChestplate.hasElytra(stack) ? 1.0f : 0.0f);
+                    CreateQOL.asResource("elytra"), (stack, level, living, id) -> ShadowRadianceChestplate.hasElytra(stack) && CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() ? 1.0f : 0.0f);
         });
 
         EntityRenderers.register(QOLEntityTypes.STATUE.get(), StatueRenderer::new);
