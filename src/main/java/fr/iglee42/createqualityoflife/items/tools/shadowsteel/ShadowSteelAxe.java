@@ -86,9 +86,6 @@ public class ShadowSteelAxe extends AxeItem implements QOLConfigurableItem {
         components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.tree_decapitation").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.treeDecapitation.get(), true, stack.getOrDefault(QOLDataComponents.TREE_DECAPITATION,false), false, true)));
-        components.add(Component.translatable("createqol.ability.tool.toggle_message", Component.translatable("createqol.ability.tool.use_air").getString())
-                .withStyle(ChatFormatting.GOLD)
-                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.tools.use_air.get(), true, stack.getOrDefault(QOLDataComponents.USE_AIR,false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 
@@ -97,9 +94,6 @@ public class ShadowSteelAxe extends AxeItem implements QOLConfigurableItem {
     public void addConfigurations(List<Configuration<?>> list, ItemStack stack) {
         list.add(Configuration.ofBool("Tree Decapitation",stack.getOrDefault(QOLDataComponents.TREE_DECAPITATION,false),QOLDataComponents.TREE_DECAPITATION,
                 List.of("Should destroy a tree when a log is broken like a mechanical saw"),(e,oe)->CreateQOLConfigs.server().equipments.tools.treeDecapitation.get()));
-        list.add(Configuration.ofBool("Use Air",stack.getOrDefault(QOLDataComponents.USE_AIR,false),QOLDataComponents.USE_AIR,
-                List.of("Define if air should be used (if available) from the backtank instead of the tool's durability."),(e,oe)->CreateQOLConfigs.server().equipments.tools.use_air.get()));
-
     }
 
     @Override
@@ -122,22 +116,22 @@ public class ShadowSteelAxe extends AxeItem implements QOLConfigurableItem {
     
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
-        return stack.getOrDefault(QOLDataComponents.USE_AIR, false) && BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack)) ? 0 : super.damageItem(stack, amount, entity, onBroken);
+        return CreateQOLConfigs.server().equipments.useAir.get() && BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack)) ? 0 : super.damageItem(stack, amount, entity, onBroken);
     }
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        return (BacktankUtil.isBarVisible(stack, getMaxDamage(stack)) && stack.getOrDefault(QOLDataComponents.USE_AIR,false)) || super.isBarVisible(stack);
+        return (BacktankUtil.isBarVisible(stack, getMaxDamage(stack)) && CreateQOLConfigs.server().equipments.useAir.get()) || super.isBarVisible(stack);
     }
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        return stack.getOrDefault(QOLDataComponents.USE_AIR,false) ? BacktankUtil.getBarWidth(stack, getMaxDamage(stack)) : super.getBarWidth(stack);
+        return CreateQOLConfigs.server().equipments.useAir.get() ? BacktankUtil.getBarWidth(stack, getMaxDamage(stack)) : super.getBarWidth(stack);
     }
 
     @Override
     public int getBarColor(ItemStack stack) {
-        return stack.getOrDefault(QOLDataComponents.USE_AIR,false) ? BacktankUtil.getBarColor(stack, getMaxDamage(stack)) : super.getBarColor(stack);
+        return CreateQOLConfigs.server().equipments.useAir.get() ? BacktankUtil.getBarColor(stack, getMaxDamage(stack)) : super.getBarColor(stack);
     }
 
     public static void mineBlock(BlockEvent.@NotNull BreakEvent event){

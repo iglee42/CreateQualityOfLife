@@ -21,8 +21,6 @@ public class CQOLTools extends ConfigBase {
     public final ConfigInt swordsChargeTime = i(50,0,Integer.MAX_VALUE,"swordsChargeTime",Comments.swordsChargeTime);
     public final ConfigInt swordsCooldowns = i(100,0,Integer.MAX_VALUE,"swordsCooldowns",Comments.swordsCooldowns);
 
-    public final ConfigBool use_air = b(true,"use_air",Comments.use_air);
-
     @Override
     public String getName() {
         return "tools";
@@ -45,7 +43,5 @@ public class CQOLTools extends ConfigBase {
         static String swordsStrength = "Define the max strength for the swords repulsion/attraction effect. The strength formula is maxStrength * (chargeTime / maxChargeTime)";
         static String swordsChargeTime = "Define the max charge time (in ticks) for the swords repulsion/attraction effect";
         static String swordsCooldowns = "Define the cooldown (in ticks) between two uses of swords repulsion/attraction effect";
-    
-        static String use_air = "Define if air should be used (if available) from the backtank instead of the tool's durability.";
     }
 }

@@ -94,21 +94,20 @@ public class RefinedRadianceChestplate extends BacktankItem.Layered implements Q
                                 .noneMatch(e -> e instanceof BooleanEntry oEntry && oEntry.getComponent().equals(QOLDataComponents.BACKTANK_FANS) && oEntry.getValue());
                         return CreateQOLConfigs.server().equipments.armors.elytraAllowed.get() && flag;
                     }));
-
         }
-        list.add(Configuration.ofBool("Use Air", stack.getOrDefault(QOLDataComponents.USE_AIR, false), QOLDataComponents.USE_AIR,
-                Arrays.asList("Define if air should be used (if available) from the backtank instead of the armor's durability."), (e, oe) -> CreateQOLConfigs.server().equipments.armors.use_air.get()));
-
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
+        String airTooltip = CreateQOLConfigs.server().equipments.useAir.get() ? " (Powering equipment with air)" : " (Underwater breathing only)";
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.air").getString())
                 .withStyle(ChatFormatting.GOLD)
                 .append(Component.literal(String.valueOf(BacktankUtil.getAir(stack)))
                         .withStyle(ChatFormatting.YELLOW))
                 .append(Component.literal("/" + BacktankUtil.maxAir(stack))
+                        .withStyle(ChatFormatting.GOLD))
+                .append(Component.literal(airTooltip)
                         .withStyle(ChatFormatting.GOLD)));
         components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.elytra").getString())
                 .withStyle(ChatFormatting.GOLD)
@@ -118,10 +117,6 @@ public class RefinedRadianceChestplate extends BacktankItem.Layered implements Q
                 .withStyle(ChatFormatting.GOLD)
                 .append(QOLConfigurableItem.chooseState(true,
                         true, stack.getOrDefault(QOLDataComponents.BACKTANK_ARMS, true), false, true)));
-        components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.use_air").getString())
-                .withStyle(ChatFormatting.GOLD)
-                .append(QOLConfigurableItem.chooseState(CreateQOLConfigs.server().equipments.armors.use_air.get(),
-                        true, stack.getOrDefault(QOLDataComponents.USE_AIR, false), false, true)));
         super.appendHoverText(stack, p_41422_, components, p_41424_);
     }
 
@@ -142,7 +137,7 @@ public class RefinedRadianceChestplate extends BacktankItem.Layered implements Q
 
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
-        return stack.getOrDefault(QOLDataComponents.USE_AIR, false) && BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack)) ? 0 : super.damageItem(stack, amount, entity, onBroken);
+        return CreateQOLConfigs.server().equipments.useAir.get() && BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack)) ? 0 : super.damageItem(stack, amount, entity, onBroken);
     }
 
 }

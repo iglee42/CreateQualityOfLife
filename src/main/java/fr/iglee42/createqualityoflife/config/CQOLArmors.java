@@ -20,8 +20,6 @@ public class CQOLArmors extends ConfigBase {
     public ConfigBool stepHeight = b(true,"stepHeight", Comments.stepHeight);
     public ConfigBool voidWalking = b(true,"voidWalking", Comments.voidWalking);
 
-    public ConfigBool use_air = b(true,"use_air", Comments.use_air);
-
     @Override
     public String getName() {
         return "armors";
@@ -43,7 +41,5 @@ public class CQOLArmors extends ConfigBase {
         static String dashCooldown = "Define the cooldown for the dash";
         static String stepHeight = "Define if shadow radiance/refined radiance leggings should provide step height to the player";
         static String voidWalking = "Define if shadow radiance/shadow steel leggings should provide the ability to walk on void to the player";
-
-        static String use_air = "Define if air should be used (if available) from the backtank instead of the armor's durability.";
     }
 }
