@@ -51,7 +51,6 @@ public class QOLDataComponents {
     public static final DataComponentType<ShadowRadianceEffects> EFFECT = register("preferred_effect", b->b.persistent(ShadowRadianceEffects.CODEC).networkSynchronized(ShadowRadianceEffects.STREAM_CODEC));
     public static final DataComponentType<CompoundTag> COPIED_DATAS = register("copied_datas",b->b.persistent(CompoundTag.CODEC).networkSynchronized(ByteBufCodecs.COMPOUND_TAG));
     public static final DataComponentType<ItemTooltips> ITEM_TOOLTIPS = register("item_tooltips", b->b.persistent(ItemTooltips.CODEC).networkSynchronized(ItemTooltips.STREAM_CODEC));
-
     public static final DataComponentType<Boolean> USE_AIR = register("use_air",b->b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
 
     private static <T> DataComponentType<T> register(String name, UnaryOperator<DataComponentType.Builder<T>> builder) {
