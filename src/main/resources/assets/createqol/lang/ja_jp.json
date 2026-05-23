@@ -230,6 +230,10 @@
   "createqol.armor.ability.dash_disabled": "このサーバーではダッシュが無効化されています!",
   "createqol.armor.ability.dash_reloading": "ダッシュはリロード中です。お待ちください！",
 
+  "createqol.ability.use_air": "空気を使用",
+  "createqol.tooltip.use_air.powering": "空気で機器を電源供給",
+  "createqol.tooltip.use_air.breathing": "水中呼吸のみ",
+
   "createqol.ability.armor.disabled": "%sは設定で無効化されています",
   "createqol.ability.armor.unavailable": "%1$sは%2$sが有効な間は有効化できません",
   "createqol.ability.armor.reloading": "%sはリロード中です。お待ちください!",

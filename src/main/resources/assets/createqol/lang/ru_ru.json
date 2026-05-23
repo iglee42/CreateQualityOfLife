@@ -232,6 +232,10 @@
   "createqol.ability.armor.dash_disabled": "Функция рывка запрещена настройками мира/сервера",
   "createqol.ability.armor.dash_reloading": "Рывок перезаряжается...",
 
+  "createqol.ability.use_air": "Используйте воздух",
+  "createqol.tooltip.use_air.powering": "Питание оборудования с помощью воздуха",
+  "createqol.tooltip.use_air.breathing": "Подводное дыхание только",
+
   "createqol.ability.armor.disabled": "%s запрещён настройками мира/сервера",
   "createqol.ability.armor.unavailable": "%1$s не может быть включён, пока активен %2$s",
   "createqol.ability.armor.reloading": "%s перезаряжается...",
