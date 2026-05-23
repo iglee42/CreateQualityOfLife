@@ -241,6 +241,8 @@
   "createqol.armor.ability.dash_reloading": "Dashing is reloading, please wait!",
 
   "createqol.ability.use_air": "Use Air",
+  "createqol.tooltip.use_air.powering": "Powering equipment with air",
+  "createqol.tooltip.use_air.breathing": "Underwater breathing only",
 
   "createqol.ability.armor.disabled": "%s is disabled by the config",
   "createqol.ability.armor.unavailable": "%1$s can't be enabled while the %2$s is enabled",

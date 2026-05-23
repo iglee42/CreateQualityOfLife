@@ -60,7 +60,7 @@ public class ShadowSteelChestplate extends BacktankItem.Layered implements QOLCo
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext p_41422_, List<Component> components, TooltipFlag p_41424_) {
-        String airTooltip = CreateQOLConfigs.server().equipments.useAir.get() ? " (Powering equipment with air)" : " (Underwater breathing only)";
+        String airTooltip = " (" + Component.translatable(CreateQOLConfigs.server().equipments.useAir.get() ? "createqol.tooltip.use_air.powering" : "createqol.tooltip.use_air.breathing").getString() + ")";
         if (!stack.getOrDefault(QOLDataComponents.ITEM_TOOLTIPS, ItemTooltips.DEFAULT).isEnable(ItemTooltips.Tooltip.OPTIONS)) return;
         components.add(Component.translatable("createqol.ability.armor.toggle_message", Component.translatable("createqol.ability.armor.air").getString())
                 .withStyle(ChatFormatting.GOLD)
