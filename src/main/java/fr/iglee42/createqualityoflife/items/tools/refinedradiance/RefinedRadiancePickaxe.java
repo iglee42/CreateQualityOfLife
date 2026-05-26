@@ -102,8 +102,7 @@ public class RefinedRadiancePickaxe extends PickaxeItem implements QOLConfigurab
 
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
-        if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
-        return super.damageItem(stack, amount, entity, onBroken);
+        return CreateQOLConfigs.server().equipments.useAir.get() && BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack)) ? 0 : super.damageItem(stack, amount, entity, onBroken);
     }
 
     @Override

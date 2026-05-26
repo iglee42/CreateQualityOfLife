@@ -58,7 +58,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -117,23 +116,22 @@ public class ShadowSteelAxe extends AxeItem implements QOLConfigurableItem {
     
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
-        if (BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack))) return 0;
-        return super.damageItem(stack, amount, entity, onBroken);
+        return CreateQOLConfigs.server().equipments.useAir.get() && BacktankUtil.canAbsorbDamage(entity, getMaxDamage(stack)) ? 0 : super.damageItem(stack, amount, entity, onBroken);
     }
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        return BacktankUtil.isBarVisible(stack, getMaxDamage(stack));
+        return (BacktankUtil.isBarVisible(stack, getMaxDamage(stack)) && CreateQOLConfigs.server().equipments.useAir.get()) || super.isBarVisible(stack);
     }
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        return BacktankUtil.getBarWidth(stack, getMaxDamage(stack));
+        return CreateQOLConfigs.server().equipments.useAir.get() ? BacktankUtil.getBarWidth(stack, getMaxDamage(stack)) : super.getBarWidth(stack);
     }
 
     @Override
     public int getBarColor(ItemStack stack) {
-        return BacktankUtil.getBarColor(stack, getMaxDamage(stack));
+        return CreateQOLConfigs.server().equipments.useAir.get() ? BacktankUtil.getBarColor(stack, getMaxDamage(stack)) : super.getBarColor(stack);
     }
 
     public static void mineBlock(BlockEvent.@NotNull BreakEvent event){
