@@ -152,6 +152,11 @@ dependencies {
 
     implementation("earth.terrarium.chipped:chipped-neoforge-${minecraft_version}:${chipped_version}")
 
+    runtimeOnly("curse.maven:create-railways-navigator-935929:8017355")
+    runtimeOnly("curse.maven:dragonlib-946163:8031875")
+    runtimeOnly("curse.maven:create-enchantment-industry-688768:7970748")
+    runtimeOnly("curse.maven:create-dragons-plus-1216624:8097174")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

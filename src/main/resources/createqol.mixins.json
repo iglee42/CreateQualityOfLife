@@ -10,7 +10,6 @@
     "BacktankRendererMixin",
     "BeltBlockMixin",
     "BeltDeployerCallbacksMixin",
-    "BlockEntityTypeMixin",
     "ChromaticCompoundItemMixin",
     "DivingBootsItemMixin",
     "EntityMixin",
