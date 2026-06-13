@@ -1,6 +1,4 @@
 {
-
-
   "block.createqol.alchemy_saw": "Механическая пила алхимика",
   "block.createqol.botanist_saw": "Механическая пила ботаника",
   "block.createqol.carpenters_saw": "Механическая пила плотника",
@@ -51,6 +49,19 @@
   "item.createqol.shadow_steel_hoe": "Мотыга из теневой стали",
   "item.createqol.statue": "Картонный манекен",
   "item.createqol.empty_stock_manager": "Рабочее место складского распорядителя",
+  "item.createqol.superheated_lava_bucket": "Ведро супернагретой лавы",
+  "item.createqol.shadow_radiance_upgrade_smithing_template": "Кузнечный шаблон",
+
+  "item.createqol.smithing_template.shadow_radiance_upgrade.additions_slot_description": "Поместите элитры или пропеллер",
+  "item.createqol.smithing_template.shadow_radiance_upgrade.applies_to": "Нагрудникам из изысканного сияния и пост-хроматического сплава",
+  "item.createqol.smithing_template.shadow_radiance_upgrade.base_slot_description": "Поместите нагрудник из изысканного сияния или пост-хроматического сплава",
+  "item.createqol.smithing_template.shadow_radiance_upgrade.ingredients": "Элитры и пропеллер",
+  "upgrade.createqol.shadow_radiance_upgrade": "Пост-хроматическое улучшение",
+
+  "tag.item.c.buckets.superheated_lava": "Вёдра супернагретой лавы",
+  "tag.fluid.c.superheated_lava": "Супернагретая лава",
+
+  "fluid.createqol.superheated_lava": "Супернагретая лава",
 
   "create.options.inventory_linker.label": "Режим привязки инвентаря",
   "options.inventory_linker.inventory": "Инвентарь",
@@ -59,15 +70,16 @@
   "create.options.brass_trash_can.label": "Режим работы мусоропровода",
   "options.brass_trash_can.void": "Уничтожать всё",
   "options.brass_trash_can.keep_64": "Оставлять по стаку",
+  "options.brass_trash_can.void_overflow": "Void Overflow (keep an empty slot)",
 
   "tooltip.createqol.player_paper.linked_player": "Привязанный игрок: %s",
   "tooltip.createqol.player_paper.no_linked_player": "Игрок не привязан",
 
   "item.createqol.player_paper.tooltip": "ИНВЕНТАРНЫЙ ПОЛИС ИГРОКА",
   "item.createqol.player_paper.tooltip.summary": "Всевидящий документ, дающий _контроль_ над _содержимым инвентаря_ игрока — с его согласия, конечно же.",
-  "item.createqol.player_paper.tooltip.condition1": "ПКМ, если нет привязки",
+  "item.createqol.player_paper.tooltip.condition1": "ПКМ с предметом",
   "item.createqol.player_paper.tooltip.behaviour1": "_Привязывает_ полис к активировавшему его _игроку_.",
-  "item.createqol.player_paper.tooltip.condition2": "ПКМ крадучись, если есть привязка",
+  "item.createqol.player_paper.tooltip.condition2": "ПКМ крадучись при активной привязке",
   "item.createqol.player_paper.tooltip.behaviour2": "_Сбрасывает_ привязку.",
 
   "block.createqol.inventory_linker.tooltip": "ИНВЕНТАРНЫЙ КОНТРОЛЛЕР",
@@ -76,14 +88,14 @@
   "block.createqol.inventory_linker.tooltip.behaviour1": "Активирует _контроль_ над _содержимым инвентаря_ игрока. _ПКМ крадучись_, чтобы _прервать контроль_ и вернуть полис.",
 
   "block.createqol.trash_can.tooltip": "МУСОРОСБОРНИК",
-  "block.createqol.trash_can.tooltip.summary": "_Уничтожает_ любой предмет, поданный через логистический компонент. Будучи _частью штуковины_, уничтожает _все предметы_ из её хранилищ!",
+  "block.createqol.trash_can.tooltip.summary": "_Уничтожает_ любой предмет, поданный в него через любой логистический компонент. Будучи _частью штуковины_, уничтожает _все предметы_ из её хранилищ.",
 
   "block.createqol.brass_trash_can.tooltip": "ЛАТУННЫЙ МУСОРОСБОРНИК",
-  "block.createqol.brass_trash_can.tooltip.summary": "_Уничтожает_ любой предмет, поданный через логистический компонент.",
+  "block.createqol.brass_trash_can.tooltip.summary": "_Уничтожает_ любой предмет, поданный в него через любой логистический компонент.",
   "block.createqol.brass_trash_can.tooltip.condition1": "ПКМ гаечным ключом",
-  "block.createqol.brass_trash_can.tooltip.behaviour1": "Открывает _крышку_ и вместе с ней _функционал жёлоба_.",
+  "block.createqol.brass_trash_can.tooltip.behaviour1": "Открывает _крышку_ мусоросборника.",
 
-  "item.createqol.shadow_radiance_chestplate.tooltip.behaviour1": "Обеспечивает подачу _сжатого_ _воздуха_ к оборудованию, которое в этом нуждается, а также даёт особый эффект носителю. Настраивается в _меню конфигурации_ (открывается привязкой клавиш).",
+  "item.createqol.shadow_radiance_chestplate.tooltip.behaviour1": "Обеспечивает подачу _сжатого_ _воздуха_ к оборудованию, которое в этом нуждается, а также даёт особый эффект носителю. Настраивается в _меню конфигурации_ (открывается привязанной клавишей).",
   "item.createqol.shadow_radiance_chestplate.tooltip.behaviour2": "_Собирает_ и _сжимает воздух_ со скоростью, зависящей от скорости вращения.",
   "item.createqol.shadow_radiance_chestplate.tooltip.behaviour3": "_Оснащает_ баллон _пропеллером_, работающим от _сжатого воздуха_. Режимы _пропеллерной тяги_ и _парения_ переключаются соответствующими привязками клавиш.",
   "item.createqol.shadow_radiance_chestplate.tooltip.behaviour4": "_Оснащает_ баллон _элитрами_. Режим _полёта_ переключается соответствующей привязкой клавиш.",
@@ -95,7 +107,7 @@
 
   "item.createqol.shadow_armor.tooltip.summary": "Прочный элемент брони, дающий _полезный эффект_.",
   "item.createqol.shadow_armor.tooltip.condition1": "Когда надето",
-  "item.createqol.shadow_armor.tooltip.behaviour1": "Даёт особый эффект носителю. Настраивается в _меню конфигурации_ (открывается привязкой клавиш).",
+  "item.createqol.shadow_armor.tooltip.behaviour1": "Даёт особый эффект носителю. Настраивается в _меню конфигурации_ (открывается привязанной клавишей).",
 
   "itemGroup.createqol": "Create: Quality Of Life",
   "keybind.createqol.category": "Create: Quality Of Life",
@@ -113,6 +125,12 @@
   "keybind.createqol.boots_effect": "Переключить эффект от ботинок",
 
   "createqol.recipe.blaze_burner_liquids": "Жидкое топливо для горелки всполоха",
+  "createqol.recipe.blaze_burner_liquids.hint": "1 ведро = %s %s",
+  "createqol.recipe.blaze_burner_liquids.burner_level.heat": "нагрева",
+  "createqol.recipe.blaze_burner_liquids.burner_level.superheat": "супернагрева",
+  "createqol.recipe.blaze_burner_liquids.duration.hours": "%sч ",
+  "createqol.recipe.blaze_burner_liquids.duration.minutes": "%sм ",
+  "createqol.recipe.blaze_burner_liquids.duration.seconds": "%sс",
 
   "entity.createqol.statue": "Картонный манекен",
 
@@ -187,22 +205,23 @@
   "createqol.statue.animationTab": "Анимация",
   "createqol.statue.publishedAnimationTab": "Опубликованные анимации",
 
-  "createqol.statue.mainTab.desc": "Цветовое форматирование Minecraft можно активировать символом '&'",
+  "createqol.statue.mainTab.desc": "Цветовое форматирование Minecraft можно активировать символом «&».",
   "createqol.statue.skinTab.desc": "А вы знали, что скины Minecraft кодируются в Base64?",
-  "createqol.statue.transformTab.desc": "Изменение размера манекена не затрагивает его хитбокс",
-  "createqol.statue.inventoryTab.desc": "Предметы снаряжения манекена являются лишь проекциями, а потому не выпадают при его уничтожении",
-  "createqol.statue.rotationPresetTab.desc": "Готовые позы были взяты из набора данных 'Armor Statues', доступного на https://vanillatweaks.net",
-  "createqol.statue.hatTab.desc": "Эти ползунки были взяты из интерфейса управления поездом",
+  "createqol.statue.transformTab.desc": "Изменение размера манекена не затрагивает его хитбокс.",
+  "createqol.statue.inventoryTab.desc": "Предметы снаряжения манекена являются лишь проекциями, в связи с чем не выпадают при его уничтожении.",
+  "createqol.statue.rotationPresetTab.desc": "Готовые позы были взяты из набора данных «Armor Statues», доступного на https://vanillatweaks.net.",
+  "createqol.statue.hatTab.desc": "Эти ползунки были взяты из интерфейса управления тягой поезда.",
   "createqol.statue.left_sleeveTab.desc": "",
   "createqol.statue.left_pants_legTab.desc": "",
-  "createqol.statue.publishedAnimationTab.desc": "Изначально анимации планировалось создавать на языке программирования Lua",
-  "createqol.statue.animationTab.desc": "ПКМ по манекену гаечным ключом, чтобы запустить или остановить анимацию;\nкрадучись, чтобы вернуть её к исходному кадру",
+  "createqol.statue.publishedAnimationTab.desc": "Изначально анимации планировалось создавать на языке программирования Lua.",
+  "createqol.statue.animationTab.desc": "ПКМ по манекену гаечным ключом, чтобы запустить или остановить анимацию;\nкрадучись, чтобы вернуть её к исходному кадру.",
 
   "createqol.statue.animation.frame": "Кадр: ",
   "createqol.statue.animation.copy_from": "Записать %s",
   "createqol.statue.animation.create": "Нажмите, чтобы создать анимацию. Манекен может воспроизводить только одну анимацию.",
   "createqol.statue.animation.frame.create": "Нажмите, чтобы создать ключевой кадр. Один кадр соответствует одному такту анимации.",
 
+  "createqol.statue.animation.loop": "Зациклить",
   "createqol.statue.animation.revert": "Возвращать",
   "createqol.statue.animation.revert_1": "Должна ли анимация воспроизводиться",
   "createqol.statue.animation.revert_2": "вспять после окончания",
@@ -225,20 +244,20 @@
   "createqol.backtank.propeller_disabled": "Установка пропеллера недоступна: режимы пропеллерной тяги и парения запрещены настройками мира/сервера",
   "createqol.backtank.elytra_disabled": "Установка элитр недоступна: режим полёта запрещён настройками мира/сервера",
 
-  "createqol.ability.armor.use_fireworks": "Находясь в инвентаре, может быть использован для ускорения полёта, когда надет нагрудник из пост-хроматического сплава, оснащённый элитрами — для этого зажмите [Пробел], находясь в режиме полёта.",
-  "createqol.ability.armor.no_propeller": "Режимы пропеллерной тяги и парения недоступны: баллон не оснащён пропеллером",
-  "createqol.ability.armor.no_elytra": "Режим полёта недоступен: баллон не оснащён элитрами",
+  "createqol.armor.ability.use_fireworks": "Находясь в инвентаре, может быть использован для ускорения полёта, когда надет нагрудник из пост-хроматического сплава, оснащённый элитрами — для этого зажмите [Пробел], находясь в режиме полёта.",
+  "createqol.armor.ability.no_propeller": "Режимы пропеллерной тяги и парения недоступны: баллон не оснащён пропеллером",
+  "createqol.armor.ability.no_elytra": "Режим полёта недоступен: баллон не оснащён элитрами",
   "createqol.armor.ability.no_elytra_or_propeller": "Невозможно переключить режимы полёта, так как нагрудник не оснащён ни элитрами, ни пропеллером",
-  "createqol.ability.armor.dash_disabled": "Функция рывка запрещена настройками мира/сервера",
-  "createqol.ability.armor.dash_reloading": "Рывок перезаряжается...",
+  "createqol.armor.ability.dash_disabled": "Функция рывка запрещена настройками мира/сервера",
+  "createqol.armor.ability.dash_reloading": "Рывок перезаряжается...",
 
-  "createqol.ability.use_air": "Используйте воздух",
-  "createqol.tooltip.use_air.powering": "Питание оборудования с помощью воздуха",
-  "createqol.tooltip.use_air.breathing": "Подводное дыхание только",
+  "createqol.tooltip.use_air.powering": "%s/%s (расходуется остальным снаряжением)",
+  "createqol.tooltip.use_air.breathing": "%s/%s (расходуется только на подводное дыхание)",
 
   "createqol.ability.armor.disabled": "%s запрещён настройками мира/сервера",
   "createqol.ability.armor.unavailable": "%1$s не может быть включён, пока активен %2$s",
   "createqol.ability.armor.reloading": "%s перезаряжается...",
+  "createqol.ability.armor.effect_toggle_message": "Эффект элемента снаряжения «%s»: ",
   "createqol.ability.armor.toggle_message": "%s: ",
 
   "createqol.ability.tool.disabled": "Режим «%s» запрещён настройками мира/сервера",
@@ -251,15 +270,15 @@
   "createqol.ability.armor.elytra_mode": "Режим полёта",
 
   "createqol.ability.tool.attraction": "Притягивание",
-  "createqol.ability.tool.casingifier": "Корпусификатор",
-  "createqol.ability.tool.digging": "Расширенное копание",
+  "createqol.ability.tool.casingifier": "Корпусификация",
+  "createqol.ability.tool.digging": "Суперкопание",
   "createqol.ability.tool.harvesting": "Автопосадка",
-  "createqol.ability.tool.ploughing": "Расширенная вспашка",
+  "createqol.ability.tool.ploughing": "Супервспашка",
   "createqol.ability.tool.reach": "Повышенная досягаемость",
   "createqol.ability.tool.repulsion_attraction": "Притягивание/отталкивание",
   "createqol.ability.tool.repulsion": "Отталкивание",
   "createqol.ability.tool.smelting": "Автопереплавка",
-  "createqol.ability.tool.tree_decapitation": "Лесоруб",
+  "createqol.ability.tool.tree_decapitation": "Лесоповал",
   "createqol.ability.tool.vein_mine": "Добыча залежи",
 
   "createqol.ability.armor.air": "Воздух",
