@@ -46,9 +46,11 @@ public class BlazeBurnerLiquidCategory extends CreateRecipeCategory<BlazeBurnerL
 
 		if (recipe.getFluidIngredients().get(0).getFluids().length > 0 && recipe.getFluidIngredients().get(0).getFluids()[0] != null) {
 			LiquidBlazeBurnerManager.LiquidEntry entry = LiquidBlazeBurnerManager.BLAZE_BURNER_LIQUIDS.get(recipe.getFluidIngredients().get(0).getFluids()[0].getFluid() );
-			int time =  (entry.burnTime() * entry.consumption() * 1000 / 20);
+			int time = (entry.burnTime() * entry.consumption() * 1000 / 20);
+            Component burnerLevel = Component.translatable("createqol.recipe.blaze_burner_liquids.burner_level."
+                    + ((recipe.getBurnerLevel().name().equalsIgnoreCase("seething")) ? "superheat" : "heat"));
 
-			graphics.drawCenteredString(Minecraft.getInstance().font,Component.literal("1 ").append(Component.translatable("item.minecraft.bucket")).append(Component.literal(" = " + formatDuration(time))), 94,60,0xffffff);
+			graphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable("createqol.recipe.blaze_burner_liquids.hint", formatDuration(time), burnerLevel), 94,60,0xffffff);
 
 		}
 		//matrixStack.translate(74, 51, 100);
@@ -62,13 +64,13 @@ public class BlazeBurnerLiquidCategory extends CreateRecipeCategory<BlazeBurnerL
 		StringBuilder result = new StringBuilder();
 
 		if (hours > 0) {
-			result.append(hours).append("h ");
+			result.append(Component.translatable("createqol.recipe.blaze_burner_liquids.duration.hours", hours).getString());
 		}
 		if (minutes > 0) {
-			result.append(minutes).append("min ");
+			result.append(Component.translatable("createqol.recipe.blaze_burner_liquids.duration.minutes", minutes).getString());
 		}
 		if (seconds > 0 || result.isEmpty()) { // always show at least seconds
-			result.append(seconds).append("s");
+			result.append(Component.translatable("createqol.recipe.blaze_burner_liquids.duration.seconds", seconds).getString());
 		}
 
 		return result.toString().trim();

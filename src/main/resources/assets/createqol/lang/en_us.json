@@ -61,10 +61,7 @@
   "tag.item.c.buckets.superheated_lava": "Superheated Lava Buckets",
   "tag.fluid.c.superheated_lava": "Superheated Lava",
 
-
-
   "fluid.createqol.superheated_lava": "Superheated Lava",
-
 
   "create.options.inventory_linker.label": "Inventory Link Mode",
   "options.inventory_linker.inventory": "Inventory",
@@ -128,6 +125,12 @@
   "keybind.createqol.boots_effect": "Toggle Boots Effect",
 
   "createqol.recipe.blaze_burner_liquids": "Blaze Burner Liquid Fuels",
+  "createqol.recipe.blaze_burner_liquids.hint": "1 Bucket = %s of %s",
+  "createqol.recipe.blaze_burner_liquids.burner_level.heat": "heat",
+  "createqol.recipe.blaze_burner_liquids.burner_level.superheat": "superheat",
+  "createqol.recipe.blaze_burner_liquids.duration.hours": "%sh ",
+  "createqol.recipe.blaze_burner_liquids.duration.minutes": "%sm ",
+  "createqol.recipe.blaze_burner_liquids.duration.seconds": "%ss",
 
   "entity.createqol.statue": "Statue",
 
@@ -218,6 +221,7 @@
   "createqol.statue.animation.create": "Click on the button to create an animation. Statues can only store 1 animation.",
   "createqol.statue.animation.frame.create": "Click on the button to create a frame. 1 frame corresponds to 1 tick of the animation. Interpolation between frame is automatically made.",
 
+  "createqol.statue.animation.loop": "Loop",
   "createqol.statue.animation.revert": "Revert",
   "createqol.statue.animation.revert_1": "Should the animation go backwards",
   "createqol.statue.animation.revert_2": "when it is at the end",
@@ -247,13 +251,13 @@
   "createqol.armor.ability.dash_disabled": "Dashing is disabled on this server !",
   "createqol.armor.ability.dash_reloading": "Dashing is reloading, please wait!",
 
-  "createqol.ability.use_air": "Use Air",
-  "createqol.tooltip.use_air.powering": "Powering equipment with air",
-  "createqol.tooltip.use_air.breathing": "Underwater breathing only",
+  "createqol.tooltip.use_air.powering": "%s / %s (Powering equipment with air)",
+  "createqol.tooltip.use_air.breathing": "%s / %s (Underwater breathing only)",
 
   "createqol.ability.armor.disabled": "%s is disabled by the config",
   "createqol.ability.armor.unavailable": "%1$s can't be enabled while the %2$s is enabled",
   "createqol.ability.armor.reloading": "%s is reloading, please wait!",
+  "createqol.ability.armor.effect_toggle_message": "%s Effect : ",
   "createqol.ability.armor.toggle_message": "%s : ",
 
   "createqol.ability.tool.disabled": "%s ability is disabled by the config",

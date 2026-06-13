@@ -87,9 +87,9 @@ public class QOLItems {
                     .register();
 
     public static final ItemEntry<SmithingTemplateItem> SHADOW_RADIANCE_UPGRADE_SMITHING_TEMPLATE = REGISTRATE.item("shadow_radiance_upgrade_smithing_template",p->new SmithingTemplateItem(
-            Component.translatable(Util.makeDescriptionId("item", CreateQOL.asResource("smithing_template.shadow_radiance_upgrade.applies_to"))).withStyle(ChatFormatting.GRAY),
-            Component.translatable(Util.makeDescriptionId("item", CreateQOL.asResource("smithing_template.shadow_radiance_upgrade.ingredients"))).withStyle(ChatFormatting.GRAY),
-            Component.translatable(Util.makeDescriptionId("upgrade", CreateQOL.asResource("shadow_radiance_upgrade"))).withStyle(ChatFormatting.BLUE),
+            Component.translatable(Util.makeDescriptionId("item", CreateQOL.asResource("smithing_template.shadow_radiance_upgrade.applies_to"))).withStyle(ChatFormatting.BLUE),
+            Component.translatable(Util.makeDescriptionId("item", CreateQOL.asResource("smithing_template.shadow_radiance_upgrade.ingredients"))).withStyle(ChatFormatting.BLUE),
+            Component.translatable(Util.makeDescriptionId("upgrade", CreateQOL.asResource("shadow_radiance_upgrade"))).withStyle(ChatFormatting.GRAY),
             Component.translatable(Util.makeDescriptionId("item", CreateQOL.asResource("smithing_template.shadow_radiance_upgrade.base_slot_description"))),
             Component.translatable(Util.makeDescriptionId("item", CreateQOL.asResource("smithing_template.shadow_radiance_upgrade.additions_slot_description"))),
             createUpgradeIconList(),
