@@ -34,8 +34,11 @@ public record ToggleArmorEffectPacket(EquipmentSlot slot) implements Serverbound
             if (it.providedEffect(stack) == null) return;
             boolean enable = !stack.getOrDefault(QOLDataComponents.ARMOR_EFFECT,true);
             stack.set(QOLDataComponents.ARMOR_EFFECT,enable);
-            player.displayClientMessage(Component.translatable(stack.getDescriptionId()).append(Component.literal( " Effect : ").append(QOLConfigurableItem.chooseState(true,true,enable,false,true))).withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED), true);
-
+            player.displayClientMessage(Component.translatable("createqol.ability.armor.effect_toggle_message",
+                                    Component.translatable(stack.getDescriptionId()))
+                    .withStyle(enable ? ChatFormatting.GREEN : ChatFormatting.RED)
+                    .append(QOLConfigurableItem.chooseState(true ,true, enable, false, true)),
+                    true);
         }
     }
 

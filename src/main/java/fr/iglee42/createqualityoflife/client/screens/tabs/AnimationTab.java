@@ -39,8 +39,8 @@ public class AnimationTab extends StatueTab {
     public static final int REVERT_X = 22;
     public static final int COPY_ALL_X = 44;
 
-    private static final List<Component> LOOP_TOOLTIPS = List.of(CreateLang.translateDirect("schedule.loop"),CreateLang.translateDirect("gui.schematicannon.optionDisabled").withStyle(ChatFormatting.RED));
-    private static final List<Component> ON_LOOP_TOOLTIPS = List.of(CreateLang.translateDirect("schedule.loop"),CreateLang.translateDirect("gui.schematicannon.optionEnabled").withStyle(ChatFormatting.GREEN));
+    private static final List<Component> LOOP_TOOLTIPS = List.of(CreateQOLLang.translateDirect("statue.animation.loop"),CreateLang.translateDirect("gui.schematicannon.optionDisabled").withStyle(ChatFormatting.RED));
+    private static final List<Component> ON_LOOP_TOOLTIPS = List.of(CreateQOLLang.translateDirect("statue.animation.loop"),CreateLang.translateDirect("gui.schematicannon.optionEnabled").withStyle(ChatFormatting.GREEN));
     private static final List<Component> REVERSE_TOOLTIPS = List.of(CreateQOLLang.translateDirect("statue.animation.revert"),CreateLang.translateDirect("gui.schematicannon.optionDisabled").withStyle(ChatFormatting.RED),CreateQOLLang.translateDirect("statue.animation.revert_1"),CreateQOLLang.translateDirect("statue.animation.revert_2"));
     private static final List<Component> ON_REVERSE_TOOLTIPS = List.of(CreateQOLLang.translateDirect("statue.animation.revert"),CreateLang.translateDirect("gui.schematicannon.optionEnabled").withStyle(ChatFormatting.GREEN),CreateQOLLang.translateDirect("statue.animation.revert_1"),CreateQOLLang.translateDirect("statue.animation.revert_2"));
     private static final List<Component> COPY_ALL_TOOLTIPS = List.of(CreateQOLLang.translateDirect("statue.animation.copy_all"),CreateQOLLang.translateDirect("statue.animation.copy_all_1"),CreateQOLLang.translateDirect("statue.animation.copy_all_2"));
