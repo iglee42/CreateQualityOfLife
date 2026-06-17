@@ -1,3 +1,14 @@
+------------------------------------------------------
+CreateQualityOfLife 1.6.3-fix1
+------------------------------------------------------
+#### Gameplay Changes
+- Add an option to helmets to disable the invisibility of Armor when the Invisibility effect is enabled [(#47)](https://github.com/iglee42/CreateQualityOfLife/issues/47)
+
+#### Optimizations
+- Dehardcode more texts in the mod [(#75)](https://github.com/iglee42/CreateQualityOfLife/pull/75)
+
+#### Bug Fixes
+- Increase the character limit for Statues positioning [(#74)](https://github.com/iglee42/CreateQualityOfLife/issues/74)
 
 ------------------------------------------------------
 CreateQualityOfLife 1.6.3
