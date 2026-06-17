@@ -22,7 +22,7 @@ public class ElytraLayerMixin {
 
     @Inject(method = "shouldRender", at = @At("HEAD"),cancellable = true)
     private <T extends LivingEntity> void qol$shadowRadianceRenderElytra(ItemStack stack, T entity, CallbackInfoReturnable<Boolean> cir){
-        if (entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof QOLConfigurableItem it && it.providedEffect(entity.getItemBySlot(EquipmentSlot.HEAD)).equals(MobEffects.INVISIBILITY) && entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.ARMOR_EFFECT,true)){
+        if (entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof QOLConfigurableItem it && entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.INVISIBLE_ARMOR,false) && it.providedEffect(entity.getItemBySlot(EquipmentSlot.HEAD)).equals(MobEffects.INVISIBILITY) && entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.ARMOR_EFFECT,true)){
             cir.setReturnValue(false);
             return;
         }

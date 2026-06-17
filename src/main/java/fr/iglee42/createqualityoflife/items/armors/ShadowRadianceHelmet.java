@@ -82,6 +82,7 @@ public class ShadowRadianceHelmet extends DivingHelmetItem implements QOLConfigu
     @Override
     public void addConfigurations(List<Configuration<?>> list, ItemStack stack) {
         list.add(Configuration.ofBool("Enable Googles",stack.getOrDefault(QOLDataComponents.HELMET_GOGGLES,true),QOLDataComponents.HELMET_GOGGLES,Arrays.asList("Should engineer's goggle's information be displayed"),(e,oe)->CreateQOLConfigs.server().equipments.armors.helmetHaveGoggles.get()));
+        list.add(Configuration.ofBool("Invisible Armor",stack.getOrDefault(QOLDataComponents.INVISIBLE_ARMOR,false),QOLDataComponents.INVISIBLE_ARMOR,Arrays.asList("Should the player armor be invisible when the invisibility effect is enabled"),(e,oe)->CreateQOLConfigs.server().equipments.armors.armorEffects.get()));
         ShadowRadianceEffects[] valids = Arrays.stream(ShadowRadianceEffects.values()).filter(ef->ef.isValidForItem(stack)).toArray(ShadowRadianceEffects[]::new);
         list.add(new Configuration<>("Effect", stack.getOrDefault(QOLDataComponents.EFFECT, ShadowRadianceEffects.NIGHT_VISION),QOLDataComponents.EFFECT,
                 Configuration.ConfigType.ENUM,Arrays.asList("Define which mob effect should be provided.",

@@ -23,7 +23,7 @@ public class HumanoidArmorLayerMixin<T extends LivingEntity, M extends HumanoidM
     @Inject(remap = false, method = "renderArmorPiece(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;ILnet/minecraft/client/model/HumanoidModel;FFFFFF)V",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;",shift = At.Shift.BEFORE),cancellable = true,locals = LocalCapture.CAPTURE_FAILSOFT)
     private void createqol$hideArmor(PoseStack p_117119_, MultiBufferSource p_117120_, T p_117121_, EquipmentSlot p_117122_, int p_117123_, A p_117124_, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci, ItemStack itemstack){
         if (!itemstack.getOrDefault(QOLDataComponents.ARMOR_RENDER_TYPE, ArmorRenderType.ALL).shouldRenderArmor()) ci.cancel();
-        if (p_117121_.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof QOLConfigurableItem it && it.providedEffect(p_117121_.getItemBySlot(EquipmentSlot.HEAD)).equals(MobEffects.INVISIBILITY) && p_117121_.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.ARMOR_EFFECT,true))ci.cancel();
+        if (p_117121_.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof QOLConfigurableItem it && p_117121_.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.INVISIBLE_ARMOR,false) && it.providedEffect(p_117121_.getItemBySlot(EquipmentSlot.HEAD)).equals(MobEffects.INVISIBILITY) && p_117121_.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.ARMOR_EFFECT,true))ci.cancel();
     }
 
 }

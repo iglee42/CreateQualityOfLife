@@ -38,7 +38,7 @@ public class BacktankArmorLayerMixin<T extends LivingEntity> {
 
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",remap = false, at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V",ordinal = 0,shift = At.Shift.BEFORE),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
     private void inject(PoseStack ms, MultiBufferSource buffer, int light, T entity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci, BacktankItem item, EntityModel entityModel, HumanoidModel model, boolean hasGlint, VertexConsumer vc, BlockState renderedState, SuperByteBuffer backtank, SuperByteBuffer cogs, SuperByteBuffer nob){
-        if (entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof QOLConfigurableItem it && it.providedEffect(entity.getItemBySlot(EquipmentSlot.HEAD)).equals(MobEffects.INVISIBILITY) && entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.ARMOR_EFFECT,true)){
+        if (entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof QOLConfigurableItem it && entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.INVISIBLE_ARMOR,false) && it.providedEffect(entity.getItemBySlot(EquipmentSlot.HEAD)).equals(MobEffects.INVISIBILITY) && entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.ARMOR_EFFECT,true)){
             ci.cancel();
             return;
         }

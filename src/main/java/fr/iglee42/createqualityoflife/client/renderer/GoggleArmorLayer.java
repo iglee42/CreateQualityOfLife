@@ -37,7 +37,7 @@ public class GoggleArmorLayer<T extends LivingEntity, M extends EntityModel<T>> 
     public void render(PoseStack ms, MultiBufferSource buffer, int light, LivingEntity entity, float yaw, float pitch, float pt, float p_117356_, float p_117357_, float p_117358_) {
         if (entity.getPose() == Pose.SLEEPING)
             return;
-        if (entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof QOLConfigurableItem it && it.providedEffect(entity.getItemBySlot(EquipmentSlot.HEAD)).equals(MobEffects.INVISIBILITY) && entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.ARMOR_EFFECT,true)){
+        if (entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof QOLConfigurableItem it && entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.INVISIBLE_ARMOR,false) && it.providedEffect(entity.getItemBySlot(EquipmentSlot.HEAD)).equals(MobEffects.INVISIBILITY) && entity.getItemBySlot(EquipmentSlot.HEAD).getOrDefault(QOLDataComponents.ARMOR_EFFECT,true)){
             return;
         }
         if (!QOLItems.SHADOW_RADIANCE_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)) && !QOLItems.SHADOW_STEEL_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)) &&  !QOLItems.REFINED_RADIANCE_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)))
