@@ -154,7 +154,7 @@ public class StatueTransformTab extends StatueTab {
 
 
         for (EditBox widget : new EditBox[]{posX, posY, posZ}) {
-            widget.setMaxLength(6);
+            widget.setMaxLength(12);
             widget.setBordered(false);
             widget.setTextColor(0xFFFFFF);
             widget.setFocused(false);
